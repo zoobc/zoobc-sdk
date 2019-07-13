@@ -1,0 +1,32 @@
+{
+  "name": "zoobc-sdk-js",
+  "version": "0.1.0",
+  "description": "A small set of libraries to implement applications connect with the P2P API of the nodes in the blockchain",
+  "author": "ZooBC SDK Team",
+  "license": "Apache",
+  "private": true,
+  "main": "index.js",
+  "keywords": [
+    "blockchain",
+    "blockchain-zoo",
+    "zoobc",
+    "zoobc-sdk-js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zoobc/zoobc-sdk-js"
+  },
+  "bugs": {
+    "url": "https://github.com/zoobc/zoobc-sdk-js/issues"
+  },
+  "scripts": {
+    "test": "nyc --reporter=text mocha"
+  },
+  "dependencies": {
+    "grpc-pack": "^0.1.2"
+  },
+  "devDependencies": {
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1"
+  }
+}
