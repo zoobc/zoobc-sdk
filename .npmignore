@@ -1,0 +1,5 @@
+.prettierrc
+.prettierignore
+tsconfig.json
+tslint.json
+dist/

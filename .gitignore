@@ -5,7 +5,10 @@
 package-lock.json
 yarn.lock
 
-# testing
+# build
+/dist
+
+# test
 /coverage
 
 # misc
