@@ -1,0 +1,3 @@
+[submodule "examples/schema"]
+	path = examples/schema
+	url = git@github.com:zoobc/zoobc-schema.git
