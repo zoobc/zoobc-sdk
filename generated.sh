@@ -142,11 +142,11 @@ $PROTOC \
   ./schema/model/*.proto \
   ./schema/service/*.proto \
   --proto_path=./schema
-echo "$(echo_pass) Generating proto definitions for ${DIST_DIR} Done"
+echo "$(echo_pass) Generating proto definitions for ${platform} Done"
 
 # 7. Cleanup downloaded proto directory
 rm -rf "protoc-${platform}"
 rm -rf ${GRPC_WEB_PATH}
 duration=$SECONDS
 echo -e "\n\n$(echo_done) Done in $(($duration / 60)) minutes and $(($duration % 60)) seconds."
-echo "    The Generating proto in the 'proto-${platform}' directory!"
+echo "    The Generating proto in the '${DIST_DIR}' directory!"
