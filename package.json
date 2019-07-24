@@ -23,26 +23,16 @@
   "scripts": {
     "test": "jest",
     "testCoverage": "rm -rf coverage && jest --coverage",
-    "build": "rm -rf dist && npm run prettier && tsc -p . && npm run test",
+    "build": "rm -rf dist && tsc -p .",
     "lint": "eslint \"{examples,src,tests}/**/*\" --fix",
     "prettier": "prettier --write \"{examples,src,tests}/**/*\"",
     "gh-pages": "rimraf docs && npm run docs && gh-pages -d docs",
     "docs": "typedoc --out docs src"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "{examples,src,tests}/**/*.{ts,tsx,js,jsx}": [
-      "npm run lint",
-      "npm run build",
-      "git add"
-    ]
-  },
   "dependencies": {
-    "grpc-pack": "^0.1.2"
+    "@grpc/proto-loader": "^0.5.1",
+    "grpc": "^1.22.2",
+    "protobufjs": "^6.8.8"
   },
   "devDependencies": {
     "@types/jest": "^24.0.15",
