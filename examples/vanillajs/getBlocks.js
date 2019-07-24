@@ -1,6 +1,6 @@
 const path = require('path');
-const { BlockService } = require('../../dist');
-const schema = path.resolve(__dirname, '../zoobc-schema');
+const { BlockService } = require('zoobc');
+const schema = path.resolve(__dirname, '../schema');
 
 var nabila = new BlockService(schema, '18.139.3.139:7000');
 
