@@ -1,12 +1,13 @@
 import React from 'react';
-import JSONPretty from 'react-json-prettify';
-import { githubGist } from 'react-json-prettify/dist/themes';
 import { BlockServiceClient } from './schema/service/block_grpc_web_pb';
 import { GetBlocksRequest } from './schema/model/block_pb';
+import './app.css';
 
 class App extends React.Component {
   state = {
-    blocks: {},
+    blocks: {
+      blocksList: [],
+    },
   };
 
   componentDidMount() {
@@ -14,8 +15,11 @@ class App extends React.Component {
   }
 
   getTestBlock() {
-    const block = new BlockServiceClient('http://18.139.3.139:8080', null, null);
+    const block = new BlockServiceClient('http://18.139.3.139:7001', null, null);
     const request = new GetBlocksRequest();
+    request.setChaintype(0);
+    request.setLimit(10);
+    request.setHeight(1);
     return new Promise((resolve, reject) => {
       block.getBlocks(request, null, (err, response) => {
         if (err) return reject(err);
@@ -25,7 +29,33 @@ class App extends React.Component {
   }
 
   render() {
-    return <JSONPretty theme={githubGist} json={this.state.blocks} padding={2} />;
+    const { blocks } = this.state;
+    return (
+      <table>
+        <thead>
+          <th>Id</th>
+          <th>Previous Hash</th>
+          <th>Height</th>
+          <th>Timestamp</th>
+          <th>Version</th>
+        </thead>
+        <tbody>
+          {blocks &&
+            blocks.blocksList.length > 0 &&
+            blocks.blocksList.map((block, key) => {
+              return (
+                <tr key={key}>
+                  <td>{block.id}}</td>
+                  <td>{block.previousblockhash}</td>
+                  <td>{block.height}</td>
+                  <td>{block.timestamp}</td>
+                  <td>{block.version}</td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+    );
   }
 }
 
