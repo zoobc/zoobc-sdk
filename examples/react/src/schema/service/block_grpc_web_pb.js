@@ -5,12 +5,10 @@
  */
 
 // GENERATED CODE -- DO NOT EDIT!
-/* eslint-disable */
-
+/* eslint-disable  */
 
 const grpc = {};
 grpc.web = require('grpc-web');
-
 
 var model_block_pb = require('../model/block_pb.js')
 const proto = {};
@@ -159,6 +157,80 @@ proto.service.BlockServicePromiseClient.prototype.getBlocks =
       request,
       metadata || {},
       methodDescriptor_BlockService_GetBlocks);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.model.GetBlockRequest,
+ *   !proto.model.Block>}
+ */
+const methodDescriptor_BlockService_GetBlock = new grpc.web.MethodDescriptor(
+  '/service.BlockService/GetBlock',
+  grpc.web.MethodType.UNARY,
+  model_block_pb.GetBlockRequest,
+  model_block_pb.Block,
+  /** @param {!proto.model.GetBlockRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_block_pb.Block.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.model.GetBlockRequest,
+ *   !proto.model.Block>}
+ */
+const methodInfo_BlockService_GetBlock = new grpc.web.AbstractClientBase.MethodInfo(
+  model_block_pb.Block,
+  /** @param {!proto.model.GetBlockRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_block_pb.Block.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.model.GetBlockRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.model.Block)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.model.Block>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.service.BlockServiceClient.prototype.getBlock =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/service.BlockService/GetBlock',
+      request,
+      metadata || {},
+      methodDescriptor_BlockService_GetBlock,
+      callback);
+};
+
+
+/**
+ * @param {!proto.model.GetBlockRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.model.Block>}
+ *     A native promise that resolves to the response
+ */
+proto.service.BlockServicePromiseClient.prototype.getBlock =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/service.BlockService/GetBlock',
+      request,
+      metadata || {},
+      methodDescriptor_BlockService_GetBlock);
 };
 
 

@@ -7,14 +7,10 @@
     "grpc-web": "^1.0.5",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-json-prettify": "^0.1.4",
     "react-scripts": "3.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "react-scripts start"
   },
   "browserslist": {
     "production": [

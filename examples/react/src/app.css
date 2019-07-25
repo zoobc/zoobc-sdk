@@ -1,0 +1,15 @@
+body {
+  text-align: left;
+}
+table {
+  width: 99vw;
+  border: 1px solid black;
+}
+thead > th {
+  border-bottom: 1px solid black;
+}
+td,
+th {
+  padding: 10px;
+  margin: 0;
+}
