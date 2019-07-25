@@ -51,13 +51,18 @@ function update_schema() {
   git submodule add git@github.com:zoobc/zoobc-schema.git schema --force
   git submodule sync
   git submodule update --init --recursive
+  echo "$(echo_pass) ${1} submodule zoobc-schema Done"
+  reduce_code
 }
 
-function fixed_bug() {
+function reduce_code() {
   directory="./schema/service"
-  find $directory -type f -exec grep -qe "google" {} \; -exec sed -i '' -e '/google/d' {} +
-  find $directory -type f -exec grep -qe "get" {} \; -exec sed -i '' -e '/get/d' {} +
-  find $directory -type f -exec grep -qe "};" {} \; -exec sed -i '' -e '/};/d' {} +
+  if [ -d "${directory}" ]; then
+    find $directory -type f -exec grep -qe "google" {} \; -exec sed -i '' -e '/google/d' {} +
+    find $directory -type f -exec grep -qe "get" {} \; -exec sed -i '' -e '/get/d' {} +
+    find $directory -type f -exec grep -qe "};" {} \; -exec sed -i '' -e '/};/d' {} +
+    echo "$(echo_pass) Reduce code proto schema Done"
+  fi
 }
 
 # ###### EXECUTES ######
@@ -75,15 +80,15 @@ if [ -d schema ]; then
     exit 1
   else
     if ([ "$is_update" == "y" ] || [ "$is_update" == "Y" ]); then
-      update_schema
-      fixed_bug
-      echo "$(echo_pass) Updating submodule zoobc-schema Done"
+      update_schema "Updating"
+      # reduce_code
+      # echo "$(echo_pass) Updating submodule zoobc-schema Done"
     fi
   fi
 else
-  update_schema
-  fixed_bug
-  echo "$(echo_pass) Cloning submodule zoobc-schema Done"
+  update_schema "Cloning"
+  # reduce_code
+  # echo "$(echo_pass) Cloning submodule zoobc-schema Done"
 fi
 
 # 3. Download grpc-web
@@ -118,22 +123,22 @@ echo "$(echo_pass) Downloading protoc v${PROTOC_VERSION} Done"
 
 # 5. Unzip into folder protoc
 echo -e "\nExtract protoc-${PROTOC_VERSION}.zip..."
-if [ -d "protoc-${platform}" ]; then
-  rm -rf "protoc-${platform}"
+if [ -d protoc ]; then
+  rm -rf protoc
 fi
-mkdir -p "protoc-${platform}"
-unzip -qq "protoc-${PROTOC_VERSION}.zip" -d "protoc-${platform}"
+mkdir -p protoc
+unzip -qq "protoc-${PROTOC_VERSION}.zip" -d protoc
 rm -rf "protoc-${PROTOC_VERSION}.zip"
 echo "$(echo_pass) Extract protoc-${PROTOC_VERSION}.zip Done"
 
 # 6. Generating proto definitions
 echo -e "\nGenerating proto definitions for ${platform}..."
-DIST_DIR="./src/proto/${platform}"
+DIST_DIR="./src/proto"
 if [ -d "${DIST_DIR}" ]; then
   rm -rf "${DIST_DIR}"
 fi
 mkdir -p "${DIST_DIR}"
-PROTOC=./protoc-${platform}/bin/protoc
+PROTOC=./protoc/bin/protoc
 $PROTOC \
   --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts \
   --ts_out=service=true:${DIST_DIR} \
@@ -145,7 +150,7 @@ $PROTOC \
 echo "$(echo_pass) Generating proto definitions for ${platform} Done"
 
 # 7. Cleanup downloaded proto directory
-rm -rf "protoc-${platform}"
+rm -rf protoc
 rm -rf ${GRPC_WEB_PATH}
 duration=$SECONDS
 echo -e "\n\n$(echo_done) Done in $(($duration / 60)) minutes and $(($duration % 60)) seconds."
