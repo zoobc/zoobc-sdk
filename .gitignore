@@ -12,8 +12,8 @@ yarn.lock
 # test
 /coverage
 
-# schema
-# /schema
+# proto
+/src/proto
 
 # misc
 .DS_Store
