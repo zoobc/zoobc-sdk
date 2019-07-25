@@ -3,10 +3,10 @@
  * @enhanceable
  * @public
  */
-
+/* eslint-disable  */
 // GENERATED CODE -- DO NOT EDIT!
 
-/* eslint-disable */
+
 
 const grpc = {};
 grpc.web = require('grpc-web');
@@ -91,15 +91,15 @@ proto.service.TransactionServicePromiseClient =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.model.GetTransactionsByAccountPublicKeyRequest,
+ *   !proto.model.GetTransactionsRequest,
  *   !proto.model.GetTransactionsResponse>}
  */
-const methodDescriptor_TransactionService_GetTransactionsByAccountPublicKey = new grpc.web.MethodDescriptor(
-  '/service.TransactionService/GetTransactionsByAccountPublicKey',
+const methodDescriptor_TransactionService_GetTransactions = new grpc.web.MethodDescriptor(
+  '/service.TransactionService/GetTransactions',
   grpc.web.MethodType.UNARY,
-  model_transaction_pb.GetTransactionsByAccountPublicKeyRequest,
+  model_transaction_pb.GetTransactionsRequest,
   model_transaction_pb.GetTransactionsResponse,
-  /** @param {!proto.model.GetTransactionsByAccountPublicKeyRequest} request */
+  /** @param {!proto.model.GetTransactionsRequest} request */
   function(request) {
     return request.serializeBinary();
   },
@@ -110,12 +110,12 @@ const methodDescriptor_TransactionService_GetTransactionsByAccountPublicKey = ne
 /**
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.model.GetTransactionsByAccountPublicKeyRequest,
+ *   !proto.model.GetTransactionsRequest,
  *   !proto.model.GetTransactionsResponse>}
  */
-const methodInfo_TransactionService_GetTransactionsByAccountPublicKey = new grpc.web.AbstractClientBase.MethodInfo(
+const methodInfo_TransactionService_GetTransactions = new grpc.web.AbstractClientBase.MethodInfo(
   model_transaction_pb.GetTransactionsResponse,
-  /** @param {!proto.model.GetTransactionsByAccountPublicKeyRequest} request */
+  /** @param {!proto.model.GetTransactionsRequest} request */
   function(request) {
     return request.serializeBinary();
   },
@@ -124,7 +124,7 @@ const methodInfo_TransactionService_GetTransactionsByAccountPublicKey = new grpc
 
 
 /**
- * @param {!proto.model.GetTransactionsByAccountPublicKeyRequest} request The
+ * @param {!proto.model.GetTransactionsRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
@@ -133,106 +133,106 @@ const methodInfo_TransactionService_GetTransactionsByAccountPublicKey = new grpc
  * @return {!grpc.web.ClientReadableStream<!proto.model.GetTransactionsResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.service.TransactionServiceClient.prototype.getTransactionsByAccountPublicKey =
+proto.service.TransactionServiceClient.prototype.getTransactions =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/service.TransactionService/GetTransactionsByAccountPublicKey',
+      '/service.TransactionService/GetTransactions',
       request,
       metadata || {},
-      methodDescriptor_TransactionService_GetTransactionsByAccountPublicKey,
+      methodDescriptor_TransactionService_GetTransactions,
       callback);
 };
 
 
 /**
- * @param {!proto.model.GetTransactionsByAccountPublicKeyRequest} request The
+ * @param {!proto.model.GetTransactionsRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
  * @return {!Promise<!proto.model.GetTransactionsResponse>}
  *     A native promise that resolves to the response
  */
-proto.service.TransactionServicePromiseClient.prototype.getTransactionsByAccountPublicKey =
+proto.service.TransactionServicePromiseClient.prototype.getTransactions =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/service.TransactionService/GetTransactionsByAccountPublicKey',
+      '/service.TransactionService/GetTransactions',
       request,
       metadata || {},
-      methodDescriptor_TransactionService_GetTransactionsByAccountPublicKey);
+      methodDescriptor_TransactionService_GetTransactions);
 };
 
 
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.model.GetTransactionsByBlockIDRequest,
- *   !proto.model.GetTransactionsResponse>}
+ *   !proto.model.GetTransactionRequest,
+ *   !proto.model.Transaction>}
  */
-const methodDescriptor_TransactionService_GetTransactionsByBlockID = new grpc.web.MethodDescriptor(
-  '/service.TransactionService/GetTransactionsByBlockID',
+const methodDescriptor_TransactionService_GetTransaction = new grpc.web.MethodDescriptor(
+  '/service.TransactionService/GetTransaction',
   grpc.web.MethodType.UNARY,
-  model_transaction_pb.GetTransactionsByBlockIDRequest,
-  model_transaction_pb.GetTransactionsResponse,
-  /** @param {!proto.model.GetTransactionsByBlockIDRequest} request */
+  model_transaction_pb.GetTransactionRequest,
+  model_transaction_pb.Transaction,
+  /** @param {!proto.model.GetTransactionRequest} request */
   function(request) {
     return request.serializeBinary();
   },
-  model_transaction_pb.GetTransactionsResponse.deserializeBinary
+  model_transaction_pb.Transaction.deserializeBinary
 );
 
 
 /**
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.model.GetTransactionsByBlockIDRequest,
- *   !proto.model.GetTransactionsResponse>}
+ *   !proto.model.GetTransactionRequest,
+ *   !proto.model.Transaction>}
  */
-const methodInfo_TransactionService_GetTransactionsByBlockID = new grpc.web.AbstractClientBase.MethodInfo(
-  model_transaction_pb.GetTransactionsResponse,
-  /** @param {!proto.model.GetTransactionsByBlockIDRequest} request */
+const methodInfo_TransactionService_GetTransaction = new grpc.web.AbstractClientBase.MethodInfo(
+  model_transaction_pb.Transaction,
+  /** @param {!proto.model.GetTransactionRequest} request */
   function(request) {
     return request.serializeBinary();
   },
-  model_transaction_pb.GetTransactionsResponse.deserializeBinary
+  model_transaction_pb.Transaction.deserializeBinary
 );
 
 
 /**
- * @param {!proto.model.GetTransactionsByBlockIDRequest} request The
+ * @param {!proto.model.GetTransactionRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.model.GetTransactionsResponse)}
+ * @param {function(?grpc.web.Error, ?proto.model.Transaction)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.model.GetTransactionsResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.model.Transaction>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.service.TransactionServiceClient.prototype.getTransactionsByBlockID =
+proto.service.TransactionServiceClient.prototype.getTransaction =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/service.TransactionService/GetTransactionsByBlockID',
+      '/service.TransactionService/GetTransaction',
       request,
       metadata || {},
-      methodDescriptor_TransactionService_GetTransactionsByBlockID,
+      methodDescriptor_TransactionService_GetTransaction,
       callback);
 };
 
 
 /**
- * @param {!proto.model.GetTransactionsByBlockIDRequest} request The
+ * @param {!proto.model.GetTransactionRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.model.GetTransactionsResponse>}
+ * @return {!Promise<!proto.model.Transaction>}
  *     A native promise that resolves to the response
  */
-proto.service.TransactionServicePromiseClient.prototype.getTransactionsByBlockID =
+proto.service.TransactionServicePromiseClient.prototype.getTransaction =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/service.TransactionService/GetTransactionsByBlockID',
+      '/service.TransactionService/GetTransaction',
       request,
       metadata || {},
-      methodDescriptor_TransactionService_GetTransactionsByBlockID);
+      methodDescriptor_TransactionService_GetTransaction);
 };
 
 

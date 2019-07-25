@@ -1,5 +1,7 @@
-import { Component } from 'react';
+/* eslint-disable react/react-in-jsx-scope */
+import React, { Component } from 'react';
 import zoobc from 'zoobc';
+import './app.css';
 
 class App extends Component {
   state = { blocks: [], error: '' };
@@ -22,7 +24,31 @@ class App extends Component {
 
   render() {
     const { blocks } = this.state;
-    return JSON.stringify(blocks);
+    return (
+      <table>
+        <thead>
+          <th>Id</th>
+          <th>Previous Hash</th>
+          <th>Height</th>
+          <th>Timestamp</th>
+          <th>Version</th>
+        </thead>
+        <tbody>
+          {blocks.length > 0 &&
+            blocks.map((block, key) => {
+              return (
+                <tr key={key}>
+                  <td>{block.id}}</td>
+                  <td>{block.previousblockhash}</td>
+                  <td>{block.height}</td>
+                  <td>{block.timestamp}</td>
+                  <td>{block.version}</td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+    );
   }
 }
 
