@@ -1,16 +1,18 @@
 {
-  "name": "simple-app",
-  "version": "0.1.0",
+  "name": "zoobc-example-react",
+  "version": "0.0.1",
   "private": true,
-  "dependencies": {
-    "google-protobuf": "^3.9.0",
-    "grpc-web": "^1.0.5",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
-  },
   "scripts": {
     "start": "react-scripts start"
+  },
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^3.0.1",
+    "zoobc": "../../dist"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
   },
   "browserslist": {
     "production": [

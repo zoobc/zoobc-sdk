@@ -30,9 +30,10 @@
     "docs": "typedoc --out docs src"
   },
   "dependencies": {
-    "@grpc/proto-loader": "^0.5.1",
-    "grpc": "^1.22.2",
-    "protobufjs": "^6.8.8",
+    "@improbable-eng/grpc-web": "^0.9.6",
+    "@types/google-protobuf": "^3.7.1",
+    "google-protobuf": "^3.9.0",
+    "grpc-web": "^1.0.5",
     "ts-protoc-gen": "^0.10.0"
   },
   "devDependencies": {

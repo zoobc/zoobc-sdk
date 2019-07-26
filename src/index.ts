@@ -1,38 +1,21 @@
-import * as grpc from 'grpc';
-import * as protoLoader from '@grpc/proto-loader';
-// export { BlockService } from './blocks';
-// import GrpcService from './grpc';
+import ZooBC from './zoobc';
+import Blocks from './blocks';
 
-class GrpcService {
-  grpc: any;
-  constructor(protoPath: string, protoName: string, serviceName: string, protoHost: string) {
-    this.grpc = this.connect(protoPath, protoName, serviceName, protoHost);
-  }
+const zoobc = new ZooBC();
 
-  connect(protoPath: string, protoName: string, serviceName: string, protoHost: string) {
-    const path = `${protoPath}/service/${protoName}`;
-    const pkgDef = protoLoader.loadSync(path, {
-      keepCase: true,
-      longs: String,
-      enums: String,
-      defaults: true,
-      oneofs: true,
-      includeDirs: [protoPath],
+function connection(host: string): void {
+  zoobc.connection = host;
+}
+
+function getBlocks(ChainType: number, Limit: number, Height: number): any {
+  const blocks = new Blocks(zoobc.connection);
+
+  return new Promise((resolve, reject) => {
+    blocks.getBlocks(ChainType, Limit, Height, (err: any, resp: any) => {
+      if (err) return reject(err);
+      return resolve(resp);
     });
-
-    const proto = grpc.loadPackageDefinition(pkgDef) as any;
-    return new proto.service[serviceName](protoHost, grpc.credentials.createInsecure());
-  }
+  });
 }
 
-// class Blocks {
-
-// }
-
-export default class ZooBC extends GrpcService {
-  grpc: any;
-  constructor(protoPath: string, protoName: string, serviceName: string, protoHost: string) {
-    super(protoPath, protoName, serviceName, protoHost);
-    this.grpc = super.grpc;
-  }
-}
+export = { connection, getBlocks };

@@ -1,32 +1,26 @@
-import React from 'react';
-import { BlockServiceClient } from './schema/service/block_grpc_web_pb';
-import { GetBlocksRequest } from './schema/model/block_pb';
+/* eslint-disable react/react-in-jsx-scope */
+import React, { Component } from 'react';
+import zoobc from 'zoobc';
 import './app.css';
 
-class App extends React.Component {
-  state = {
-    blocks: {
-      blocksList: [],
-    },
-  };
+class App extends Component {
+  state = { blocks: [], error: '' };
 
   componentDidMount() {
-    this.getTestBlock().then(data => this.setState({ blocks: data }));
+    this.listBlocks();
   }
 
-  getTestBlock() {
-    const block = new BlockServiceClient('http://18.139.3.139:7001', null, null);
-    const request = new GetBlocksRequest();
-    request.setChaintype(0);
-    request.setLimit(10);
-    request.setHeight(1);
-    return new Promise((resolve, reject) => {
-      block.getBlocks(request, null, (err, response) => {
-        if (err) return reject(err);
-        resolve(response.toObject());
+  listBlocks = () => {
+    zoobc.connection('http://18.139.3.139:7001');
+    zoobc
+      .getBlocks(0, 5, 1)
+      .then(res => {
+        this.setState({ blocks: res.blocksList });
+      })
+      .catch(err => {
+        this.setState({ error: err });
       });
-    });
-  }
+  };
 
   render() {
     const { blocks } = this.state;
@@ -40,9 +34,8 @@ class App extends React.Component {
           <th>Version</th>
         </thead>
         <tbody>
-          {blocks &&
-            blocks.blocksList.length > 0 &&
-            blocks.blocksList.map((block, key) => {
+          {blocks.length > 0 &&
+            blocks.map((block, key) => {
               return (
                 <tr key={key}>
                   <td>{block.id}}</td>

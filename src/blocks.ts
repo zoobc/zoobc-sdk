@@ -1,40 +1,35 @@
-import * as grpc from 'grpc';
-import * as protoLoader from '@grpc/proto-loader';
+import { grpc } from '@improbable-eng/grpc-web';
+import { GetBlocksRequest } from './proto/model/block_pb';
+import { BlockService } from './proto/service/block_pb_service';
 
-interface ParamBlock {
-  ChainType: number;
-  Limit: number;
-  Height: number;
+interface Callback {
+  (error: any, result: any): void;
 }
 
-export class BlockService {
-  block: any;
+export default class Blocks {
+  host: string;
 
-  constructor(protoPath: string, protoHost: string) {
-    this.block = this.Block(protoPath, protoHost);
+  constructor(host: string) {
+    this.host = host;
   }
 
-  Block(protoPath: string, protoHost: string) {
-    const path = `${protoPath}/service/block.proto`;
-    const pkgDef = protoLoader.loadSync(path, {
-      keepCase: true,
-      longs: String,
-      enums: String,
-      defaults: true,
-      oneofs: true,
-      includeDirs: [protoPath],
-    });
+  getBlocks(ChainType: number, Limit: number, Height: number, callback: Callback): void {
+    const getBlockRequest = new GetBlocksRequest();
+    getBlockRequest.setChaintype(ChainType);
+    getBlockRequest.setHeight(Height);
+    getBlockRequest.setLimit(Limit);
 
-    const proto = grpc.loadPackageDefinition(pkgDef) as any;
-    return new proto.service.BlockService(protoHost, grpc.credentials.createInsecure());
-  }
-
-  getBlock({ ChainType, Limit, Height }: ParamBlock) {
-    return new Promise((resolve, reject) => {
-      this.block.GetBlocks({ ChainType, Limit, Height }, (err: any, result: any) => {
-        if (err) reject(err.details);
-        resolve(result.blocks);
-      });
+    grpc.unary(BlockService.GetBlocks, {
+      request: getBlockRequest,
+      host: this.host,
+      onEnd: res => {
+        const { status, statusMessage, message } = res;
+        if (status === grpc.Code.OK && message) {
+          callback(null, message.toObject());
+        } else {
+          callback(`Error Blocks: ${statusMessage}`, null);
+        }
+      },
     });
   }
 }
