@@ -1,31 +1,54 @@
-import React from 'react';
-import JSONPretty from 'react-json-prettify';
-import { githubGist } from 'react-json-prettify/dist/themes';
-import { BlockServiceClient } from './schema/service/block_grpc_web_pb';
-import { GetBlocksRequest } from './schema/model/block_pb';
+/* eslint-disable react/react-in-jsx-scope */
+import React, { Component } from 'react';
+import zoobc from 'zoobc';
+import './app.css';
 
-class App extends React.Component {
-  state = {
-    blocks: {},
-  };
+class App extends Component {
+  state = { blocks: [], error: '' };
 
   componentDidMount() {
-    this.getTestBlock().then(data => this.setState({ blocks: data }));
+    this.listBlocks();
   }
 
-  getTestBlock() {
-    const block = new BlockServiceClient('http://18.139.3.139:8080', null, null);
-    const request = new GetBlocksRequest();
-    return new Promise((resolve, reject) => {
-      block.getBlocks(request, null, (err, response) => {
-        if (err) return reject(err);
-        resolve(response.toObject());
+  listBlocks = () => {
+    zoobc.connection('http://18.139.3.139:7001');
+    zoobc
+      .getBlocks(0, 5, 1)
+      .then(res => {
+        this.setState({ blocks: res.blocksList });
+      })
+      .catch(err => {
+        this.setState({ error: err });
       });
-    });
-  }
+  };
 
   render() {
-    return <JSONPretty theme={githubGist} json={this.state.blocks} padding={2} />;
+    const { blocks } = this.state;
+    return (
+      <table>
+        <thead>
+          <th>Id</th>
+          <th>Previous Hash</th>
+          <th>Height</th>
+          <th>Timestamp</th>
+          <th>Version</th>
+        </thead>
+        <tbody>
+          {blocks.length > 0 &&
+            blocks.map((block, key) => {
+              return (
+                <tr key={key}>
+                  <td>{block.id}}</td>
+                  <td>{block.previousblockhash}</td>
+                  <td>{block.height}</td>
+                  <td>{block.timestamp}</td>
+                  <td>{block.version}</td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+    );
   }
 }
 
