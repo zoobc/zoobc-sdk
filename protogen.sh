@@ -41,13 +41,20 @@ function echo_done() {
   printf "\033\e[0m"
 }
 
-function update_schema() {
-  rm -rf .gitmodules
-  git config -f .git/config --remove-section submodule.schema 2>/dev/null
-  git rm --cached schema -f
-  rm -rf .git/modules/schema
-  rm -rf schema
+function clean_schema() {
+  if [ -d schema ]; then
+    git config -f .gitmodules --remove-section submodule.schema
+    git add .gitmodules
+    git config -f .git/config --remove-section submodule.schema
+    git rm --cached schema -f -r
+    rm -rf .git/modules/schema
+    git commit -m 'Removed submodule'
+    rm -rf schema
+  fi
+}
 
+function update_schema() {
+  clean_schema
   git submodule add git@github.com:zoobc/zoobc-schema.git schema --force
   git submodule sync
   git submodule update --init --recursive
@@ -98,11 +105,19 @@ if [[ $platform == 'linux' ]]; then
   GRPC_WEB_URL="https://github.com/grpc/grpc-web/releases/download/${GRPC_WEB_VERSION}/protoc-gen-grpc-web-${GRPC_WEB_VERSION}-linux-x86_64"
 elif [[ $platform == 'mac' ]]; then
   GRPC_WEB_URL="https://github.com/grpc/grpc-web/releases/download/${GRPC_WEB_VERSION}/protoc-gen-grpc-web-${GRPC_WEB_VERSION}-darwin-x86_64"
+elif [[ $platform == 'win' ]]; then
+  GRPC_WEB_URL="https://github.com/grpc/grpc-web/releases/download/${GRPC_WEB_VERSION}/protoc-gen-grpc-web-${GRPC_WEB_VERSION}-windows-x86_64.exe"
 else
   echo -e "\n$(echo_fail) Cannot download grpc web. Platform ${platform} is not currently supported by grpc web"
   exit 1
 fi
-GRPC_WEB_PATH="/usr/local/bin/protoc-gen-grpc-web"
+
+if [[ $platform == 'win' ]]; then
+  GRPC_WEB_PATH="./protoc-gen-grpc-web.exe"
+else
+  GRPC_WEB_PATH="/usr/local/bin/protoc-gen-grpc-web"
+fi
+
 curl -L -o ${GRPC_WEB_PATH} ${GRPC_WEB_URL}
 chmod +x ${GRPC_WEB_PATH}
 echo "$(echo_pass) Downloading grpc web v${GRPC_WEB_VERSION} Done"
@@ -114,6 +129,8 @@ if [[ $platform == 'linux' ]]; then
   PROTOC_URL="https://github.com/google/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip"
 elif [[ $platform == 'mac' ]]; then
   PROTOC_URL="https://github.com/google/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-osx-x86_64.zip"
+elif [[ $platform == 'win' ]]; then
+  PROTOC_URL="https://github.com/google/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-win64.zip"
 else
   echo -e "\n$(echo_fail) Cannot download protoc. Platform ${platform} is not currently supported by ts-protoc-gen"
   exit 1
@@ -139,8 +156,17 @@ if [ -d "${DIST_DIR}" ]; then
 fi
 mkdir -p "${DIST_DIR}"
 PROTOC=./protoc/bin/protoc
+
+if [[ $platform == 'win' ]]; then
+  PROTOC_GEN_TS=$(pwd)"/node_modules/.bin/protoc-gen-ts.cmd"
+else
+  PROTOC_GEN_TS="./node_modules/.bin/protoc-gen-ts"
+fi
+
+
 $PROTOC \
-  --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts \
+  --plugin=protoc-gen-grpc-web=${GRPC_WEB_PATH} \
+  --plugin=protoc-gen-ts=${PROTOC_GEN_TS} \
   --ts_out=service=true:${DIST_DIR} \
   --js_out=import_style=commonjs,binary:${DIST_DIR} \
   --grpc-web_out=import_style=commonjs,mode=grpcwebtext:${DIST_DIR} \
@@ -152,6 +178,9 @@ echo "$(echo_pass) Generating proto definitions for ${platform} Done"
 # 7. Cleanup downloaded proto directory
 rm -rf protoc
 rm -rf ${GRPC_WEB_PATH}
+clean_schema
 duration=$SECONDS
 echo -e "\n\n$(echo_done) Done in $(($duration / 60)) minutes and $(($duration % 60)) seconds."
 echo "    The Generating proto in the '${DIST_DIR}' directory!"
+
+sleep 5s

@@ -1,3 +1,0 @@
-[submodule "schema"]
-	path = schema
-	url = git@github.com:zoobc/zoobc-schema.git
