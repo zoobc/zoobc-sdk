@@ -15,9 +15,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
-    "removeComments": true,
-    "baseUrl": ".",
-    "paths": { "@zoobc/*": ["dist/*"], "@app/*": ["src/*"] }
+    "removeComments": true
   },
-  "exclude": ["node_modules", "dist", "tests", "examples"]
+  "exclude": ["node_modules", "dist", "test", "examples"]
 }
