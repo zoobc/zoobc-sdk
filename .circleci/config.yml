@@ -1,8 +1,20 @@
 version: 2
 
 jobs:
-  test_node_6:
+  protogen:
     working_directory: ~/zoobc-sdk-js
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - run:
+          name: Generate Proto ZooBC Schema
+          command: ./protogen.sh
+
+  test_node_6:
     docker:
       - image: circleci/node:6
     steps:
@@ -56,6 +68,9 @@ jobs:
 
 workflows:
   version: 2
-  test-release:
+  protogen-test-release:
     jobs:
-      - test_node_6
+      - protogen
+      - test_node_6:
+          requires:
+            - protogen
