@@ -1,6 +1,18 @@
 version: 2
 
 jobs:
+  test_node_4:
+    docker:
+      - image: circleci/node:4
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - run:
+          name: Unit Testing for NodeJs 4
+          command: npm run test
+
   test_node_6:
     docker:
       - image: circleci/node:6
@@ -70,5 +82,6 @@ workflows:
   version: 2
   test-release:
     jobs:
+      - test_node_4
       - test_node_6
       - test_node_10
