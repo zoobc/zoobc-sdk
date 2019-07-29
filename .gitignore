@@ -13,7 +13,7 @@ yarn.lock
 /coverage
 
 # proto
-/src/proto
+# /src/proto
 
 # misc
 .DS_Store

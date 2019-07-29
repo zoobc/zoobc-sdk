@@ -32,7 +32,7 @@
     }
   },
   "lint-staged": {
-    "{src,tests}/**/*.{ts,tsx,js,jsx}": [
+    "{src,tests}/*.{ts,test.ts}": [
       "npm run prettier",
       "npm run test",
       "git add"
