@@ -15,7 +15,6 @@ class App extends Component {
     zoobc
       .getBlocks(0, 5, 1)
       .then(res => {
-        console.log(res)
         this.setState({ blocks: res.blocksList });
       })
       .catch(err => {
