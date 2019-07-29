@@ -43,9 +43,9 @@ jobs:
           paths:
             - node_modules
 
-workflows:
-  version: 2.0
-  build_and_build_localhost:
-    jobs:
-      - build
-      - build_localhost
+# workflows:
+#   version: 2.0
+#   build_and_build_localhost:
+#     jobs:
+#       - build
+#       - build_localhost
