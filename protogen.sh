@@ -67,6 +67,7 @@ function reduce_code() {
   if [ -d "${directory}" ]; then
     find $directory -type f -exec grep -qe "google" {} \; -exec sed -i '' -e '/google/d' {} +
     find $directory -type f -exec grep -qe "get" {} \; -exec sed -i '' -e '/get/d' {} +
+    find $directory -type f -exec grep -qe "post" {} \; -exec sed -i '' -e '/post/d' {} +
     find $directory -type f -exec grep -qe "};" {} \; -exec sed -i '' -e '/};/d' {} +
     echo "$(echo_pass) Reduce code proto schema Done"
   fi
