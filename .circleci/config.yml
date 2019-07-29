@@ -14,8 +14,8 @@ jobs:
           name: Generate Protobuf
           command: ./protogen.sh
 
-workflows:
-  version: 2.0
-  build:
-    jobs:
-      - build
+# workflows:
+#   version: 2.0
+#   build:
+#     jobs:
+#       - build
