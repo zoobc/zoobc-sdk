@@ -1,7 +1,7 @@
 version: 2.0
 
 jobs:
-  build-root:
+  build:
     working_directory: ~/zoobc-sdk-js
     docker:
       - image: circleci/node:10
