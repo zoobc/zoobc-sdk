@@ -6,7 +6,7 @@ import { BlockService } from './proto/service/block_pb_service';
 interface Callback {
   (error: any, result: any): void;
 }
-export class ZooBC {
+class ZooBC {
   private _host: string = '';
 
   get connection(): string {
