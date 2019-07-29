@@ -1,7 +1,7 @@
 version: 2.0
 
 jobs:
-  build:
+  build-root:
     working_directory: ~/zoobc-sdk-js
     docker:
       - image: circleci/node:10
@@ -21,6 +21,13 @@ jobs:
       - run:
           name: Generate Protobuf
           command: ./protogen.sh
+
+  build-localhost:
+    working_directory: ~/zoobc-sdk-js/examples/react
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
       - run:
           name: Setup Localhost
           command: |
