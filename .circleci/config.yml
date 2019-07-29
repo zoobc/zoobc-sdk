@@ -10,6 +10,14 @@ jobs:
       - run:
           name: Setup Dependencies
           command: npm install
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
       - run:
           name: Generate Protobuf
           command: ./protogen.sh
