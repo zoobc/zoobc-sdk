@@ -44,11 +44,9 @@ function echo_done() {
 function clean_schema() {
   if [ -d schema ]; then
     git config -f .gitmodules --remove-section submodule.schema
-    git add .gitmodules
     git config -f .git/config --remove-section submodule.schema
     git rm --cached schema -f -r
     rm -rf .git/modules/schema
-    git commit -m 'Removed submodule'
     rm -rf schema
   fi
 }
@@ -88,14 +86,10 @@ if [ -d schema ]; then
   else
     if ([ "$is_update" == "y" ] || [ "$is_update" == "Y" ]); then
       update_schema "Updating"
-      # reduce_code
-      # echo "$(echo_pass) Updating submodule zoobc-schema Done"
     fi
   fi
 else
   update_schema "Cloning"
-  # reduce_code
-  # echo "$(echo_pass) Cloning submodule zoobc-schema Done"
 fi
 
 # 3. Download grpc-web
@@ -176,9 +170,11 @@ $PROTOC \
 echo "$(echo_pass) Generating proto definitions for ${platform} Done"
 
 # 7. Cleanup downloaded proto directory
+echo -e "\nCleaning temp generator..."
 rm -rf protoc
 rm -rf ${GRPC_WEB_PATH}
 clean_schema
+
 duration=$SECONDS
 echo -e "\n\n$(echo_done) Done in $(($duration / 60)) minutes and $(($duration % 60)) seconds."
 echo "    The Generating proto in the '${DIST_DIR}' directory!"
