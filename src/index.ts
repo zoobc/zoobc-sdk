@@ -1,4 +1,5 @@
 import { grpc } from '@improbable-eng/grpc-web';
+import { NodeHttpTransport } from '@improbable-eng/grpc-web-node-http-transport';
 import { GetBlocksRequest } from './proto/model/block_pb';
 import { BlockService } from './proto/service/block_pb_service';
 
@@ -25,6 +26,7 @@ class ZooBC {
     grpc.unary(BlockService.GetBlocks, {
       request: getBlockRequest,
       host: this._host,
+      transport: NodeHttpTransport(),
       onEnd: res => {
         const { status, statusMessage, message } = res;
         if (status === grpc.Code.OK && message) {

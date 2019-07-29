@@ -17,5 +17,5 @@
     "esModuleInterop": true,
     "removeComments": true
   },
-  "exclude": ["node_modules", "dist", "test", "examples"]
+  "exclude": ["node_modules", "dist", "tests", "examples"]
 }
