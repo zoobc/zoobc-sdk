@@ -43,20 +43,14 @@ function echo_done() {
 
 function clean_schema() {
   if [ -d schema ]; then
-    git config -f .gitmodules --remove-section submodule.schema
-    git config -f .git/config --remove-section submodule.schema
-    git rm --cached schema -f -r
-    rm -rf .git/modules/schema
     rm -rf schema
   fi
 }
 
 function update_schema() {
   clean_schema
-  git submodule add git@github.com:zoobc/zoobc-schema.git schema --force
-  git submodule sync
-  git submodule update --init --recursive
-  echo "$(echo_pass) ${1} submodule zoobc-schema Done"
+  git clone git@github.com:zoobc/zoobc-schema.git schema
+  echo "$(echo_pass) ${1} Cloning zoobc-schema Done"
   reduce_code
 }
 
@@ -76,22 +70,9 @@ function reduce_code() {
 SECONDS=0
 echo "You appear to be running on ${platform}"
 
-# 2. Check submodule zoobc-schema
-echo -e "\nChecking submodule zoobc-schema..."
-if [ -d schema ]; then
-  read -p "Do you want to update submodule zoobc-schema (y/n)? " is_update
-
-  if ! ([ "$is_update" == "y" ] || [ "$is_update" == "Y" ] || [ "$is_update" == "n" ] || [ "$is_update" == "N" ]); then
-    echo "Invalid answer, please choose y or n!"
-    exit 1
-  else
-    if ([ "$is_update" == "y" ] || [ "$is_update" == "Y" ]); then
-      update_schema "Updating"
-    fi
-  fi
-else
-  update_schema "Cloning"
-fi
+# 2. Cloning zoobc-schema
+echo -e "\nStart cloning zoobc-schema..."
+update_schema
 
 # 3. Download grpc-web
 GRPC_WEB_VERSION="1.0.5"
@@ -158,7 +139,6 @@ else
   PROTOC_GEN_TS="./node_modules/.bin/protoc-gen-ts"
 fi
 
-
 $PROTOC \
   --plugin=protoc-gen-grpc-web=${GRPC_WEB_PATH} \
   --plugin=protoc-gen-ts=${PROTOC_GEN_TS} \
@@ -175,9 +155,8 @@ echo -e "\nCleaning temp generator..."
 rm -rf protoc
 rm -rf ${GRPC_WEB_PATH}
 clean_schema
-
 duration=$SECONDS
 echo -e "\n\n$(echo_done) Done in $(($duration / 60)) minutes and $(($duration % 60)) seconds."
 echo "    The Generating proto in the '${DIST_DIR}' directory!"
 
-sleep 5s
+# sleep 5s
