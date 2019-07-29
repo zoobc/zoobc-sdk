@@ -24,10 +24,10 @@ jobs:
       - run:
           name: Setup Localhost
           command: |
-            - cd examples/react
-            - npm i -g yarn
-            - yarn
-            - yarn start
+            cd examples/react
+            npm i -g yarn
+            yarn
+            yarn start
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
