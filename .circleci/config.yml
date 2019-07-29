@@ -21,6 +21,21 @@ jobs:
       - run:
           name: Generate Protobuf
           command: ./protogen.sh
+      - run:
+          name: Setup Localhost
+          command: |
+            - cd examples/react
+            - npm i -g yarn
+            - yarn
+            - yarn start
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
 
 # workflows:
 #   version: 2.0
