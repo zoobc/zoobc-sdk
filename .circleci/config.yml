@@ -1,0 +1,21 @@
+version: 2.0
+
+jobs:
+  build:
+    working_directory: ~/zoobc-sdk-js
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run:
+          name: Setup Dependencies
+          command: npm install
+      - run:
+          name: Generate Protobuf
+          command: ./protogen.sh
+
+workflows:
+  version: 2.0
+  build:
+    jobs:
+      - build
