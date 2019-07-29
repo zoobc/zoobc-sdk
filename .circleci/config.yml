@@ -1,0 +1,51 @@
+version: 2.0
+
+jobs:
+  build:
+    working_directory: ~/zoobc-sdk-js
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run:
+          name: Setup Dependencies
+          command: npm install
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - run:
+          name: Generate Protobuf
+          command: ./protogen.sh
+
+  build_localhost:
+    working_directory: ~/zoobc-sdk-js/examples/react
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run:
+          name: Setup Localhost
+          command: |
+            cd examples/react
+            npm install
+            npm start
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+
+# workflows:
+#   version: 2.0
+#   build_and_build_localhost:
+#     jobs:
+#       - build
+#       - build_localhost
