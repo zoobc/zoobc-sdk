@@ -315,7 +315,7 @@ proto.model.Transaction.prototype.toObject = function(opt_includeInstance) {
 proto.model.Transaction.toObject = function(includeInstance, msg) {
   var f, obj = {
     version: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    id: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    id: jspb.Message.getFieldWithDefault(msg, 2, "0"),
     blockid: jspb.Message.getFieldWithDefault(msg, 3, 0),
     height: jspb.Message.getFieldWithDefault(msg, 4, 0),
     senderaccounttype: jspb.Message.getFieldWithDefault(msg, 5, 0),
@@ -373,7 +373,7 @@ proto.model.Transaction.deserializeBinaryFromReader = function(msg, reader) {
       msg.setVersion(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setId(value);
       break;
     case 3:
@@ -480,8 +480,8 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
     );
   }
   f = message.getId();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       2,
       f
     );
@@ -621,16 +621,16 @@ proto.model.Transaction.prototype.setVersion = function(value) {
 
 /**
  * optional int64 ID = 2;
- * @return {number}
+ * @return {string}
  */
 proto.model.Transaction.prototype.getId = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
 };
 
 
-/** @param {number} value */
+/** @param {string} value */
 proto.model.Transaction.prototype.setId = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
+  jspb.Message.setProto3StringIntField(this, 2, value);
 };
 
 
@@ -1876,7 +1876,7 @@ proto.model.GetTransactionRequest.prototype.toObject = function(opt_includeInsta
  */
 proto.model.GetTransactionRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, 0)
+    id: jspb.Message.getFieldWithDefault(msg, 1, "0")
   };
 
   if (includeInstance) {
@@ -1914,7 +1914,7 @@ proto.model.GetTransactionRequest.deserializeBinaryFromReader = function(msg, re
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setId(value);
       break;
     default:
@@ -1947,8 +1947,8 @@ proto.model.GetTransactionRequest.prototype.serializeBinary = function() {
 proto.model.GetTransactionRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getId();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       1,
       f
     );
@@ -1958,16 +1958,16 @@ proto.model.GetTransactionRequest.serializeBinaryToWriter = function(message, wr
 
 /**
  * optional int64 ID = 1;
- * @return {number}
+ * @return {string}
  */
 proto.model.GetTransactionRequest.prototype.getId = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
 };
 
 
-/** @param {number} value */
+/** @param {string} value */
 proto.model.GetTransactionRequest.prototype.setId = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
+  jspb.Message.setProto3StringIntField(this, 1, value);
 };
 
 
