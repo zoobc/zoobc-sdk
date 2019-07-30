@@ -16,7 +16,6 @@ $ npm install zoobc or yarn add zoobc
 ```bash
 import React, { Component } from 'react';
 import zoobc from 'zoobc';
-import './app.css';
 
 class App extends Component {
   state = { blocks: [], error: '' };
