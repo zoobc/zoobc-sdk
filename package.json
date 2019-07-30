@@ -4,7 +4,6 @@
   "description": "A small set of libraries to implement applications connect with the P2P API of the nodes in the blockchain",
   "author": "ZooBC SDK Team",
   "license": "Apache-2.0",
-  "private": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "keywords": [
