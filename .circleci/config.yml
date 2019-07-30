@@ -13,7 +13,10 @@ jobs:
       - checkout
       - run:
           name: Install Dependencies
-          command: npm install
+          command: |
+            sudo apt update && sudo apt upgrade -y && sudo apt install git
+            npm install
+            npm audit fix
       - run:
           name: Unit Testing for NodeJs 6
           command: npm run test
@@ -24,7 +27,10 @@ jobs:
       - checkout
       - run:
           name: Install Dependencies
-          command: npm install
+          command: |
+            sudo apt update && sudo apt upgrade -y && sudo apt install git
+            npm install
+            npm audit fix
       - run:
           name: Unit Testing for NodeJs 10
           command: npm run test
@@ -36,9 +42,9 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
-            sudo apt update && sudo apt install git
-            npm audit fix
+            sudo apt update && sudo apt upgrade -y && sudo apt install git
             npm install
+            npm audit fix
       - run:
           name: Build SDK
           command: npm run build
