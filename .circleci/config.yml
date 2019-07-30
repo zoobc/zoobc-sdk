@@ -54,10 +54,10 @@ workflows:
   test_release_publish:
     jobs:
       - test_node_6
-      - test_node_10
+      - test_node_10:
           requires:
             - test_node_6
-      - build_release_publish
+      - build_release_publish:
           requires:
             - test_node_10
           filters:
