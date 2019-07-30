@@ -35,7 +35,10 @@ jobs:
       - checkout
       - run:
           name: Install Dependencies
-          command: npm install
+          command: |
+            sudo apt update && sudo apt install git
+            npm audit fix
+            npm install
       - run:
           name: Build SDK
           command: npm run build
