@@ -41,7 +41,7 @@ class ZooBC {
     });
   }
 
-  getBlock(ChainType: number, ID = 0, Height = 0, callback: Callback): void {
+  getBlock(ChainType: number, ID = '0', Height = 0, callback: Callback): void {
     const request = new GetBlockRequest();
     request.setChaintype(ChainType);
     request.setId(ID);
@@ -82,7 +82,7 @@ class ZooBC {
     });
   }
 
-  getTransaction(ID: number, callback: Callback): void {
+  getTransaction(ID = '0', callback: Callback): void {
     const request = new GetTransactionRequest();
     request.setId(ID);
 
@@ -117,7 +117,7 @@ function getBlocks(ChainType: number, Limit: number, Height: number): any {
   });
 }
 
-function getBlock(ChainType: number, ID = 0, Height = 0): any {
+function getBlock(ChainType: number, ID = '0', Height = 0): any {
   return new Promise((resolve, reject) => {
     zoobc.getBlock(ChainType, ID, Height, (err: any, resp: any) => {
       if (err) return reject(err);
@@ -135,7 +135,7 @@ function getTransactions(Limit: number, Offset = 0): any {
   });
 }
 
-function getTransaction(ID: number): any {
+function getTransaction(ID = '0'): any {
   return new Promise((resolve, reject) => {
     zoobc.getTransaction(ID, (err: any, resp: any) => {
       if (err) return reject(err);
