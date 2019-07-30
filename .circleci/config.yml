@@ -72,4 +72,4 @@ workflows:
                 - v1.0.0-beta
             tags:
               only:
-                - /\d+\.\d+\.\d+/
+                - /\d+\.\d+\.\d+/ # /^v.*/

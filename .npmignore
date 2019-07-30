@@ -13,5 +13,3 @@ tests
 protogen.sh
 rollup.config.js
 tsconfig.json
-package-lock.json
-yarn.lock
