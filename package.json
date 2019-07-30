@@ -1,6 +1,6 @@
 {
   "name": "zoobc-sdk-js",
-  "version": "0.1.0",
+  "version": "0.0.0-semantic-release",
   "description": "A small set of libraries to implement applications connect with the P2P API of the nodes in the blockchain",
   "author": "ZooBC SDK Team",
   "license": "Apache",
@@ -32,7 +32,7 @@
     }
   },
   "lint-staged": {
-    "{src,tests}/**/*.{ts,tsx,js,jsx}": [
+    "{src,tests}/*.{ts,test.ts}": [
       "npm run prettier",
       "npm run test",
       "git add"

@@ -1,51 +1,33 @@
-version: 2.0
+version: 2
 
 jobs:
-  build:
-    working_directory: ~/zoobc-sdk-js
+  test_node_6:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:6
     steps:
       - checkout
       - run:
-          name: Setup Dependencies
+          name: Install Dependencies
           command: npm install
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-      - save_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-          paths:
-            - node_modules
       - run:
-          name: Generate Protobuf
-          command: ./protogen.sh
+          name: Unit Testing for NodeJs 6
+          command: npm run test
 
-  build_localhost:
-    working_directory: ~/zoobc-sdk-js/examples/react
+  test_node_10:
     docker:
       - image: circleci/node:10
     steps:
       - checkout
       - run:
-          name: Setup Localhost
-          command: |
-            cd examples/react
-            npm install
-            npm start
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-      - save_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-          paths:
-            - node_modules
+          name: Install Dependencies
+          command: npm install
+      - run:
+          name: Unit Testing for NodeJs 10
+          command: npm run test
 
-# workflows:
-#   version: 2.0
-#   build_and_build_localhost:
-#     jobs:
-#       - build
-#       - build_localhost
+workflows:
+  version: 2
+  test-release:
+    jobs:
+      - test_node_6
+      - test_node_10

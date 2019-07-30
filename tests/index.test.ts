@@ -2,39 +2,43 @@ import 'mocha';
 import { expect } from 'chai';
 import zoobc from '../src/index';
 
-zoobc.connection('http://18.139.3.139:7001');
+const host = 'http://18.139.3.139:7001';
+const conn = zoobc.connection(host);
 
-describe('Zoobc unit testing', () => {
-  it('check connection retun void', async () => {
-    const con = await zoobc.connection('http://18.139.3.139:7001');
-    expect(con).to.be.an('undefined');
+describe('Zoobc unit testing :', () => {
+  it(`checking connection ${host} retun void`, async () => {
+    expect(conn).to.be.an('undefined');
   });
 
-  it('checking blocks should return object', async () => {
-    const getBlocks = await zoobc.getBlocks(0, 2, 1);
-    expect(getBlocks).to.be.an('object');
-  });
+  describe('Blocks unit testing :', async () => {
+    const p = { chaintype: 0, limit: 2, height: 1 };
 
-  it('checking blockList should return array', async () => {
-    const getBlocks = await zoobc.getBlocks(0, 2, 1);
-    expect(getBlocks.blocksList).to.be.an('array');
-  });
+    it('checking blocks should return object', async () => {
+      const getBlocks = await zoobc.getBlocks(p.chaintype, p.limit, p.height);
+      expect(getBlocks).to.be.an('object');
+    });
 
-  it('checking block should have property chaintype', async () => {
-    const getBlocks = await zoobc.getBlocks(0, 2, 1);
-    expect(getBlocks).to.be.have.haveOwnProperty('chaintype');
-    expect(getBlocks.chaintype).to.equal(0);
-  });
+    it('checking blocks should have property chaintype', async () => {
+      const getBlocks = await zoobc.getBlocks(p.chaintype, p.limit, p.height);
+      expect(getBlocks).to.be.have.haveOwnProperty('chaintype');
+      expect(getBlocks.chaintype).to.equal(p.chaintype);
+    });
 
-  it('checking block should have property count', async () => {
-    const getBlocks = await zoobc.getBlocks(0, 2, 1);
-    expect(getBlocks).to.be.have.haveOwnProperty('count');
-    expect(getBlocks.count).to.equal(2);
-  });
+    it('checking blocks should have property count', async () => {
+      const getBlocks = await zoobc.getBlocks(p.chaintype, p.limit, p.height);
+      expect(getBlocks).to.be.have.haveOwnProperty('count');
+      expect(getBlocks.count).to.equal(p.limit);
+    });
 
-  it('checking block should have property height', async () => {
-    const getBlocks = await zoobc.getBlocks(0, 2, 1);
-    expect(getBlocks).to.be.have.haveOwnProperty('height');
-    expect(getBlocks.height).to.equal(1);
+    it('checking blocks should have property height', async () => {
+      const getBlocks = await zoobc.getBlocks(p.chaintype, p.limit, p.height);
+      expect(getBlocks).to.be.have.haveOwnProperty('height');
+      expect(getBlocks.height).to.equal(p.height);
+    });
+
+    it('checking blocksList should return array', async () => {
+      const getBlocks = await zoobc.getBlocks(p.chaintype, p.limit, p.height);
+      expect(getBlocks.blocksList).to.be.an('array');
+    });
   });
 });
