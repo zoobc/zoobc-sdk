@@ -1,6 +1,6 @@
 version: 2
 
-defaults:
+defaults: &defaults
   working_directory: ~/zoobc-sdk-js
   docker:
     - image: circleci/node:10
