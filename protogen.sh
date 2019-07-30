@@ -12,7 +12,7 @@ case $platform in
 'WindowsNT')
   platform='win'
   ;;
-'MINGW64_NT-10.0')
+MINGW64_NT*)
   platform='win'
   ;;
 'FreeBSD')
