@@ -1,51 +1,75 @@
-version: 2.0
+version: 2
+
+defaults: &defaults
+  working_directory: ~/zoobc-sdk-js
+  docker:
+    - image: circleci/node:10
 
 jobs:
-  build:
-    working_directory: ~/zoobc-sdk-js
+  test_node_6:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:6
     steps:
       - checkout
       - run:
-          name: Setup Dependencies
-          command: npm install
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-      - save_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-          paths:
-            - node_modules
-      - run:
-          name: Generate Protobuf
-          command: ./protogen.sh
-
-  build_localhost:
-    working_directory: ~/zoobc-sdk-js/examples/react
-    docker:
-      - image: circleci/node:10
-    steps:
-      - checkout
-      - run:
-          name: Setup Localhost
+          name: Install Dependencies
           command: |
-            cd examples/react
-            npm install
-            npm start
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-      - save_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-          paths:
-            - node_modules
+            sudo apt update && sudo apt upgrade -y && sudo apt install git
+            npm install --no-audit
+      - run:
+          name: Unit Testing for NodeJs 6
+          command: npm run test
 
-# workflows:
-#   version: 2.0
-#   build_and_build_localhost:
-#     jobs:
-#       - build
-#       - build_localhost
+  test_node_10:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            sudo apt update && sudo apt upgrade -y && sudo apt install git
+            npm install --no-audit
+      - run:
+          name: Unit Testing for NodeJs 10
+          command: npm run test
+
+  build_release_publish:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            sudo apt update && sudo apt upgrade -y && sudo apt install git
+            npm install --no-audit
+      - run:
+          name: Build SDK
+          command: npm run build
+      - run:
+          name: Release SDK
+          command: npx semantic-release
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/zoobc-sdk-js/.npmrc
+      - run:
+          name: Publish SDK
+          command: npm publish
+
+workflows:
+  version: 2
+  test_release_publish:
+    jobs:
+      - test_node_6
+      - test_node_10:
+          requires:
+            - test_node_6
+      - build_release_publish:
+          requires:
+            - test_node_10
+          filters:
+            branches:
+              only:
+                - v1.0.0-beta
+            tags:
+              only:
+                - /\d+\.\d+\.\d+/ # /^v.*/

@@ -1,10 +1,10 @@
 {
-  "name": "zoobc-sdk-js",
-  "version": "0.1.0",
+  "name": "zoobc",
+  "version": "0.0.1-pre-release",
   "description": "A small set of libraries to implement applications connect with the P2P API of the nodes in the blockchain",
   "author": "ZooBC SDK Team",
-  "license": "Apache",
-  "private": true,
+  "license": "Apache-2.0",
+  "private": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "keywords": [
@@ -32,7 +32,7 @@
     }
   },
   "lint-staged": {
-    "{src,tests}/**/*.{ts,tsx,js,jsx}": [
+    "{src,tests}/*.{ts,test.ts}": [
       "npm run prettier",
       "npm run test",
       "git add"
@@ -64,8 +64,15 @@
     "rollup": "^1.17.0",
     "rollup-plugin-commonjs": "^10.0.1",
     "rollup-plugin-typescript": "^1.0.1",
+    "semantic-release": "^15.13.18",
     "ts-jest": "^24.0.2",
     "tslib": "^1.10.0",
     "typescript": "^3.5.3"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=6.0.0"
   }
 }
