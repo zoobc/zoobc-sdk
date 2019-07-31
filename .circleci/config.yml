@@ -63,13 +63,13 @@ workflows:
       - test_node_10:
           requires:
             - test_node_6
-      - build_release_publish:
-          requires:
-            - test_node_10
-          filters:
-            branches:
-              only:
-                - v1.0.0-beta
-            tags:
-              only:
-                - /\d+\.\d+\.\d+/ # /^v.*/
+      # - build_release_publish:
+      #     requires:
+      #       - test_node_10
+      #     filters:
+      #       branches:
+      #         only:
+      #           - v1.0.0-beta
+      #       tags:
+      #         only:
+      #           - /\d+\.\d+\.\d+/ # /^v.*/
