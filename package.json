@@ -40,14 +40,12 @@
   },
   "dependencies": {
     "@improbable-eng/grpc-web": "^0.9.6",
-    "@improbable-eng/grpc-web-node-http-transport": "^0.9.6",
-    "@types/google-protobuf": "^3.7.1",
-    "google-protobuf": "^3.9.0",
     "grpc-web": "^1.0.5",
     "ts-node": "^8.3.0",
     "ts-protoc-gen": "^0.10.0"
   },
   "devDependencies": {
+    "@improbable-eng/grpc-web-node-http-transport": "^0.9.6",
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.7",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
@@ -68,6 +66,9 @@
     "ts-jest": "^24.0.2",
     "tslib": "^1.10.0",
     "typescript": "^3.5.3"
+  },
+  "peerDependencies": {
+    "google-protobuf": "^3.9.0"
   },
   "files": [
     "dist"
