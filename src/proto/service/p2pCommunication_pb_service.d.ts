@@ -5,6 +5,8 @@ import * as service_p2pCommunication_pb from "../service/p2pCommunication_pb";
 import * as model_peer_pb from "../model/peer_pb";
 import * as model_node_pb from "../model/node_pb";
 import * as model_empty_pb from "../model/empty_pb";
+import * as model_block_pb from "../model/block_pb";
+import * as model_transaction_pb from "../model/transaction_pb";
 import {grpc} from "@improbable-eng/grpc-web";
 
 type P2PCommunicationGetPeerInfo = {
@@ -34,11 +36,31 @@ type P2PCommunicationSendPeers = {
   readonly responseType: typeof model_empty_pb.Empty;
 };
 
+type P2PCommunicationSendBlock = {
+  readonly methodName: string;
+  readonly service: typeof P2PCommunication;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof model_block_pb.Block;
+  readonly responseType: typeof model_empty_pb.Empty;
+};
+
+type P2PCommunicationSendTransaction = {
+  readonly methodName: string;
+  readonly service: typeof P2PCommunication;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof model_transaction_pb.SendTransactionRequest;
+  readonly responseType: typeof model_empty_pb.Empty;
+};
+
 export class P2PCommunication {
   static readonly serviceName: string;
   static readonly GetPeerInfo: P2PCommunicationGetPeerInfo;
   static readonly GetMorePeers: P2PCommunicationGetMorePeers;
   static readonly SendPeers: P2PCommunicationSendPeers;
+  static readonly SendBlock: P2PCommunicationSendBlock;
+  static readonly SendTransaction: P2PCommunicationSendTransaction;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -98,6 +120,24 @@ export class P2PCommunicationClient {
   ): UnaryResponse;
   sendPeers(
     requestMessage: model_peer_pb.SendPeersRequest,
+    callback: (error: ServiceError|null, responseMessage: model_empty_pb.Empty|null) => void
+  ): UnaryResponse;
+  sendBlock(
+    requestMessage: model_block_pb.Block,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: model_empty_pb.Empty|null) => void
+  ): UnaryResponse;
+  sendBlock(
+    requestMessage: model_block_pb.Block,
+    callback: (error: ServiceError|null, responseMessage: model_empty_pb.Empty|null) => void
+  ): UnaryResponse;
+  sendTransaction(
+    requestMessage: model_transaction_pb.SendTransactionRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: model_empty_pb.Empty|null) => void
+  ): UnaryResponse;
+  sendTransaction(
+    requestMessage: model_transaction_pb.SendTransactionRequest,
     callback: (error: ServiceError|null, responseMessage: model_empty_pb.Empty|null) => void
   ): UnaryResponse;
 }

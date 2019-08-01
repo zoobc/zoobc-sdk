@@ -18,3 +18,7 @@ var model_node_pb = require('../model/node_pb.js');
 goog.object.extend(proto, model_node_pb);
 var model_empty_pb = require('../model/empty_pb.js');
 goog.object.extend(proto, model_empty_pb);
+var model_block_pb = require('../model/block_pb.js');
+goog.object.extend(proto, model_block_pb);
+var model_transaction_pb = require('../model/transaction_pb.js');
+goog.object.extend(proto, model_transaction_pb);

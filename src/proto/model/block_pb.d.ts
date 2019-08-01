@@ -5,8 +5,8 @@ import * as jspb from "google-protobuf";
 import * as model_transaction_pb from "../model/transaction_pb";
 
 export class Block extends jspb.Message {
-  getId(): number;
-  setId(value: number): void;
+  getId(): string;
+  setId(value: string): void;
 
   getPreviousblockhash(): Uint8Array | string;
   getPreviousblockhash_asU8(): Uint8Array;
@@ -77,7 +77,7 @@ export class Block extends jspb.Message {
 
 export namespace Block {
   export type AsObject = {
-    id: number,
+    id: string,
     previousblockhash: Uint8Array | string,
     height: number,
     timestamp: number,
@@ -100,8 +100,8 @@ export class GetBlockRequest extends jspb.Message {
   getChaintype(): number;
   setChaintype(value: number): void;
 
-  getId(): number;
-  setId(value: number): void;
+  getId(): string;
+  setId(value: string): void;
 
   getHeight(): number;
   setHeight(value: number): void;
@@ -119,7 +119,7 @@ export class GetBlockRequest extends jspb.Message {
 export namespace GetBlockRequest {
   export type AsObject = {
     chaintype: number,
-    id: number,
+    id: string,
     height: number,
   }
 }

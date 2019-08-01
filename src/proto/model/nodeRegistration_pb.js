@@ -185,7 +185,7 @@ proto.model.NodeRegistration.deserializeBinaryFromReader = function(msg, reader)
       msg.setAccountid(value);
       break;
     case 3:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {number} */ (reader.readUint32());
       msg.setRegistrationheight(value);
       break;
     case 4:
@@ -253,7 +253,7 @@ proto.model.NodeRegistration.serializeBinaryToWriter = function(message, writer)
   }
   f = message.getRegistrationheight();
   if (f !== 0) {
-    writer.writeInt64(
+    writer.writeUint32(
       3,
       f
     );
@@ -375,7 +375,7 @@ proto.model.NodeRegistration.prototype.setAccountid = function(value) {
 
 
 /**
- * optional int64 RegistrationHeight = 3;
+ * optional uint32 RegistrationHeight = 3;
  * @return {number}
  */
 proto.model.NodeRegistration.prototype.getRegistrationheight = function() {
@@ -549,7 +549,7 @@ proto.model.GetNodeRegistrationsRequest.deserializeBinaryFromReader = function(m
       msg.setAccountaddress(value);
       break;
     case 4:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {number} */ (reader.readUint32());
       msg.setRegistrationheight(value);
       break;
     default:
@@ -604,7 +604,7 @@ proto.model.GetNodeRegistrationsRequest.serializeBinaryToWriter = function(messa
   }
   f = message.getRegistrationheight();
   if (f !== 0) {
-    writer.writeInt64(
+    writer.writeUint32(
       4,
       f
     );
@@ -682,7 +682,7 @@ proto.model.GetNodeRegistrationsRequest.prototype.setAccountaddress = function(v
 
 
 /**
- * optional int64 RegistrationHeight = 4;
+ * optional uint32 RegistrationHeight = 4;
  * @return {number}
  */
 proto.model.GetNodeRegistrationsRequest.prototype.getRegistrationheight = function() {
@@ -782,7 +782,7 @@ proto.model.GetNodeRegistrationRequest.deserializeBinaryFromReader = function(ms
       msg.setAccountaddress(value);
       break;
     case 4:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {number} */ (reader.readUint32());
       msg.setRegistrationheight(value);
       break;
     case 5:
@@ -841,7 +841,7 @@ proto.model.GetNodeRegistrationRequest.serializeBinaryToWriter = function(messag
   }
   f = message.getRegistrationheight();
   if (f !== 0) {
-    writer.writeInt64(
+    writer.writeUint32(
       4,
       f
     );
@@ -926,7 +926,7 @@ proto.model.GetNodeRegistrationRequest.prototype.setAccountaddress = function(va
 
 
 /**
- * optional int64 RegistrationHeight = 4;
+ * optional uint32 RegistrationHeight = 4;
  * @return {number}
  */
 proto.model.GetNodeRegistrationRequest.prototype.getRegistrationheight = function() {
@@ -1042,7 +1042,7 @@ proto.model.GetNodeRegistrationsResponse.deserializeBinaryFromReader = function(
       msg.setAccountaddress(value);
       break;
     case 4:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {number} */ (reader.readUint32());
       msg.setRegistrationheight(value);
       break;
     case 5:
@@ -1105,7 +1105,7 @@ proto.model.GetNodeRegistrationsResponse.serializeBinaryToWriter = function(mess
   }
   f = message.getRegistrationheight();
   if (f !== 0) {
-    writer.writeInt64(
+    writer.writeUint32(
       4,
       f
     );
@@ -1197,7 +1197,7 @@ proto.model.GetNodeRegistrationsResponse.prototype.setAccountaddress = function(
 
 
 /**
- * optional int64 RegistrationHeight = 4;
+ * optional uint32 RegistrationHeight = 4;
  * @return {number}
  */
 proto.model.GetNodeRegistrationsResponse.prototype.getRegistrationheight = function() {

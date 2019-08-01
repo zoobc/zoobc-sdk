@@ -7,8 +7,8 @@ export class Transaction extends jspb.Message {
   getVersion(): number;
   setVersion(value: number): void;
 
-  getId(): number;
-  setId(value: number): void;
+  getId(): string;
+  setId(value: string): void;
 
   getBlockid(): number;
   setBlockid(value: number): void;
@@ -84,7 +84,7 @@ export class Transaction extends jspb.Message {
 export namespace Transaction {
   export type AsObject = {
     version: number,
-    id: number,
+    id: string,
     blockid: number,
     height: number,
     senderaccounttype: number,
@@ -162,6 +162,9 @@ export class NodeRegistrationTransactionBody extends jspb.Message {
   getRegistrationheight(): number;
   setRegistrationheight(value: number): void;
 
+  getNodeaddresslength(): number;
+  setNodeaddresslength(value: number): void;
+
   getNodeaddress(): string;
   setNodeaddress(value: string): void;
 
@@ -189,6 +192,7 @@ export namespace NodeRegistrationTransactionBody {
     accounttype: number,
     accountaddress: string,
     registrationheight: number,
+    nodeaddresslength: number,
     nodeaddress: string,
     lockedbalance: number,
     poown?: ProofOfOwnership.AsObject,
@@ -236,8 +240,8 @@ export namespace ProofOfOwnership {
 }
 
 export class GetTransactionRequest extends jspb.Message {
-  getId(): number;
-  setId(value: number): void;
+  getId(): string;
+  setId(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetTransactionRequest.AsObject;
@@ -251,7 +255,7 @@ export class GetTransactionRequest extends jspb.Message {
 
 export namespace GetTransactionRequest {
   export type AsObject = {
-    id: number,
+    id: string,
   }
 }
 
@@ -350,6 +354,28 @@ export namespace GetTransactionsResponse {
     total: number,
     count: number,
     transactionsList: Array<Transaction.AsObject>,
+  }
+}
+
+export class SendTransactionRequest extends jspb.Message {
+  getTransactionbytes(): Uint8Array | string;
+  getTransactionbytes_asU8(): Uint8Array;
+  getTransactionbytes_asB64(): string;
+  setTransactionbytes(value: Uint8Array | string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): SendTransactionRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: SendTransactionRequest): SendTransactionRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: SendTransactionRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): SendTransactionRequest;
+  static deserializeBinaryFromReader(message: SendTransactionRequest, reader: jspb.BinaryReader): SendTransactionRequest;
+}
+
+export namespace SendTransactionRequest {
+  export type AsObject = {
+    transactionbytes: Uint8Array | string,
   }
 }
 
