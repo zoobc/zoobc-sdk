@@ -10,12 +10,12 @@
       <th>Version</th>
     </thead>
     <tbody >
-      <tr *ngFor="let lists of list">
-        <td>{{lists.id}}</td>
-        <td>{{lists.previousblockhash}}</td>
-        <td>{{lists.height}}</td>
-        <td>{{lists.timestamp}}</td>
-        <td>{{lists.version}}</td>
+      <tr *ngFor="let list of lists">
+        <td>{{list.id}}</td>
+        <td>{{list.previousblockhash}}</td>
+        <td>{{list.height}}</td>
+        <td>{{list.timestamp}}</td>
+        <td>{{list.version}}</td>
     </tr>
     </tbody>
   </table>
