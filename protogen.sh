@@ -9,7 +9,7 @@ case $platform in
 'Linux')
   platform='linux'
   ;;
-'WindowsNT')
+MINGW64_NT*)
   platform='win'
   ;;
 'MINGW64_NT-10.0')
@@ -50,7 +50,7 @@ function clean_schema() {
 function update_schema() {
   clean_schema
   git clone git@github.com:zoobc/zoobc-schema.git schema
-  echo "$(echo_pass) ${1} Cloning zoobc-schema Done"
+  echo "$(echo_pass) Cloning zoobc-schema Done"
   reduce_code
   replace_code
 }
