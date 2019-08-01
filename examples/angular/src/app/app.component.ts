@@ -14,7 +14,6 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.getBlocks().then(data => {
       this.list = data.blocksList;
-      console.log(this.list);
     });
   }
 
