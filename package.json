@@ -6,6 +6,7 @@
   "license": "Apache-2.0",
   "private": false,
   "main": "dist/index.js",
+  "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "keywords": [
     "blockchain",
@@ -21,8 +22,11 @@
     "url": "https://github.com/zoobc/zoobc-sdk-js/issues"
   },
   "scripts": {
+    "clean": "rimraf dist",
     "test": "mocha -r ts-node/register tests/**/*.test.ts",
-    "build": "rm -rf dist && npm run prettier && ./node_modules/.bin/rollup -c",
+    "build": "run-s clean && npm run prettier && run-p buildEs buildCjs",
+    "buildEs": "NODE_ENV=es rollup -c",
+    "buildCjs": "NODE_ENV=cjs rollup -c",
     "lint": "eslint \"{src,tests}/**/*\" --fix",
     "prettier": "prettier --write \"{src,tests}/**/*\""
   },
@@ -58,9 +62,12 @@
     "install": "^0.13.0",
     "lint-staged": "^9.2.0",
     "mocha": "^6.2.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^1.18.2",
     "rollup": "^1.17.0",
     "rollup-plugin-commonjs": "^10.0.1",
+    "rollup-plugin-filesize": "^6.1.1",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-typescript": "^1.0.1",
     "semantic-release": "^15.13.18",
     "ts-jest": "^24.0.2",
