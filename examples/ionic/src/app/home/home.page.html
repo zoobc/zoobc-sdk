@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      List Block Demo
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item button *ngFor="let item of list">
+      <ion-label text-wrap>
+        <h2>
+          <strong>{{ item.id }}</strong>
+        </h2>
+        <h3>Height : {{ item.height }}</h3>
+        <h3>Timestamp : {{ item.timestamp }}</h3>
+        <h3>Version : {{ item.version }}</h3>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
