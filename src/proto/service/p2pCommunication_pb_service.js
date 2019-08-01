@@ -5,6 +5,8 @@ var service_p2pCommunication_pb = require("../service/p2pCommunication_pb");
 var model_peer_pb = require("../model/peer_pb");
 var model_node_pb = require("../model/node_pb");
 var model_empty_pb = require("../model/empty_pb");
+var model_block_pb = require("../model/block_pb");
+var model_transaction_pb = require("../model/transaction_pb");
 var grpc = require("@improbable-eng/grpc-web").grpc;
 
 var P2PCommunication = (function () {
@@ -37,6 +39,24 @@ P2PCommunication.SendPeers = {
   requestStream: false,
   responseStream: false,
   requestType: model_peer_pb.SendPeersRequest,
+  responseType: model_empty_pb.Empty
+};
+
+P2PCommunication.SendBlock = {
+  methodName: "SendBlock",
+  service: P2PCommunication,
+  requestStream: false,
+  responseStream: false,
+  requestType: model_block_pb.Block,
+  responseType: model_empty_pb.Empty
+};
+
+P2PCommunication.SendTransaction = {
+  methodName: "SendTransaction",
+  service: P2PCommunication,
+  requestStream: false,
+  responseStream: false,
+  requestType: model_transaction_pb.SendTransactionRequest,
   responseType: model_empty_pb.Empty
 };
 
@@ -114,6 +134,68 @@ P2PCommunicationClient.prototype.sendPeers = function sendPeers(requestMessage, 
     callback = arguments[1];
   }
   var client = grpc.unary(P2PCommunication.SendPeers, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+P2PCommunicationClient.prototype.sendBlock = function sendBlock(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(P2PCommunication.SendBlock, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+P2PCommunicationClient.prototype.sendTransaction = function sendTransaction(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(P2PCommunication.SendTransaction, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,

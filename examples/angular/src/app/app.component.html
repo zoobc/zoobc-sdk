@@ -1,0 +1,24 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<html>
+<head></head>
+<body>
+  <table border="1" width="100%">
+    <thead>
+      <th>Id</th>
+      <th>Previous Hash</th>
+      <th>Height</th>
+      <th>Timestamp</th>
+      <th>Version</th>
+    </thead>
+    <tbody >
+      <tr *ngFor="let list of lists">
+        <td>{{list.id}}</td>
+        <td>{{list.previousblockhash}}</td>
+        <td>{{list.height}}</td>
+        <td>{{list.timestamp}}</td>
+        <td>{{list.version}}</td>
+    </tr>
+    </tbody>
+  </table>
+</body>
+</html>

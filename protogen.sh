@@ -9,10 +9,10 @@ case $platform in
 'Linux')
   platform='linux'
   ;;
-'WindowsNT')
+MINGW64_NT*)
   platform='win'
   ;;
-MINGW64_NT*)
+'MINGW64_NT-10.0')
   platform='win'
   ;;
 'FreeBSD')
@@ -103,8 +103,15 @@ else
   GRPC_WEB_PATH="/usr/local/bin/protoc-gen-grpc-web"
 fi
 
-curl -L -o ${GRPC_WEB_PATH} ${GRPC_WEB_URL}
-chmod +x ${GRPC_WEB_PATH}
+
+##CHECKING PLATFORM TO GIVE PERMISSION TO LINUX TO EDIT
+if [[ $platform == 'linux' ]]; then
+  sudo curl -L -o ${GRPC_WEB_PATH} ${GRPC_WEB_URL}
+  sudo chmod +x ${GRPC_WEB_PATH}
+else
+  curl -L -o ${GRPC_WEB_PATH} ${GRPC_WEB_URL}
+  chmod +x ${GRPC_WEB_PATH}
+fi
 echo "$(echo_pass) Downloading grpc web v${GRPC_WEB_VERSION} Done"
 
 # 4. Download protobuf base on platform
@@ -120,7 +127,13 @@ else
   echo -e "\n$(echo_fail) Cannot download protoc. Platform ${platform} is not currently supported by ts-protoc-gen"
   exit 1
 fi
-curl -L -o "protoc-${PROTOC_VERSION}.zip" ${PROTOC_URL}
+
+echo ${PROTOC_VERSION}
+if [[ $platform == 'linux' ]]; then
+  sudo curl -L -o "protoc-${PROTOC_VERSION}.zip" ${PROTOC_URL}
+else
+  curl -L -o "protoc-${PROTOC_VERSION}.zip" ${PROTOC_URL}
+fi
 echo "$(echo_pass) Downloading protoc v${PROTOC_VERSION} Done"
 
 # 5. Unzip into folder protoc
@@ -128,6 +141,7 @@ echo -e "\nExtract protoc-${PROTOC_VERSION}.zip..."
 if [ -d protoc ]; then
   rm -rf protoc
 fi
+
 mkdir -p protoc
 unzip -qq "protoc-${PROTOC_VERSION}.zip" -d protoc
 rm -rf "protoc-${PROTOC_VERSION}.zip"
@@ -137,7 +151,11 @@ echo "$(echo_pass) Extract protoc-${PROTOC_VERSION}.zip Done"
 echo -e "\nGenerating proto definitions for ${platform}..."
 DIST_DIR="./src/proto"
 if [ -d "${DIST_DIR}" ]; then
+  if [[ $platform == 'linux' ]]; then
+  sudo rm -rf "${DIST_DIR}"
+  else
   rm -rf "${DIST_DIR}"
+  fi
 fi
 mkdir -p "${DIST_DIR}"
 PROTOC=./protoc/bin/protoc
@@ -148,7 +166,18 @@ else
   PROTOC_GEN_TS="./node_modules/.bin/protoc-gen-ts"
 fi
 
-$PROTOC \
+if [[ $platform == 'linux' ]]; then
+    sudo $PROTOC \
+    --plugin=protoc-gen-grpc-web=${GRPC_WEB_PATH} \
+    --plugin=protoc-gen-ts=${PROTOC_GEN_TS} \
+    --ts_out=service=true:${DIST_DIR} \
+    --js_out=import_style=commonjs,binary:${DIST_DIR} \
+    --grpc-web_out=import_style=commonjs,mode=grpcwebtext:${DIST_DIR} \
+    ./schema/model/*.proto \
+    ./schema/service/*.proto \
+    --proto_path=./schema
+else
+  $PROTOC \
   --plugin=protoc-gen-grpc-web=${GRPC_WEB_PATH} \
   --plugin=protoc-gen-ts=${PROTOC_GEN_TS} \
   --ts_out=service=true:${DIST_DIR} \
@@ -157,15 +186,20 @@ $PROTOC \
   ./schema/model/*.proto \
   ./schema/service/*.proto \
   --proto_path=./schema
+fi
 echo "$(echo_pass) Generating proto definitions for ${platform} Done"
 
-# 7. Cleanup downloaded proto directory
+ # 7. Cleanup downloaded proto directory
 echo -e "\nCleaning temp generator..."
-rm -rf protoc
-rm -rf ${GRPC_WEB_PATH}
-clean_schema
-echo "$(echo_pass) Cleaning temp generator Done"
+if [[ $platform == 'linux' ]]; then
+  sudo rm -rf protoc
+  sudo rm -rf ${GRPC_WEB_PATH}
+else
+  rm -rf protoc
+  rm -rf ${GRPC_WEB_PATH}
+fi
 
+clean_schema
 duration=$SECONDS
 echo -e "\n\n$(echo_done) Done in $(($duration / 60)) minutes and $(($duration % 60)) seconds."
 echo "    The Generating proto in the '${DIST_DIR}' directory!"

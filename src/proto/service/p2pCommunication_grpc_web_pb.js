@@ -17,6 +17,10 @@ var model_peer_pb = require('../model/peer_pb.js')
 var model_node_pb = require('../model/node_pb.js')
 
 var model_empty_pb = require('../model/empty_pb.js')
+
+var model_block_pb = require('../model/block_pb.js')
+
+var model_transaction_pb = require('../model/transaction_pb.js')
 const proto = {};
 proto.service = require('./p2pCommunication_pb.js');
 
@@ -311,6 +315,154 @@ proto.service.P2PCommunicationPromiseClient.prototype.sendPeers =
       request,
       metadata || {},
       methodDescriptor_P2PCommunication_SendPeers);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.model.Block,
+ *   !proto.model.Empty>}
+ */
+const methodDescriptor_P2PCommunication_SendBlock = new grpc.web.MethodDescriptor(
+  '/service.P2PCommunication/SendBlock',
+  grpc.web.MethodType.UNARY,
+  model_block_pb.Block,
+  model_empty_pb.Empty,
+  /** @param {!proto.model.Block} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_empty_pb.Empty.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.model.Block,
+ *   !proto.model.Empty>}
+ */
+const methodInfo_P2PCommunication_SendBlock = new grpc.web.AbstractClientBase.MethodInfo(
+  model_empty_pb.Empty,
+  /** @param {!proto.model.Block} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_empty_pb.Empty.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.model.Block} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.model.Empty)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.model.Empty>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.service.P2PCommunicationClient.prototype.sendBlock =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/service.P2PCommunication/SendBlock',
+      request,
+      metadata || {},
+      methodDescriptor_P2PCommunication_SendBlock,
+      callback);
+};
+
+
+/**
+ * @param {!proto.model.Block} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.model.Empty>}
+ *     A native promise that resolves to the response
+ */
+proto.service.P2PCommunicationPromiseClient.prototype.sendBlock =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/service.P2PCommunication/SendBlock',
+      request,
+      metadata || {},
+      methodDescriptor_P2PCommunication_SendBlock);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.model.SendTransactionRequest,
+ *   !proto.model.Empty>}
+ */
+const methodDescriptor_P2PCommunication_SendTransaction = new grpc.web.MethodDescriptor(
+  '/service.P2PCommunication/SendTransaction',
+  grpc.web.MethodType.UNARY,
+  model_transaction_pb.SendTransactionRequest,
+  model_empty_pb.Empty,
+  /** @param {!proto.model.SendTransactionRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_empty_pb.Empty.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.model.SendTransactionRequest,
+ *   !proto.model.Empty>}
+ */
+const methodInfo_P2PCommunication_SendTransaction = new grpc.web.AbstractClientBase.MethodInfo(
+  model_empty_pb.Empty,
+  /** @param {!proto.model.SendTransactionRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_empty_pb.Empty.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.model.SendTransactionRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.model.Empty)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.model.Empty>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.service.P2PCommunicationClient.prototype.sendTransaction =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/service.P2PCommunication/SendTransaction',
+      request,
+      metadata || {},
+      methodDescriptor_P2PCommunication_SendTransaction,
+      callback);
+};
+
+
+/**
+ * @param {!proto.model.SendTransactionRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.model.Empty>}
+ *     A native promise that resolves to the response
+ */
+proto.service.P2PCommunicationPromiseClient.prototype.sendTransaction =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/service.P2PCommunication/SendTransaction',
+      request,
+      metadata || {},
+      methodDescriptor_P2PCommunication_SendTransaction);
 };
 
 
