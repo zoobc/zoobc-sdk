@@ -8,7 +8,7 @@ import zoobc from 'zoobc';
 })
 
 export class AppComponent implements OnInit {
-  list = [];
+  lists = [];
   title = 'angular app';
 
   ngOnInit(): void {
