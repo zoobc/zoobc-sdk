@@ -1,7 +1,7 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <head></head>
 <body>
-  <table>
+  <table border="1" width="100%">
     <thead>
       <th>Id</th>
       <th>Previous Hash</th>
@@ -10,7 +10,7 @@
       <th>Version</th>
     </thead>
     <tbody >
-      <tr *ngFor="let lists of list | keyvalue">
+      <tr *ngFor="let lists of list">
         <td>{{lists.id}}</td>
         <td>{{lists.previousblockhash}}</td>
         <td>{{lists.height}}</td>

@@ -132,7 +132,7 @@ proto.model.MempoolTransaction.prototype.toObject = function(opt_includeInstance
  */
 proto.model.MempoolTransaction.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    id: jspb.Message.getFieldWithDefault(msg, 1, "0"),
     feeperbyte: jspb.Message.getFieldWithDefault(msg, 2, 0),
     arrivaltimestamp: jspb.Message.getFieldWithDefault(msg, 3, 0),
     transactionbytes: msg.getTransactionbytes_asB64()
@@ -173,7 +173,7 @@ proto.model.MempoolTransaction.deserializeBinaryFromReader = function(msg, reade
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setId(value);
       break;
     case 2:
@@ -218,8 +218,8 @@ proto.model.MempoolTransaction.prototype.serializeBinary = function() {
 proto.model.MempoolTransaction.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getId();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
       1,
       f
     );
@@ -250,16 +250,16 @@ proto.model.MempoolTransaction.serializeBinaryToWriter = function(message, write
 
 /**
  * optional int64 ID = 1;
- * @return {number}
+ * @return {string}
  */
 proto.model.MempoolTransaction.prototype.getId = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
 };
 
 
-/** @param {number} value */
+/** @param {string} value */
 proto.model.MempoolTransaction.prototype.setId = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
+  jspb.Message.setProto3StringIntField(this, 1, value);
 };
 
 

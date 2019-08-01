@@ -50,8 +50,9 @@ function clean_schema() {
 function update_schema() {
   clean_schema
   git clone git@github.com:zoobc/zoobc-schema.git schema
-  echo "$(echo_pass) ${1} Cloning zoobc-schema Done"
+  echo "$(echo_pass) Cloning zoobc-schema Done"
   reduce_code
+  replace_code
 }
 
 function reduce_code() {
@@ -62,6 +63,14 @@ function reduce_code() {
     sudo find $directory -type f -exec grep -qe "post" {} \; -exec sed -i '' -e '/post/d' {} +
     sudo find $directory -type f -exec grep -qe "};" {} \; -exec sed -i '' -e '/};/d' {} +
     echo "$(echo_pass) Reduce code proto schema Done"
+  fi
+}
+
+function replace_code() {
+  directory="./schema/model"
+  if [ -d "${directory}" ]; then
+    find $directory -type f -exec grep -qe "int64 ID" {} \; -exec sed -i '' -e '/int64 ID/ s/^\(.*\)\(;\)/\1 [jstype = JS_STRING]\2/g' {} \;
+    echo "$(echo_pass) Replace line code for int64 ID in proto schema Done"
   fi
 }
 
@@ -197,6 +206,8 @@ else
   rm -rf ${GRPC_WEB_PATH}
 fi
 clean_schema
+echo "$(echo_pass) Cleaning temp generator Done"
+
 duration=$SECONDS
 echo -e "\n\n$(echo_done) Done in $(($duration / 60)) minutes and $(($duration % 60)) seconds."
 echo "    The Generating proto in the '${DIST_DIR}' directory!"

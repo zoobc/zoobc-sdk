@@ -1,5 +1,4 @@
 import { grpc } from '@improbable-eng/grpc-web';
-import { NodeHttpTransport } from '@improbable-eng/grpc-web-node-http-transport';
 import { GetBlocksRequest, GetBlockRequest } from './proto/model/block_pb';
 import { GetTransactionsRequest, GetTransactionRequest } from './proto/model/transaction_pb';
 import { BlockService } from './proto/service/block_pb_service';
@@ -20,6 +19,10 @@ class ZooBC {
     this._host = host;
   }
 
+  httpTransport(nodeHttpTransport: grpc.TransportFactory) {
+    grpc.setDefaultTransport(nodeHttpTransport);
+  }
+
   getBlocks(ChainType: number, Limit: number, Height: number, callback: Callback): void {
     const request = new GetBlocksRequest();
     request.setChaintype(ChainType);
@@ -29,7 +32,6 @@ class ZooBC {
     grpc.unary(BlockService.GetBlocks, {
       request: request,
       host: this._host,
-      transport: NodeHttpTransport(),
       onEnd: (res: any) => {
         const { status, statusMessage, message } = res;
         if (status === grpc.Code.OK && message) {
@@ -41,7 +43,7 @@ class ZooBC {
     });
   }
 
-  getBlock(ChainType: number, ID = '0', Height = 0, callback: Callback): void {
+  getBlock(ChainType: number, ID: string = '0', Height: number = 0, callback: Callback): void {
     const request = new GetBlockRequest();
     request.setChaintype(ChainType);
     request.setId(ID);
@@ -50,7 +52,6 @@ class ZooBC {
     grpc.unary(BlockService.GetBlock, {
       request: request,
       host: this._host,
-      transport: NodeHttpTransport(),
       onEnd: (res: any) => {
         const { status, statusMessage, message } = res;
         if (status === grpc.Code.OK && message) {
@@ -70,7 +71,6 @@ class ZooBC {
     grpc.unary(TransactionService.GetTransactions, {
       request: request,
       host: this._host,
-      transport: NodeHttpTransport(),
       onEnd: (res: any) => {
         const { status, statusMessage, message } = res;
         if (status === grpc.Code.OK && message) {
@@ -82,14 +82,13 @@ class ZooBC {
     });
   }
 
-  getTransaction(ID = '0', callback: Callback): void {
+  getTransaction(ID: string = '0', callback: Callback): void {
     const request = new GetTransactionRequest();
     request.setId(ID);
 
     grpc.unary(TransactionService.GetTransaction, {
       request: request,
       host: this._host,
-      transport: NodeHttpTransport(),
       onEnd: (res: any) => {
         const { status, statusMessage, message } = res;
         if (status === grpc.Code.OK && message) {
@@ -108,6 +107,10 @@ function connection(host: string): void {
   zoobc.connection = host;
 }
 
+function httpTransport(nodeHttpTransport: grpc.TransportFactory): void {
+  zoobc.httpTransport(nodeHttpTransport);
+}
+
 function getBlocks(ChainType: number, Limit: number, Height: number): any {
   return new Promise((resolve, reject) => {
     zoobc.getBlocks(ChainType, Limit, Height, (err: any, resp: any) => {
@@ -117,7 +120,7 @@ function getBlocks(ChainType: number, Limit: number, Height: number): any {
   });
 }
 
-function getBlock(ChainType: number, ID = '0', Height = 0): any {
+function getBlock(ChainType: number, ID: string = '0', Height = 0): any {
   return new Promise((resolve, reject) => {
     zoobc.getBlock(ChainType, ID, Height, (err: any, resp: any) => {
       if (err) return reject(err);
@@ -135,7 +138,7 @@ function getTransactions(Limit: number, Offset = 0): any {
   });
 }
 
-function getTransaction(ID = '0'): any {
+function getTransaction(ID: string = '0'): any {
   return new Promise((resolve, reject) => {
     zoobc.getTransaction(ID, (err: any, resp: any) => {
       if (err) return reject(err);
@@ -144,4 +147,4 @@ function getTransaction(ID = '0'): any {
   });
 }
 
-export default { connection, getBlocks, getBlock, getTransactions, getTransaction };
+export default { connection, httpTransport, getBlocks, getBlock, getTransactions, getTransaction };
