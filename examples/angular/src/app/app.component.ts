@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
 
   async getBlocks() {
     zoobc.connection('http://18.139.3.139:7001');
-    const a = zoobc.getBlocks(0, 5, 1);
+    const a = await zoobc.getBlocks(0, 5, 1);
     return a;
   }
 }
