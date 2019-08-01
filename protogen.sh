@@ -58,10 +58,10 @@ function update_schema() {
 function reduce_code() {
   directory="./schema/service"
   if [ -d "${directory}" ]; then
-    sudo find $directory -type f -exec grep -qe "google" {} \; -exec sed -i '' -e '/google/d' {} +
-    sudo find $directory -type f -exec grep -qe "get" {} \; -exec sed -i '' -e '/get/d' {} +
-    sudo find $directory -type f -exec grep -qe "post" {} \; -exec sed -i '' -e '/post/d' {} +
-    sudo find $directory -type f -exec grep -qe "};" {} \; -exec sed -i '' -e '/};/d' {} +
+    find $directory -type f -exec grep -qe "google" {} \; -exec sed -i '' -e '/google/d' {} +
+    find $directory -type f -exec grep -qe "get" {} \; -exec sed -i '' -e '/get/d' {} +
+    find $directory -type f -exec grep -qe "post" {} \; -exec sed -i '' -e '/post/d' {} +
+    find $directory -type f -exec grep -qe "};" {} \; -exec sed -i '' -e '/};/d' {} +
     echo "$(echo_pass) Reduce code proto schema Done"
   fi
 }
