@@ -7,8 +7,8 @@ export class Transaction extends jspb.Message {
   getVersion(): number;
   setVersion(value: number): void;
 
-  getId(): string;
-  setId(value: string): void;
+  getId(): number;
+  setId(value: number): void;
 
   getBlockid(): number;
   setBlockid(value: number): void;
@@ -84,7 +84,7 @@ export class Transaction extends jspb.Message {
 export namespace Transaction {
   export type AsObject = {
     version: number,
-    id: string,
+    id: number,
     blockid: number,
     height: number,
     senderaccounttype: number,
@@ -236,8 +236,8 @@ export namespace ProofOfOwnership {
 }
 
 export class GetTransactionRequest extends jspb.Message {
-  getId(): string;
-  setId(value: string): void;
+  getId(): number;
+  setId(value: number): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetTransactionRequest.AsObject;
@@ -251,7 +251,7 @@ export class GetTransactionRequest extends jspb.Message {
 
 export namespace GetTransactionRequest {
   export type AsObject = {
-    id: string,
+    id: number,
   }
 }
 

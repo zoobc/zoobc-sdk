@@ -141,7 +141,7 @@ proto.model.Block.prototype.toObject = function(opt_includeInstance) {
  */
 proto.model.Block.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, "0"),
+    id: jspb.Message.getFieldWithDefault(msg, 1, 0),
     previousblockhash: msg.getPreviousblockhash_asB64(),
     height: jspb.Message.getFieldWithDefault(msg, 3, 0),
     timestamp: jspb.Message.getFieldWithDefault(msg, 4, 0),
@@ -195,7 +195,7 @@ proto.model.Block.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readInt64String());
+      var value = /** @type {number} */ (reader.readInt64());
       msg.setId(value);
       break;
     case 2:
@@ -289,8 +289,8 @@ proto.model.Block.prototype.serializeBinary = function() {
 proto.model.Block.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getId();
-  if (parseInt(f, 10) !== 0) {
-    writer.writeInt64String(
+  if (f !== 0) {
+    writer.writeInt64(
       1,
       f
     );
@@ -406,16 +406,16 @@ proto.model.Block.serializeBinaryToWriter = function(message, writer) {
 
 /**
  * optional int64 ID = 1;
- * @return {string}
+ * @return {number}
  */
 proto.model.Block.prototype.getId = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, "0"));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
-/** @param {string} value */
+/** @param {number} value */
 proto.model.Block.prototype.setId = function(value) {
-  jspb.Message.setProto3StringIntField(this, 1, value);
+  jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -816,7 +816,7 @@ proto.model.GetBlockRequest.prototype.toObject = function(opt_includeInstance) {
 proto.model.GetBlockRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     chaintype: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    id: jspb.Message.getFieldWithDefault(msg, 2, "0"),
+    id: jspb.Message.getFieldWithDefault(msg, 2, 0),
     height: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
@@ -859,7 +859,7 @@ proto.model.GetBlockRequest.deserializeBinaryFromReader = function(msg, reader) 
       msg.setChaintype(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readInt64String());
+      var value = /** @type {number} */ (reader.readInt64());
       msg.setId(value);
       break;
     case 3:
@@ -903,8 +903,8 @@ proto.model.GetBlockRequest.serializeBinaryToWriter = function(message, writer) 
     );
   }
   f = message.getId();
-  if (parseInt(f, 10) !== 0) {
-    writer.writeInt64String(
+  if (f !== 0) {
+    writer.writeInt64(
       2,
       f
     );
@@ -936,16 +936,16 @@ proto.model.GetBlockRequest.prototype.setChaintype = function(value) {
 
 /**
  * optional int64 ID = 2;
- * @return {string}
+ * @return {number}
  */
 proto.model.GetBlockRequest.prototype.getId = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
 
-/** @param {string} value */
+/** @param {number} value */
 proto.model.GetBlockRequest.prototype.setId = function(value) {
-  jspb.Message.setProto3StringIntField(this, 2, value);
+  jspb.Message.setProto3IntField(this, 2, value);
 };
 
 

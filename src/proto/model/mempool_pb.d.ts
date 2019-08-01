@@ -4,8 +4,8 @@
 import * as jspb from "google-protobuf";
 
 export class MempoolTransaction extends jspb.Message {
-  getId(): string;
-  setId(value: string): void;
+  getId(): number;
+  setId(value: number): void;
 
   getFeeperbyte(): number;
   setFeeperbyte(value: number): void;
@@ -30,7 +30,7 @@ export class MempoolTransaction extends jspb.Message {
 
 export namespace MempoolTransaction {
   export type AsObject = {
-    id: string,
+    id: number,
     feeperbyte: number,
     arrivaltimestamp: number,
     transactionbytes: Uint8Array | string,
