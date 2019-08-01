@@ -58,10 +58,10 @@ function update_schema() {
 function reduce_code() {
   directory="./schema/service"
   if [ -d "${directory}" ]; then
-    find $directory -type f -exec grep -qe "google" {} \; -exec sed -i '' -e '/google/d' {} +
-    find $directory -type f -exec grep -qe "get" {} \; -exec sed -i '' -e '/get/d' {} +
-    find $directory -type f -exec grep -qe "post" {} \; -exec sed -i '' -e '/post/d' {} +
-    find $directory -type f -exec grep -qe "};" {} \; -exec sed -i '' -e '/};/d' {} +
+    sudo find $directory -type f -exec grep -qe "google" {} \; -exec sed -i '' -e '/google/d' {} +
+    sudo find $directory -type f -exec grep -qe "get" {} \; -exec sed -i '' -e '/get/d' {} +
+    sudo find $directory -type f -exec grep -qe "post" {} \; -exec sed -i '' -e '/post/d' {} +
+    sudo find $directory -type f -exec grep -qe "};" {} \; -exec sed -i '' -e '/};/d' {} +
     echo "$(echo_pass) Reduce code proto schema Done"
   fi
 }
@@ -99,12 +99,22 @@ fi
 
 if [[ $platform == 'win' ]]; then
   GRPC_WEB_PATH="./protoc-gen-grpc-web.exe"
+elif [[ $platform == 'linux' ]]; then
+  GRPC_WEB_PATH="/usr/local/bin/protoc-gen-grpc-web"
 else
   GRPC_WEB_PATH="/usr/local/bin/protoc-gen-grpc-web"
 fi
 
+
+##CHECKING PLATFORM TO GIVE PERMISSION TO LINUX TO EDIT
+if [[ $platform == 'linux' ]]; then
+sudo curl -L -o ${GRPC_WEB_PATH} ${GRPC_WEB_URL}
+sudo chmod +x ${GRPC_WEB_PATH}
+else
 curl -L -o ${GRPC_WEB_PATH} ${GRPC_WEB_URL}
 chmod +x ${GRPC_WEB_PATH}
+fi
+
 echo "$(echo_pass) Downloading grpc web v${GRPC_WEB_VERSION} Done"
 
 # 4. Download protobuf base on platform
@@ -120,8 +130,15 @@ else
   echo -e "\n$(echo_fail) Cannot download protoc. Platform ${platform} is not currently supported by ts-protoc-gen"
   exit 1
 fi
+
+echo ${PROTOC_VERSION}
+if [[ $platform == 'linux' ]]; then
+sudo curl -L -o "protoc-${PROTOC_VERSION}.zip" ${PROTOC_URL}
+echo "$(echo_pass) Downloading protoc v${PROTOC_VERSION} Done"
+else
 curl -L -o "protoc-${PROTOC_VERSION}.zip" ${PROTOC_URL}
 echo "$(echo_pass) Downloading protoc v${PROTOC_VERSION} Done"
+fi
 
 # 5. Unzip into folder protoc
 echo -e "\nExtract protoc-${PROTOC_VERSION}.zip..."
@@ -137,7 +154,11 @@ echo "$(echo_pass) Extract protoc-${PROTOC_VERSION}.zip Done"
 echo -e "\nGenerating proto definitions for ${platform}..."
 DIST_DIR="./src/proto"
 if [ -d "${DIST_DIR}" ]; then
+  if [[ $platform == 'linux' ]]; then
+  sudo rm -rf "${DIST_DIR}"
+  else
   rm -rf "${DIST_DIR}"
+  fi
 fi
 mkdir -p "${DIST_DIR}"
 PROTOC=./protoc/bin/protoc
@@ -148,7 +169,26 @@ else
   PROTOC_GEN_TS="./node_modules/.bin/protoc-gen-ts"
 fi
 
-$PROTOC \
+echo "checking platform"
+if [[ $platform == 'linux' ]]; then
+echo "linux approved"
+    sudo $PROTOC \
+    --plugin=protoc-gen-grpc-web=${GRPC_WEB_PATH} \
+    --plugin=protoc-gen-ts=${PROTOC_GEN_TS} \
+    --ts_out=service=true:${DIST_DIR} \
+    --js_out=import_style=commonjs,binary:${DIST_DIR} \
+    --grpc-web_out=import_style=commonjs,mode=grpcwebtext:${DIST_DIR} \
+    ./schema/model/*.proto \
+    ./schema/service/*.proto \
+    --proto_path=./schema
+  echo "$(echo_pass) Generating proto definitions for ${platform} Done"
+
+    # 7. Cleanup downloaded proto directory
+    echo -e "\nCleaning temp generator..."
+    sudo rm -rf protoc
+    sudo rm -rf ${GRPC_WEB_PATH}
+else
+  $PROTOC \
   --plugin=protoc-gen-grpc-web=${GRPC_WEB_PATH} \
   --plugin=protoc-gen-ts=${PROTOC_GEN_TS} \
   --ts_out=service=true:${DIST_DIR} \
@@ -157,12 +197,14 @@ $PROTOC \
   ./schema/model/*.proto \
   ./schema/service/*.proto \
   --proto_path=./schema
-echo "$(echo_pass) Generating proto definitions for ${platform} Done"
+  echo "$(echo_pass) Generating proto definitions for ${platform} Done"
 
-# 7. Cleanup downloaded proto directory
-echo -e "\nCleaning temp generator..."
-rm -rf protoc
-rm -rf ${GRPC_WEB_PATH}
+  # 7. Cleanup downloaded proto directory
+  -e "\nCleaning temp generator..."
+  rm -rf protoc
+
+  rm -rf ${GRPC_WEB_PATH}
+fi
 clean_schema
 echo "$(echo_pass) Cleaning temp generator Done"
 
