@@ -23,3 +23,7 @@ cd examples\ionic\
 ionic cordova prepare
 ionic serve --devapp
 ```
+
+## Screenshoot
+
+<img width="375" alt="Capture" src="https://user-images.githubusercontent.com/43771081/62348044-5e7ec480-b52e-11e9-902a-f0ae34f10f78.PNG">
