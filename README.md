@@ -1,15 +1,29 @@
-# ZooBC
+# ZooBC-SDK for JavaScript
+
+ZooBC-SDK is a small set of libraries written in JavaScript, making it easy to implement/integrate applications so that they connect with the P2P API of the nodes in the blockchain and the Web API of the explorer servers.
 
 ![npm](https://img.shields.io/npm/v/zoobc-sdk-js.svg)
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 [![CircleCI](https://circleci.com/gh/zoobc/zoobc-sdk-js.svg?style=svg&circle-token=8a1610a487c652b7165e501f7d4c814fe0e34e12)](https://circleci.com/gh/zoobc/zoobc-sdk-js)
 
-A small set of libraries written in different programming languages, making it easy to implement / integrate applications so that they connect with the P2P API of the nodes in the blockchain and the Web API of the explorer servers.
+## Start using ZooBC-SDK for JavaScript
 
-## Install
+For instructions on how to use the JavaScript web and mobile client framework for a project, please refer to these documents:
+
+  * [AngularJs](examples/angular/README.md)
+  * [Ionic](examples/ionic/README.md)
+  * [ReactJs](examples/react/README.md)
+  * [React Native](examples/reactnative/README.md)
+  * [VueJs](examples/vue/README.md)
+
+## Start developing ZooBC-SDK for JavaScript
+
+### Install
 
 ```bash
-$ npm install zoobc or yarn add zoobc
+$ npm install zoobc
+or
+$ yarn add zoobc
 ```
 
 ## Issue
