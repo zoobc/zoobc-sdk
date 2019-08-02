@@ -41,6 +41,13 @@ $ ./protogen.sh
 
 ### General Usage
 
+Add 'zoobc' packages to your project by executing:
+```bash
+$ npm install zoobc
+or
+$ yarn add zoobc
+```
+
 Here's an example of basic usage for connection:
 ```bash
 import zoobc from 'zoobc';
