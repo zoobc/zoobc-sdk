@@ -18,64 +18,46 @@ For instructions on how to use the JavaScript web and mobile client framework fo
 
 ## Start developing ZooBC-SDK for JavaScript
 
-### Install
+### Installing
 
+**Step 1**
 ```bash
-$ npm install zoobc
+# Clone this repository
+$ git clone https://github.com/zoobc/zoobc-sdk-js.git
+
+# Go to 'zoobc-sdk-js' directory
+$ cd zoobc-sdk-js
+
+# Install 'node_modules' packages
+$ npm install
 or
-$ yarn add zoobc
+$ yarn install
+```
+**Step 2**
+```bash
+# Run proto generator
+$ ./protogen.sh
 ```
 
-## Issue
+### General Usage
 
-Please Install This Package Globally For Windows User
-
+Here's an example of basic usage for connection:
 ```bash
-$ npm install -g win-node-env
-```
-
-## How To Run Example
-
-- [React](https://github.com/zoobc/zoobc-sdk-js/tree/develop/examples/react)
-- [Angular](https://github.com/zoobc/zoobc-sdk-js/tree/develop/examples/angular)
-- [Vue](https://github.com/zoobc/zoobc-sdk-js/tree/develop/examples/vue)
-- [Ionic](https://github.com/zoobc/zoobc-sdk-js/tree/develop/examples/ionic)
-
-## Usage
-
-```bash
-import React, { Component } from 'react';
 import zoobc from 'zoobc';
 
-class App extends Component {
-  state = { blocks: [], error: '' };
-
-  componentDidMount() {
-    this.listBlocks();
-  }
-
-  listBlocks = () => {
-    zoobc.connection('http://18.139.3.139:7001');
-    zoobc
-      .getBlocks(0, 5, 1)
-      .then(res => {
-        this.setState({ blocks: res.blocksList });
-      })
-      .catch(err => {
-        this.setState({ error: err });
-      });
-  };
-
-  render() {
-    const { blocks } = this.state;
-    return blocks;
-  }
-}
-
-export default App;
-
+listBlocks = () => {
+  zoobc.connection('http://18.139.3.139:7001');
+  zoobc
+    .getBlocks(0, 5, 1)
+    .then(res => {
+      this.setState({ blocks: res.blocksList });
+    })
+    .catch(err => {
+      this.setState({ error: err });
+    });
+};
 ```
 
-## License
+### License
 
 This project is licensed under the Apache License - see the [LICENSE](LICENSE) file for details
