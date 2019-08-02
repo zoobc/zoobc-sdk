@@ -8,6 +8,108 @@ interface Callback {
   (error: any, result: any): void;
 }
 
+declare const XMLHttpRequest: any;
+let awaitingExecution: (() => void)[] | null = null;
+
+function runCallbacks() {
+  if (awaitingExecution) {
+    const thisCallbackSet = awaitingExecution;
+    awaitingExecution = null;
+    for (let i = 0; i < thisCallbackSet.length; i++) {
+      try {
+        thisCallbackSet[i]();
+      } catch (e) {
+        if (awaitingExecution === null) {
+          awaitingExecution = [];
+          setTimeout(() => {
+            runCallbacks();
+          }, 0);
+        }
+        for (let k = thisCallbackSet.length - 1; k > i; k--) {
+          awaitingExecution.unshift(thisCallbackSet[k]);
+        }
+        throw e;
+      }
+    }
+  }
+}
+
+function detach(cb: () => void) {
+  if (awaitingExecution !== null) {
+    awaitingExecution.push(cb);
+    return;
+  }
+  awaitingExecution = [cb];
+  setTimeout(() => {
+    runCallbacks();
+  }, 0);
+}
+
+class XHR implements grpc.Transport {
+  options: grpc.TransportOptions;
+  xhr: any = null;
+  metadata: grpc.Metadata | null = null;
+
+  constructor(transportOptions: grpc.TransportOptions) {
+    this.options = transportOptions;
+  }
+
+  onLoadEvent() {
+    const result = new Uint8Array(this.xhr.response);
+    detach(() => {
+      this.options.onChunk(result);
+    });
+    detach(() => {
+      this.options.onEnd();
+    });
+  }
+
+  onStateChange() {
+    if (this.xhr.readyState === XMLHttpRequest.HEADERS_RECEIVED) {
+      detach(() => {
+        this.options.onHeaders(
+          new grpc.Metadata(this.xhr.getAllResponseHeaders()),
+          this.xhr.status,
+        );
+      });
+    }
+  }
+
+  sendMessage(msgBytes: Uint8Array) {
+    this.xhr.send(msgBytes);
+  }
+
+  finishSend() {}
+
+  start(metadata: grpc.Metadata) {
+    this.metadata = metadata;
+    const xhr = new XMLHttpRequest();
+    this.xhr = xhr;
+    xhr.open('POST', this.options.url);
+    (xhr as any).responseType = 'arraybuffer';
+    this.metadata.forEach((key, values) => {
+      xhr.setRequestHeader(key, values.join(', '));
+    });
+    xhr.addEventListener('readystatechange', this.onStateChange.bind(this));
+    xhr.addEventListener('loadend', this.onLoadEvent.bind(this));
+    xhr.addEventListener('error', (err: any) => {
+      detach(() => {
+        this.options.onEnd(err.error);
+      });
+    });
+  }
+
+  cancel() {
+    this.xhr.abort();
+  }
+}
+
+function xhrTransport(): grpc.TransportFactory {
+  return (opts: grpc.TransportOptions) => {
+    return new XHR(opts);
+  };
+}
+
 class ZooBC {
   private _host: string = '';
 
@@ -147,4 +249,12 @@ function getTransaction(ID: string = '0'): any {
   });
 }
 
-export default { connection, httpTransport, getBlocks, getBlock, getTransactions, getTransaction };
+export default {
+  connection,
+  httpTransport,
+  getBlocks,
+  getBlock,
+  getTransactions,
+  getTransaction,
+  xhrTransport,
+};
