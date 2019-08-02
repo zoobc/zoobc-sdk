@@ -12,6 +12,14 @@ A small set of libraries written in different programming languages, making it e
 $ npm install zoobc or yarn add zoobc
 ```
 
+## Issue
+
+Please Install This Package Globally For Windows User
+
+```bash
+$ npm install -g win-node-env
+```
+
 ## Usage
 
 ```bash
