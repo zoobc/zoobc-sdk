@@ -13,7 +13,7 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
-            sudo apt update && apt install git
+            sudo apt update && sudo apt install git
             npm install --no-audit
       - run:
           name: Unit Testing for NodeJs 6
@@ -26,7 +26,7 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
-            sudo apt update && apt install git
+            sudo apt update && sudo apt install git
             npm install --no-audit
       - run:
           name: Build SDK
