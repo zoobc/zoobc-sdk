@@ -12,6 +12,21 @@ A small set of libraries written in different programming languages, making it e
 $ npm install zoobc or yarn add zoobc
 ```
 
+## Issue
+
+Please Install This Package Globally For Windows User
+
+```bash
+$ npm install -g win-node-env
+```
+
+## How To Run Example
+
+- [React](https://github.com/zoobc/zoobc-sdk-js/tree/develop/examples/react)
+- [Angular](https://github.com/zoobc/zoobc-sdk-js/tree/develop/examples/angular)
+- [Vue](https://github.com/zoobc/zoobc-sdk-js/tree/develop/examples/vue)
+- [Ionic](https://github.com/zoobc/zoobc-sdk-js/tree/develop/examples/ionic)
+
 ## Usage
 
 ```bash
