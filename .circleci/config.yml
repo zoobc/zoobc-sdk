@@ -6,7 +6,7 @@ defaults: &defaults
     - image: circleci/node:10
 
 jobs:
-  test_node_6:
+  test:
     docker:
       - image: circleci/node:6
     steps:
@@ -14,7 +14,7 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
-            sudo apt update && sudo apt upgrade -y && sudo apt install git
+            sudo apt update && apt install git
             npm install --no-audit
       - run:
           name: Unit Testing for NodeJs 6
@@ -27,7 +27,7 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
-            sudo apt update && sudo apt upgrade -y && sudo apt install git
+            sudo apt update && apt install git
             npm install --no-audit
       - run:
           name: Unit Testing for NodeJs 10
@@ -40,7 +40,7 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
-            sudo apt update && sudo apt upgrade -y && sudo apt install git
+            sudo apt update && apt install git
             npm install --no-audit
       - run:
           name: Build SDK
@@ -59,10 +59,7 @@ workflows:
   version: 2
   test_release_publish:
     jobs:
-      - test_node_6
-      - test_node_10:
-          requires:
-            - test_node_6
+      - test:
           filters:
             branches:
               only:
