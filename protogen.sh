@@ -9,7 +9,7 @@ case $platform in
 'Linux')
   platform='linux'
   ;;
-'WindowsNT')
+MINGW64_NT*)
   platform='win'
   ;;
 'MINGW64_NT-10.0')
