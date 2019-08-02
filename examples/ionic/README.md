@@ -19,6 +19,7 @@ With DevApp installed, sign up or login to an Ionic Account.
 Make sure the device running DevApp and the computer are on the same network, then run :
 
 ```
+cd examples\ionic\
 ionic cordova prepare
 ionic serve --devapp
 ```
