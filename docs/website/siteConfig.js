@@ -21,7 +21,7 @@ const users = [
 ];
 
 const siteConfig = {
-  title: 'Test Site', // Title for your website.
+  title: 'ZOOBC-SDK', // Title for your website.
   tagline: 'A website for testing',
   url: 'https://gedenata.github.io', // Your website URL
   baseUrl: '/zoobc-sdk-js/', // Base URL for your project */
@@ -54,8 +54,8 @@ const siteConfig = {
 
   /* Colors for website */
   colors: {
-    primaryColor: '#6f3713',
-    secondaryColor: '#4d260d',
+    primaryColor: '#0b3d65',
+    secondaryColor: '#37708e',
   },
 
   /* Custom fonts for website */
