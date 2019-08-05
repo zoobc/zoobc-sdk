@@ -3,44 +3,30 @@ version: 2
 defaults: &defaults
   working_directory: ~/zoobc-sdk-js
   docker:
-    - image: circleci/node:10
+    - image: circleci/node:6
 
 jobs:
-  test_node_6:
-    docker:
-      - image: circleci/node:6
+  test:
+    <<: *defaults
     steps:
       - checkout
       - run:
           name: Install Dependencies
           command: |
-            sudo apt update && sudo apt upgrade -y && sudo apt install git
+            sudo apt update && sudo apt install git
             npm install --no-audit
       - run:
           name: Unit Testing for NodeJs 6
           command: npm run test
 
-  test_node_10:
+  publish:
     <<: *defaults
     steps:
       - checkout
       - run:
           name: Install Dependencies
           command: |
-            sudo apt update && sudo apt upgrade -y && sudo apt install git
-            npm install --no-audit
-      - run:
-          name: Unit Testing for NodeJs 10
-          command: npm run test
-
-  build_release_publish:
-    <<: *defaults
-    steps:
-      - checkout
-      - run:
-          name: Install Dependencies
-          command: |
-            sudo apt update && sudo apt upgrade -y && sudo apt install git
+            sudo apt update && sudo apt install git
             npm install --no-audit
       - run:
           name: Build SDK
@@ -57,19 +43,16 @@ jobs:
 
 workflows:
   version: 2
-  test_release_publish:
+  test-publish:
     jobs:
-      - test_node_6
-      - test_node_10:
-          requires:
-            - test_node_6
+      - test:
           filters:
             branches:
               only:
                 - develop
-      - build_release_publish:
+      - publish:
           requires:
-            - test_node_10
+            - test
           filters:
             branches:
               only:
