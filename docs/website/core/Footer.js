@@ -16,7 +16,7 @@ class Footer extends React.Component {
 
   render() {
     return (
-      <footer className="nav-footer" id="footer">
+      <footer className="nav-footer" id="footer" style={{ background: '#0b3d65 !important' }}>
         <section className="sitemap">
           <a href={this.props.config.baseUrl} className="nav-home">
             {this.props.config.footerIcon && (

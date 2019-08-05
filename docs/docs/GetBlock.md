@@ -8,33 +8,32 @@ Returns a block matching the block number or block hash.
 
 ### Parameters
 
-* `ChainType` -
+* `ChainType` : _int32_ - Indicate the type of chains, _Mainchain_ for flag 0 and _Spinechain_ for flag 1.
 
-* `Limit` -
+* `Limit` : _uint32_ - Number of block to fetch.
 
-* `Height` - 
+* `Height` : _uint32_ - Fetch block from `n` height.
 
 
 ### Returns
 
 `Promise` returns `Object` - The block object:
 
-  - `ID`- _String_: Block ID
-  - `PreviousBlockHash` - _String_: PreviousBlockHash definition...
-  - `Height` - _Number_: Height definition...
-  - `Timestamp` - _String_: Timestamp definition...
-  - `BlockSeed` - _String_: BlockSeed definition...
-  - `BlockSignature` - _String_: BlockSignature definition...
-  - `CumulativeDifficulty` - _String_: CumulativeDifficulty definition...
-  - `SmithScale` - _String_: SmithScale definition...
-  - `BlocksmithID` - _String_: BlocksmithID definition...
-  - `TotalAmount` - _String_: TotalAmount definition...
-  - `TotalFee` - _String_: TotalFee definition...
-  - `TotalCoinBase` - _String_: TotalCoinBasedefinition...
-  - `Version` - _Number_: Version definition...
-  - `PayloadLength` - _Number_: PayloadLength definition...
-  - `PayloadHash` - _String_: PayloadHash definition...
-  - `Transactions` - _String_: Transactions definition...
+  - `ID` : _string_ - Little endian representation of transaction bytes .FullHash: computed on tx bytes +body bytes (without signature).
+  - `PreviousBlockHash` : _bytes_ -
+  - `Height` : _uint32_ - Height relative to the block of transaction was included in.
+  - `Timestamp` : _int64_ - Block’s first recorded (arrival) timestamp
+  - `BlockSeed` : _bytes_ - A pseudorandom number computed by hashing together the BlockSeed of the previous block and the Account Address of the new Blocksmith.
+  - `BlockSignature` : _bytes_ -
+  - `CumulativeDifficulty` : _string_ - The total difficulty it would take to create this chain since the Genesis.
+  - `SmithScale` : _int64_ -
+  - `BlocksmithID` : _bytes_ -
+  - `TotalAmount` : _int64_ -
+  - `TotalFee` : _int64_ -
+  - `TotalCoinBase` : _int64_ -
+  - `Version` : _uint32_ -
+  - `PayloadLength` : _uint32_ -
+  - `PayloadHash` : _bytes_ -
 
 ### Example
 
