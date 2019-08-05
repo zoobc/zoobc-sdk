@@ -8,11 +8,11 @@ Returns a block matching the block number or block hash.
 
 ### Parameters
 
-* `String|Number` - The block number or block hash. Or the string "genesis", "latest" or "pending" as in the default block parameter.
+* `ChainType` -
 
-* `Boolean` - (optional, default _false_) If _true_, the returned block will contain all transactions as objects, if false it will only contains the transaction hashes.
+* `Limit` -
 
-* `Function` - (optional) Optional callback, returns an error object as first parameter and the result as second.
+* `Height` - 
 
 
 ### Returns
