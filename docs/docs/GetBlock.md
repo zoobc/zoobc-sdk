@@ -23,7 +23,7 @@ Returns a block matching the block number or block hash.
   - `BlockSeed` : _bytes_ - A pseudorandom number computed by hashing together the BlockSeed of the previous block and the Account Address of the new Blocksmith.
   - `BlockSignature` : _bytes_ - A hashing that correspond to exactly each string in that block.
   - `CumulativeDifficulty` : _string_ - The total difficulty it would take to create this chain since the Genesis.
-  - `SmithScale` : _int64_ - Its a multiplier which determines how long the blocks takes to find. The higher the number the more people smithing the blocks.
+  - `SmithScale` : _int64_ - Its a multiplier which determines how long the blocks takes to find. The higher the number means more people participate in smithing the blocks.
   - `BlocksmithID` : _bytes_ - The account address of the block creator.
   - `TotalAmount` : _int64_ - The total amount of funds that were sent in this block.
   - `TotalFee` : _int64_ - The total fees thats collected from all transactions in the block.
