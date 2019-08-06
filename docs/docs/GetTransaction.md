@@ -8,7 +8,7 @@ Returns a transaction matching the requested transaction hash.
 
 ## Parameters
 
-* `ID` : _uint32_ - Identifier of transaction.
+* `ID` : _string__ - Identifier of transaction.
 
 ## Returns
 
