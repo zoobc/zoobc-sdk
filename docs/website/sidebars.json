@@ -3,7 +3,8 @@
     "JavaScript": [
       "getBlock",
       "getBlocks",
-      "getTransaction"
+      "getTransaction",
+      "getTransactions"
     ]
   },
   "docs-other": {
