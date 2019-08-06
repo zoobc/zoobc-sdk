@@ -38,7 +38,7 @@ sidebar_label: getTransaction
 
 ### Example
 ```javascript
-listTransaction = () => {
+singleTransaction = () => {
   zoobc.connection('http://18.139.3.139:7001');
   zoobc.getTransaction("1902297852732397426")
     .then(res => {
