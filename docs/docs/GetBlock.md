@@ -9,7 +9,7 @@ Returns a block matching the block number or block hash.
 ### Parameters
 
 * `ChainType` : _int32_ - Indicate the type of chains, _Mainchain_ for flag 0 and _Spinechain_ for flag 1.
-* `ID` : _string_ - Identifer of blocks produced from the first 8 bytes from blockhash
+* `ID` : _string_ - Identifer of blocks produced from the first 8 bytes from blockhash.
 * `Height` : _uint32_ - Fetch block from `n` height.
 
 ### Returns
