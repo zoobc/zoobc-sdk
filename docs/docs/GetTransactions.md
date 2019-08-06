@@ -55,7 +55,7 @@ listTransactions = () => {
   zoobc.connection('http://18.139.3.139:7001');
   zoobc.getTransactions(5, 4)
     .then(res => {
-      console.log(res.TransactionsList );
+      console.log(res.TransactionsList);
     })
     .catch(err => {
       console.log(err);
