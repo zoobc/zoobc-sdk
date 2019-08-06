@@ -37,7 +37,7 @@ Returns a block matching the block number or block hash.
 ```javascript
 import zoobc from 'zoobc';
 
-SingleBlock = () => {
+singleBlock = () => {
   zoobc.connection('http://18.139.3.139:7001');
   zoobc.getBlock(0, -9222407558273501032, 5)
     .then(res => {
