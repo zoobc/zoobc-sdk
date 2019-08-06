@@ -6,14 +6,14 @@ sidebar_label: getBlocks
 
 Returns a block matching the block number or block hash.
 
-### Parameters
+## Parameters
 
 * `ChainType` : _int32_ - Indicate the type of chains, _Mainchain_ for flag 0 and _Spinechain_ for flag 1.
 * `Limit` : _uint32_ - Number of blocks to fetch.
 * `Height` : _uint32_ - Fetch block from `n` height.
 
 
-### Returns
+## Returns
 
 `Promise` returns `Object` - The blocks object:
 
@@ -37,7 +37,7 @@ Returns a block matching the block number or block hash.
   - `PayloadHash` : _bytes_ - The hash of all transactions included in the block.
 
 
-### Example
+## Example
 
 ```javascript
 import zoobc from 'zoobc';
@@ -46,7 +46,7 @@ listBlocks = () => {
   zoobc.connection('http://18.139.3.139:7001');
   zoobc.getBlocks(0, 5, 1)
     .then(res => {
-      console.log(res);
+      console.log(res.blocksList);
     })
     .catch(err => {
       console.log(err);
