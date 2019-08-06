@@ -8,13 +8,15 @@ Returns a block matching the block number or block hash.
 
 ### Parameters
 
-- `ID` : _string_ - Little endian representation of transaction bytes .FullHash: computed on tx bytes +body bytes (without signature)
+* `ChainType` : _int32_ - Indicate the type of chains, _Mainchain_ for flag 0 and _Spinechain_ for flag 1.
+* `ID` : _string_ - 1identifer of blocks produced from the first 8 bytes from blockhash
+* `Height` : _uint32_ - Fetch block from `n` height.
 
 ### Returns
 
 `Promise` returns `Object` - The block object:
 
-  - `ID` : _string_ - identifer of blocks produced from the first 8 bytes from blockhash  
+  - `ID` : _string_ - identifer of blocks produced from the first 8 bytes from blockhash.
   - `PreviousBlockHash` : _bytes_ - the blockhash of the  the block that connect each block
   - `Height` : _uint32_ - Height relative to the block of transaction was included in.
   - `Timestamp` : _int64_ - Block’s first recorded (arrival) timestamp
