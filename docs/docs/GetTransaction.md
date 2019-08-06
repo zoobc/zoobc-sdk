@@ -6,7 +6,7 @@ sidebar_label: getTransaction
 
 ### Parameters
 
-* `ID` : _string_ - Little endian representation of transaction bytes .FullHash: computed on tx bytes +body bytes (without signature)
+* `ID` : _string_ - The hash of each transaction.
 
 ### Returns
 
