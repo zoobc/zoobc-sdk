@@ -14,7 +14,7 @@ Returns a block matching the block number or block hash.
 
 `Promise` returns `Object` - The block object:
 
-  - `ID` : _string_ - Little endian representation of transaction bytes .FullHash: computed on tx bytes +body bytes (without signature).
+  - `ID` : _string_ - identifer of blocks produced from the first 8 bytes from blockhash  
   - `PreviousBlockHash` : _bytes_ - the blockhash of the  the block that connect each block
   - `Height` : _uint32_ - Height relative to the block of transaction was included in.
   - `Timestamp` : _int64_ - Block’s first recorded (arrival) timestamp
@@ -35,14 +35,14 @@ Returns a block matching the block number or block hash.
 ```javascript
 import zoobc from 'zoobc';
 
-listBlock = () => {
+aBlock = () => {
   zoobc.connection('http://18.139.3.139:7001');
   zoobc.getBlock("-9222407558273501032")
     .then(res => {
-      this.setState({ block: res.blocksList });
+      this.setState(res => console.log(res));
     })
     .catch(err => {
-      this.setState({ error: err });
+      this.setState(err => console.log(err));
     });
 };
 ```
