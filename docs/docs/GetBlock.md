@@ -17,7 +17,7 @@ Returns a block matching the block number or block hash.
 `Promise` returns `Object` - The block object:
 
   - `ID` : _string_ - Identifier of blocks produced from the first 8 bytes from blockhash.
-  - `PreviousBlockHash` : _bytes_ - The blockhash of the block that connect each block
+  - `PreviousBlockHash` : _bytes_ - The blockhash of the block that connect each block.
   - `Height` : _uint32_ - Height relative to the block of transaction was included in.
   - `Timestamp` : _int64_ - Block’s first recorded (arrival) timestamp.
   - `BlockSeed` : _bytes_ - A pseudorandom number computed by hashing together the BlockSeed of the previous block and the Account Address of the new Blocksmith.
