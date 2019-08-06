@@ -6,12 +6,12 @@ sidebar_label: getTransactions
 
 Returns an array of transactions according to a maximum set by the limit requested at and starts from the offset.
 
-### Parameters
+## Parameters
 
 * `Limit` : _uin32_ - Limiting how many transactions to be fetched at.
 * `Offset`: _uint32_ - The hash of which transaction started to fetched at.
 
-### Returns
+## Returns
 
 `Promise` returns `Object` - A transaction object its hash `TransactionHash` :
 
@@ -46,7 +46,7 @@ Returns an array of transactions according to a maximum set by the limit request
         - `MessageBytes` : _bytes_ - The raw data format of the message.
         - `Signature` : _bytes_ - The digital signature on the raw data by the node.
 
-### Example
+## Example
 ```
 import zoobc from 'zoobc';
 
