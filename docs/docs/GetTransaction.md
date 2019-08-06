@@ -4,14 +4,16 @@ title: getTransaction
 sidebar_label: getTransaction
 ---
 
+Returns a transaction matching the requested transaction hash.
+
 ## Parameters
 
-* `ID` : _string_ - Identifier of transaction.
+* `ID` : _uint32_ - Identifier of transaction.
 
 ## Returns
 
   - `Version`: _uint32_ - A version number that can be changed if the protocol number is changed.
-  - `ID` : _string_ - Identifier of transaction.
+  - `ID` : _uint32_ - Identifier of transaction.
   - `BlockID`: _string_ - The hash of the current Block where the transaction included in.
   - `Height` : _uint32_ - The height of the current block where the transaction data located.
   - `SenderAccountType`: _uint32_ - The address type of the sender account.
@@ -40,7 +42,7 @@ sidebar_label: getTransaction
 ```javascript
 singleTransaction = () => {
   zoobc.connection('http://18.139.3.139:7001');
-  zoobc.getTransaction("1902297852732397426")
+  zoobc.getTransaction(1902297852732397426)
     .then(res => {
       console.log(res);
     })
