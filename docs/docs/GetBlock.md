@@ -41,10 +41,10 @@ aBlock = () => {
   zoobc.connection('http://18.139.3.139:7001');
   zoobc.getBlock(1, "-9222407558273501032", 5)
     .then(res => {
-      this.setState(res => console.log(res));
+      console.log(res);
     })
     .catch(err => {
-      this.setState(err => console.log(err));
+      console.log(err);
     });
 };
 ```
