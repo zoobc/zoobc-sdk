@@ -40,7 +40,7 @@ Returns a transaction matching the requested transaction hash.
       - `NodeAddress` : _string_ - The ip address of the node.
       - `LockedBalance` : _string_ - The number of funds locked by the node owner.
       - `Poown` : _object_ - The proof of ownership message for this node.
-        - `MessageBytes` : _bytes_ - The raw data.
+        - `MessageBytes` : _bytes_ - The raw data format of the message.
         - `Signature` : _bytes_ - The digital signature on the raw data by the node.
 
 ## Example
