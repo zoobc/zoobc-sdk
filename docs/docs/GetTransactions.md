@@ -11,9 +11,9 @@ sidebar_label: getTransactions
 
 ### Returns
 
-  - `Total`: _string_ -
-  - `Count`: _uint32_ - Total transaction that fetched.
-  - `Version`: _uint32_ - A version number that cna be changed if the protocol number is changed.
+  - `Total`: _string_ - Number of transactions in total.
+  - `Count`: _uint32_ - Number of transactions returned.
+  - `Version`: _uint32_ - A version number that can be changed if the protocol number is changed.
   - `ID` : _string_ - Identifier of transaction.
   - `BlockID`: _string_ - The hash of the current Block where the transaction included in.
   - `Height` : _uint32_ - The height of the current block where the transaction data located.
@@ -32,7 +32,7 @@ sidebar_label: getTransactions
   <!-- need further discussion with the core to specify each field for each transaction. -->
   - - `NodePublicKey`: _string_ - The public key of the node that registered.
     - `AccountType`: _uint32_ - The address type of the node's owner.
-    - `AccountAddress`: _string_ - The address node of the node's owner.
+    - `AccountAddress`: _string_ - The node address  of the node's owner.
     - `RegistrationHeight`: _string_ - The block height which the node register.
     - `NodeAddress`: _string_ - The ip address of the node.
     - `LockedBalance`: _string_ - The number of funds locked by the node owner.
