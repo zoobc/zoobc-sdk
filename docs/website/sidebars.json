@@ -1,9 +1,6 @@
 {
   "docs": {
-    "JavaScript": [
-      "getBlock",
-      "getTransaction"
-    ]
+    "JavaScript": ["getBlock", "getTransaction", "getTransactions"]
   },
   "docs-other": {
     "First Category": ["doc4", "doc5"]
