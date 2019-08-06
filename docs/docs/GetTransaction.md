@@ -12,7 +12,7 @@ Returns a transaction matching the requested transaction hash.
 
 ## Returns
 
-`Promise` returns `Object` - A transaction object its hash:
+`Promise` returns `Object` - A transaction object its hash `TransactionHash` :
 
   - `ID` : _uint32_ - Identifier of transaction.
   - `BlockID` : _string_ - The hash of the current Block where the transaction included in.
