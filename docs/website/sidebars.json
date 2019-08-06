@@ -2,6 +2,7 @@
   "docs": {
     "JavaScript": [
       "getBlock",
+      "getBlocks",
       "getTransaction"
     ]
   },
