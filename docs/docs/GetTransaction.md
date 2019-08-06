@@ -6,17 +6,17 @@ sidebar_label: getTransaction
 
 ## Parameters
 
-* `ID` : _string_ - The hash of each transaction.
+* `ID` : _string_ - Identifier of transaction.
 
 ## Returns
 
   - `Version`: _uint32_ - A version number that can be changed if the protocol number is changed.
-  - `ID` : The hash of each transaction.
+  - `ID` : _string_ - Identifier of transaction.
   - `BlockID`: _string_ - The hash of the current Block where the transaction included in.
-  - `Height` : _uint32_ - The Height of the current block where the transaction data located.
+  - `Height` : _uint32_ - The height of the current block where the transaction data located.
   - `SenderAccountType`: _uint32_ - The address type of the sender account.
   - `SenderAccountAddress`: _string_ - Address of sender.
-  - `RecipientAccountType`: _uint32_ - The address type of the recipient account
+  - `RecipientAccountType`: _uint32_ - The address type of the recipient account.
   - `RecipientAccountAddress`: _string_ - Address of recipient.
   - `TransationType`: _uint32_ - Type of transaction.
   - `Fee`: _string_ - The amount of currency that imposed for doing the transaction
@@ -29,11 +29,11 @@ sidebar_label: getTransaction
   <!-- need further discussion with the core to specify each field for each transaction. -->
   - - `NodePublicKey`: _string_ - The public key of the node that registered.
     - `AccountType`: _uint32_ - The address type of the node's owner.
-    - `AccountAddress`: _string_ - The address node of the node's owner.
+    - `AccountAddress`: _string_ - The node address of the node's owner.
     - `RegistrationHeight`: _string_ - The block height which the node register.
     - `NodeAddress`: _string_ - The ip address of the node.
     - `LockedBalance`: _string_ - The number of funds locked by the node owner.
-    - `Poown`: _null_ - The poof of ownership message for this node.
+    - `Poown`: _string_ - The poof of ownership message for this node.
   - `TransactionBody`: _string_ -
 
 ## Example
