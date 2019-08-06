@@ -4,7 +4,7 @@ title: getBlock
 sidebar_label: getBlock
 ---
 
-Returns a block matching the block number or block hash.
+Returns a block matching the block number, block id or block hash.
 
 ## Parameters 
 
