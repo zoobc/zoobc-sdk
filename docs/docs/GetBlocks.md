@@ -20,7 +20,7 @@ Returns a block matching the block number or block hash.
   - `ChainType` : _int32_ - Indicate the type of chains, _Mainchain_ for flag 0 and _Spinechain_ for flag 1.
   - `Limit` : _uint32_ - Number of block to fetch.
   - `Height` : _uint32_ - Fetch block from `n` height.
-  - `ID` : _string_ - Identifer of blocks produced from the first 8 bytes from blockhash  
+  - `ID` : _string_ - Identifier of blocks produced from the first 8 bytes from blockhash  
   - `PreviousBlockHash` : _bytes_ - The blockhash of the  the block that connect each block
   - `Height` : _uint32_ - Height relative to the block of transaction was included in.
   - `Timestamp` : _int64_ - Block’s first recorded (arrival) timestamp
