@@ -4,11 +4,11 @@ title: getTransaction
 sidebar_label: getTransaction
 ---
 
-### Parameters
+## Parameters
 
 * `ID` : _string_ - The hash of each transaction.
 
-### Returns
+## Returns
 
   - `Version`: _uint32_ - A version number that can be changed if the protocol number is changed.
   - `ID` : The hash of each transaction.
@@ -36,7 +36,7 @@ sidebar_label: getTransaction
     - `Poown`: _null_ - The poof of ownership message for this node.
   - `TransactionBody`: _string_ -
 
-### Example
+## Example
 ```javascript
 singleTransaction = () => {
   zoobc.connection('http://18.139.3.139:7001');
