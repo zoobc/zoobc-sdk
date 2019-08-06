@@ -8,13 +8,10 @@ Returns an array of transactions according to a maximum set by the limit request
 
 ### Parameters
 
-* `Limit` : _uin32_ - limiting how many transactions to be fetched at.
-* `Offset`: _uint32_ - the hash of which transaction started to fetched at.
+* `Limit` : _uin32_ - Limiting how many transactions to be fetched at.
+* `Offset`: _uint32_ - The hash of which transaction started to fetched at.
 
 ### Returns
-
-  - `Total`: _string_ - Number of transactions in total.
-  - `Count`: _uint32_ - Number of transactions returned.
 
 `Promise` returns `Object` - A transaction object its hash `TransactionHash` :
 
@@ -32,6 +29,8 @@ Returns an array of transactions according to a maximum set by the limit request
   - `TransactionBodyLength` : _uint32_ - The length that the transaction body.
   - `TransactionBodyBytes` : _bytes_ - The raw data of the transaction body.
   - `Version` : _uint32_ - A version number that can be changed if the protocol number is changed.
+  - `Total`: _string_ - Number of transactions in total.
+  - `Count`: _uint32_ - Number of transactions returned.
   - `Signature` : _bytes_ - Digital signature from the sender.
   - `TransactionBody` : _string_
     - `SendMoneyTransactionBody` : _object_
