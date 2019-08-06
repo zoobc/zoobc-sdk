@@ -4,7 +4,7 @@
       "getBlock",
       "getBlocks",
       "getTransaction",
-      "getTransctions"
+      "getTransactions"
     ]
   },
   "docs-other": {
