@@ -6,7 +6,7 @@ sidebar_label: getBlock
 
 Returns a block matching the block number or block hash.
 
-### Parameters
+## Parameters
 
 * `ChainType` : _int32_ - Indicate the type of chains, _Mainchain_ for flag 0 and _Spinechain_ for flag 1.
 
@@ -15,7 +15,7 @@ Returns a block matching the block number or block hash.
 * `Height` : _uint32_ - Fetch block from `n` height.
 
 
-### Returns
+## Returns
 
 `Promise` returns `Object` - The block object:
 
@@ -35,7 +35,7 @@ Returns a block matching the block number or block hash.
   - `PayloadLength` : _uint32_ -
   - `PayloadHash` : _bytes_ -
 
-### Example
+## Example
 
 ```javascript
 import zoobc from 'zoobc';
