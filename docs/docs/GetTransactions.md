@@ -4,6 +4,8 @@ title: getTransactions
 sidebar_label: getTransactions
 ---
 
+Returns an array of transactions according to a maximum set by the limit requested at and starts from the offset.
+
 ### Parameters
 
 * `Limit` : _uin32_ - limiting how many transactions to be fetched at.
