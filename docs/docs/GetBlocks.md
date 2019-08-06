@@ -45,10 +45,10 @@ listBlocks = () => {
   zoobc.connection('http://18.139.3.139:7001');
   zoobc.getBlocks(0, 5, 1)
     .then(res => {
-      this.setState(res => console.log(res));
+      console.log(res);
     })
     .catch(err => {
-      this.setState(err => console.log(err));
+      console.log(err);
     });
 };
 
