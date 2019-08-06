@@ -4,7 +4,7 @@ title: getBlocks
 sidebar_label: getBlocks
 ---
 
-Returns a block matching the block number or block hash.
+Returns an array blocks according to a maximum set by the limit requested at.
 
 ## Parameters
 
