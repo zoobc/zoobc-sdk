@@ -45,10 +45,10 @@ listTransactions = () => {
   zoobc.connection('http://18.139.3.139:7001');
   zoobc.getTransactions("1902297852732397426")
     .then(res => {
-      this.setState({ transactions: res.TransactionsList });
+      console.log(res.TransactionsList );
     })
     .catch(err => {
-      this.setState({ error: err });
+      console.log(err);
     });
 };
 ```
