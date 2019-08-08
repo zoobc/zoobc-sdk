@@ -1,3 +1,5 @@
+![](/src/assets/images/ZooBC-SDK-js.png)
+
 # ZooBC-SDK for JavaScript
 
 ![npm](https://img.shields.io/npm/v/zoobc-sdk-js.svg)
