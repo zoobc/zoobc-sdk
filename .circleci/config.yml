@@ -1,7 +1,7 @@
 version: 2
 
 defaults: &defaults
-  working_directory: ~/zoobc-sdk-js
+  working_directory: ~/zoobc-sdk
   docker:
     - image: circleci/node:6
 
@@ -36,7 +36,7 @@ jobs:
           command: npx semantic-release
       - run:
           name: Authenticate with registry
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/zoobc-sdk-js/.npmrc
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/zoobc-sdk/.npmrc
       - run:
           name: Publish SDK
           command: npm publish
