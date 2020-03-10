@@ -1,3 +1,4 @@
+Gede Yandi, [09.03.20 14:53]
 #!/bin/bash
 
 # ###### FUNCTION ######
@@ -32,7 +33,7 @@ function echo_fail() {
 }
 
 function echo_pass() {
-  printf "\e[32m✔ ${1}"
+  printf "\e[32m✔️ ${1}"
   printf "\033\e[0m"
 }
 
@@ -47,31 +48,18 @@ function clean_schema() {
   fi
 }
 
+function clean_old_proto_dir() {
+  directory="./src/proto"
+  if [ -d "${directory}" ]; then
+    rm -rf $directory
+  fi
+}
+
 function update_schema() {
+  clean_old_proto_dir
   clean_schema
   git clone git@github.com:zoobc/zoobc-schema.git schema
   echo "$(echo_pass) Cloning zoobc-schema Done"
-  reduce_code
-  replace_code
-}
-
-function reduce_code() {
-  directory="./schema/service"
-  if [ -d "${directory}" ]; then
-    find $directory -type f -exec grep -qe "google" {} \; -exec sed -i '' -e '/google/d' {} +
-    find $directory -type f -exec grep -qe "get" {} \; -exec sed -i '' -e '/get/d' {} +
-    find $directory -type f -exec grep -qe "post" {} \; -exec sed -i '' -e '/post/d' {} +
-    find $directory -type f -exec grep -qe "};" {} \; -exec sed -i '' -e '/};/d' {} +
-    echo "$(echo_pass) Reduce code proto schema Done"
-  fi
-}
-
-function replace_code() {
-  directory="./schema/model"
-  if [ -d "${directory}" ]; then
-    find $directory -type f -exec grep -qe "int64 ID" {} \; -exec sed -i '' -e '/int64 ID/ s/^\(.*\)\(;\)/\1 [jstype = JS_STRING]\2/g' {} \;
-    echo "$(echo_pass) Replace line code for int64 ID in proto schema Done"
-  fi
 }
 
 # ###### EXECUTES ######
@@ -149,7 +137,7 @@ echo "$(echo_pass) Extract protoc-${PROTOC_VERSION}.zip Done"
 
 # 6. Generating proto definitions
 echo -e "\nGenerating proto definitions for ${platform}..."
-DIST_DIR="./src/proto"
+DIST_DIR="./grpc"
 if [ -d "${DIST_DIR}" ]; then
   if [[ $platform == 'linux' ]]; then
   sudo rm -rf "${DIST_DIR}"
@@ -160,6 +148,7 @@ fi
 mkdir -p "${DIST_DIR}"
 PROTOC=./protoc/bin/protoc
 
+Gede Yandi, [09.03.20 14:53]
 if [[ $platform == 'win' ]]; then
   PROTOC_GEN_TS=$(pwd)"/node_modules/.bin/protoc-gen-ts.cmd"
 else
@@ -175,6 +164,7 @@ if [[ $platform == 'linux' ]]; then
     --grpc-web_out=import_style=commonjs,mode=grpcwebtext:${DIST_DIR} \
     ./schema/model/*.proto \
     ./schema/service/*.proto \
+    ./schema/google/api/*.proto \
     --proto_path=./schema
 else
   $PROTOC \
@@ -185,6 +175,7 @@ else
   --grpc-web_out=import_style=commonjs,mode=grpcwebtext:${DIST_DIR} \
   ./schema/model/*.proto \
   ./schema/service/*.proto \
+  ./schema/google/api/*.proto \
   --proto_path=./schema
 fi
 echo "$(echo_pass) Generating proto definitions for ${platform} Done"
@@ -204,4 +195,4 @@ duration=$SECONDS
 echo -e "\n\n$(echo_done) Done in $(($duration / 60)) minutes and $(($duration % 60)) seconds."
 echo "    The Generating proto in the '${DIST_DIR}' directory!"
 
-# sleep 5s
+sleep 5s
