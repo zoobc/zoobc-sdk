@@ -20,6 +20,8 @@ var utils_1 = require("./helper/utils");
 exports.getZBCAdress = utils_1.getZBCAdress;
 exports.ZBCAddressValidation = utils_1.ZBCAddressValidation;
 exports.isZBCPublicKeyValid = utils_1.isZBCPublicKeyValid;
+var Transaction_1 = require("./helper/wallet/Transaction");
+exports.toTransactionListWallet = Transaction_1.toTransactionListWallet;
 exports.default = {
     Transactions: Transactions_1.default,
     Network: Network_1.default,

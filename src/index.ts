@@ -21,6 +21,7 @@ export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
 export { ZBCAccount } from './Account';
 
 export { getZBCAdress, ZBCAddressValidation, isZBCPublicKeyValid } from './helper/utils';
+export { toTransactionListWallet } from './helper/wallet/Transaction';
 
 export default {
   Transactions,
