@@ -12,6 +12,7 @@ export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
 
+export { HostInterface } from './Network';
 export { ZooTransactionsInterface, ZooTransactionInterface } from './Transactions';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
@@ -22,7 +23,7 @@ export { ZBCAccount } from './Account';
 
 export { getZBCAdress, ZBCAddressValidation, isZBCPublicKeyValid } from './helper/utils';
 
-export default {
+const zoobc = {
   Transactions,
   Network,
   Wallet,
@@ -33,3 +34,5 @@ export default {
   Escrows,
   Mempool,
 };
+
+export default zoobc;
