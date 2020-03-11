@@ -2,7 +2,7 @@
 export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
-export { ZooTransactionsInterface, ZooTransactionInterface } from './Transactions';
+export { TransactionListParams } from './Transactions';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
@@ -12,8 +12,8 @@ export { getZBCAdress, ZBCAddressValidation, isZBCPublicKeyValid } from './helpe
 declare const _default: {
     Transactions: {
         sendMoney: (data: import("./helper/transaction-builder/send-money").SendMoneyInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
-        get: (address: string, page: number, limit: number) => Promise<import("../grpc/model/transaction_pb").GetTransactionsResponse.AsObject>;
-        getOne: (id: string) => Promise<import("../grpc/model/transaction_pb").Transaction.AsObject>;
+        get: (id: string) => Promise<import("../grpc/model/transaction_pb").Transaction.AsObject>;
+        getList: (params?: import("./Transactions").TransactionListParams | undefined) => Promise<import("../grpc/model/transaction_pb").GetTransactionsResponse.AsObject>;
     };
     Network: {
         list: {
