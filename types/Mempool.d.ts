@@ -9,10 +9,10 @@ export interface MempoolListParams {
         orderBy?: 0 | 1;
     };
 }
-declare function get(params?: MempoolListParams): Promise<GetMempoolTransactionsResponse.AsObject>;
-declare function getOne(id: string): Promise<MempoolTransaction.AsObject>;
+declare function getList(params?: MempoolListParams): Promise<GetMempoolTransactionsResponse.AsObject>;
+declare function get(id: string): Promise<MempoolTransaction.AsObject>;
 declare const _default: {
     get: typeof get;
-    getOne: typeof getOne;
+    getList: typeof getList;
 };
 export default _default;

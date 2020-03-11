@@ -19,7 +19,7 @@ export interface MempoolListParams {
   };
 }
 
-function get(params?: MempoolListParams): Promise<GetMempoolTransactionsResponse.AsObject> {
+function getList(params?: MempoolListParams): Promise<GetMempoolTransactionsResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected;
     const request = new GetMempoolTransactionsRequest();
@@ -47,7 +47,7 @@ function get(params?: MempoolListParams): Promise<GetMempoolTransactionsResponse
   });
 }
 
-function getOne(id: string): Promise<MempoolTransaction.AsObject> {
+function get(id: string): Promise<MempoolTransaction.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected;
     const request = new GetMempoolTransactionRequest();
@@ -61,4 +61,4 @@ function getOne(id: string): Promise<MempoolTransaction.AsObject> {
   });
 }
 
-export default { get, getOne };
+export default { get, getList };

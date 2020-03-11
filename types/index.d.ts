@@ -53,8 +53,8 @@ declare const _default: {
         getOne: (id: string) => Promise<import("../grpc/model/escrow_pb").Escrow.AsObject>;
     };
     Mempool: {
-        get: (params?: import("./Mempool").MempoolListParams | undefined) => Promise<import("../grpc/model/mempool_pb").GetMempoolTransactionsResponse.AsObject>;
-        getOne: (id: string) => Promise<import("../grpc/model/mempool_pb").MempoolTransaction.AsObject>;
+        get: (id: string) => Promise<import("../grpc/model/mempool_pb").MempoolTransaction.AsObject>;
+        getList: (params?: import("./Mempool").MempoolListParams | undefined) => Promise<import("../grpc/model/mempool_pb").GetMempoolTransactionsResponse.AsObject>;
     };
 };
 export default _default;

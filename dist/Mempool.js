@@ -7,7 +7,7 @@ var Network_1 = __importDefault(require("./Network"));
 var mempool_pb_1 = require("../grpc/model/mempool_pb");
 var pagination_pb_1 = require("../grpc/model/pagination_pb");
 var mempool_pb_service_1 = require("../grpc/service/mempool_pb_service");
-function get(params) {
+function getList(params) {
     return new Promise(function (resolve, reject) {
         var networkIP = Network_1.default.selected;
         var request = new mempool_pb_1.GetMempoolTransactionsRequest();
@@ -36,7 +36,7 @@ function get(params) {
         });
     });
 }
-function getOne(id) {
+function get(id) {
     return new Promise(function (resolve, reject) {
         var networkIP = Network_1.default.selected;
         var request = new mempool_pb_1.GetMempoolTransactionRequest();
@@ -50,4 +50,4 @@ function getOne(id) {
         });
     });
 }
-exports.default = { get: get, getOne: getOne };
+exports.default = { get: get, getList: getList };
