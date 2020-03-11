@@ -13,6 +13,7 @@ export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
 
 export { ZooTransactionsInterface, ZooTransactionInterface } from './Transactions';
+export { MempoolListParams } from './Mempool';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
