@@ -55,5 +55,10 @@ declare const _default: {
         get: (address: string, page: number, limit: number) => Promise<import("../grpc/model/mempool_pb").GetMempoolTransactionsResponse.AsObject>;
         getOne: (id: string) => Promise<import("../grpc/model/mempool_pb").MempoolTransaction.AsObject>;
     };
+    Block: {
+        getBlocks: (height: number, limit?: number | undefined) => Promise<import("../grpc/model/block_pb").GetBlocksResponse.AsObject>;
+        getBlockById: (id: string) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
+        getBlockByHeight: (height: number) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
+    };
 };
 export default _default;

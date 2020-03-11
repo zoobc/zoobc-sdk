@@ -12,6 +12,7 @@ var Host_1 = __importDefault(require("./Host"));
 var Node_1 = __importDefault(require("./Node"));
 var Escrows_1 = __importDefault(require("./Escrows"));
 var Poown_1 = __importDefault(require("./Poown"));
+var Block_1 = __importDefault(require("./Block"));
 var Keyring_1 = require("./Keyring");
 exports.ZooKeyring = Keyring_1.ZooKeyring;
 var auth_pb_1 = require("../grpc/model/auth_pb");
@@ -30,4 +31,5 @@ exports.default = {
     Poown: Poown_1.default,
     Escrows: Escrows_1.default,
     Mempool: Mempool_1.default,
+    Block: Block_1.default,
 };
