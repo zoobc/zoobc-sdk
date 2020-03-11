@@ -3,6 +3,7 @@ export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
 export { ZooTransactionsInterface, ZooTransactionInterface } from './Transactions';
+export { EscrowListParams } from './Escrows';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
@@ -48,8 +49,8 @@ declare const _default: {
     };
     Escrows: {
         approval: (data: import("./helper/transaction-builder/escrow-transaction").EscrowApprovalInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
-        get: (address: string, page: number, limit: number) => Promise<import("../grpc/model/escrow_pb").GetEscrowTransactionsResponse.AsObject>;
-        getOne: (id: string) => Promise<import("../grpc/model/escrow_pb").Escrow.AsObject>;
+        get: (id: string) => Promise<import("../grpc/model/escrow_pb").Escrow.AsObject>;
+        getList: (params?: import("./Escrows").EscrowListParams | undefined) => Promise<import("../grpc/model/escrow_pb").GetEscrowTransactionsResponse.AsObject>;
     };
     Mempool: {
         get: (address: string, page: number, limit: number) => Promise<import("../grpc/model/mempool_pb").GetMempoolTransactionsResponse.AsObject>;
