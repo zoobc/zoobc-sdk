@@ -13,6 +13,7 @@ export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
 
+export { MempoolListParams } from './Mempool';
 export { TransactionListParams } from './Transactions';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';

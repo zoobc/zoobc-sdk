@@ -2,6 +2,7 @@
 export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
+export { MempoolListParams } from './Mempool';
 export { TransactionListParams } from './Transactions';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
@@ -52,8 +53,8 @@ declare const _default: {
         getOne: (id: string) => Promise<import("../grpc/model/escrow_pb").Escrow.AsObject>;
     };
     Mempool: {
-        get: (address: string, page: number, limit: number) => Promise<import("../grpc/model/mempool_pb").GetMempoolTransactionsResponse.AsObject>;
-        getOne: (id: string) => Promise<import("../grpc/model/mempool_pb").MempoolTransaction.AsObject>;
+        get: (id: string) => Promise<import("../grpc/model/mempool_pb").MempoolTransaction.AsObject>;
+        getList: (params?: import("./Mempool").MempoolListParams | undefined) => Promise<import("../grpc/model/mempool_pb").GetMempoolTransactionsResponse.AsObject>;
     };
     Block: {
         getBlocks: (height: number, limit?: number | undefined) => Promise<import("../grpc/model/block_pb").GetBlocksResponse.AsObject>;
