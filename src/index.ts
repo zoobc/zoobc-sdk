@@ -17,16 +17,16 @@ export { EscrowListParams } from './Escrows';
 export { NodeListParams } from './Node';
 export { MempoolListParams } from './Mempool';
 export { TransactionListParams } from './Transactions';
+
+export { ZBCAccount } from './Account';
+export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
-
-export { ZBCAccount } from './Account';
-
 export { getZBCAdress, ZBCAddressValidation, isZBCPublicKeyValid } from './helper/utils';
 
-export default {
+const zoobc = {
   Transactions,
   Network,
   Wallet,
@@ -38,3 +38,5 @@ export default {
   Mempool,
   Block,
 };
+
+export default zoobc;
