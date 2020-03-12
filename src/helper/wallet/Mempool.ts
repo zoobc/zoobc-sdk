@@ -4,10 +4,7 @@ import { TransactionTypeMap } from '../../../grpc/model/transaction_pb';
 
 let typeTransactions: TransactionTypeMap;
 
-export function toUnconfirmedSendMoneyWallet(
-  res: GetMempoolTransactionsResponse.AsObject,
-  ownAddress: string,
-) {
+export function toUnconfirmedSendMoneyWallet(res: GetMempoolTransactionsResponse.AsObject, ownAddress: string) {
   let transactions: any = res.mempooltransactionsList.filter(tx => {
     const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
     if (bytes.readInt32LE(0) == typeTransactions.SENDMONEYTRANSACTION) return tx;
@@ -17,8 +14,7 @@ export function toUnconfirmedSendMoneyWallet(
 
     const amount = readInt64(bytes, 121);
     const fee = readInt64(bytes, 109);
-    const friendAddress =
-      tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
+    const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
     const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
 
     return {

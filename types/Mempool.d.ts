@@ -1,8 +1,18 @@
 import { GetMempoolTransactionsResponse, MempoolTransaction } from '../grpc/model/mempool_pb';
-declare function get(address: string, page: number, limit: number): Promise<GetMempoolTransactionsResponse.AsObject>;
-declare function getOne(id: string): Promise<MempoolTransaction.AsObject>;
+export interface MempoolListParams {
+    address?: string;
+    timestampStart?: string;
+    timestampEnd?: string;
+    pagination?: {
+        limit?: number;
+        page?: number;
+        orderBy?: 0 | 1;
+    };
+}
+declare function getList(params?: MempoolListParams): Promise<GetMempoolTransactionsResponse.AsObject>;
+declare function get(id: string): Promise<MempoolTransaction.AsObject>;
 declare const _default: {
     get: typeof get;
-    getOne: typeof getOne;
+    getList: typeof getList;
 };
 export default _default;

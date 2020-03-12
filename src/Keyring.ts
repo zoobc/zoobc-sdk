@@ -50,17 +50,8 @@ export class ZooKeyring {
     return bip39.generateMnemonic(strength, undefined, wordlist);
   }
 
-  calcDerivationPath(
-    accountValue: number,
-    changeValue: 0 | 1 = 0,
-    bip32RootKey: BIP32Interface = this.bip32RootKey,
-  ): BIP32Interface {
-    const {
-      curveName = 'secp256k1',
-      derivationStandard = 'bip44',
-      purposeValue = '44',
-      coinValue,
-    } = findCoin(this.coinName);
+  calcDerivationPath(accountValue: number, changeValue: 0 | 1 = 0, bip32RootKey: BIP32Interface = this.bip32RootKey): BIP32Interface {
+    const { curveName = 'secp256k1', derivationStandard = 'bip44', purposeValue = '44', coinValue } = findCoin(this.coinName);
 
     return this.calcForDerivationPath(
       curveName,
@@ -82,13 +73,7 @@ export class ZooKeyring {
     changeValue: string = '0',
     bip32RootKey: BIP32Interface = this.bip32RootKey,
   ): BIP32Interface {
-    var derivationPath = getDerivationPath(
-      derivationStandard,
-      purposeValue,
-      coinValue,
-      accountValue,
-      changeValue,
-    );
+    var derivationPath = getDerivationPath(derivationStandard, purposeValue, coinValue, accountValue, changeValue);
 
     var errorText = findDerivationPathErrors(derivationPath!);
     if (errorText) {
@@ -112,14 +97,9 @@ export class ZooKeyring {
       publicKey,
       sign(message: Uint8Array | Buffer, lowR?: boolean): Buffer {
         if (curveName === 'secp256k1') {
-          return bip32ExtendedKey.sign(
-            !Buffer.isBuffer(message) ? Buffer.from(message) : message,
-            lowR,
-          );
+          return bip32ExtendedKey.sign(!Buffer.isBuffer(message) ? Buffer.from(message) : message, lowR);
         } else if (curveName === 'ed25519') {
-          const { secretKey } = ed25519.keyPair.fromSeed(
-            new Uint8Array(privKey!.buffer.slice(0, 32)),
-          );
+          const { secretKey } = ed25519.keyPair.fromSeed(new Uint8Array(privKey!.buffer.slice(0, 32)));
           return Buffer.from(ed25519.detached(message, secretKey));
         } else {
           throw new Error(NOT_IMPLEMENTED);

@@ -1,21 +1,41 @@
-const list = [
-  {
-    ip: 'https://n0.alpha.proofofparticipation.network:8443',
-    default: true,
-    name: 'Alpha Testnet',
-  },
-  {
-    ip: 'http://172.104.34.10:8002',
-    default: true,
-    name: 'Local Testnet',
-  },
-  {
-    ip: 'http://45.79.39.58:8002',
-    default: true,
-    name: 'Demo Testnet',
-  },
-];
+export interface HostInterface {
+  host: string;
+  name: string;
+}
 
-var selected = list[0].ip;
+class Network {
+  private idx: number = 0;
+  private hosts: HostInterface[] = [];
 
-export default { list, selected };
+  get list(): HostInterface[] {
+    return this.hosts;
+  }
+
+  set list(hosts: HostInterface[]) {
+    this.hosts = hosts;
+  }
+
+  get id(): number {
+    return this.idx;
+  }
+
+  set id(id) {
+    this.idx = id;
+  }
+}
+
+const network = new Network();
+
+function list(hosts: HostInterface[]): void {
+  network.list = hosts;
+}
+
+function set(idx: number) {
+  network.id = idx;
+}
+
+function selected(): HostInterface {
+  return network.list[network.id];
+}
+
+export default { list, set, selected };

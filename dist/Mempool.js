@@ -7,17 +7,27 @@ var Network_1 = __importDefault(require("./Network"));
 var mempool_pb_1 = require("../grpc/model/mempool_pb");
 var pagination_pb_1 = require("../grpc/model/pagination_pb");
 var mempool_pb_service_1 = require("../grpc/service/mempool_pb_service");
-function get(address, page, limit) {
+function getList(params) {
     return new Promise(function (resolve, reject) {
-        var networkIP = Network_1.default.selected;
+        var networkIP = Network_1.default.selected();
         var request = new mempool_pb_1.GetMempoolTransactionsRequest();
-        var pagination = new pagination_pb_1.Pagination();
-        pagination.setLimit(limit);
-        pagination.setPage(page);
-        pagination.setOrderby(pagination_pb_1.OrderBy.DESC);
-        request.setAddress(address);
-        request.setPagination(pagination);
-        var client = new mempool_pb_service_1.MempoolServiceClient(networkIP);
+        if (params) {
+            var address = params.address, timestampEnd = params.timestampEnd, timestampStart = params.timestampStart, pagination = params.pagination;
+            if (address)
+                request.setAddress(address);
+            if (timestampStart)
+                request.setTimestampstart(timestampStart);
+            if (timestampEnd)
+                request.setTimestampend(timestampEnd);
+            if (pagination) {
+                var reqPagination = new pagination_pb_1.Pagination();
+                reqPagination.setLimit(pagination.limit || 10);
+                reqPagination.setPage(pagination.page || 1);
+                reqPagination.setOrderby(pagination.orderBy || pagination_pb_1.OrderBy.DESC);
+                request.setPagination(reqPagination);
+            }
+        }
+        var client = new mempool_pb_service_1.MempoolServiceClient(networkIP.host);
         client.getMempoolTransactions(request, function (err, res) {
             if (err)
                 reject(err);
@@ -26,12 +36,12 @@ function get(address, page, limit) {
         });
     });
 }
-function getOne(id) {
+function get(id) {
     return new Promise(function (resolve, reject) {
-        var networkIP = Network_1.default.selected;
+        var networkIP = Network_1.default.selected();
         var request = new mempool_pb_1.GetMempoolTransactionRequest();
         request.setId(id);
-        var client = new mempool_pb_service_1.MempoolServiceClient(networkIP);
+        var client = new mempool_pb_service_1.MempoolServiceClient(networkIP.host);
         client.getMempoolTransaction(request, function (err, res) {
             if (err)
                 reject(err.message);
@@ -40,4 +50,4 @@ function getOne(id) {
         });
     });
 }
-exports.default = { get: get, getOne: getOne };
+exports.default = { get: get, getList: getList };

@@ -6,11 +6,7 @@ export function encryptPassphrase(seed: string, password: string, salt: string =
   return CryptoJS.AES.encrypt(seed, key).toString();
 }
 
-export function decryptPassphrase(
-  encSeed: string,
-  password: string,
-  salt: string = 'salt',
-): string {
+export function decryptPassphrase(encSeed: string, password: string, salt: string = 'salt'): string {
   const key = encryptPassword(password, salt);
   try {
     const seed = CryptoJS.AES.decrypt(encSeed, key).toString(CryptoJS.enc.Utf8);
