@@ -64,9 +64,10 @@ function isZBCPublicKeyValid(pubkey) {
 }
 exports.isZBCPublicKeyValid = isZBCPublicKeyValid;
 function writeInt64(number, base, endian) {
+    number = number.toString();
     var bn = new bn_js_1.default(number, base, endian);
     var buffer = bn.toArrayLike(Buffer, 'le', 8);
-    if (number.toString()[0] == '-') {
+    if (number[0] == '-') {
         var array = buffer.map(function (b, i) {
             if (i == 0)
                 b = Math.abs(b - 256);

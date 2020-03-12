@@ -10,7 +10,6 @@ export { RegisterNodeInterface } from './helper/transaction-builder/register-nod
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
-export { ZBCAccount } from './Account';
 export { getZBCAdress, ZBCAddressValidation, isZBCPublicKeyValid } from './helper/utils';
 export { toTransactionListWallet } from './helper/wallet/Transaction';
 declare const _default: {
@@ -32,7 +31,7 @@ declare const _default: {
         decryptPassphrase: typeof import("./Wallet").decryptPassphrase;
     };
     Account: {
-        getBalance: (address: string) => Promise<import("../grpc/model/accountBalance_pb").GetAccountBalanceResponse.AsObject>;
+        getBalance: typeof import("./Account").getBalance;
     };
     Host: {
         getBlock: () => Promise<import("../grpc/model/host_pb").HostInfo.AsObject>;

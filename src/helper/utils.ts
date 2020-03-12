@@ -50,9 +50,10 @@ export function isZBCPublicKeyValid(pubkey: string): boolean {
 }
 
 export function writeInt64(number: number | string, base?: number, endian?: any): Buffer {
+  number = number.toString();
   let bn = new BN(number, base, endian);
   let buffer = bn.toArrayLike(Buffer, 'le', 8);
-  if (number.toString()[0] == '-') {
+  if (number[0] == '-') {
     let array = buffer.map((b, i) => {
       if (i == 0) b = Math.abs(b - 256);
       else b = Math.abs(b - 255);
