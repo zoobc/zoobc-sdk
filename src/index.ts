@@ -25,6 +25,7 @@ export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
 export { getZBCAdress, ZBCAddressValidation, isZBCPublicKeyValid } from './helper/utils';
+export { toTransactionListWallet } from './helper/wallet/Transaction';
 
 const zoobc = {
   Transactions,
