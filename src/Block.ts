@@ -1,21 +1,16 @@
-import {
-  GetBlocksResponse,
-  GetBlocksRequest,
-  GetBlockRequest,
-  BlockExtendedInfo,
-} from '../grpc/model/block_pb';
+import { GetBlocksResponse, GetBlocksRequest, GetBlockRequest, BlockExtendedInfo } from '../grpc/model/block_pb';
 import { BlockServiceClient } from '../grpc/service/block_pb_service';
 import Network from './Network';
 
 function getBlocks(height: number, limit?: number): Promise<GetBlocksResponse.AsObject> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected;
+    const networkIP = Network.selected();
     const request = new GetBlocksRequest();
 
     request.setHeight(height);
     request.setLimit(limit || 10);
 
-    const client = new BlockServiceClient(networkIP);
+    const client = new BlockServiceClient(networkIP.host);
     client.getBlocks(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());
@@ -25,11 +20,11 @@ function getBlocks(height: number, limit?: number): Promise<GetBlocksResponse.As
 
 function getBlockById(id: string): Promise<BlockExtendedInfo.AsObject> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected;
+    const networkIP = Network.selected();
     const request = new GetBlockRequest();
 
     request.setId(id);
-    const client = new BlockServiceClient(networkIP);
+    const client = new BlockServiceClient(networkIP.host);
     client.getBlock(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());
@@ -39,11 +34,11 @@ function getBlockById(id: string): Promise<BlockExtendedInfo.AsObject> {
 
 function getBlockByHeight(height: number): Promise<BlockExtendedInfo.AsObject> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected;
+    const networkIP = Network.selected();
     const request = new GetBlockRequest();
 
     request.setHeight(height);
-    const client = new BlockServiceClient(networkIP);
+    const client = new BlockServiceClient(networkIP.host);
     client.getBlock(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());

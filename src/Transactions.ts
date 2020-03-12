@@ -28,7 +28,7 @@ export interface TransactionListParams {
 function getList(params?: TransactionListParams): Promise<GetTransactionsResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const request = new GetTransactionsRequest();
-    const networkIP = Network.selected;
+    const networkIP = Network.selected();
 
     if (params) {
       const { address, height, transactionType, timestampStart, timestampEnd, pagination } = params;
@@ -47,7 +47,7 @@ function getList(params?: TransactionListParams): Promise<GetTransactionsRespons
       }
     }
 
-    const client = new TransactionServiceClient(networkIP);
+    const client = new TransactionServiceClient(networkIP.host);
     client.getTransactions(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());
@@ -57,11 +57,11 @@ function getList(params?: TransactionListParams): Promise<GetTransactionsRespons
 
 function get(id: string): Promise<Transaction.AsObject> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected;
+    const networkIP = Network.selected();
     const request = new GetTransactionRequest();
     request.setId(id);
 
-    const client = new TransactionServiceClient(networkIP);
+    const client = new TransactionServiceClient(networkIP.host);
     client.getTransaction(request, (err, res) => {
       if (err) reject(err.message);
       if (res) resolve(res.toObject());
@@ -69,19 +69,16 @@ function get(id: string): Promise<Transaction.AsObject> {
   });
 }
 
-function sendMoney(
-  data: SendMoneyInterface,
-  seed: BIP32Interface,
-): Promise<PostTransactionResponse.AsObject> {
+function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   const txBytes = sendMoneyBuilder(data, seed);
 
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected;
+    const networkIP = Network.selected();
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(txBytes);
 
-    const client = new TransactionServiceClient(networkIP);
+    const client = new TransactionServiceClient(networkIP.host);
     client.postTransaction(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());

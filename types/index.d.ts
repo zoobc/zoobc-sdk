@@ -6,25 +6,25 @@ export { EscrowListParams } from './Escrows';
 export { NodeListParams } from './Node';
 export { MempoolListParams } from './Mempool';
 export { TransactionListParams } from './Transactions';
+export { ZBCAccount } from './Account';
+export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
 export { getZBCAdress, ZBCAddressValidation, isZBCPublicKeyValid } from './helper/utils';
-export { toTransactionListWallet } from './helper/wallet/Transaction';
-declare const _default: {
+export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
+export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
+declare const zoobc: {
     Transactions: {
         sendMoney: (data: import("./helper/transaction-builder/send-money").SendMoneyInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
         get: (id: string) => Promise<import("../grpc/model/transaction_pb").Transaction.AsObject>;
         getList: (params?: import("./Transactions").TransactionListParams | undefined) => Promise<import("../grpc/model/transaction_pb").GetTransactionsResponse.AsObject>;
     };
     Network: {
-        list: {
-            ip: string;
-            default: boolean;
-            name: string;
-        }[];
-        selected: string;
+        list: (hosts: import("./Network").HostInterface[]) => void;
+        set: (idx: number) => void;
+        selected: () => import("./Network").HostInterface;
     };
     Wallet: {
         encryptPassphrase: typeof import("./Wallet").encryptPassphrase;
@@ -65,4 +65,4 @@ declare const _default: {
         getBlockByHeight: (height: number) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
     };
 };
-export default _default;
+export default zoobc;

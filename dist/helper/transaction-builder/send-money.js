@@ -12,18 +12,7 @@ function sendMoneyBuilder(data, seed) {
     var fee = utils_1.writeInt64(data.fee * 1e8);
     var amount = utils_1.writeInt64(data.amount * 1e8);
     var bodyLength = utils_1.writeInt32(amount.length);
-    bytes = Buffer.concat([
-        TRANSACTION_TYPE,
-        constant_1.VERSION,
-        timestamp,
-        addressLength,
-        sender,
-        addressLength,
-        recipient,
-        fee,
-        bodyLength,
-        amount,
-    ]);
+    bytes = Buffer.concat([TRANSACTION_TYPE, constant_1.VERSION, timestamp, addressLength, sender, addressLength, recipient, fee, bodyLength, amount]);
     if (data.approverAddress && data.commission && data.timeout && data.instruction) {
         // escrow bytes
         var approverAddressLength = utils_1.writeInt32(constant_1.ADDRESS_LENGTH);
@@ -32,15 +21,7 @@ function sendMoneyBuilder(data, seed) {
         var timeout = utils_1.writeInt64(data.timeout);
         var instruction = Buffer.from(data.instruction, 'utf-8');
         var instructionLength = utils_1.writeInt32(instruction.length);
-        bytes = Buffer.concat([
-            bytes,
-            approverAddressLength,
-            approverAddress,
-            commission,
-            timeout,
-            instructionLength,
-            instruction,
-        ]);
+        bytes = Buffer.concat([bytes, approverAddressLength, approverAddress, commission, timeout, instructionLength, instruction]);
     }
     else {
         // escrow bytes default value

@@ -8,9 +8,9 @@ var host_pb_service_1 = require("../grpc/service/host_pb_service");
 var empty_pb_1 = require("../grpc/model/empty_pb");
 function getBlock() {
     return new Promise(function (resolve, reject) {
-        var networkIP = Network_1.default.selected;
+        var networkIP = Network_1.default.selected();
         var request = new empty_pb_1.Empty();
-        var client = new host_pb_service_1.HostServiceClient(networkIP);
+        var client = new host_pb_service_1.HostServiceClient(networkIP.host);
         client.getHostInfo(request, function (err, res) {
             if (err)
                 reject(err.message);

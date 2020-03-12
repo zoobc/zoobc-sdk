@@ -9,10 +9,10 @@ var Network_1 = __importDefault(require("./Network"));
 var grpc_web_1 = require("@improbable-eng/grpc-web");
 function getBalance(address) {
     return new Promise(function (resolve, reject) {
-        var networkIP = Network_1.default.selected;
+        var networkIP = Network_1.default.selected();
         var request = new accountBalance_pb_1.GetAccountBalanceRequest();
         request.setAccountaddress(address);
-        var client = new accountBalance_pb_service_1.AccountBalanceServiceClient(networkIP);
+        var client = new accountBalance_pb_service_1.AccountBalanceServiceClient(networkIP.host);
         client.getAccountBalance(request, function (err, res) {
             if (err) {
                 var code = err.code, message = err.message;

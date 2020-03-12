@@ -14,10 +14,7 @@ import {
   GetNodeRegistrationsResponse,
   GetNodeRegistrationsRequest,
 } from '../grpc/model/nodeRegistration_pb';
-import {
-  RegisterNodeInterface,
-  registerNodeBuilder,
-} from './helper/transaction-builder/register-node';
+import { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
 import { UpdateNodeInterface, updateNodeBuilder } from './helper/transaction-builder/update-node';
 import { RemoveNodeInterface, removeNodeBuilder } from './helper/transaction-builder/remove-node';
 import { ClaimNodeInterface, claimNodeBuilder } from './helper/transaction-builder/claim-node';
@@ -37,10 +34,7 @@ export interface NodeListParams {
   };
 }
 
-function getHardwareInfo(
-  networkIP: string,
-  childSeed: BIP32Interface,
-): Observable<GetNodeHardwareResponse.AsObject> {
+function getHardwareInfo(networkIP: string, childSeed: BIP32Interface): Observable<GetNodeHardwareResponse.AsObject> {
   return new Observable(observer => {
     const auth = Poown.createAuth(RequestType.GETPROOFOFOWNERSHIP, childSeed);
     const request = new GetNodeHardwareRequest();
@@ -58,10 +52,7 @@ function getHardwareInfo(
   });
 }
 
-function generateNodeKey(
-  networkIP: string,
-  childSeed: BIP32Interface,
-): Promise<GenerateNodeKeyResponse.AsObject> {
+function generateNodeKey(networkIP: string, childSeed: BIP32Interface): Promise<GenerateNodeKeyResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const auth = Poown.createAuth(RequestType.GENERATETNODEKEY, childSeed);
     const metadata = new grpc.Metadata({ authorization: auth });
@@ -76,7 +67,7 @@ function generateNodeKey(
 
 function getList(params?: NodeListParams): Promise<GetNodeRegistrationsResponse.AsObject> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected;
+    const networkIP = Network.selected();
     const request = new GetNodeRegistrationsRequest();
 
     if (params) {
@@ -95,7 +86,7 @@ function getList(params?: NodeListParams): Promise<GetNodeRegistrationsResponse.
       if (status) request.setRegistrationstatus(status);
     }
 
-    const client = new NodeRegistrationServiceClient(networkIP);
+    const client = new NodeRegistrationServiceClient(networkIP.host);
     client.getNodeRegistrations(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());
@@ -105,11 +96,11 @@ function getList(params?: NodeListParams): Promise<GetNodeRegistrationsResponse.
 
 function get(address: string): Promise<GetNodeRegistrationResponse.AsObject> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected;
+    const networkIP = Network.selected();
     const request = new GetNodeRegistrationRequest();
     request.setAccountaddress(address);
 
-    const client = new NodeRegistrationServiceClient(networkIP);
+    const client = new NodeRegistrationServiceClient(networkIP.host);
     client.getNodeRegistration(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());
@@ -117,18 +108,15 @@ function get(address: string): Promise<GetNodeRegistrationResponse.AsObject> {
   });
 }
 
-function register(
-  data: RegisterNodeInterface,
-  childSeed: BIP32Interface,
-): Promise<PostTransactionResponse.AsObject> {
+function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const bytes = registerNodeBuilder(data, childSeed);
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
 
-    const networkIP = Network.selected;
-    const client = new TransactionServiceClient(networkIP);
+    const networkIP = Network.selected();
+    const client = new TransactionServiceClient(networkIP.host);
     client.postTransaction(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());
@@ -136,10 +124,7 @@ function register(
   });
 }
 
-function update(
-  data: UpdateNodeInterface,
-  childSeed: BIP32Interface,
-): Promise<PostTransactionResponse.AsObject> {
+function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const auth = Poown.createAuth(RequestType.GETPROOFOFOWNERSHIP, childSeed);
     Poown.request(auth, data.nodeAddress)
@@ -149,8 +134,8 @@ function update(
         const request = new PostTransactionRequest();
         request.setTransactionbytes(bytes);
 
-        const networkIP = Network.selected;
-        const client = new TransactionServiceClient(networkIP);
+        const networkIP = Network.selected();
+        const client = new TransactionServiceClient(networkIP.host);
         client.postTransaction(request, (err, res) => {
           if (err) reject(err);
           if (res) resolve(res.toObject());
@@ -162,18 +147,15 @@ function update(
   });
 }
 
-function remove(
-  data: RemoveNodeInterface,
-  childSeed: BIP32Interface,
-): Promise<PostTransactionResponse.AsObject> {
+function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const bytes = removeNodeBuilder(data, childSeed);
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
 
-    const networkIP = Network.selected;
-    const client = new TransactionServiceClient(networkIP);
+    const networkIP = Network.selected();
+    const client = new TransactionServiceClient(networkIP.host);
     client.postTransaction(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());
@@ -181,18 +163,15 @@ function remove(
   });
 }
 
-function claim(
-  data: ClaimNodeInterface,
-  childSeed: BIP32Interface,
-): Promise<PostTransactionResponse.AsObject> {
+function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const bytes = claimNodeBuilder(data, childSeed);
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
 
-    const networkIP = Network.selected;
-    const client = new TransactionServiceClient(networkIP);
+    const networkIP = Network.selected();
+    const client = new TransactionServiceClient(networkIP.host);
     client.postTransaction(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());

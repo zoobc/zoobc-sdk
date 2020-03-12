@@ -21,9 +21,12 @@ var utils_1 = require("./helper/utils");
 exports.getZBCAdress = utils_1.getZBCAdress;
 exports.ZBCAddressValidation = utils_1.ZBCAddressValidation;
 exports.isZBCPublicKeyValid = utils_1.isZBCPublicKeyValid;
+var Mempool_2 = require("./helper/wallet/Mempool");
+exports.toUnconfirmedSendMoneyWallet = Mempool_2.toUnconfirmedSendMoneyWallet;
+exports.toUnconfirmTransactionNodeWallet = Mempool_2.toUnconfirmTransactionNodeWallet;
 var Transaction_1 = require("./helper/wallet/Transaction");
 exports.toTransactionListWallet = Transaction_1.toTransactionListWallet;
-exports.default = {
+var zoobc = {
     Transactions: Transactions_1.default,
     Network: Network_1.default,
     Wallet: Wallet_1.default,
@@ -35,3 +38,4 @@ exports.default = {
     Mempool: Mempool_1.default,
     Block: Block_1.default,
 };
+exports.default = zoobc;

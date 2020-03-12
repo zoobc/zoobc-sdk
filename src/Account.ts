@@ -1,18 +1,15 @@
-import {
-  GetAccountBalanceRequest,
-  GetAccountBalanceResponse,
-} from '../grpc/model/accountBalance_pb';
+import { GetAccountBalanceRequest, GetAccountBalanceResponse } from '../grpc/model/accountBalance_pb';
 import { AccountBalanceServiceClient } from '../grpc/service/accountBalance_pb_service';
 import Network from './Network';
 import { grpc } from '@improbable-eng/grpc-web';
 
 export function getBalance(address: string): Promise<GetAccountBalanceResponse.AsObject> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected;
+    const networkIP = Network.selected();
     const request = new GetAccountBalanceRequest();
 
     request.setAccountaddress(address);
-    const client = new AccountBalanceServiceClient(networkIP);
+    const client = new AccountBalanceServiceClient(networkIP.host);
     client.getAccountBalance(request, (err, res) => {
       if (err) {
         const { code, message } = err;

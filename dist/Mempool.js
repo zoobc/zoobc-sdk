@@ -9,7 +9,7 @@ var pagination_pb_1 = require("../grpc/model/pagination_pb");
 var mempool_pb_service_1 = require("../grpc/service/mempool_pb_service");
 function getList(params) {
     return new Promise(function (resolve, reject) {
-        var networkIP = Network_1.default.selected;
+        var networkIP = Network_1.default.selected();
         var request = new mempool_pb_1.GetMempoolTransactionsRequest();
         if (params) {
             var address = params.address, timestampEnd = params.timestampEnd, timestampStart = params.timestampStart, pagination = params.pagination;
@@ -27,7 +27,7 @@ function getList(params) {
                 request.setPagination(reqPagination);
             }
         }
-        var client = new mempool_pb_service_1.MempoolServiceClient(networkIP);
+        var client = new mempool_pb_service_1.MempoolServiceClient(networkIP.host);
         client.getMempoolTransactions(request, function (err, res) {
             if (err)
                 reject(err);
@@ -38,10 +38,10 @@ function getList(params) {
 }
 function get(id) {
     return new Promise(function (resolve, reject) {
-        var networkIP = Network_1.default.selected;
+        var networkIP = Network_1.default.selected();
         var request = new mempool_pb_1.GetMempoolTransactionRequest();
         request.setId(id);
-        var client = new mempool_pb_service_1.MempoolServiceClient(networkIP);
+        var client = new mempool_pb_service_1.MempoolServiceClient(networkIP.host);
         client.getMempoolTransaction(request, function (err, res) {
             if (err)
                 reject(err.message);

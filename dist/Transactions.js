@@ -11,7 +11,7 @@ var send_money_1 = require("./helper/transaction-builder/send-money");
 function getList(params) {
     return new Promise(function (resolve, reject) {
         var request = new transaction_pb_1.GetTransactionsRequest();
-        var networkIP = Network_1.default.selected;
+        var networkIP = Network_1.default.selected();
         if (params) {
             var address = params.address, height = params.height, transactionType = params.transactionType, timestampStart = params.timestampStart, timestampEnd = params.timestampEnd, pagination = params.pagination;
             if (address)
@@ -32,7 +32,7 @@ function getList(params) {
                 request.setPagination(reqPagination);
             }
         }
-        var client = new transaction_pb_service_1.TransactionServiceClient(networkIP);
+        var client = new transaction_pb_service_1.TransactionServiceClient(networkIP.host);
         client.getTransactions(request, function (err, res) {
             if (err)
                 reject(err);
@@ -43,10 +43,10 @@ function getList(params) {
 }
 function get(id) {
     return new Promise(function (resolve, reject) {
-        var networkIP = Network_1.default.selected;
+        var networkIP = Network_1.default.selected();
         var request = new transaction_pb_1.GetTransactionRequest();
         request.setId(id);
-        var client = new transaction_pb_service_1.TransactionServiceClient(networkIP);
+        var client = new transaction_pb_service_1.TransactionServiceClient(networkIP.host);
         client.getTransaction(request, function (err, res) {
             if (err)
                 reject(err.message);
@@ -58,10 +58,10 @@ function get(id) {
 function sendMoney(data, seed) {
     var txBytes = send_money_1.sendMoneyBuilder(data, seed);
     return new Promise(function (resolve, reject) {
-        var networkIP = Network_1.default.selected;
+        var networkIP = Network_1.default.selected();
         var request = new transaction_pb_1.PostTransactionRequest();
         request.setTransactionbytes(txBytes);
-        var client = new transaction_pb_service_1.TransactionServiceClient(networkIP);
+        var client = new transaction_pb_service_1.TransactionServiceClient(networkIP.host);
         client.postTransaction(request, function (err, res) {
             if (err)
                 reject(err);

@@ -21,7 +21,7 @@ export interface MempoolListParams {
 
 function getList(params?: MempoolListParams): Promise<GetMempoolTransactionsResponse.AsObject> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected;
+    const networkIP = Network.selected();
     const request = new GetMempoolTransactionsRequest();
 
     if (params) {
@@ -39,7 +39,7 @@ function getList(params?: MempoolListParams): Promise<GetMempoolTransactionsResp
       }
     }
 
-    const client = new MempoolServiceClient(networkIP);
+    const client = new MempoolServiceClient(networkIP.host);
     client.getMempoolTransactions(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());
@@ -49,11 +49,11 @@ function getList(params?: MempoolListParams): Promise<GetMempoolTransactionsResp
 
 function get(id: string): Promise<MempoolTransaction.AsObject> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected;
+    const networkIP = Network.selected();
     const request = new GetMempoolTransactionRequest();
     request.setId(id);
 
-    const client = new MempoolServiceClient(networkIP);
+    const client = new MempoolServiceClient(networkIP.host);
     client.getMempoolTransaction(request, (err, res) => {
       if (err) reject(err.message);
       if (res) resolve(res.toObject().transaction);

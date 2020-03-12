@@ -8,11 +8,11 @@ var block_pb_service_1 = require("../grpc/service/block_pb_service");
 var Network_1 = __importDefault(require("./Network"));
 function getBlocks(height, limit) {
     return new Promise(function (resolve, reject) {
-        var networkIP = Network_1.default.selected;
+        var networkIP = Network_1.default.selected();
         var request = new block_pb_1.GetBlocksRequest();
         request.setHeight(height);
         request.setLimit(limit || 10);
-        var client = new block_pb_service_1.BlockServiceClient(networkIP);
+        var client = new block_pb_service_1.BlockServiceClient(networkIP.host);
         client.getBlocks(request, function (err, res) {
             if (err)
                 reject(err);
@@ -23,10 +23,10 @@ function getBlocks(height, limit) {
 }
 function getBlockById(id) {
     return new Promise(function (resolve, reject) {
-        var networkIP = Network_1.default.selected;
+        var networkIP = Network_1.default.selected();
         var request = new block_pb_1.GetBlockRequest();
         request.setId(id);
-        var client = new block_pb_service_1.BlockServiceClient(networkIP);
+        var client = new block_pb_service_1.BlockServiceClient(networkIP.host);
         client.getBlock(request, function (err, res) {
             if (err)
                 reject(err);
@@ -37,10 +37,10 @@ function getBlockById(id) {
 }
 function getBlockByHeight(height) {
     return new Promise(function (resolve, reject) {
-        var networkIP = Network_1.default.selected;
+        var networkIP = Network_1.default.selected();
         var request = new block_pb_1.GetBlockRequest();
         request.setHeight(height);
-        var client = new block_pb_service_1.BlockServiceClient(networkIP);
+        var client = new block_pb_service_1.BlockServiceClient(networkIP.host);
         client.getBlock(request, function (err, res) {
             if (err)
                 reject(err);
