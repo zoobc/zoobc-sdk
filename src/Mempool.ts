@@ -8,21 +8,36 @@ import {
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { MempoolServiceClient } from '../grpc/service/mempool_pb_service';
 
-function get(
-  address: string,
-  page: number,
-  limit: number,
-): Promise<GetMempoolTransactionsResponse.AsObject> {
+export interface MempoolListParams {
+  address?: string;
+  timestampStart?: string;
+  timestampEnd?: string;
+  pagination?: {
+    limit?: number;
+    page?: number;
+    orderBy?: 0 | 1;
+  };
+}
+
+function getList(params?: MempoolListParams): Promise<GetMempoolTransactionsResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected;
-
     const request = new GetMempoolTransactionsRequest();
-    const pagination = new Pagination();
-    pagination.setLimit(limit);
-    pagination.setPage(page);
-    pagination.setOrderby(OrderBy.DESC);
-    request.setAddress(address);
-    request.setPagination(pagination);
+
+    if (params) {
+      const { address, timestampEnd, timestampStart, pagination } = params;
+
+      if (address) request.setAddress(address);
+      if (timestampStart) request.setTimestampstart(timestampStart);
+      if (timestampEnd) request.setTimestampend(timestampEnd);
+      if (pagination) {
+        const reqPagination = new Pagination();
+        reqPagination.setLimit(pagination.limit || 10);
+        reqPagination.setPage(pagination.page || 1);
+        reqPagination.setOrderby(pagination.orderBy || OrderBy.DESC);
+        request.setPagination(reqPagination);
+      }
+    }
 
     const client = new MempoolServiceClient(networkIP);
     client.getMempoolTransactions(request, (err, res) => {
@@ -32,7 +47,7 @@ function get(
   });
 }
 
-function getOne(id: string): Promise<MempoolTransaction.AsObject> {
+function get(id: string): Promise<MempoolTransaction.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected;
     const request = new GetMempoolTransactionRequest();
@@ -46,4 +61,4 @@ function getOne(id: string): Promise<MempoolTransaction.AsObject> {
   });
 }
 
-export default { get, getOne };
+export default { get, getList };

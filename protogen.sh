@@ -1,4 +1,3 @@
-Gede Yandi, [09.03.20 14:53]
 #!/bin/bash
 
 # ###### FUNCTION ######
@@ -68,12 +67,12 @@ SECONDS=0
 echo "You appear to be running on ${platform}"
 
 # 2. Cloning zoobc-schema
-echo -e "\nStart cloning zoobc-schema..."
+echo "Start cloning zoobc-schema..."
 update_schema
 
 # 3. Download grpc-web
 GRPC_WEB_VERSION="1.0.5"
-echo -e "\nDownloading grpc-web v${GRPC_WEB_VERSION} for ${platform}..."
+echo "Downloading grpc-web v${GRPC_WEB_VERSION} for ${platform}..."
 if [[ $platform == 'linux' ]]; then
   GRPC_WEB_URL="https://github.com/grpc/grpc-web/releases/download/${GRPC_WEB_VERSION}/protoc-gen-grpc-web-${GRPC_WEB_VERSION}-linux-x86_64"
 elif [[ $platform == 'mac' ]]; then
@@ -81,7 +80,7 @@ elif [[ $platform == 'mac' ]]; then
 elif [[ $platform == 'win' ]]; then
   GRPC_WEB_URL="https://github.com/grpc/grpc-web/releases/download/${GRPC_WEB_VERSION}/protoc-gen-grpc-web-${GRPC_WEB_VERSION}-windows-x86_64.exe"
 else
-  echo -e "\n$(echo_fail) Cannot download grpc web. Platform ${platform} is not currently supported by grpc web"
+  echo "$(echo_fail) Cannot download grpc web. Platform ${platform} is not currently supported by grpc web"
   exit 1
 fi
 
@@ -90,7 +89,6 @@ if [[ $platform == 'win' ]]; then
 else
   GRPC_WEB_PATH="/usr/local/bin/protoc-gen-grpc-web"
 fi
-
 
 ##CHECKING PLATFORM TO GIVE PERMISSION TO LINUX TO EDIT
 if [[ $platform == 'linux' ]]; then
@@ -104,7 +102,7 @@ echo "$(echo_pass) Downloading grpc web v${GRPC_WEB_VERSION} Done"
 
 # 4. Download protobuf base on platform
 PROTOC_VERSION="3.9.0"
-echo -e "\nDownloading protoc v${PROTOC_VERSION} for ${platform}..."
+echo "Downloading protoc v${PROTOC_VERSION} for ${platform}..."
 if [[ $platform == 'linux' ]]; then
   PROTOC_URL="https://github.com/google/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-linux-x86_64.zip"
 elif [[ $platform == 'mac' ]]; then
@@ -112,7 +110,7 @@ elif [[ $platform == 'mac' ]]; then
 elif [[ $platform == 'win' ]]; then
   PROTOC_URL="https://github.com/google/protobuf/releases/download/v${PROTOC_VERSION}/protoc-${PROTOC_VERSION}-win64.zip"
 else
-  echo -e "\n$(echo_fail) Cannot download protoc. Platform ${platform} is not currently supported by ts-protoc-gen"
+  echo "$(echo_fail) Cannot download protoc. Platform ${platform} is not currently supported by ts-protoc-gen"
   exit 1
 fi
 
@@ -125,7 +123,7 @@ fi
 echo "$(echo_pass) Downloading protoc v${PROTOC_VERSION} Done"
 
 # 5. Unzip into folder protoc
-echo -e "\nExtract protoc-${PROTOC_VERSION}.zip..."
+echo "Extract protoc-${PROTOC_VERSION}.zip..."
 if [ -d protoc ]; then
   rm -rf protoc
 fi
@@ -136,19 +134,18 @@ rm -rf "protoc-${PROTOC_VERSION}.zip"
 echo "$(echo_pass) Extract protoc-${PROTOC_VERSION}.zip Done"
 
 # 6. Generating proto definitions
-echo -e "\nGenerating proto definitions for ${platform}..."
+echo "Generating proto definitions for ${platform}..."
 DIST_DIR="./grpc"
 if [ -d "${DIST_DIR}" ]; then
   if [[ $platform == 'linux' ]]; then
-  sudo rm -rf "${DIST_DIR}"
+    sudo rm -rf "${DIST_DIR}"
   else
-  rm -rf "${DIST_DIR}"
+    rm -rf "${DIST_DIR}"
   fi
 fi
 mkdir -p "${DIST_DIR}"
 PROTOC=./protoc/bin/protoc
 
-Gede Yandi, [09.03.20 14:53]
 if [[ $platform == 'win' ]]; then
   PROTOC_GEN_TS=$(pwd)"/node_modules/.bin/protoc-gen-ts.cmd"
 else
@@ -156,7 +153,7 @@ else
 fi
 
 if [[ $platform == 'linux' ]]; then
-    sudo $PROTOC \
+  sudo $PROTOC \
     --plugin=protoc-gen-grpc-web=${GRPC_WEB_PATH} \
     --plugin=protoc-gen-ts=${PROTOC_GEN_TS} \
     --ts_out=service=true:${DIST_DIR} \
@@ -168,20 +165,20 @@ if [[ $platform == 'linux' ]]; then
     --proto_path=./schema
 else
   $PROTOC \
-  --plugin=protoc-gen-grpc-web=${GRPC_WEB_PATH} \
-  --plugin=protoc-gen-ts=${PROTOC_GEN_TS} \
-  --ts_out=service=true:${DIST_DIR} \
-  --js_out=import_style=commonjs,binary:${DIST_DIR} \
-  --grpc-web_out=import_style=commonjs,mode=grpcwebtext:${DIST_DIR} \
-  ./schema/model/*.proto \
-  ./schema/service/*.proto \
-  ./schema/google/api/*.proto \
-  --proto_path=./schema
+    --plugin=protoc-gen-grpc-web=${GRPC_WEB_PATH} \
+    --plugin=protoc-gen-ts=${PROTOC_GEN_TS} \
+    --ts_out=service=true:${DIST_DIR} \
+    --js_out=import_style=commonjs,binary:${DIST_DIR} \
+    --grpc-web_out=import_style=commonjs,mode=grpcwebtext:${DIST_DIR} \
+    ./schema/model/*.proto \
+    ./schema/service/*.proto \
+    ./schema/google/api/*.proto \
+    --proto_path=./schema
 fi
 echo "$(echo_pass) Generating proto definitions for ${platform} Done"
 
- # 7. Cleanup downloaded proto directory
-echo -e "\nCleaning temp generator..."
+# 7. Cleanup downloaded proto directory
+echo "Cleaning temp generator..."
 if [[ $platform == 'linux' ]]; then
   sudo rm -rf protoc
   sudo rm -rf ${GRPC_WEB_PATH}
@@ -192,7 +189,7 @@ fi
 
 clean_schema
 duration=$SECONDS
-echo -e "\n\n$(echo_done) Done in $(($duration / 60)) minutes and $(($duration % 60)) seconds."
-echo "    The Generating proto in the '${DIST_DIR}' directory!"
+echo "$(echo_done) Done in $(($duration / 60)) minutes and $(($duration % 60)) seconds."
+echo "     The Generating proto in the '${DIST_DIR}' directory!"
 
 sleep 5s
