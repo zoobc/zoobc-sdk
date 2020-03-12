@@ -22,6 +22,7 @@
     "url": "https://github.com/zoobc/zoobc-sdk/issues"
   },
   "scripts": {
+    "protogen": "./protogen.sh",
     "start": "tsc-watch --onCompilationComplete",
     "clean": "rimraf dist",
     "test": "mocha -r ts-node/register tests/**/*.test.ts",
