@@ -21,6 +21,10 @@ export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
 export { ZBCAccount } from './Account';
 
 export { getZBCAdress, ZBCAddressValidation, isZBCPublicKeyValid } from './helper/utils';
+export {
+  toUnconfirmedSendMoneyWallet,
+  toUnconfirmTransactionNodeWallet,
+} from './helper/wallet/Mempool';
 
 export default {
   Transactions,

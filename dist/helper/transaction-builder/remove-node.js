@@ -34,7 +34,7 @@ function removeNodeBuilder(data, seed) {
     // ========== END NULLIFYING THE ESCROW =========
     var signatureType = utils_1.writeInt32(0);
     var signature = seed.sign(bytes);
-    console.log(bytes);
-    return Buffer.concat([bytes, signatureType, signature]);
+    var bodyLengthSignature = utils_1.writeInt32(signatureType.length + signature.length);
+    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 exports.removeNodeBuilder = removeNodeBuilder;

@@ -20,6 +20,9 @@ var utils_1 = require("./helper/utils");
 exports.getZBCAdress = utils_1.getZBCAdress;
 exports.ZBCAddressValidation = utils_1.ZBCAddressValidation;
 exports.isZBCPublicKeyValid = utils_1.isZBCPublicKeyValid;
+var Mempool_2 = require("./helper/wallet/Mempool");
+exports.toUnconfirmedSendMoneyWallet = Mempool_2.toUnconfirmedSendMoneyWallet;
+exports.toUnconfirmTransactionNodeWallet = Mempool_2.toUnconfirmTransactionNodeWallet;
 exports.default = {
     Transactions: Transactions_1.default,
     Network: Network_1.default,
