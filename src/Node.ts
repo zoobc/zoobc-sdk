@@ -11,6 +11,8 @@ import Network from './Network';
 import {
   GetNodeRegistrationRequest,
   GetNodeRegistrationResponse,
+  GetNodeRegistrationsResponse,
+  GetNodeRegistrationsRequest,
 } from '../grpc/model/nodeRegistration_pb';
 import {
   RegisterNodeInterface,
@@ -22,6 +24,18 @@ import { ClaimNodeInterface, claimNodeBuilder } from './helper/transaction-build
 import Poown from './Poown';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
+import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
+
+export interface NodeListParams {
+  minHeight?: number;
+  maxHeight?: number;
+  status?: 0 | 1 | 2;
+  pagination?: {
+    limit?: number;
+    page?: number;
+    orderBy?: 0 | 1;
+  };
+}
 
 function getHardwareInfo(
   networkIP: string,
@@ -60,7 +74,36 @@ function generateNodeKey(
   });
 }
 
-function getOne(address: string): Promise<GetNodeRegistrationResponse.AsObject> {
+function getList(params?: NodeListParams): Promise<GetNodeRegistrationsResponse.AsObject> {
+  return new Promise((resolve, reject) => {
+    const networkIP = Network.selected;
+    const request = new GetNodeRegistrationsRequest();
+
+    if (params) {
+      const { minHeight, maxHeight, status, pagination } = params;
+
+      if (pagination) {
+        const reqPagination = new Pagination();
+        reqPagination.setLimit(pagination.limit || 10);
+        reqPagination.setPage(pagination.page || 1);
+        reqPagination.setOrderby(pagination.orderBy || OrderBy.DESC);
+        request.setPagination(reqPagination);
+      }
+
+      if (maxHeight) request.setMaxregistrationheight(maxHeight);
+      if (minHeight) request.setMinregistrationheight(minHeight);
+      if (status) request.setRegistrationstatus(status);
+    }
+
+    const client = new NodeRegistrationServiceClient(networkIP);
+    client.getNodeRegistrations(request, (err, res) => {
+      if (err) reject(err);
+      if (res) resolve(res.toObject());
+    });
+  });
+}
+
+function get(address: string): Promise<GetNodeRegistrationResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected;
     const request = new GetNodeRegistrationRequest();
@@ -164,5 +207,6 @@ export default {
   claim,
   getHardwareInfo,
   generateNodeKey,
-  getOne,
+  getList,
+  get,
 };
