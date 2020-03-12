@@ -22,6 +22,7 @@
     "url": "https://github.com/zoobc/zoobc-sdk/issues"
   },
   "scripts": {
+    "protogen": "./protogen.sh",
     "start": "tsc-watch --onCompilationComplete",
     "clean": "rimraf dist",
     "test": "mocha -r ts-node/register tests/**/*.test.ts",
@@ -42,7 +43,7 @@
   },
   "dependencies": {
     "@improbable-eng/grpc-web": "^0.9.6",
-    "bip32": "https://github.com/BlockchainZoo/bip32#SLIP10",
+    "bip32": "BlockchainZoo/bip32#SLIP10",
     "bip39": "^3.0.2",
     "bn.js": "^5.1.1",
     "buffer": "^5.5.0",
@@ -60,6 +61,7 @@
     "@types/crypto-js": "^3.1.43",
     "@types/google-protobuf": "^3.7.2",
     "@types/mocha": "^5.2.7",
+    "@types/node": "^13.9.0",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "chai": "^4.2.0",
@@ -76,6 +78,7 @@
     "ts-jest": "^24.0.2",
     "ts-node": "^8.6.2",
     "ts-protoc-gen": "^0.12.0",
+    "tsc-watch": "^4.2.3",
     "tslib": "^1.10.0",
     "typescript": "^3.5.3"
   },
@@ -83,7 +86,9 @@
     "google-protobuf": "^3.9.0"
   },
   "files": [
-    "dist"
+    "dist",
+    "grpc",
+    "types"
   ],
   "engines": {
     "node": ">=6.0.0"
