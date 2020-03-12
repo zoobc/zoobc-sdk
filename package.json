@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@improbable-eng/grpc-web": "^0.9.6",
-    "bip32": "https://github.com/BlockchainZoo/bip32#SLIP10",
+    "bip32": "BlockchainZoo/bip32#SLIP10",
     "bip39": "^3.0.2",
     "bn.js": "^5.1.1",
     "buffer": "^5.5.0",
@@ -77,6 +77,7 @@
     "ts-jest": "^24.0.2",
     "ts-node": "^8.6.2",
     "ts-protoc-gen": "^0.12.0",
+    "tsc-watch": "^4.2.3",
     "tslib": "^1.10.0",
     "typescript": "^3.5.3"
   },
@@ -84,7 +85,9 @@
     "google-protobuf": "^3.9.0"
   },
   "files": [
-    "dist"
+    "dist",
+    "grpc",
+    "types"
   ],
   "engines": {
     "node": ">=6.0.0"

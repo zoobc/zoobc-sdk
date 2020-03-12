@@ -7,6 +7,7 @@ import Host from './Host';
 import Node from './Node';
 import Escrows from './Escrows';
 import Poown from './Poown';
+import Block from './Block';
 
 export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
@@ -32,4 +33,5 @@ export default {
   Poown,
   Escrows,
   Mempool,
+  Block,
 };
