@@ -3,7 +3,7 @@ export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
 export { EscrowListParams } from './Escrows';
-export { NodeListParams } from './Node';
+export { NodeListParams, NodeParams } from './Node';
 export { MempoolListParams } from './Mempool';
 export { TransactionListParams } from './Transactions';
 export { HostInterface } from './Network';
