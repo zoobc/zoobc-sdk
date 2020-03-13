@@ -80,11 +80,27 @@ function getList(params) {
         });
     });
 }
-function get(address) {
+function get(params) {
     return new Promise(function (resolve, reject) {
         var networkIP = Network_1.default.selected();
         var request = new nodeRegistration_pb_1.GetNodeRegistrationRequest();
-        request.setAccountaddress(address);
+        if (params) {
+            var nodeaddress = params.nodeaddress, height = params.height, owner = params.owner, publicKey = params.publicKey;
+            if (nodeaddress) {
+                var nodeAddress = new nodeRegistration_pb_1.NodeAddress();
+                if (nodeaddress.address)
+                    nodeAddress.setAddress(nodeaddress.address);
+                if (nodeaddress.port)
+                    nodeAddress.setPort(nodeaddress.port);
+                request.setNodeaddress(nodeAddress);
+            }
+            if (owner)
+                request.setAccountaddress(owner);
+            if (publicKey)
+                request.setNodepublickey(publicKey);
+            if (height)
+                request.setRegistrationheight(height);
+        }
         var client = new nodeRegistration_pb_service_1.NodeRegistrationServiceClient(networkIP.host);
         client.getNodeRegistration(request, function (err, res) {
             if (err)

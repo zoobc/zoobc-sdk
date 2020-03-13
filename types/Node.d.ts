@@ -18,10 +18,19 @@ export interface NodeListParams {
         orderBy?: 0 | 1;
     };
 }
+export interface NodeParams {
+    owner?: string;
+    publicKey?: string;
+    height?: number;
+    nodeaddress?: {
+        address?: string;
+        port?: number;
+    };
+}
 declare function getHardwareInfo(networkIP: string, childSeed: BIP32Interface): Observable<GetNodeHardwareResponse.AsObject>;
 declare function generateNodeKey(networkIP: string, childSeed: BIP32Interface): Promise<GenerateNodeKeyResponse.AsObject>;
 declare function getList(params?: NodeListParams): Promise<GetNodeRegistrationsResponse.AsObject>;
-declare function get(address: string): Promise<GetNodeRegistrationResponse.AsObject>;
+declare function get(params: NodeParams): Promise<GetNodeRegistrationResponse.AsObject>;
 declare function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject>;
 declare function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject>;
 declare function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject>;

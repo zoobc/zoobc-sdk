@@ -13,6 +13,7 @@ import {
   GetNodeRegistrationResponse,
   GetNodeRegistrationsResponse,
   GetNodeRegistrationsRequest,
+  NodeAddress,
 } from '../grpc/model/nodeRegistration_pb';
 import { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
 import { UpdateNodeInterface, updateNodeBuilder } from './helper/transaction-builder/update-node';
@@ -31,6 +32,16 @@ export interface NodeListParams {
     limit?: number;
     page?: number;
     orderBy?: 0 | 1;
+  };
+}
+
+export interface NodeParams {
+  owner?: string;
+  publicKey?: string;
+  height?: number;
+  nodeaddress?: {
+    address?: string;
+    port?: number;
   };
 }
 
@@ -94,11 +105,24 @@ function getList(params?: NodeListParams): Promise<GetNodeRegistrationsResponse.
   });
 }
 
-function get(address: string): Promise<GetNodeRegistrationResponse.AsObject> {
+function get(params: NodeParams): Promise<GetNodeRegistrationResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetNodeRegistrationRequest();
-    request.setAccountaddress(address);
+    if (params) {
+      const { nodeaddress, height, owner, publicKey } = params;
+
+      if (nodeaddress) {
+        const nodeAddress = new NodeAddress();
+        if (nodeaddress.address) nodeAddress.setAddress(nodeaddress.address);
+        if (nodeaddress.port) nodeAddress.setPort(nodeaddress.port);
+        request.setNodeaddress(nodeAddress);
+      }
+
+      if (owner) request.setAccountaddress(owner);
+      if (publicKey) request.setNodepublickey(publicKey);
+      if (height) request.setRegistrationheight(height);
+    }
 
     const client = new NodeRegistrationServiceClient(networkIP.host);
     client.getNodeRegistration(request, (err, res) => {
