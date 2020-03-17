@@ -6,13 +6,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var block_pb_1 = require("../grpc/model/block_pb");
 var block_pb_service_1 = require("../grpc/service/block_pb_service");
 var Network_1 = __importDefault(require("./Network"));
-function getBlocks(height, limit) {
+function getBlocks(params) {
     return new Promise(function (resolve, reject) {
         var networkIP = Network_1.default.selected();
         var request = new block_pb_1.GetBlocksRequest();
+        var clientOptions = {};
+        var height = params.height, limit = params.limit, transport = params.transport;
         request.setHeight(height);
         request.setLimit(limit || 10);
-        var client = new block_pb_service_1.BlockServiceClient(networkIP.host);
+        if (transport)
+            clientOptions.transport = transport;
+        var client = new block_pb_service_1.BlockServiceClient(networkIP.host, clientOptions);
         client.getBlocks(request, function (err, res) {
             if (err)
                 reject(err);
@@ -21,12 +25,15 @@ function getBlocks(height, limit) {
         });
     });
 }
-function getBlockById(id) {
+function getBlockById(id, transport) {
     return new Promise(function (resolve, reject) {
         var networkIP = Network_1.default.selected();
         var request = new block_pb_1.GetBlockRequest();
+        var clientOptions = {};
         request.setId(id);
-        var client = new block_pb_service_1.BlockServiceClient(networkIP.host);
+        if (transport)
+            clientOptions.transport = transport;
+        var client = new block_pb_service_1.BlockServiceClient(networkIP.host, clientOptions);
         client.getBlock(request, function (err, res) {
             if (err)
                 reject(err);
@@ -35,12 +42,15 @@ function getBlockById(id) {
         });
     });
 }
-function getBlockByHeight(height) {
+function getBlockByHeight(height, transport) {
     return new Promise(function (resolve, reject) {
         var networkIP = Network_1.default.selected();
         var request = new block_pb_1.GetBlockRequest();
+        var clientOptions = {};
         request.setHeight(height);
-        var client = new block_pb_service_1.BlockServiceClient(networkIP.host);
+        if (transport)
+            clientOptions.transport = transport;
+        var client = new block_pb_service_1.BlockServiceClient(networkIP.host, clientOptions);
         client.getBlock(request, function (err, res) {
             if (err)
                 reject(err);
