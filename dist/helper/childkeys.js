@@ -96,7 +96,7 @@ function findDerivationPathErrors(path) {
                 return 'Invalid number at depth ' + depth;
             }
             if (indexValue > maxIndexValue) {
-                return ('Value of ' + indexValue + ' at depth ' + depth + ' must be less than ' + maxIndexValue);
+                return 'Value of ' + indexValue + ' at depth ' + depth + ' must be less than ' + maxIndexValue;
             }
         }
     }

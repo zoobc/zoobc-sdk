@@ -20,6 +20,7 @@ var claim_node_1 = require("./helper/transaction-builder/claim-node");
 var Poown_1 = __importDefault(require("./Poown"));
 var transaction_pb_1 = require("../grpc/model/transaction_pb");
 var transaction_pb_service_1 = require("../grpc/service/transaction_pb_service");
+var pagination_pb_1 = require("../grpc/model/pagination_pb");
 function getHardwareInfo(networkIP, childSeed) {
     return new rxjs_1.Observable(function (observer) {
         var auth = Poown_1.default.createAuth(auth_pb_1.RequestType.GETPROOFOFOWNERSHIP, childSeed);
@@ -50,12 +51,57 @@ function generateNodeKey(networkIP, childSeed) {
         });
     });
 }
-function getOne(address) {
+function getList(params) {
     return new Promise(function (resolve, reject) {
-        var networkIP = Network_1.default.selected;
+        var networkIP = Network_1.default.selected();
+        var request = new nodeRegistration_pb_1.GetNodeRegistrationsRequest();
+        if (params) {
+            var minHeight = params.minHeight, maxHeight = params.maxHeight, status_1 = params.status, pagination = params.pagination;
+            if (pagination) {
+                var reqPagination = new pagination_pb_1.Pagination();
+                reqPagination.setLimit(pagination.limit || 10);
+                reqPagination.setPage(pagination.page || 1);
+                reqPagination.setOrderby(pagination.orderBy || pagination_pb_1.OrderBy.DESC);
+                request.setPagination(reqPagination);
+            }
+            if (maxHeight)
+                request.setMaxregistrationheight(maxHeight);
+            if (minHeight)
+                request.setMinregistrationheight(minHeight);
+            if (status_1)
+                request.setRegistrationstatus(status_1);
+        }
+        var client = new nodeRegistration_pb_service_1.NodeRegistrationServiceClient(networkIP.host);
+        client.getNodeRegistrations(request, function (err, res) {
+            if (err)
+                reject(err);
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+function get(params) {
+    return new Promise(function (resolve, reject) {
+        var networkIP = Network_1.default.selected();
         var request = new nodeRegistration_pb_1.GetNodeRegistrationRequest();
-        request.setAccountaddress(address);
-        var client = new nodeRegistration_pb_service_1.NodeRegistrationServiceClient(networkIP);
+        if (params) {
+            var nodeaddress = params.nodeaddress, height = params.height, owner = params.owner, publicKey = params.publicKey;
+            if (nodeaddress) {
+                var nodeAddress = new nodeRegistration_pb_1.NodeAddress();
+                if (nodeaddress.address)
+                    nodeAddress.setAddress(nodeaddress.address);
+                if (nodeaddress.port)
+                    nodeAddress.setPort(nodeaddress.port);
+                request.setNodeaddress(nodeAddress);
+            }
+            if (owner)
+                request.setAccountaddress(owner);
+            if (publicKey)
+                request.setNodepublickey(publicKey);
+            if (height)
+                request.setRegistrationheight(height);
+        }
+        var client = new nodeRegistration_pb_service_1.NodeRegistrationServiceClient(networkIP.host);
         client.getNodeRegistration(request, function (err, res) {
             if (err)
                 reject(err);
@@ -69,8 +115,8 @@ function register(data, childSeed) {
         var bytes = register_node_1.registerNodeBuilder(data, childSeed);
         var request = new transaction_pb_1.PostTransactionRequest();
         request.setTransactionbytes(bytes);
-        var networkIP = Network_1.default.selected;
-        var client = new transaction_pb_service_1.TransactionServiceClient(networkIP);
+        var networkIP = Network_1.default.selected();
+        var client = new transaction_pb_service_1.TransactionServiceClient(networkIP.host);
         client.postTransaction(request, function (err, res) {
             if (err)
                 reject(err);
@@ -87,8 +133,8 @@ function update(data, childSeed) {
             var bytes = update_node_1.updateNodeBuilder(data, poown, childSeed);
             var request = new transaction_pb_1.PostTransactionRequest();
             request.setTransactionbytes(bytes);
-            var networkIP = Network_1.default.selected;
-            var client = new transaction_pb_service_1.TransactionServiceClient(networkIP);
+            var networkIP = Network_1.default.selected();
+            var client = new transaction_pb_service_1.TransactionServiceClient(networkIP.host);
             client.postTransaction(request, function (err, res) {
                 if (err)
                     reject(err);
@@ -106,8 +152,8 @@ function remove(data, childSeed) {
         var bytes = remove_node_1.removeNodeBuilder(data, childSeed);
         var request = new transaction_pb_1.PostTransactionRequest();
         request.setTransactionbytes(bytes);
-        var networkIP = Network_1.default.selected;
-        var client = new transaction_pb_service_1.TransactionServiceClient(networkIP);
+        var networkIP = Network_1.default.selected();
+        var client = new transaction_pb_service_1.TransactionServiceClient(networkIP.host);
         client.postTransaction(request, function (err, res) {
             if (err)
                 reject(err);
@@ -121,8 +167,8 @@ function claim(data, childSeed) {
         var bytes = claim_node_1.claimNodeBuilder(data, childSeed);
         var request = new transaction_pb_1.PostTransactionRequest();
         request.setTransactionbytes(bytes);
-        var networkIP = Network_1.default.selected;
-        var client = new transaction_pb_service_1.TransactionServiceClient(networkIP);
+        var networkIP = Network_1.default.selected();
+        var client = new transaction_pb_service_1.TransactionServiceClient(networkIP.host);
         client.postTransaction(request, function (err, res) {
             if (err)
                 reject(err);
@@ -138,5 +184,6 @@ exports.default = {
     claim: claim,
     getHardwareInfo: getHardwareInfo,
     generateNodeKey: generateNodeKey,
-    getOne: getOne,
+    getList: getList,
+    get: get,
 };

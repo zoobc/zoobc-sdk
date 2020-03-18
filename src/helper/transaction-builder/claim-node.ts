@@ -49,5 +49,6 @@ export function claimNodeBuilder(data: ClaimNodeInterface, seed: BIP32Interface)
 
   const signatureType = writeInt32(0);
   const signature = seed.sign(bytes);
-  return Buffer.concat([bytes, signatureType, signature]);
+  const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+  return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }

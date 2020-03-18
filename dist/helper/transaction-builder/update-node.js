@@ -15,11 +15,7 @@ function updateNodeBuilder(data, poown, seed) {
     var nodeAddress = Buffer.from(data.nodeAddress, 'utf-8');
     var nodeAddressLength = utils_1.writeInt32(nodeAddress.length);
     var funds = utils_1.writeInt64(data.funds * 1e8);
-    var bodyLength = utils_1.writeInt32(nodePublicKey.length +
-        nodeAddressLength.length +
-        nodeAddress.length +
-        funds.length +
-        poown.length);
+    var bodyLength = utils_1.writeInt32(nodePublicKey.length + nodeAddressLength.length + nodeAddress.length + funds.length + poown.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE,
         constant_1.VERSION,

@@ -1,6 +1,6 @@
 export interface HostInterface {
-  host?: string;
-  name?: string;
+  host: string;
+  name: string;
 }
 
 class Network {
@@ -34,7 +34,7 @@ function set(idx: number) {
   network.id = idx;
 }
 
-function selected() {
+function selected(): HostInterface {
   return network.list[network.id];
 }
 

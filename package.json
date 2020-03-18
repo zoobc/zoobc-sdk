@@ -26,6 +26,8 @@
     "start": "tsc-watch --onCompilationComplete",
     "clean": "rimraf dist",
     "test": "mocha -r ts-node/register tests/**/*.test.ts",
+    "test:watch": "mocha -r ts-node/register tests/**/*.test.ts --watch",
+    "test:coverage": "nyc --reporter=html --reporter=text mocha -r ts-node/register tests/**/*.test.ts",
     "build": "run-s clean && npm run prettier && tsc -p .",
     "lint": "eslint \"{src,tests}/**/*\" --fix",
     "prettier": "prettier --write \"{src,tests}/**/*\""
@@ -43,7 +45,7 @@
   },
   "dependencies": {
     "@improbable-eng/grpc-web": "^0.9.6",
-    "bip32": "https://github.com/BlockchainZoo/bip32#SLIP10",
+    "bip32": "BlockchainZoo/bip32#SLIP10",
     "bip39": "^3.0.2",
     "bn.js": "^5.1.1",
     "buffer": "^5.5.0",
@@ -55,12 +57,14 @@
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
+    "@improbable-eng/grpc-web-fake-transport": "^0.12.0",
     "@improbable-eng/grpc-web-node-http-transport": "^0.9.6",
     "@types/bn.js": "^4.11.6",
     "@types/chai": "^4.1.7",
     "@types/crypto-js": "^3.1.43",
     "@types/google-protobuf": "^3.7.2",
     "@types/mocha": "^5.2.7",
+    "@types/node": "^13.9.0",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "chai": "^4.2.0",
@@ -72,11 +76,13 @@
     "lint-staged": "^9.2.0",
     "mocha": "^6.2.0",
     "npm-run-all": "^4.1.5",
+    "nyc": "^15.0.0",
     "prettier": "^1.18.2",
     "semantic-release": "^15.13.18",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.6.2",
     "ts-protoc-gen": "^0.12.0",
+    "tsc-watch": "^4.2.3",
     "tslib": "^1.10.0",
     "typescript": "^3.5.3"
   },
@@ -84,9 +90,17 @@
     "google-protobuf": "^3.9.0"
   },
   "files": [
-    "dist"
+    "dist",
+    "grpc",
+    "types"
   ],
   "engines": {
     "node": ">=6.0.0"
+  },
+  "nyc": {
+    "exclude": [
+      "grpc/**/*",
+      "tests/**/*"
+    ]
   }
 }

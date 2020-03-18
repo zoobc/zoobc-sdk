@@ -2,6 +2,7 @@
 // file: model/multiSignature.proto
 
 import * as jspb from "google-protobuf";
+import * as model_pagination_pb from "../model/pagination_pb";
 
 export class MultiSignatureInfo extends jspb.Message {
   getMinimumsignatures(): number;
@@ -151,6 +152,120 @@ export namespace PendingTransaction {
     status: PendingTransactionStatusMap[keyof PendingTransactionStatusMap],
     blockheight: number,
     latest: boolean,
+  }
+}
+
+export class GetPendingTransactionByAddressRequest extends jspb.Message {
+  getSenderaddress(): string;
+  setSenderaddress(value: string): void;
+
+  getStatus(): PendingTransactionStatusMap[keyof PendingTransactionStatusMap];
+  setStatus(value: PendingTransactionStatusMap[keyof PendingTransactionStatusMap]): void;
+
+  hasPagination(): boolean;
+  clearPagination(): void;
+  getPagination(): model_pagination_pb.Pagination | undefined;
+  setPagination(value?: model_pagination_pb.Pagination): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPendingTransactionByAddressRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPendingTransactionByAddressRequest): GetPendingTransactionByAddressRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetPendingTransactionByAddressRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPendingTransactionByAddressRequest;
+  static deserializeBinaryFromReader(message: GetPendingTransactionByAddressRequest, reader: jspb.BinaryReader): GetPendingTransactionByAddressRequest;
+}
+
+export namespace GetPendingTransactionByAddressRequest {
+  export type AsObject = {
+    senderaddress: string,
+    status: PendingTransactionStatusMap[keyof PendingTransactionStatusMap],
+    pagination?: model_pagination_pb.Pagination.AsObject,
+  }
+}
+
+export class GetPendingTransactionByAddressResponse extends jspb.Message {
+  getCount(): number;
+  setCount(value: number): void;
+
+  getPage(): number;
+  setPage(value: number): void;
+
+  clearPendingtransactionsList(): void;
+  getPendingtransactionsList(): Array<PendingTransaction>;
+  setPendingtransactionsList(value: Array<PendingTransaction>): void;
+  addPendingtransactions(value?: PendingTransaction, index?: number): PendingTransaction;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPendingTransactionByAddressResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPendingTransactionByAddressResponse): GetPendingTransactionByAddressResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetPendingTransactionByAddressResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPendingTransactionByAddressResponse;
+  static deserializeBinaryFromReader(message: GetPendingTransactionByAddressResponse, reader: jspb.BinaryReader): GetPendingTransactionByAddressResponse;
+}
+
+export namespace GetPendingTransactionByAddressResponse {
+  export type AsObject = {
+    count: number,
+    page: number,
+    pendingtransactionsList: Array<PendingTransaction.AsObject>,
+  }
+}
+
+export class GetPendingTransactionDetailByTransactionHashRequest extends jspb.Message {
+  getTransactionhashhex(): string;
+  setTransactionhashhex(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPendingTransactionDetailByTransactionHashRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPendingTransactionDetailByTransactionHashRequest): GetPendingTransactionDetailByTransactionHashRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetPendingTransactionDetailByTransactionHashRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPendingTransactionDetailByTransactionHashRequest;
+  static deserializeBinaryFromReader(message: GetPendingTransactionDetailByTransactionHashRequest, reader: jspb.BinaryReader): GetPendingTransactionDetailByTransactionHashRequest;
+}
+
+export namespace GetPendingTransactionDetailByTransactionHashRequest {
+  export type AsObject = {
+    transactionhashhex: string,
+  }
+}
+
+export class GetPendingTransactionDetailByTransactionHashResponse extends jspb.Message {
+  hasPendingtransaction(): boolean;
+  clearPendingtransaction(): void;
+  getPendingtransaction(): PendingTransaction | undefined;
+  setPendingtransaction(value?: PendingTransaction): void;
+
+  clearPendingsignaturesList(): void;
+  getPendingsignaturesList(): Array<PendingSignature>;
+  setPendingsignaturesList(value: Array<PendingSignature>): void;
+  addPendingsignatures(value?: PendingSignature, index?: number): PendingSignature;
+
+  hasMultisignatureinfo(): boolean;
+  clearMultisignatureinfo(): void;
+  getMultisignatureinfo(): MultiSignatureInfo | undefined;
+  setMultisignatureinfo(value?: MultiSignatureInfo): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPendingTransactionDetailByTransactionHashResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPendingTransactionDetailByTransactionHashResponse): GetPendingTransactionDetailByTransactionHashResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetPendingTransactionDetailByTransactionHashResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPendingTransactionDetailByTransactionHashResponse;
+  static deserializeBinaryFromReader(message: GetPendingTransactionDetailByTransactionHashResponse, reader: jspb.BinaryReader): GetPendingTransactionDetailByTransactionHashResponse;
+}
+
+export namespace GetPendingTransactionDetailByTransactionHashResponse {
+  export type AsObject = {
+    pendingtransaction?: PendingTransaction.AsObject,
+    pendingsignaturesList: Array<PendingSignature.AsObject>,
+    multisignatureinfo?: MultiSignatureInfo.AsObject,
   }
 }
 
