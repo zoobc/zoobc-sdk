@@ -1,6 +1,4 @@
 import Network from './Network';
-import { RpcOptions } from '@improbable-eng/grpc-web/dist/typings/client';
-import { TransportFactory } from '@improbable-eng/grpc-web/dist/typings/transports/Transport';
 import {
   GetMempoolTransactionRequest,
   GetMempoolTransactionsResponse,
@@ -19,17 +17,15 @@ export interface MempoolListParams {
     page?: number;
     orderBy?: 0 | 1;
   };
-  transport?: TransportFactory;
 }
 
 function getList(params?: MempoolListParams): Promise<GetMempoolTransactionsResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetMempoolTransactionsRequest();
-    const clientOptions: RpcOptions = {};
 
     if (params) {
-      const { address, timestampEnd, timestampStart, pagination, transport } = params;
+      const { address, timestampEnd, timestampStart, pagination } = params;
 
       if (address) request.setAddress(address);
       if (timestampStart) request.setTimestampstart(timestampStart);
@@ -41,10 +37,9 @@ function getList(params?: MempoolListParams): Promise<GetMempoolTransactionsResp
         reqPagination.setOrderby(pagination.orderBy || OrderBy.DESC);
         request.setPagination(reqPagination);
       }
-      if (transport) clientOptions.transport = transport;
     }
 
-    const client = new MempoolServiceClient(networkIP.host, clientOptions);
+    const client = new MempoolServiceClient(networkIP.host);
     client.getMempoolTransactions(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());
@@ -52,16 +47,14 @@ function getList(params?: MempoolListParams): Promise<GetMempoolTransactionsResp
   });
 }
 
-function get(id: string, transport?: TransportFactory): Promise<GetMempoolTransactionResponse.AsObject> {
+function get(id: string): Promise<GetMempoolTransactionResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetMempoolTransactionRequest();
-    const clientOptions: RpcOptions = {};
 
     request.setId(id);
-    if (transport) clientOptions.transport = transport;
 
-    const client = new MempoolServiceClient(networkIP.host, clientOptions);
+    const client = new MempoolServiceClient(networkIP.host);
     client.getMempoolTransaction(request, (err, res) => {
       if (err) reject(err.message);
       if (res) resolve(res.toObject());

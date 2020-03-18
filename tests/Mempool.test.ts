@@ -5,6 +5,7 @@ import { FakeTransportBuilder } from '@improbable-eng/grpc-web-fake-transport';
 import { GetMempoolTransactionsResponse, GetMempoolTransactionResponse, MempoolTransaction } from '../grpc/model/mempool_pb';
 import { MempoolListParams } from '../src';
 import { Pagination } from '../grpc/model/pagination_pb';
+import { grpc } from '@improbable-eng/grpc-web';
 
 function mockMempoolTransactionsTransport(params?: MempoolListParams) {
   const mempoolTransactionsResponse = new GetMempoolTransactionsResponse();
@@ -41,23 +42,32 @@ describe('Mempool Transaction Unit Testing :', () => {
   });
 
   describe('Get Mempool Transaction List', () => {
-    it('should return an array of mempool transaction with total data = 10', async () => {
+    it('should return object with mempoolTransactionsList property as an empty array & total property as an number equal to 10', async () => {
       const pagination = {
         page: 1,
         limit: 10,
       };
 
-      const mempoolTransactions = await zoobc.Mempool.getList({ pagination, transport: mockMempoolTransactionsTransport({ pagination }) });
+      grpc.setDefaultTransport(mockMempoolTransactionsTransport({ pagination }));
+
+      const mempoolTransactions = await zoobc.Mempool.getList({ pagination });
+
       expect(mempoolTransactions).to.be.an('object');
-      expect(mempoolTransactions.total).to.be.equal(10);
-      expect(mempoolTransactions.mempooltransactionsList).to.be.an('array');
+      expect(mempoolTransactions?.total)
+        .to.be.an('number')
+        .that.is.equal(10);
+      expect(mempoolTransactions?.mempooltransactionsList).to.be.an('array').that.is.empty;
     });
   });
 
   describe('Get Mempool Transaction Detail', () => {
-    it('should return mempool transaction detail with ID = 1  ', async () => {
+    it('should return an object of mempool transaction detail with ID = 1  ', async () => {
       const id = '1';
-      const mempoolTransaction = await zoobc.Mempool.get(id, mockMempoolTransactionTransport(id));
+
+      grpc.setDefaultTransport(mockMempoolTransactionTransport(id));
+
+      const mempoolTransaction = await zoobc.Mempool.get(id);
+
       expect(mempoolTransaction).to.be.an('object');
       expect(mempoolTransaction?.transaction).to.be.an('object');
       expect(mempoolTransaction?.transaction?.id).to.be.equal(id);
