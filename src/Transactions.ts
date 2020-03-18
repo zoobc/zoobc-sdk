@@ -31,11 +31,7 @@ export interface ZooTransactionInterface {
   transactionIndex: number;
 }
 
-function get(
-  address: string,
-  page: number,
-  limit: number,
-): Promise<GetTransactionsResponse.AsObject> {
+function get(address: string, page: number, limit: number): Promise<GetTransactionsResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected;
 
@@ -70,10 +66,7 @@ function getOne(id: string): Promise<Transaction.AsObject> {
   });
 }
 
-function sendMoney(
-  data: SendMoneyInterface,
-  seed: BIP32Interface,
-): Promise<PostTransactionResponse.AsObject> {
+function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   const txBytes = sendMoneyBuilder(data, seed);
 
   return new Promise((resolve, reject) => {

@@ -13,11 +13,7 @@ export interface UpdateNodeInterface {
   funds: number;
 }
 
-export function updateNodeBuilder(
-  data: UpdateNodeInterface,
-  poown: Buffer,
-  seed: BIP32Interface,
-): Buffer {
+export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed: BIP32Interface): Buffer {
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
@@ -30,13 +26,7 @@ export function updateNodeBuilder(
   const nodeAddress = Buffer.from(data.nodeAddress, 'utf-8');
   const nodeAddressLength = writeInt32(nodeAddress.length);
   const funds = writeInt64(data.funds * 1e8);
-  const bodyLength = writeInt32(
-    nodePublicKey.length +
-      nodeAddressLength.length +
-      nodeAddress.length +
-      funds.length +
-      poown.length,
-  );
+  const bodyLength = writeInt32(nodePublicKey.length + nodeAddressLength.length + nodeAddress.length + funds.length + poown.length);
 
   bytes = Buffer.concat([
     TRANSACTION_TYPE,

@@ -8,11 +8,7 @@ import {
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { MempoolServiceClient } from '../grpc/service/mempool_pb_service';
 
-function get(
-  address: string,
-  page: number,
-  limit: number,
-): Promise<GetMempoolTransactionsResponse.AsObject> {
+function get(address: string, page: number, limit: number): Promise<GetMempoolTransactionsResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected;
 

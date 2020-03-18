@@ -26,18 +26,7 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed: BIP32Interface)
   const amount = writeInt64(data.amount * 1e8);
   const bodyLength = writeInt32(amount.length);
 
-  bytes = Buffer.concat([
-    TRANSACTION_TYPE,
-    VERSION,
-    timestamp,
-    addressLength,
-    sender,
-    addressLength,
-    recipient,
-    fee,
-    bodyLength,
-    amount,
-  ]);
+  bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, addressLength, sender, addressLength, recipient, fee, bodyLength, amount]);
 
   if (data.approverAddress && data.commission && data.timeout && data.instruction) {
     // escrow bytes
@@ -48,15 +37,7 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed: BIP32Interface)
     const instruction = Buffer.from(data.instruction, 'utf-8');
     const instructionLength = writeInt32(instruction.length);
 
-    bytes = Buffer.concat([
-      bytes,
-      approverAddressLength,
-      approverAddress,
-      commission,
-      timeout,
-      instructionLength,
-      instruction,
-    ]);
+    bytes = Buffer.concat([bytes, approverAddressLength, approverAddress, commission, timeout, instructionLength, instruction]);
   } else {
     // escrow bytes default value
     const approverAddressLength = writeInt32(0);

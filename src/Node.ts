@@ -8,14 +8,8 @@ import { GetNodeHardwareRequest, GetNodeHardwareResponse } from '../grpc/model/n
 import { grpc } from '@improbable-eng/grpc-web';
 import { GenerateNodeKeyRequest, GenerateNodeKeyResponse } from '../grpc/model/node_pb';
 import Network from './Network';
-import {
-  GetNodeRegistrationRequest,
-  GetNodeRegistrationResponse,
-} from '../grpc/model/nodeRegistration_pb';
-import {
-  RegisterNodeInterface,
-  registerNodeBuilder,
-} from './helper/transaction-builder/register-node';
+import { GetNodeRegistrationRequest, GetNodeRegistrationResponse } from '../grpc/model/nodeRegistration_pb';
+import { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
 import { UpdateNodeInterface, updateNodeBuilder } from './helper/transaction-builder/update-node';
 import { RemoveNodeInterface, removeNodeBuilder } from './helper/transaction-builder/remove-node';
 import { ClaimNodeInterface, claimNodeBuilder } from './helper/transaction-builder/claim-node';
@@ -23,10 +17,7 @@ import Poown from './Poown';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 
-function getHardwareInfo(
-  networkIP: string,
-  childSeed: BIP32Interface,
-): Observable<GetNodeHardwareResponse.AsObject> {
+function getHardwareInfo(networkIP: string, childSeed: BIP32Interface): Observable<GetNodeHardwareResponse.AsObject> {
   return new Observable(observer => {
     const auth = Poown.createAuth(RequestType.GETPROOFOFOWNERSHIP, childSeed);
     const request = new GetNodeHardwareRequest();
@@ -44,10 +35,7 @@ function getHardwareInfo(
   });
 }
 
-function generateNodeKey(
-  networkIP: string,
-  childSeed: BIP32Interface,
-): Promise<GenerateNodeKeyResponse.AsObject> {
+function generateNodeKey(networkIP: string, childSeed: BIP32Interface): Promise<GenerateNodeKeyResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const auth = Poown.createAuth(RequestType.GENERATETNODEKEY, childSeed);
     const metadata = new grpc.Metadata({ authorization: auth });
@@ -74,10 +62,7 @@ function getOne(address: string): Promise<GetNodeRegistrationResponse.AsObject> 
   });
 }
 
-function register(
-  data: RegisterNodeInterface,
-  childSeed: BIP32Interface,
-): Promise<PostTransactionResponse.AsObject> {
+function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const bytes = registerNodeBuilder(data, childSeed);
 
@@ -93,10 +78,7 @@ function register(
   });
 }
 
-function update(
-  data: UpdateNodeInterface,
-  childSeed: BIP32Interface,
-): Promise<PostTransactionResponse.AsObject> {
+function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const auth = Poown.createAuth(RequestType.GETPROOFOFOWNERSHIP, childSeed);
     Poown.request(auth, data.nodeAddress)
@@ -119,10 +101,7 @@ function update(
   });
 }
 
-function remove(
-  data: RemoveNodeInterface,
-  childSeed: BIP32Interface,
-): Promise<PostTransactionResponse.AsObject> {
+function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const bytes = removeNodeBuilder(data, childSeed);
 
@@ -138,10 +117,7 @@ function remove(
   });
 }
 
-function claim(
-  data: ClaimNodeInterface,
-  childSeed: BIP32Interface,
-): Promise<PostTransactionResponse.AsObject> {
+function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const bytes = claimNodeBuilder(data, childSeed);
 

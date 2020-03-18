@@ -1,25 +1,13 @@
 import Network from './Network';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { BIP32Interface } from 'bip32';
-import {
-  EscrowApprovalInterface,
-  escrowBuilder,
-} from './helper/transaction-builder/escrow-transaction';
-import {
-  GetEscrowTransactionsRequest,
-  GetEscrowTransactionRequest,
-  Escrow,
-  GetEscrowTransactionsResponse,
-} from '../grpc/model/escrow_pb';
+import { EscrowApprovalInterface, escrowBuilder } from './helper/transaction-builder/escrow-transaction';
+import { GetEscrowTransactionsRequest, GetEscrowTransactionRequest, Escrow, GetEscrowTransactionsResponse } from '../grpc/model/escrow_pb';
 import { EscrowTransactionServiceClient } from '../grpc/service/escrow_pb_service';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 
-function get(
-  address: string,
-  page: number,
-  limit: number,
-): Promise<GetEscrowTransactionsResponse.AsObject> {
+function get(address: string, page: number, limit: number): Promise<GetEscrowTransactionsResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected;
 
@@ -53,10 +41,7 @@ function getOne(id: string): Promise<Escrow.AsObject> {
   });
 }
 
-function approval(
-  data: EscrowApprovalInterface,
-  seed: BIP32Interface,
-): Promise<PostTransactionResponse.AsObject> {
+function approval(data: EscrowApprovalInterface, seed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   const txBytes = escrowBuilder(data, seed);
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected;

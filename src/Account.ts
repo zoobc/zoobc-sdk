@@ -1,7 +1,4 @@
-import {
-  GetAccountBalanceRequest,
-  GetAccountBalanceResponse,
-} from '../grpc/model/accountBalance_pb';
+import { GetAccountBalanceRequest, GetAccountBalanceResponse } from '../grpc/model/accountBalance_pb';
 import { AccountBalanceServiceClient } from '../grpc/service/accountBalance_pb_service';
 import Network from './Network';
 
