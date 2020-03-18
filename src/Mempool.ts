@@ -3,7 +3,7 @@ import {
   GetMempoolTransactionRequest,
   GetMempoolTransactionsResponse,
   GetMempoolTransactionsRequest,
-  GetMempoolTransactionResponse,
+  MempoolTransaction,
 } from '../grpc/model/mempool_pb';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { MempoolServiceClient } from '../grpc/service/mempool_pb_service';
@@ -47,7 +47,7 @@ function getList(params?: MempoolListParams): Promise<GetMempoolTransactionsResp
   });
 }
 
-function get(id: string): Promise<GetMempoolTransactionResponse.AsObject> {
+function get(id: string): Promise<MempoolTransaction.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetMempoolTransactionRequest();
@@ -57,7 +57,7 @@ function get(id: string): Promise<GetMempoolTransactionResponse.AsObject> {
     const client = new MempoolServiceClient(networkIP.host);
     client.getMempoolTransaction(request, (err, res) => {
       if (err) reject(err.message);
-      if (res) resolve(res.toObject());
+      if (res) resolve(res.toObject().transaction);
     });
   });
 }

@@ -69,8 +69,7 @@ describe('Mempool Transaction Unit Testing :', () => {
       const mempoolTransaction = await zoobc.Mempool.get(id);
 
       expect(mempoolTransaction).to.be.an('object');
-      expect(mempoolTransaction?.transaction).to.be.an('object');
-      expect(mempoolTransaction?.transaction?.id).to.be.equal(id);
+      expect(mempoolTransaction?.id).to.be.equal(id);
     });
   });
 });
