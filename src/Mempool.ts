@@ -51,6 +51,7 @@ function get(id: string): Promise<MempoolTransaction.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetMempoolTransactionRequest();
+
     request.setId(id);
 
     const client = new MempoolServiceClient(networkIP.host);
