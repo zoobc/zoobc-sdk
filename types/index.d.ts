@@ -6,6 +6,7 @@ export { EscrowListParams } from './Escrows';
 export { NodeListParams, NodeParams } from './Node';
 export { MempoolListParams } from './Mempool';
 export { TransactionListParams } from './Transactions';
+export { BlockListParams } from './Block';
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
@@ -59,9 +60,9 @@ declare const zoobc: {
         getList: (params?: import("./Mempool").MempoolListParams | undefined) => Promise<import("../grpc/model/mempool_pb").GetMempoolTransactionsResponse.AsObject>;
     };
     Block: {
-        getBlocks: (height: number, limit?: number | undefined) => Promise<import("../grpc/model/block_pb").GetBlocksResponse.AsObject>;
-        getBlockById: (id: string) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
-        getBlockByHeight: (height: number) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
+        getBlocks: (params: import("./Block").BlockListParams) => Promise<import("../grpc/model/block_pb").GetBlocksResponse.AsObject>;
+        getBlockById: (id: string, transport?: import("@improbable-eng/grpc-web/dist/typings/transports/Transport").TransportFactory | undefined) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
+        getBlockByHeight: (height: number, transport?: import("@improbable-eng/grpc-web/dist/typings/transports/Transport").TransportFactory | undefined) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
     };
 };
 export default zoobc;
