@@ -47,6 +47,7 @@ export class ZooKeyring {
 
   static generateRandomPhrase(numWords: number = 24, wordlist?: string[]): string {
     const strength = (numWords / 3) * 32;
+    if (strength !== 128 && strength !== 256) return 'numWords only 12 or 24';
     return bip39.generateMnemonic(strength, undefined, wordlist);
   }
 
