@@ -25,11 +25,25 @@ describe('Keyring Unit Testing :', () => {
   });
 
   describe('calcDerivationPath', () => {
-    it('should return BIP32Interface object that contain expected properties value', async () => {
+    it('should return BIP32Interface object', async () => {
       const numWords = 12;
       const passphare = await ZooKeyring.generateRandomPhrase(numWords);
       const result = new ZooKeyring(passphare, 'p4ssphr4se');
       expect(result).to.be.an('object');
+    });
+
+    it('should having property bip32RootKey', async () => {
+      const numWords = 12;
+      const passphare = await ZooKeyring.generateRandomPhrase(numWords);
+      const result = new ZooKeyring(passphare, 'p4ssphr4se');
+      expect(result).to.be.have.property('bip32RootKey');
+    });
+
+    it('should having property seed', async () => {
+      const numWords = 12;
+      const passphare = await ZooKeyring.generateRandomPhrase(numWords);
+      const result = new ZooKeyring(passphare, 'p4ssphr4se');
+      expect(result).to.be.have.property('seed');
     });
   });
 });
