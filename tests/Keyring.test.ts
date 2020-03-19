@@ -45,5 +45,12 @@ describe('Keyring Unit Testing :', () => {
       const result = new ZooKeyring(passphare, 'p4ssphr4se');
       expect(result).to.be.have.property('seed');
     });
+
+    it('should having property coinName', async () => {
+      const numWords = 12;
+      const passphare = await ZooKeyring.generateRandomPhrase(numWords);
+      const result = new ZooKeyring(passphare, 'p4ssphr4se');
+      expect(result).to.be.have.property('coinName');
+    });
   });
 });
