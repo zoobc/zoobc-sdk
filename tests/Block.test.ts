@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import zoobc from '../src';
 import { FakeTransportBuilder } from '@improbable-eng/grpc-web-fake-transport';
 import { GetBlocksResponse, BlockExtendedInfo, Block } from '../grpc/model/block_pb';
+import { grpc } from '@improbable-eng/grpc-web';
 
 interface IMockBlockTransport {
   id?: string;
@@ -37,18 +38,24 @@ describe('Block Unit Testing :', () => {
     zoobc.Network.list(hosts);
   });
   describe('getBlocks', () => {
-    it('getBlocks should return list block from height 0', async () => {
+    it('should return list block from height 0', async () => {
       const height = 0;
-      const blocks = await zoobc.Block.getBlocks({ height, transport: mockBlocksTransport(height) });
+      const transport = mockBlocksTransport(height);
+      grpc.setDefaultTransport(transport);
+      const blocks = await zoobc.Block.getBlocks({ height });
+
       expect(blocks).to.be.an('object');
       expect(blocks.height).to.be.equal(height);
       expect(blocks.blocksList).to.be.an('array');
     });
 
-    it('getBlocks should return 2 blocks from height 10 ', async () => {
+    it('should return 2 blocks from height 10 ', async () => {
       const height = 10;
       const limit = 2;
-      const blocks = await zoobc.Block.getBlocks({ height: 0, limit: 2, transport: mockBlocksTransport(height, limit) });
+      const transport = mockBlocksTransport(height, limit);
+      grpc.setDefaultTransport(transport);
+      const blocks = await zoobc.Block.getBlocks({ height, limit });
+
       expect(blocks).to.be.an('object');
       expect(blocks.height).to.be.equal(height);
       expect(blocks.count).to.be.equal(limit);
@@ -57,9 +64,12 @@ describe('Block Unit Testing :', () => {
   });
 
   describe('getBlockById', () => {
-    it('getBlockById should return block detail with blockID 1070983609761144356', async () => {
+    it('should return block detail with blockID 1070983609761144356', async () => {
       const blockId = '1070983609761144356';
-      const res = await zoobc.Block.getBlockById(blockId, mockBlockTransport({ id: blockId }));
+      const transport = mockBlockTransport({ id: blockId });
+      grpc.setDefaultTransport(transport);
+      const res = await zoobc.Block.getBlockById(blockId);
+
       expect(res).to.be.an('object');
       expect(res.block).to.be.an('object');
       expect(res?.block?.id).to.be.equal(blockId);
@@ -67,9 +77,12 @@ describe('Block Unit Testing :', () => {
   });
 
   describe('getBlockByHeight', () => {
-    it('getBlockByHeight should return block detail with blockHeight 10', async () => {
+    it('should return block detail with blockHeight 10', async () => {
       const blockHeight = 10;
-      const res = await zoobc.Block.getBlockByHeight(blockHeight, mockBlockTransport({ height: blockHeight }));
+      const transport = mockBlockTransport({ height: blockHeight });
+      grpc.setDefaultTransport(transport);
+      const res = await zoobc.Block.getBlockByHeight(blockHeight);
+
       expect(res).to.be.an('object');
       expect(res.block).to.be.an('object');
       expect(res?.block?.height).to.be.equal(blockHeight);

@@ -7,21 +7,18 @@ import { TransportFactory } from '@improbable-eng/grpc-web/dist/typings/transpor
 export interface BlockListParams {
   height: number;
   limit?: number;
-  transport?: TransportFactory;
 }
 
 function getBlocks(params: BlockListParams): Promise<GetBlocksResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetBlocksRequest();
-    const clientOptions: RpcOptions = {};
 
-    const { height, limit, transport } = params;
+    const { height, limit } = params;
     request.setHeight(height);
     request.setLimit(limit || 10);
-    if (transport) clientOptions.transport = transport;
 
-    const client = new BlockServiceClient(networkIP.host, clientOptions);
+    const client = new BlockServiceClient(networkIP.host);
     client.getBlocks(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());
@@ -29,14 +26,13 @@ function getBlocks(params: BlockListParams): Promise<GetBlocksResponse.AsObject>
   });
 }
 
-function getBlockById(id: string, transport?: TransportFactory): Promise<BlockExtendedInfo.AsObject> {
+function getBlockById(id: string): Promise<BlockExtendedInfo.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetBlockRequest();
     const clientOptions: RpcOptions = {};
 
     request.setId(id);
-    if (transport) clientOptions.transport = transport;
 
     const client = new BlockServiceClient(networkIP.host, clientOptions);
     client.getBlock(request, (err, res) => {
@@ -46,16 +42,14 @@ function getBlockById(id: string, transport?: TransportFactory): Promise<BlockEx
   });
 }
 
-function getBlockByHeight(height: number, transport?: TransportFactory): Promise<BlockExtendedInfo.AsObject> {
+function getBlockByHeight(height: number): Promise<BlockExtendedInfo.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetBlockRequest();
-    const clientOptions: RpcOptions = {};
 
     request.setHeight(height);
-    if (transport) clientOptions.transport = transport;
 
-    const client = new BlockServiceClient(networkIP.host, clientOptions);
+    const client = new BlockServiceClient(networkIP.host);
     client.getBlock(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());
