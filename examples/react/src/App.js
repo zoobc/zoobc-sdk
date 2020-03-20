@@ -1,43 +1,66 @@
-/* eslint-disable react/react-in-jsx-scope */
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import zoobc from '../../../';
 import './app.css';
 
-class App extends Component {
-  state = { blocks: [], error: '', detail: null };
 
-  componentDidMount() {
-    zoobc.Network.selected = 'http://85.90.246.90:8002'
-    this.listBlocks();
-  }
+const App = () => {
+  const [blocks, setBlocks] = useState([])
+  const [error, setError] = useState(null)
+  const [detail, setDetail] = useState(null)
 
-  listBlocks = () => {
+  useEffect(() => {
+    const hosts = [
+      { host: 'http://85.90.246.90:8002', name: '168 Testnet' },
+    ];
+    zoobc.Network.list(hosts)
+    listBlocks();
+  }, [])
+
+  const listBlocks = () => {
     zoobc.Block
-      .getBlocks(0, 5)
-      .then(res => this.setState({ blocks: res.blocksList }))
-      .catch(err => this.setState({ error: err }))
+      .getBlocks({height: 0})
+      .then(res => setBlocks(res.blocksList))
+      .catch(err => setError(err))
   };
 
-  onClickBlockId = (id) => {
+  const onClickBlockId = (id) => {
     zoobc.Block
       .getBlockById(id)
-      .then(res => this.setState({detail: res}))
-      .catch(err => this.setState({ error: err }))
+      .then(res => {
+        setDetail(res)
+        setError(null)
+      })
+      .catch(err => {
+        setError(err)
+        setDetail(null)
+      })
   }
 
-  onClickBlockHeight = (height) => {
+  const onClickBlockHeight = (height) => {
     zoobc.Block
       .getBlockByHeight(height)
-      .then(res => this.setState({detail: res}))
-      .catch(err => this.setState({ error: err }))
+      .then(res => {
+        setDetail(res)
+        setError(null)
+      })
+      .catch(err => {
+        setError(err)
+        setDetail(null)
+      })
   }
 
-  render() {
-    const { blocks } = this.state;
-    return (
-      <>
-      {!!this.state.detail && (
-        <code>{JSON.stringify(this.state.detail)}</code>
+  return (
+    <>
+      {!!error && (
+        <>
+          <div><strong>Error</strong></div>
+          <code>{JSON.stringify(error)}</code>
+        </>
+      )}{!!detail && (
+        <>
+          <div><strong>Detail</strong></div>
+          <code>{JSON.stringify(detail)}</code>
+        </>
       )}
         <table>
           <thead>
@@ -54,11 +77,11 @@ class App extends Component {
               blocks.map((data, key) => {
                 return (
                   <tr key={key}>
-                    <td onClick={() => this.onClickBlockId(data.block.id)}>
+                    <td onClick={() => onClickBlockId(data.block.id)}>
                       {data.block.id}
                     </td>
                     <td>{data.block.previousblockhash}</td>
-                    <td onClick={() => this.onClickBlockHeight(data.block.height)}>
+                    <td onClick={() => onClickBlockHeight(data.block.height)}>
                       {data.block.height}
                     </td>
                     <td>{data.block.timestamp}</td>
@@ -69,8 +92,7 @@ class App extends Component {
           </tbody>
         </table>
       </>
-    );
-  }
+  )
 }
 
 export default App;
