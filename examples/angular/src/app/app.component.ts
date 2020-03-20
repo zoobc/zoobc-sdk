@@ -4,22 +4,30 @@ import zoobc from 'zoobc';
 @Component({
   selector: 'app-root',
   templateUrl: `./app.component.html`,
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
-
 export class AppComponent implements OnInit {
-  lists = [];
+  account: any;
   title = 'angular app';
+  networks = [
+    {
+      host: 'http://85.90.246.90:8002',
+      name: 'dev',
+    },
+  ];
 
-  ngOnInit(): void {
-    this.getBlocks().then(data => {
-      this.lists = data.blocksList;
-    });
+  constructor() {
+    zoobc.Network.list(this.networks);
   }
 
-  async getBlocks() {
-    zoobc.connection('http://18.139.3.139:7001');
-    const a = await zoobc.getBlocks(0, 5, 1);
-    return a;
+  ngOnInit() {
+    this.getBalance();
+  }
+
+  async getBalance() {
+    const address = 'B9C35tu6hJCE7IrwqL5uxnh6OW77Pw99JIdrSpHMg2Ki';
+    const balance = await zoobc.Account.getBalance(address).then((res: any) => {
+      this.account = res.accountbalance;
+    });
   }
 }
