@@ -12,6 +12,8 @@ var jspb = require('google-protobuf');
 var goog = jspb;
 var global = Function('return this')();
 
+goog.exportSymbol('proto.model.BitcoinPublicKeyFormat', null, global);
+goog.exportSymbol('proto.model.PrivateKeyBytesLength', null, global);
 goog.exportSymbol('proto.model.SignatureType', null, global);
 /**
  * @enum {number}
@@ -20,6 +22,24 @@ proto.model.SignatureType = {
   DEFAULTSIGNATURE: 0,
   BITCOINSIGNATURE: 1,
   MULTISIGSIGNATURE: 2
+};
+
+/**
+ * @enum {number}
+ */
+proto.model.PrivateKeyBytesLength = {
+  PRIVATEKEYINVALID: 0,
+  PRIVATEKEY256BITS: 32,
+  PRIVATEKEY384BITS: 48,
+  PRIVATEKEY512BITS: 64
+};
+
+/**
+ * @enum {number}
+ */
+proto.model.BitcoinPublicKeyFormat = {
+  PUBLICKEYFORMATUNCOMPRESSED: 0,
+  PUBLICKEYFORMATCOMPRESSED: 1
 };
 
 goog.object.extend(exports, proto.model);

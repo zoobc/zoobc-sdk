@@ -5,13 +5,13 @@ import * as service_multiSignature_pb from "../service/multiSignature_pb";
 import * as model_multiSignature_pb from "../model/multiSignature_pb";
 import {grpc} from "@improbable-eng/grpc-web";
 
-type MultisigServiceGetPendingTransactionByAddress = {
+type MultisigServiceGetPendingTransactions = {
   readonly methodName: string;
   readonly service: typeof MultisigService;
   readonly requestStream: false;
   readonly responseStream: false;
-  readonly requestType: typeof model_multiSignature_pb.GetPendingTransactionByAddressRequest;
-  readonly responseType: typeof model_multiSignature_pb.GetPendingTransactionByAddressResponse;
+  readonly requestType: typeof model_multiSignature_pb.GetPendingTransactionsRequest;
+  readonly responseType: typeof model_multiSignature_pb.GetPendingTransactionsResponse;
 };
 
 type MultisigServiceGetPendingTransactionDetailByTransactionHash = {
@@ -23,10 +23,20 @@ type MultisigServiceGetPendingTransactionDetailByTransactionHash = {
   readonly responseType: typeof model_multiSignature_pb.GetPendingTransactionDetailByTransactionHashResponse;
 };
 
+type MultisigServiceGetMultisignatureInfo = {
+  readonly methodName: string;
+  readonly service: typeof MultisigService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof model_multiSignature_pb.GetMultisignatureInfoRequest;
+  readonly responseType: typeof model_multiSignature_pb.GetMultisignatureInfoResponse;
+};
+
 export class MultisigService {
   static readonly serviceName: string;
-  static readonly GetPendingTransactionByAddress: MultisigServiceGetPendingTransactionByAddress;
+  static readonly GetPendingTransactions: MultisigServiceGetPendingTransactions;
   static readonly GetPendingTransactionDetailByTransactionHash: MultisigServiceGetPendingTransactionDetailByTransactionHash;
+  static readonly GetMultisignatureInfo: MultisigServiceGetMultisignatureInfo;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -61,14 +71,14 @@ export class MultisigServiceClient {
   readonly serviceHost: string;
 
   constructor(serviceHost: string, options?: grpc.RpcOptions);
-  getPendingTransactionByAddress(
-    requestMessage: model_multiSignature_pb.GetPendingTransactionByAddressRequest,
+  getPendingTransactions(
+    requestMessage: model_multiSignature_pb.GetPendingTransactionsRequest,
     metadata: grpc.Metadata,
-    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetPendingTransactionByAddressResponse|null) => void
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetPendingTransactionsResponse|null) => void
   ): UnaryResponse;
-  getPendingTransactionByAddress(
-    requestMessage: model_multiSignature_pb.GetPendingTransactionByAddressRequest,
-    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetPendingTransactionByAddressResponse|null) => void
+  getPendingTransactions(
+    requestMessage: model_multiSignature_pb.GetPendingTransactionsRequest,
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetPendingTransactionsResponse|null) => void
   ): UnaryResponse;
   getPendingTransactionDetailByTransactionHash(
     requestMessage: model_multiSignature_pb.GetPendingTransactionDetailByTransactionHashRequest,
@@ -78,6 +88,15 @@ export class MultisigServiceClient {
   getPendingTransactionDetailByTransactionHash(
     requestMessage: model_multiSignature_pb.GetPendingTransactionDetailByTransactionHashRequest,
     callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetPendingTransactionDetailByTransactionHashResponse|null) => void
+  ): UnaryResponse;
+  getMultisignatureInfo(
+    requestMessage: model_multiSignature_pb.GetMultisignatureInfoRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisignatureInfoResponse|null) => void
+  ): UnaryResponse;
+  getMultisignatureInfo(
+    requestMessage: model_multiSignature_pb.GetMultisignatureInfoRequest,
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisignatureInfoResponse|null) => void
   ): UnaryResponse;
 }
 
