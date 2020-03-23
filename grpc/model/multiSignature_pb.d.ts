@@ -155,7 +155,7 @@ export namespace PendingTransaction {
   }
 }
 
-export class GetPendingTransactionByAddressRequest extends jspb.Message {
+export class GetPendingTransactionsRequest extends jspb.Message {
   getSenderaddress(): string;
   setSenderaddress(value: string): void;
 
@@ -168,16 +168,16 @@ export class GetPendingTransactionByAddressRequest extends jspb.Message {
   setPagination(value?: model_pagination_pb.Pagination): void;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetPendingTransactionByAddressRequest.AsObject;
-  static toObject(includeInstance: boolean, msg: GetPendingTransactionByAddressRequest): GetPendingTransactionByAddressRequest.AsObject;
+  toObject(includeInstance?: boolean): GetPendingTransactionsRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPendingTransactionsRequest): GetPendingTransactionsRequest.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: GetPendingTransactionByAddressRequest, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetPendingTransactionByAddressRequest;
-  static deserializeBinaryFromReader(message: GetPendingTransactionByAddressRequest, reader: jspb.BinaryReader): GetPendingTransactionByAddressRequest;
+  static serializeBinaryToWriter(message: GetPendingTransactionsRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPendingTransactionsRequest;
+  static deserializeBinaryFromReader(message: GetPendingTransactionsRequest, reader: jspb.BinaryReader): GetPendingTransactionsRequest;
 }
 
-export namespace GetPendingTransactionByAddressRequest {
+export namespace GetPendingTransactionsRequest {
   export type AsObject = {
     senderaddress: string,
     status: PendingTransactionStatusMap[keyof PendingTransactionStatusMap],
@@ -185,7 +185,7 @@ export namespace GetPendingTransactionByAddressRequest {
   }
 }
 
-export class GetPendingTransactionByAddressResponse extends jspb.Message {
+export class GetPendingTransactionsResponse extends jspb.Message {
   getCount(): number;
   setCount(value: number): void;
 
@@ -198,16 +198,16 @@ export class GetPendingTransactionByAddressResponse extends jspb.Message {
   addPendingtransactions(value?: PendingTransaction, index?: number): PendingTransaction;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): GetPendingTransactionByAddressResponse.AsObject;
-  static toObject(includeInstance: boolean, msg: GetPendingTransactionByAddressResponse): GetPendingTransactionByAddressResponse.AsObject;
+  toObject(includeInstance?: boolean): GetPendingTransactionsResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPendingTransactionsResponse): GetPendingTransactionsResponse.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: GetPendingTransactionByAddressResponse, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): GetPendingTransactionByAddressResponse;
-  static deserializeBinaryFromReader(message: GetPendingTransactionByAddressResponse, reader: jspb.BinaryReader): GetPendingTransactionByAddressResponse;
+  static serializeBinaryToWriter(message: GetPendingTransactionsResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPendingTransactionsResponse;
+  static deserializeBinaryFromReader(message: GetPendingTransactionsResponse, reader: jspb.BinaryReader): GetPendingTransactionsResponse;
 }
 
-export namespace GetPendingTransactionByAddressResponse {
+export namespace GetPendingTransactionsResponse {
   export type AsObject = {
     count: number,
     page: number,
@@ -266,6 +266,62 @@ export namespace GetPendingTransactionDetailByTransactionHashResponse {
     pendingtransaction?: PendingTransaction.AsObject,
     pendingsignaturesList: Array<PendingSignature.AsObject>,
     multisignatureinfo?: MultiSignatureInfo.AsObject,
+  }
+}
+
+export class GetMultisignatureInfoRequest extends jspb.Message {
+  getMultisigaddress(): string;
+  setMultisigaddress(value: string): void;
+
+  hasPagination(): boolean;
+  clearPagination(): void;
+  getPagination(): model_pagination_pb.Pagination | undefined;
+  setPagination(value?: model_pagination_pb.Pagination): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetMultisignatureInfoRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMultisignatureInfoRequest): GetMultisignatureInfoRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetMultisignatureInfoRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMultisignatureInfoRequest;
+  static deserializeBinaryFromReader(message: GetMultisignatureInfoRequest, reader: jspb.BinaryReader): GetMultisignatureInfoRequest;
+}
+
+export namespace GetMultisignatureInfoRequest {
+  export type AsObject = {
+    multisigaddress: string,
+    pagination?: model_pagination_pb.Pagination.AsObject,
+  }
+}
+
+export class GetMultisignatureInfoResponse extends jspb.Message {
+  getCount(): number;
+  setCount(value: number): void;
+
+  getPage(): number;
+  setPage(value: number): void;
+
+  clearMultisignatureinfoList(): void;
+  getMultisignatureinfoList(): Array<MultiSignatureInfo>;
+  setMultisignatureinfoList(value: Array<MultiSignatureInfo>): void;
+  addMultisignatureinfo(value?: MultiSignatureInfo, index?: number): MultiSignatureInfo;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetMultisignatureInfoResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMultisignatureInfoResponse): GetMultisignatureInfoResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetMultisignatureInfoResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMultisignatureInfoResponse;
+  static deserializeBinaryFromReader(message: GetMultisignatureInfoResponse, reader: jspb.BinaryReader): GetMultisignatureInfoResponse;
+}
+
+export namespace GetMultisignatureInfoResponse {
+  export type AsObject = {
+    count: number,
+    page: number,
+    multisignatureinfoList: Array<MultiSignatureInfo.AsObject>,
   }
 }
 

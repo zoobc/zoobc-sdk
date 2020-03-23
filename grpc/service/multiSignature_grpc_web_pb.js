@@ -93,74 +93,74 @@ proto.service.MultisigServicePromiseClient =
 /**
  * @const
  * @type {!grpc.web.MethodDescriptor<
- *   !proto.model.GetPendingTransactionByAddressRequest,
- *   !proto.model.GetPendingTransactionByAddressResponse>}
+ *   !proto.model.GetPendingTransactionsRequest,
+ *   !proto.model.GetPendingTransactionsResponse>}
  */
-const methodDescriptor_MultisigService_GetPendingTransactionByAddress = new grpc.web.MethodDescriptor(
-  '/service.MultisigService/GetPendingTransactionByAddress',
+const methodDescriptor_MultisigService_GetPendingTransactions = new grpc.web.MethodDescriptor(
+  '/service.MultisigService/GetPendingTransactions',
   grpc.web.MethodType.UNARY,
-  model_multiSignature_pb.GetPendingTransactionByAddressRequest,
-  model_multiSignature_pb.GetPendingTransactionByAddressResponse,
-  /** @param {!proto.model.GetPendingTransactionByAddressRequest} request */
+  model_multiSignature_pb.GetPendingTransactionsRequest,
+  model_multiSignature_pb.GetPendingTransactionsResponse,
+  /** @param {!proto.model.GetPendingTransactionsRequest} request */
   function(request) {
     return request.serializeBinary();
   },
-  model_multiSignature_pb.GetPendingTransactionByAddressResponse.deserializeBinary
+  model_multiSignature_pb.GetPendingTransactionsResponse.deserializeBinary
 );
 
 
 /**
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
- *   !proto.model.GetPendingTransactionByAddressRequest,
- *   !proto.model.GetPendingTransactionByAddressResponse>}
+ *   !proto.model.GetPendingTransactionsRequest,
+ *   !proto.model.GetPendingTransactionsResponse>}
  */
-const methodInfo_MultisigService_GetPendingTransactionByAddress = new grpc.web.AbstractClientBase.MethodInfo(
-  model_multiSignature_pb.GetPendingTransactionByAddressResponse,
-  /** @param {!proto.model.GetPendingTransactionByAddressRequest} request */
+const methodInfo_MultisigService_GetPendingTransactions = new grpc.web.AbstractClientBase.MethodInfo(
+  model_multiSignature_pb.GetPendingTransactionsResponse,
+  /** @param {!proto.model.GetPendingTransactionsRequest} request */
   function(request) {
     return request.serializeBinary();
   },
-  model_multiSignature_pb.GetPendingTransactionByAddressResponse.deserializeBinary
+  model_multiSignature_pb.GetPendingTransactionsResponse.deserializeBinary
 );
 
 
 /**
- * @param {!proto.model.GetPendingTransactionByAddressRequest} request The
+ * @param {!proto.model.GetPendingTransactionsRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.model.GetPendingTransactionByAddressResponse)}
+ * @param {function(?grpc.web.Error, ?proto.model.GetPendingTransactionsResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.model.GetPendingTransactionByAddressResponse>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.model.GetPendingTransactionsResponse>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.service.MultisigServiceClient.prototype.getPendingTransactionByAddress =
+proto.service.MultisigServiceClient.prototype.getPendingTransactions =
     function(request, metadata, callback) {
   return this.client_.rpcCall(this.hostname_ +
-      '/service.MultisigService/GetPendingTransactionByAddress',
+      '/service.MultisigService/GetPendingTransactions',
       request,
       metadata || {},
-      methodDescriptor_MultisigService_GetPendingTransactionByAddress,
+      methodDescriptor_MultisigService_GetPendingTransactions,
       callback);
 };
 
 
 /**
- * @param {!proto.model.GetPendingTransactionByAddressRequest} request The
+ * @param {!proto.model.GetPendingTransactionsRequest} request The
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.model.GetPendingTransactionByAddressResponse>}
+ * @return {!Promise<!proto.model.GetPendingTransactionsResponse>}
  *     A native promise that resolves to the response
  */
-proto.service.MultisigServicePromiseClient.prototype.getPendingTransactionByAddress =
+proto.service.MultisigServicePromiseClient.prototype.getPendingTransactions =
     function(request, metadata) {
   return this.client_.unaryCall(this.hostname_ +
-      '/service.MultisigService/GetPendingTransactionByAddress',
+      '/service.MultisigService/GetPendingTransactions',
       request,
       metadata || {},
-      methodDescriptor_MultisigService_GetPendingTransactionByAddress);
+      methodDescriptor_MultisigService_GetPendingTransactions);
 };
 
 
@@ -235,6 +235,80 @@ proto.service.MultisigServicePromiseClient.prototype.getPendingTransactionDetail
       request,
       metadata || {},
       methodDescriptor_MultisigService_GetPendingTransactionDetailByTransactionHash);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.model.GetMultisignatureInfoRequest,
+ *   !proto.model.GetMultisignatureInfoResponse>}
+ */
+const methodDescriptor_MultisigService_GetMultisignatureInfo = new grpc.web.MethodDescriptor(
+  '/service.MultisigService/GetMultisignatureInfo',
+  grpc.web.MethodType.UNARY,
+  model_multiSignature_pb.GetMultisignatureInfoRequest,
+  model_multiSignature_pb.GetMultisignatureInfoResponse,
+  /** @param {!proto.model.GetMultisignatureInfoRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_multiSignature_pb.GetMultisignatureInfoResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.model.GetMultisignatureInfoRequest,
+ *   !proto.model.GetMultisignatureInfoResponse>}
+ */
+const methodInfo_MultisigService_GetMultisignatureInfo = new grpc.web.AbstractClientBase.MethodInfo(
+  model_multiSignature_pb.GetMultisignatureInfoResponse,
+  /** @param {!proto.model.GetMultisignatureInfoRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_multiSignature_pb.GetMultisignatureInfoResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.model.GetMultisignatureInfoRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.model.GetMultisignatureInfoResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.model.GetMultisignatureInfoResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.service.MultisigServiceClient.prototype.getMultisignatureInfo =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/service.MultisigService/GetMultisignatureInfo',
+      request,
+      metadata || {},
+      methodDescriptor_MultisigService_GetMultisignatureInfo,
+      callback);
+};
+
+
+/**
+ * @param {!proto.model.GetMultisignatureInfoRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.model.GetMultisignatureInfoResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.service.MultisigServicePromiseClient.prototype.getMultisignatureInfo =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/service.MultisigService/GetMultisignatureInfo',
+      request,
+      metadata || {},
+      methodDescriptor_MultisigService_GetMultisignatureInfo);
 };
 
 

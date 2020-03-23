@@ -11,3 +11,19 @@ export interface SignatureTypeMap {
 
 export const SignatureType: SignatureTypeMap;
 
+export interface PrivateKeyBytesLengthMap {
+  PRIVATEKEYINVALID: 0;
+  PRIVATEKEY256BITS: 32;
+  PRIVATEKEY384BITS: 48;
+  PRIVATEKEY512BITS: 64;
+}
+
+export const PrivateKeyBytesLength: PrivateKeyBytesLengthMap;
+
+export interface BitcoinPublicKeyFormatMap {
+  PUBLICKEYFORMATUNCOMPRESSED: 0;
+  PUBLICKEYFORMATCOMPRESSED: 1;
+}
+
+export const BitcoinPublicKeyFormat: BitcoinPublicKeyFormatMap;
+
