@@ -68,7 +68,7 @@ function mockGet(params: NodeParams) {
 }
 
 function mockRegister(data: RegisterNodeInterface) {
-  const bytes = registerNodeBuilder(data, childSeed);
+  const bytes = registerNodeBuilder(data, Buffer.alloc(8), childSeed);
 
   const response = new PostTransactionResponse();
   const transaction = new Transaction();
