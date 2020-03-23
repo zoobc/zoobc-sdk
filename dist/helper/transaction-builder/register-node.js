@@ -4,7 +4,7 @@ var converters_1 = require("../converters");
 var utils_1 = require("../utils");
 var constant_1 = require("./constant");
 var TRANSACTION_TYPE = new Buffer([2, 0, 0, 0]);
-function registerNodeBuilder(data, seed) {
+function registerNodeBuilder(data, poown, seed) {
     var bytes;
     var timestamp = utils_1.writeInt64(Math.trunc(Date.now() / 1000));
     var accountAddress = Buffer.from(data.accountAddress, 'utf-8');
@@ -21,7 +21,7 @@ function registerNodeBuilder(data, seed) {
         nodeAddressLength.length +
         nodeAddress.length +
         funds.length +
-        data.poown.length);
+        poown.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE,
         constant_1.VERSION,
@@ -38,8 +38,15 @@ function registerNodeBuilder(data, seed) {
         nodeAddressLength,
         nodeAddress,
         funds,
-        data.poown,
+        poown,
     ]);
+    // ========== NULLIFYING THE ESCROW ===========
+    var approverAddressLength = utils_1.writeInt32(0);
+    var commission = utils_1.writeInt64(0);
+    var timeout = utils_1.writeInt64(0);
+    var instructionLength = utils_1.writeInt32(0);
+    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    // ========== END NULLIFYING THE ESCROW =========
     var signatureType = utils_1.writeInt32(0);
     var signature = seed.sign(bytes);
     var bodyLengthSignature = utils_1.writeInt32(signatureType.length + signature.length);
