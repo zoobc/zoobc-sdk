@@ -11,10 +11,9 @@ export interface RegisterNodeInterface {
   nodePublicKey: string;
   nodeAddress: string;
   funds: number;
-  poown: Buffer;
 }
 
-export function registerNodeBuilder(data: RegisterNodeInterface, seed: BIP32Interface): Buffer {
+export function registerNodeBuilder(data: RegisterNodeInterface, poown: Buffer, seed: BIP32Interface): Buffer {
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
@@ -34,7 +33,7 @@ export function registerNodeBuilder(data: RegisterNodeInterface, seed: BIP32Inte
       nodeAddressLength.length +
       nodeAddress.length +
       funds.length +
-      data.poown.length,
+      poown.length,
   );
 
   bytes = Buffer.concat([
@@ -53,8 +52,17 @@ export function registerNodeBuilder(data: RegisterNodeInterface, seed: BIP32Inte
     nodeAddressLength,
     nodeAddress,
     funds,
-    data.poown,
+    poown,
   ]);
+
+  // ========== NULLIFYING THE ESCROW ===========
+  const approverAddressLength = writeInt32(0);
+  const commission = writeInt64(0);
+  const timeout = writeInt64(0);
+  const instructionLength = writeInt32(0);
+
+  bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+  // ========== END NULLIFYING THE ESCROW =========
 
   const signatureType = writeInt32(0);
   const signature = seed.sign(bytes);
