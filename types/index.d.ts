@@ -61,8 +61,8 @@ declare const zoobc: {
     };
     Block: {
         getBlocks: (params: import("./Block").BlockListParams) => Promise<import("../grpc/model/block_pb").GetBlocksResponse.AsObject>;
-        getBlockById: (id: string, transport?: import("@improbable-eng/grpc-web/dist/typings/transports/Transport").TransportFactory | undefined) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
-        getBlockByHeight: (height: number, transport?: import("@improbable-eng/grpc-web/dist/typings/transports/Transport").TransportFactory | undefined) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
+        getBlockById: (id: string) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
+        getBlockByHeight: (height: number) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
     };
 };
 export default zoobc;

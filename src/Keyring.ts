@@ -40,7 +40,11 @@ export class ZooKeyring {
 
   constructor(passphrase: string, password: string, coinName: string = 'ZBC') {
     const { curveName = 'secp256k1' } = findCoin(coinName);
-    this.seed = bip39.mnemonicToSeedSync(passphrase, password);
+    // first we need remove space using trim, case: "     stand cheap     "
+    const passphraseTrim = passphrase.trim();
+    // and then using regex to make sure dont have double space after phrase, case: "stand cheap      entire"
+    const resultPassphrase = passphraseTrim.replace(/\s\s+/g, ' ');
+    this.seed = bip39.mnemonicToSeedSync(resultPassphrase, password);
     this.coinName = coinName;
     this.bip32RootKey = fromSeed(this.seed, BITCOIN, curveName);
   }

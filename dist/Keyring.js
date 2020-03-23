@@ -40,7 +40,11 @@ var ZooKeyring = /** @class */ (function () {
         if (coinName === void 0) { coinName = 'ZBC'; }
         this.coinName = 'ZBC';
         var _a = coins_1.findCoin(coinName).curveName, curveName = _a === void 0 ? 'secp256k1' : _a;
-        this.seed = bip39.mnemonicToSeedSync(passphrase, password);
+        // first we need remove space using trim, case: "     stand cheap     "
+        var passphraseTrim = passphrase.trim();
+        // and then using regex to make sure dont have double space after phrase, case: "stand cheap      entire"
+        var resultPassphrase = passphraseTrim.replace(/\s\s+/g, ' ');
+        this.seed = bip39.mnemonicToSeedSync(resultPassphrase, password);
         this.coinName = coinName;
         this.bip32RootKey = bip32_1.fromSeed(this.seed, BITCOIN, curveName);
     }

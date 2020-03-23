@@ -112,16 +112,19 @@ function get(params) {
 }
 function register(data, childSeed) {
     return new Promise(function (resolve, reject) {
-        var bytes = register_node_1.registerNodeBuilder(data, childSeed);
-        var request = new transaction_pb_1.PostTransactionRequest();
-        request.setTransactionbytes(bytes);
-        var networkIP = Network_1.default.selected();
-        var client = new transaction_pb_service_1.TransactionServiceClient(networkIP.host);
-        client.postTransaction(request, function (err, res) {
-            if (err)
-                reject(err);
-            if (res)
-                resolve(res.toObject());
+        var auth = Poown_1.default.createAuth(auth_pb_1.RequestType.GETPROOFOFOWNERSHIP, childSeed);
+        Poown_1.default.request(auth, data.nodeAddress).then(function (poown) {
+            var bytes = register_node_1.registerNodeBuilder(data, poown, childSeed);
+            var request = new transaction_pb_1.PostTransactionRequest();
+            request.setTransactionbytes(bytes);
+            var networkIP = Network_1.default.selected();
+            var client = new transaction_pb_service_1.TransactionServiceClient(networkIP.host);
+            client.postTransaction(request, function (err, res) {
+                if (err)
+                    reject(err);
+                if (res)
+                    resolve(res.toObject());
+            });
         });
     });
 }

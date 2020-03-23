@@ -6,6 +6,5 @@ export interface RegisterNodeInterface {
     nodePublicKey: string;
     nodeAddress: string;
     funds: number;
-    poown: Buffer;
 }
-export declare function registerNodeBuilder(data: RegisterNodeInterface, seed: BIP32Interface): Buffer;
+export declare function registerNodeBuilder(data: RegisterNodeInterface, poown: Buffer, seed: BIP32Interface): Buffer;
