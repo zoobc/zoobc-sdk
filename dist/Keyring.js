@@ -44,10 +44,19 @@ var ZooKeyring = /** @class */ (function () {
         this.coinName = coinName;
         this.bip32RootKey = bip32_1.fromSeed(this.seed, BITCOIN, curveName);
     }
-    ZooKeyring.generateRandomPhrase = function (numWords, wordlist) {
+    ZooKeyring.generateRandomPhrase = function (numWords, lang) {
         if (numWords === void 0) { numWords = 24; }
+        if (lang === void 0) { lang = 'english'; }
+        bip39.setDefaultWordlist(lang);
         var strength = (numWords / 3) * 32;
-        return bip39.generateMnemonic(strength, undefined, wordlist);
+        if (strength !== 128 && strength !== 256)
+            return 'numWords only 12 or 24';
+        return bip39.generateMnemonic(strength, undefined);
+    };
+    ZooKeyring.isPassphraseValid = function (passphrase, lang) {
+        if (lang === void 0) { lang = 'english'; }
+        bip39.setDefaultWordlist(lang);
+        return bip39.validateMnemonic(passphrase);
     };
     ZooKeyring.prototype.calcDerivationPath = function (accountValue, changeValue, bip32RootKey) {
         if (changeValue === void 0) { changeValue = 0; }
