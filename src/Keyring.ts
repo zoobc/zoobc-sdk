@@ -45,10 +45,16 @@ export class ZooKeyring {
     this.bip32RootKey = fromSeed(this.seed, BITCOIN, curveName);
   }
 
-  static generateRandomPhrase(numWords: number = 24, wordlist?: string[]): string {
+  static generateRandomPhrase(numWords: number = 24, lang: string = 'english'): string {
+    bip39.setDefaultWordlist(lang);
     const strength = (numWords / 3) * 32;
     if (strength !== 128 && strength !== 256) return 'numWords only 12 or 24';
-    return bip39.generateMnemonic(strength, undefined, wordlist);
+    return bip39.generateMnemonic(strength, undefined);
+  }
+
+  static isPassphraseValid(passphrase: string, lang: string = 'english') {
+    bip39.setDefaultWordlist(lang);
+    return bip39.validateMnemonic(passphrase);
   }
 
   calcDerivationPath(accountValue: number, changeValue: 0 | 1 = 0, bip32RootKey: BIP32Interface = this.bip32RootKey): BIP32Interface {
