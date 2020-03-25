@@ -47,7 +47,7 @@ export interface NodeParams {
 
 function getHardwareInfo(networkIP: string, childSeed: BIP32Interface): Observable<GetNodeHardwareResponse.AsObject> {
   return new Observable(observer => {
-    const auth = Poown.createAuth(RequestType.GETPROOFOFOWNERSHIP, childSeed);
+    const auth = Poown.createAuth(RequestType.GETNODEHARDWARE, childSeed);
     const request = new GetNodeHardwareRequest();
 
     const client = new NodeHardwareServiceClient(networkIP)

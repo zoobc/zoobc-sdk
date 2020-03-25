@@ -23,7 +23,7 @@ var transaction_pb_service_1 = require("../grpc/service/transaction_pb_service")
 var pagination_pb_1 = require("../grpc/model/pagination_pb");
 function getHardwareInfo(networkIP, childSeed) {
     return new rxjs_1.Observable(function (observer) {
-        var auth = Poown_1.default.createAuth(auth_pb_1.RequestType.GETPROOFOFOWNERSHIP, childSeed);
+        var auth = Poown_1.default.createAuth(auth_pb_1.RequestType.GETNODEHARDWARE, childSeed);
         var request = new nodeHardware_pb_1.GetNodeHardwareRequest();
         var client = new nodeHardware_pb_service_1.NodeHardwareServiceClient(networkIP)
             .getNodeHardware(new grpc_web_1.grpc.Metadata({ authorization: auth }))

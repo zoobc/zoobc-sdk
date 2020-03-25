@@ -9,17 +9,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var CryptoJS = __importStar(require("crypto-js"));
 var utils_1 = require("./helper/utils");
-function encryptPassphrase(seed, password, salt) {
+function encryptPassphrase(passphrase, password, salt) {
     if (salt === void 0) { salt = 'salt'; }
     var key = utils_1.encryptPassword(password, salt);
-    return CryptoJS.AES.encrypt(seed, key).toString();
+    return CryptoJS.AES.encrypt(passphrase, key).toString();
 }
 exports.encryptPassphrase = encryptPassphrase;
-function decryptPassphrase(encSeed, password, salt) {
+function decryptPassphrase(encPassphrase, password, salt) {
     if (salt === void 0) { salt = 'salt'; }
     var key = utils_1.encryptPassword(password, salt);
     try {
-        var seed = CryptoJS.AES.decrypt(encSeed, key).toString(CryptoJS.enc.Utf8);
+        var seed = CryptoJS.AES.decrypt(encPassphrase, key).toString(CryptoJS.enc.Utf8);
         if (!seed)
             throw 'not match';
         return seed;
