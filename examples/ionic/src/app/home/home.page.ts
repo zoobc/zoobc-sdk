@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import zoobc from 'zoobc';
 
 @Component({
@@ -6,19 +6,32 @@ import zoobc from 'zoobc';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
+  hosts = [
+    {
+      host: 'http://85.90.246.90:8002',
+      name: '168 Testnet',
+    },
+  ];
+
   list = [];
 
   constructor() {
-    this.getBlocks().then(data => {
-      this.list = data.blocksList;
-      console.log(data.blocksList);
-    });
+    zoobc.Network.list(this.hosts);
   }
 
-  getBlocks() {
-    zoobc.connection('http://18.139.3.139:7001');
-    const a = zoobc.getBlocks(0, 5, 1);
-    return a;
+  ngOnInit() {
+    this.getBlocks();
+  }
+
+  async getBlocks() {
+    try {
+      const res = await zoobc.Block.getBlocks({ height: 0 });
+      if (res) {
+        this.list = res.blocksList;
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
