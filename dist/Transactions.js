@@ -70,4 +70,19 @@ function sendMoney(data, seed) {
         });
     });
 }
-exports.default = { sendMoney: sendMoney, get: get, getList: getList };
+function getTransactionMinimumFee(data, seed) {
+    var txBytes = send_money_1.sendMoneyBuilder(data, seed);
+    return new Promise(function (resolve, reject) {
+        var networkIP = Network_1.default.selected();
+        var request = new transaction_pb_1.GetTransactionMinimumFeeRequest();
+        request.setTransactionbytes(txBytes);
+        var client = new transaction_pb_service_1.TransactionServiceClient(networkIP.host);
+        client.getTransactionMinimumFee(request, function (err, res) {
+            if (err)
+                reject(err);
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+exports.default = { sendMoney: sendMoney, get: get, getList: getList, getTransactionMinimumFee: getTransactionMinimumFee };
