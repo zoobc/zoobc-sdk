@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var empty_pb_1 = require("../grpc/model/empty_pb");
+var healthCheck_pb_service_1 = require("../grpc/service/healthCheck_pb_service");
 var Network = /** @class */ (function () {
     function Network() {
         this.idx = 0;
@@ -37,4 +39,16 @@ function set(idx) {
 function selected() {
     return network.list[network.id];
 }
-exports.default = { list: list, set: set, selected: selected };
+function ping() {
+    return new Promise(function (resolve, reject) {
+        var networkIP = selected();
+        var client = new healthCheck_pb_service_1.HealthCheckServiceClient(networkIP.host);
+        var request = new empty_pb_1.Empty();
+        client.healthCheck(request, function (err) {
+            if (err)
+                return reject(err);
+            return resolve('PONG');
+        });
+    });
+}
+exports.default = { list: list, set: set, selected: selected, ping: ping };
