@@ -44,7 +44,7 @@ function encryptPassword(password, salt) {
     }).toString();
 }
 exports.encryptPassword = encryptPassword;
-function ZBCAddressValidation(address) {
+function isZBCAddressValid(address) {
     var addressBase64 = converters_1.fromBase64Url(address);
     var addressBytes = converters_1.base64ToBuffer(addressBase64);
     if (addressBytes.length == 33 && addressBase64.length == 44) {
@@ -53,7 +53,7 @@ function ZBCAddressValidation(address) {
     else
         return false;
 }
-exports.ZBCAddressValidation = ZBCAddressValidation;
+exports.isZBCAddressValid = isZBCAddressValid;
 function isZBCPublicKeyValid(pubkey) {
     var addressBytes = converters_1.base64ToBuffer(pubkey);
     if (addressBytes.length == 32 && pubkey.length == 44) {
