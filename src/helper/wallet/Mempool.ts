@@ -1,13 +1,11 @@
 import { readInt64 } from '../utils';
 import { GetMempoolTransactionsResponse } from '../../../grpc/model/mempool_pb';
-import { TransactionTypeMap } from '../../../grpc/model/transaction_pb';
-
-let typeTransactions: TransactionTypeMap;
+import { TransactionType } from '../../../grpc/model/transaction_pb';
 
 export function toUnconfirmedSendMoneyWallet(res: GetMempoolTransactionsResponse.AsObject, ownAddress: string) {
   let transactions: any = res.mempooltransactionsList.filter(tx => {
     const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-    if (bytes.readInt32LE(0) == typeTransactions.SENDMONEYTRANSACTION) return tx;
+    if (bytes.readInt32LE(0) == TransactionType.SENDMONEYTRANSACTION) return tx;
   });
   transactions = transactions.map((tx: any) => {
     const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
@@ -38,19 +36,19 @@ export function toUnconfirmTransactionNodeWallet(res: GetMempoolTransactionsResp
 
     let found = false;
     switch (type) {
-      case typeTransactions.NODEREGISTRATIONTRANSACTION:
+      case TransactionType.NODEREGISTRATIONTRANSACTION:
         found = true;
         result = { type: 'Register Node', tx: mempoolTx };
         break;
-      case typeTransactions.UPDATENODEREGISTRATIONTRANSACTION:
+      case TransactionType.UPDATENODEREGISTRATIONTRANSACTION:
         found = true;
         result = { type: 'Update Node', tx: mempoolTx };
         break;
-      case typeTransactions.REMOVENODEREGISTRATIONTRANSACTION:
+      case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
         found = true;
         result = { type: 'Remove Node', tx: mempoolTx };
         break;
-      case typeTransactions.CLAIMNODEREGISTRATIONTRANSACTION:
+      case TransactionType.CLAIMNODEREGISTRATIONTRANSACTION:
         found = true;
         result = { type: 'Claim Node', tx: mempoolTx };
         break;
