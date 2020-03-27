@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var utils_1 = require("../utils");
-var typeTransactions;
+var transaction_pb_1 = require("../../../grpc/model/transaction_pb");
 function toUnconfirmedSendMoneyWallet(res, ownAddress) {
     var transactions = res.mempooltransactionsList.filter(function (tx) {
         var bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        if (bytes.readInt32LE(0) == typeTransactions.SENDMONEYTRANSACTION)
+        if (bytes.readInt32LE(0) == transaction_pb_1.TransactionType.SENDMONEYTRANSACTION)
             return tx;
     });
     transactions = transactions.map(function (tx) {
@@ -34,19 +34,19 @@ function toUnconfirmTransactionNodeWallet(res) {
         var type = txBytes.slice(0, 4).readInt32LE(0);
         var found = false;
         switch (type) {
-            case typeTransactions.NODEREGISTRATIONTRANSACTION:
+            case transaction_pb_1.TransactionType.NODEREGISTRATIONTRANSACTION:
                 found = true;
                 result = { type: 'Register Node', tx: mempoolTx };
                 break;
-            case typeTransactions.UPDATENODEREGISTRATIONTRANSACTION:
+            case transaction_pb_1.TransactionType.UPDATENODEREGISTRATIONTRANSACTION:
                 found = true;
                 result = { type: 'Update Node', tx: mempoolTx };
                 break;
-            case typeTransactions.REMOVENODEREGISTRATIONTRANSACTION:
+            case transaction_pb_1.TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
                 found = true;
                 result = { type: 'Remove Node', tx: mempoolTx };
                 break;
-            case typeTransactions.CLAIMNODEREGISTRATIONTRANSACTION:
+            case transaction_pb_1.TransactionType.CLAIMNODEREGISTRATIONTRANSACTION:
                 found = true;
                 result = { type: 'Claim Node', tx: mempoolTx };
                 break;
