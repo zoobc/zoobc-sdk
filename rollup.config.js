@@ -45,7 +45,6 @@ export default [
   {
     input: 'src/index.ts',
     output: {
-      name: 'ZoobcSDK',
       file: 'dist/zoobc-sdk.development.js',
       format: 'cjs',
       sourcemap: true,
