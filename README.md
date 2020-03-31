@@ -6,7 +6,7 @@
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 [![CircleCI](https://circleci.com/gh/zoobc/zoobc-sdk.svg?style=svg&circle-token=8a1610a487c652b7165e501f7d4c814fe0e34e12)](https://circleci.com/gh/zoobc/zoobc-sdk)
 
-ZooBC-SDK is a small set of libraries written with TypeScript and compiled with JavaScript, making it easy to implement / integrate applications so that they connect with the P2P API of the nodes in the blockchain for the Web API of the explorer servers and wallet.
+ZooBC-SDK is a small set of libraries written with TypeScript and compiled to be JavaScript, making it easy to implement / integrate applications so that they connect with the P2P API of the nodes in the blockchain for the Web API of the explorer servers and wallet.
 
 ## Start using ZooBC-SDK
 
@@ -25,10 +25,10 @@ For instructions on how to use web and mobile for a project, please refer to the
 **Step 1**
 ```bash
 # Clone this repository
-$ git clone https://github.com/zoobc/zoobc-sdk-js.git
+$ git clone https://github.com/zoobc/zoobc-sdk.git
 
-# Go to 'zoobc-sdk-js' directory
-$ cd zoobc-sdk-js
+# Go to 'zoobc-sdk' directory
+$ cd zoobc-sdk
 
 # Install 'node_modules' packages
 $ npm install
