@@ -6,7 +6,6 @@
   "license": "Apache-2.0",
   "private": true,
   "main": "index.js",
-  "module": "dist/zoobc-sdk.mjs",
   "types": "types/index.d.ts",
   "keywords": [
     "blockchain",
