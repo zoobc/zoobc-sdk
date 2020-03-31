@@ -24,4 +24,4 @@ yarn-debug.log
 yarn-error.log
 /examples/**/yarn-error.log
 /examples/**/yarn.lock
-
+size-plugin.json
