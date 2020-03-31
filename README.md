@@ -1,25 +1,24 @@
-![](/src/assets/images/ZooBC-SDK-js.png)
+![Screenshot](assets/images/ZooBC-SDK.gif)
 
-# ZooBC-SDK for JavaScript
+# ZooBC-SDK
 
 ![npm](https://img.shields.io/npm/v/zoobc-sdk-js.svg)
 ![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 [![CircleCI](https://circleci.com/gh/zoobc/zoobc-sdk.svg?style=svg&circle-token=8a1610a487c652b7165e501f7d4c814fe0e34e12)](https://circleci.com/gh/zoobc/zoobc-sdk)
 
-ZooBC-SDK is a small set of libraries written in JavaScript, making it easy to implement/integrate applications so that they connect with the P2P API of the nodes in the blockchain and the Web API of the explorer servers.
+ZooBC-SDK is a small set of libraries written with TypeScript and compiled with JavaScript, making it easy to implement / integrate applications so that they connect with the P2P API of the nodes in the blockchain for the Web API of the explorer servers and wallet.
 
+## Start using ZooBC-SDK
 
-## Start using ZooBC-SDK for JavaScript
+For instructions on how to use web and mobile for a project, please refer to these documents:
 
-For instructions on how to use the JavaScript web and mobile client framework for a project, please refer to these documents:
+  * [AngularJs](examples/angular)
+  * [Ionic](examples/ionic)
+  * [ReactJs](examples/react)
+  * [React Native](https://github.com/zoobc/zoobc-thumbwar.git)
+  * [VueJs](examples/vue)
 
-  * [AngularJs](examples/angular/README.md)
-  * [Ionic](examples/ionic/README.md)
-  * [ReactJs](examples/react/README.md)
-  * [React Native](examples/reactnative/README.md)
-  * [VueJs](examples/vue/README.md)
-
-## Start developing ZooBC-SDK for JavaScript
+## Start developing ZooBC-SDK
 
 ### Installing
 
@@ -41,6 +40,13 @@ $ yarn install
 # Run proto generator
 $ ./protogen.sh
 ```
+**Step 3**
+```bash
+# Unit testing
+$ npm run test
+or
+$ yarn test
+```
 
 ### General Usage
 
@@ -53,19 +59,103 @@ $ yarn add zoobc
 
 Here's an example of basic usage for connection:
 ```bash
+import React, { useState, useEffect } from 'react';
 import zoobc from 'zoobc';
+import './app.css';
 
-listBlocks = () => {
-  zoobc.connection('http://18.139.3.139:7001');
-  zoobc
-    .getBlocks(0, 5, 1)
-    .then(res => {
-      this.setState({ blocks: res.blocksList });
-    })
-    .catch(err => {
-      this.setState({ error: err });
-    });
-};
+const App = () => {
+  const [blocks, setBlocks] = useState([])
+  const [error, setError] = useState(null)
+  const [detail, setDetail] = useState(null)
+
+  useEffect(() => {
+    const hosts = [
+      { host: 'http://85.90.246.90:8002', name: '168 Testnet' },
+    ];
+    zoobc.Network.list(hosts)
+    listBlocks();
+  }, [])
+
+  const listBlocks = () => {
+    zoobc.Block
+      .getBlocks({height: 0})
+      .then(res => setBlocks(res.blocksList))
+      .catch(err => setError(err))
+  };
+
+  const onClickBlockId = (id) => {
+    zoobc.Block
+      .getBlockById(id)
+      .then(res => {
+        setDetail(res)
+        setError(null)
+      })
+      .catch(err => {
+        setError(err)
+        setDetail(null)
+      })
+  }
+
+  const onClickBlockHeight = (height) => {
+    zoobc.Block
+      .getBlockByHeight(height)
+      .then(res => {
+        setDetail(res)
+        setError(null)
+      })
+      .catch(err => {
+        setError(err)
+        setDetail(null)
+      })
+  }
+
+  return (
+    <>
+      {!!error && (
+        <>
+          <div><strong>Error</strong></div>
+          <code>{JSON.stringify(error)}</code>
+        </>
+      )}{!!detail && (
+        <>
+          <div><strong>Detail</strong></div>
+          <code>{JSON.stringify(detail)}</code>
+        </>
+      )}
+        <table>
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Previous Hash</th>
+              <th>Height</th>
+              <th>Timestamp</th>
+              <th>Version</th>
+            </tr>
+          </thead>
+          <tbody>
+            {blocks.length > 0 &&
+              blocks.map((data, key) => {
+                return (
+                  <tr key={key}>
+                    <td onClick={() => onClickBlockId(data.block.id)}>
+                      {data.block.id}
+                    </td>
+                    <td>{data.block.previousblockhash}</td>
+                    <td onClick={() => onClickBlockHeight(data.block.height)}>
+                      {data.block.height}
+                    </td>
+                    <td>{data.block.timestamp}</td>
+                    <td>{data.block.version}</td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </table>
+      </>
+  )
+}
+
+export default App;
 ```
 
 ### License
