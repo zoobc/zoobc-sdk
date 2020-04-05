@@ -5,5 +5,19 @@
   "editor.insertSpaces": true,
   "files.trimTrailingWhitespace": true,
   "git.autofetch": true,
-  "editor.formatOnSave": true
+  "eslint.codeActionsOnSave": true,
+  // "eslint.validate": [
+  //   "javascript",
+  //   {
+  //     "language": "typescript",
+  //     "autoFix": true
+  //   }
+  // ],
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+  "[typescript]": {
+    "editor.formatOnSave": true
+  }
 }
