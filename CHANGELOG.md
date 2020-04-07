@@ -36,7 +36,7 @@
  - **Wallet Helper**: add mempool converter from grpc to wallet format ([#106](https://github.com/zoobc/zoobc-sdk/pull/106), [#151](https://github.com/zoobc/zoobc-sdk/pull/151)), issue [#89](https://github.com/zoobc/zoobc-sdk/issues/89)
 
 
-### Improvements
+### Enhancements
 - Update example for ReactJS ([#133](https://github.com/zoobc/zoobc-sdk/pull/133)), issue [#108](https://github.com/zoobc/zoobc-sdk/issues/108)
 - Update example for Angular ([#139](https://github.com/zoobc/zoobc-sdk/pull/139)), issue [#107](https://github.com/zoobc/zoobc-sdk/issues/107)
 - Update example for VueJs ([#145](https://github.com/zoobc/zoobc-sdk/pull/145)), issue [#111](https://github.com/zoobc/zoobc-sdk/issues/111)
@@ -44,6 +44,6 @@
 - Update example for React Native ([#159](https://github.com/zoobc/zoobc-sdk/pull/159)), issue [#110](https://github.com/zoobc/zoobc-sdk/issues/110)
 - **Compile**: compiling SDK using rollup typescript plugin ([#154](https://github.com/zoobc/zoobc-sdk/pull/154)), issue [#149](https://github.com/zoobc/zoobc-sdk/issues/149)
 
-### Bugs
+### Bug fixes
 - CI not executing branch master ([#158](https://github.com/zoobc/zoobc-sdk/pull/158)), issue [#157](https://github.com/zoobc/zoobc-sdk/issues/157)
 - NPM version not match between readme and NPMJS ([#161](https://github.com/zoobc/zoobc-sdk/pull/161)), issue [#160](https://github.com/zoobc/zoobc-sdk/issues/160)
