@@ -37766,6 +37766,7 @@ var EscrowTransactionServiceClient_1 = EscrowTransactionServiceClient;
 
 function getList$3(params) {
     return new Promise(function (resolve, reject) {
+        var _a;
         var networkIP = Network$1.selected();
         var request = new escrow_pb_1();
         if (params) {
@@ -37784,9 +37785,11 @@ function getList$3(params) {
                 var reqPagination = new pagination_pb_1();
                 reqPagination.setLimit(pagination.limit || 10);
                 reqPagination.setPage(pagination.page || 1);
-                reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.ASC);
+                reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
+                reqPagination.setOrderfield(pagination.orderField || 'id');
                 request.setPagination(reqPagination);
             }
+            console.log((_a = params.pagination) === null || _a === void 0 ? void 0 : _a.orderBy);
         }
         var client = new EscrowTransactionServiceClient_1(networkIP.host);
         client.getEscrowTransactions(request, function (err, res) {
