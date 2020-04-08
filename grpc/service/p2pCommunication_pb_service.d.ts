@@ -3,7 +3,6 @@
 
 import * as service_p2pCommunication_pb from "../service/p2pCommunication_pb";
 import * as model_peer_pb from "../model/peer_pb";
-import * as model_node_pb from "../model/node_pb";
 import * as model_empty_pb from "../model/empty_pb";
 import * as model_block_pb from "../model/block_pb";
 import * as model_blockchain_pb from "../model/blockchain_pb";
@@ -17,7 +16,7 @@ type P2PCommunicationGetPeerInfo = {
   readonly requestStream: false;
   readonly responseStream: false;
   readonly requestType: typeof model_peer_pb.GetPeerInfoRequest;
-  readonly responseType: typeof model_node_pb.Node;
+  readonly responseType: typeof model_peer_pb.GetPeerInfoResponse;
 };
 
 type P2PCommunicationGetMorePeers = {
@@ -170,11 +169,11 @@ export class P2PCommunicationClient {
   getPeerInfo(
     requestMessage: model_peer_pb.GetPeerInfoRequest,
     metadata: grpc.Metadata,
-    callback: (error: ServiceError|null, responseMessage: model_node_pb.Node|null) => void
+    callback: (error: ServiceError|null, responseMessage: model_peer_pb.GetPeerInfoResponse|null) => void
   ): UnaryResponse;
   getPeerInfo(
     requestMessage: model_peer_pb.GetPeerInfoRequest,
-    callback: (error: ServiceError|null, responseMessage: model_node_pb.Node|null) => void
+    callback: (error: ServiceError|null, responseMessage: model_peer_pb.GetPeerInfoResponse|null) => void
   ): UnaryResponse;
   getMorePeers(
     requestMessage: model_empty_pb.Empty,
