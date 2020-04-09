@@ -104,7 +104,7 @@ function mockRemove(data: RemoveNodeInterface) {
 }
 
 function mockClaim(data: ClaimNodeInterface) {
-  const bytes = claimNodeBuilder(data, childSeed);
+  const bytes = claimNodeBuilder(data, Buffer.alloc(8), childSeed);
 
   const response = new PostTransactionResponse();
   const transaction = new Transaction();
@@ -232,13 +232,11 @@ describe('Node Unit Testing :', () => {
 
   describe('claim', () => {
     it('claim should return new transaction object', async () => {
-      const data = {
+      const data: ClaimNodeInterface = {
         accountAddress: 'zfMr7NYWL5xfZKEtxck1nISatFTVhUk3fCigN39MecoH',
         fee: 0,
         nodePublicKey: '5E04hoe4JIYpnvSTMMvFr8+GGO7F7AQ/sSRPySagUxM=',
         nodeAddress: '',
-        funds: 0,
-        poown: Buffer.alloc(8),
       };
 
       const transport = mockClaim({ ...data });

@@ -37543,7 +37543,7 @@ function removeNodeBuilder(data, seed) {
 }
 
 var TRANSACTION_TYPE$4 = new Buffer([2, 3, 0, 0]);
-function claimNodeBuilder(data, seed) {
+function claimNodeBuilder(data, poown, seed) {
     var bytes;
     var timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     var accountAddress = Buffer.from(data.accountAddress, 'utf-8');
@@ -37551,7 +37551,7 @@ function claimNodeBuilder(data, seed) {
     var addressLength = writeInt32(ADDRESS_LENGTH);
     var fee = writeInt64(data.fee * 1e8);
     var nodePublicKey = Buffer.from(base64ToBuffer(data.nodePublicKey));
-    var bodyLength = writeInt32(nodePublicKey.length + data.poown.length);
+    var bodyLength = writeInt32(nodePublicKey.length + poown.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE$4,
         VERSION,
@@ -37563,7 +37563,7 @@ function claimNodeBuilder(data, seed) {
         fee,
         bodyLength,
         nodePublicKey,
-        data.poown,
+        poown,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
     var approverAddressLength = writeInt32(0);
@@ -37689,8 +37689,13 @@ function get$2(params) {
         }
         var client = new NodeRegistrationServiceClient_1(networkIP.host);
         client.getNodeRegistration(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message;
+                if (code == grpc$a.Code.NotFound)
+                    return resolve(undefined);
+                else if (code != grpc$a.Code.OK)
+                    return reject(message);
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -37753,16 +37758,19 @@ function remove(data, childSeed) {
 }
 function claim(data, childSeed) {
     return new Promise(function (resolve, reject) {
-        var bytes = claimNodeBuilder(data, childSeed);
-        var request = new transaction_pb_3();
-        request.setTransactionbytes(bytes);
-        var networkIP = Network$1.selected();
-        var client = new TransactionServiceClient_1(networkIP.host);
-        client.postTransaction(request, function (err, res) {
-            if (err)
-                reject(err);
-            if (res)
-                resolve(res.toObject());
+        var auth = Poown.createAuth(auth_pb_1.GETPROOFOFOWNERSHIP, childSeed);
+        Poown.request(auth, data.nodeAddress).then(function (poown) {
+            var bytes = claimNodeBuilder(data, poown, childSeed);
+            var request = new transaction_pb_3();
+            request.setTransactionbytes(bytes);
+            var networkIP = Network$1.selected();
+            var client = new TransactionServiceClient_1(networkIP.host);
+            client.postTransaction(request, function (err, res) {
+                if (err)
+                    reject(err);
+                if (res)
+                    resolve(res.toObject());
+            });
         });
     });
 }

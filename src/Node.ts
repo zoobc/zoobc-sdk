@@ -126,7 +126,11 @@ function get(params: NodeParams): Promise<GetNodeRegistrationResponse.AsObject> 
 
     const client = new NodeRegistrationServiceClient(networkIP.host);
     client.getNodeRegistration(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message } = err;
+        if (code == grpc.Code.NotFound) return resolve(undefined);
+        else if (code != grpc.Code.OK) return reject(message);
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -192,16 +196,19 @@ function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<P
 
 function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   return new Promise((resolve, reject) => {
-    const bytes = claimNodeBuilder(data, childSeed);
+    const auth = Poown.createAuth(RequestType.GETPROOFOFOWNERSHIP, childSeed);
+    Poown.request(auth, data.nodeAddress).then(poown => {
+      const bytes = claimNodeBuilder(data, poown, childSeed);
 
-    const request = new PostTransactionRequest();
-    request.setTransactionbytes(bytes);
+      const request = new PostTransactionRequest();
+      request.setTransactionbytes(bytes);
 
-    const networkIP = Network.selected();
-    const client = new TransactionServiceClient(networkIP.host);
-    client.postTransaction(request, (err, res) => {
-      if (err) reject(err);
-      if (res) resolve(res.toObject());
+      const networkIP = Network.selected();
+      const client = new TransactionServiceClient(networkIP.host);
+      client.postTransaction(request, (err, res) => {
+        if (err) reject(err);
+        if (res) resolve(res.toObject());
+      });
     });
   });
 }
