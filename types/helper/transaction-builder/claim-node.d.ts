@@ -4,6 +4,6 @@ export interface ClaimNodeInterface {
     accountAddress: string;
     fee: number;
     nodePublicKey: string;
-    poown: Buffer;
+    nodeAddress: string;
 }
-export declare function claimNodeBuilder(data: ClaimNodeInterface, seed: BIP32Interface): Buffer;
+export declare function claimNodeBuilder(data: ClaimNodeInterface, poown: Buffer, seed: BIP32Interface): Buffer;

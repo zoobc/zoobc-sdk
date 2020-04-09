@@ -9,10 +9,10 @@ export interface ClaimNodeInterface {
   accountAddress: string;
   fee: number;
   nodePublicKey: string;
-  poown: Buffer;
+  nodeAddress: string;
 }
 
-export function claimNodeBuilder(data: ClaimNodeInterface, seed: BIP32Interface) {
+export function claimNodeBuilder(data: ClaimNodeInterface, poown: Buffer, seed: BIP32Interface) {
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
@@ -22,7 +22,7 @@ export function claimNodeBuilder(data: ClaimNodeInterface, seed: BIP32Interface)
   const fee = writeInt64(data.fee * 1e8);
 
   const nodePublicKey = Buffer.from(base64ToBuffer(data.nodePublicKey));
-  const bodyLength = writeInt32(nodePublicKey.length + data.poown.length);
+  const bodyLength = writeInt32(nodePublicKey.length + poown.length);
 
   bytes = Buffer.concat([
     TRANSACTION_TYPE,
@@ -35,7 +35,7 @@ export function claimNodeBuilder(data: ClaimNodeInterface, seed: BIP32Interface)
     fee,
     bodyLength,
     nodePublicKey,
-    data.poown,
+    poown,
   ]);
 
   // ========== NULLIFYING THE ESCROW ===========

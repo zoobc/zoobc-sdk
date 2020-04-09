@@ -59,4 +59,4 @@ workflows:
                 - master
             tags:
               only:
-                - /\d+\.\d+\.\d+/ # /^v.*/
+                - /\d+\.\d+\.\d+/ # /^v*/

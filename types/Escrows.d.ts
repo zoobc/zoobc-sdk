@@ -12,6 +12,7 @@ export interface EscrowListParams {
         limit?: number;
         page?: number;
         orderBy?: 0 | 1;
+        orderField?: string;
     };
 }
 declare function getList(params?: EscrowListParams): Promise<GetEscrowTransactionsResponse.AsObject>;
