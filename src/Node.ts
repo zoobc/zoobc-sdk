@@ -126,7 +126,11 @@ function get(params: NodeParams): Promise<GetNodeRegistrationResponse.AsObject> 
 
     const client = new NodeRegistrationServiceClient(networkIP.host);
     client.getNodeRegistration(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message } = err;
+        if (code == grpc.Code.NotFound) return resolve(undefined);
+        else if (code != grpc.Code.OK) return reject(message);
+      }
       if (res) resolve(res.toObject());
     });
   });

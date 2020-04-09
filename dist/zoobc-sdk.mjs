@@ -37689,8 +37689,13 @@ function get$2(params) {
         }
         var client = new NodeRegistrationServiceClient_1(networkIP.host);
         client.getNodeRegistration(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message;
+                if (code == grpc$a.Code.NotFound)
+                    return resolve(undefined);
+                else if (code != grpc$a.Code.OK)
+                    return reject(message);
+            }
             if (res)
                 resolve(res.toObject());
         });
