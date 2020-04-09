@@ -11,13 +11,13 @@ var MultisigService = (function () {
   return MultisigService;
 }());
 
-MultisigService.GetPendingTransactionByAddress = {
-  methodName: "GetPendingTransactionByAddress",
+MultisigService.GetPendingTransactions = {
+  methodName: "GetPendingTransactions",
   service: MultisigService,
   requestStream: false,
   responseStream: false,
-  requestType: model_multiSignature_pb.GetPendingTransactionByAddressRequest,
-  responseType: model_multiSignature_pb.GetPendingTransactionByAddressResponse
+  requestType: model_multiSignature_pb.GetPendingTransactionsRequest,
+  responseType: model_multiSignature_pb.GetPendingTransactionsResponse
 };
 
 MultisigService.GetPendingTransactionDetailByTransactionHash = {
@@ -29,6 +29,15 @@ MultisigService.GetPendingTransactionDetailByTransactionHash = {
   responseType: model_multiSignature_pb.GetPendingTransactionDetailByTransactionHashResponse
 };
 
+MultisigService.GetMultisignatureInfo = {
+  methodName: "GetMultisignatureInfo",
+  service: MultisigService,
+  requestStream: false,
+  responseStream: false,
+  requestType: model_multiSignature_pb.GetMultisignatureInfoRequest,
+  responseType: model_multiSignature_pb.GetMultisignatureInfoResponse
+};
+
 exports.MultisigService = MultisigService;
 
 function MultisigServiceClient(serviceHost, options) {
@@ -36,11 +45,11 @@ function MultisigServiceClient(serviceHost, options) {
   this.options = options || {};
 }
 
-MultisigServiceClient.prototype.getPendingTransactionByAddress = function getPendingTransactionByAddress(requestMessage, metadata, callback) {
+MultisigServiceClient.prototype.getPendingTransactions = function getPendingTransactions(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(MultisigService.GetPendingTransactionByAddress, {
+  var client = grpc.unary(MultisigService.GetPendingTransactions, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
@@ -72,6 +81,37 @@ MultisigServiceClient.prototype.getPendingTransactionDetailByTransactionHash = f
     callback = arguments[1];
   }
   var client = grpc.unary(MultisigService.GetPendingTransactionDetailByTransactionHash, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+MultisigServiceClient.prototype.getMultisignatureInfo = function getMultisignatureInfo(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(MultisigService.GetMultisignatureInfo, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,

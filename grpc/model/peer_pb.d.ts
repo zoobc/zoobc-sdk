@@ -94,6 +94,28 @@ export namespace GetPeerInfoRequest {
   }
 }
 
+export class GetPeerInfoResponse extends jspb.Message {
+  hasHostinfo(): boolean;
+  clearHostinfo(): void;
+  getHostinfo(): model_node_pb.Node | undefined;
+  setHostinfo(value?: model_node_pb.Node): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPeerInfoResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPeerInfoResponse): GetPeerInfoResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetPeerInfoResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPeerInfoResponse;
+  static deserializeBinaryFromReader(message: GetPeerInfoResponse, reader: jspb.BinaryReader): GetPeerInfoResponse;
+}
+
+export namespace GetPeerInfoResponse {
+  export type AsObject = {
+    hostinfo?: model_node_pb.Node.AsObject,
+  }
+}
+
 export class GetMorePeersResponse extends jspb.Message {
   clearPeersList(): void;
   getPeersList(): Array<model_node_pb.Node>;

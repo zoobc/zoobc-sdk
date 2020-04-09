@@ -24,7 +24,9 @@ export { RegisterNodeInterface } from './helper/transaction-builder/register-nod
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
-export { getZBCAdress, ZBCAddressValidation, isZBCPublicKeyValid } from './helper/utils';
+export { EscrowApprovalInterface } from './helper/transaction-builder/escrow-transaction';
+export { SendMoneyInterface } from './helper/transaction-builder/send-money';
+export { getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
 

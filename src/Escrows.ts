@@ -17,6 +17,7 @@ export interface EscrowListParams {
     limit?: number;
     page?: number;
     orderBy?: 0 | 1;
+    orderField?: string;
   };
 }
 
@@ -36,7 +37,8 @@ function getList(params?: EscrowListParams): Promise<GetEscrowTransactionsRespon
         const reqPagination = new Pagination();
         reqPagination.setLimit(pagination.limit || 10);
         reqPagination.setPage(pagination.page || 1);
-        reqPagination.setOrderby(pagination.orderBy || OrderBy.ASC);
+        reqPagination.setOrderby(pagination.orderBy || OrderBy.DESC);
+        reqPagination.setOrderfield(pagination.orderField || 'id');
         request.setPagination(reqPagination);
       }
     }

@@ -3,7 +3,6 @@
 
 var service_p2pCommunication_pb = require("../service/p2pCommunication_pb");
 var model_peer_pb = require("../model/peer_pb");
-var model_node_pb = require("../model/node_pb");
 var model_empty_pb = require("../model/empty_pb");
 var model_block_pb = require("../model/block_pb");
 var model_blockchain_pb = require("../model/blockchain_pb");
@@ -23,7 +22,7 @@ P2PCommunication.GetPeerInfo = {
   requestStream: false,
   responseStream: false,
   requestType: model_peer_pb.GetPeerInfoRequest,
-  responseType: model_node_pb.Node
+  responseType: model_peer_pb.GetPeerInfoResponse
 };
 
 P2PCommunication.GetMorePeers = {

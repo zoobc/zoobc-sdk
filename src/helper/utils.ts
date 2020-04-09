@@ -34,7 +34,7 @@ export function encryptPassword(password: string, salt: string = 'salt'): string
   }).toString();
 }
 
-export function ZBCAddressValidation(address: string): boolean {
+export function isZBCAddressValid(address: string): boolean {
   const addressBase64 = fromBase64Url(address);
   const addressBytes = base64ToBuffer(addressBase64);
   if (addressBytes.length == 33 && addressBase64.length == 44) {

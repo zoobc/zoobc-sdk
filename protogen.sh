@@ -156,7 +156,7 @@ if [[ $platform == 'linux' ]]; then
   sudo $PROTOC \
     --plugin=protoc-gen-grpc-web=${GRPC_WEB_PATH} \
     --plugin=protoc-gen-ts=${PROTOC_GEN_TS} \
-    --ts_out=service=true:${DIST_DIR} \
+    --ts_out=service=grpc-web:${DIST_DIR} \
     --js_out=import_style=commonjs,binary:${DIST_DIR} \
     --grpc-web_out=import_style=commonjs,mode=grpcwebtext:${DIST_DIR} \
     ./schema/model/*.proto \
@@ -167,7 +167,7 @@ else
   $PROTOC \
     --plugin=protoc-gen-grpc-web=${GRPC_WEB_PATH} \
     --plugin=protoc-gen-ts=${PROTOC_GEN_TS} \
-    --ts_out=service=true:${DIST_DIR} \
+    --ts_out=service=grpc-web:${DIST_DIR} \
     --js_out=import_style=commonjs,binary:${DIST_DIR} \
     --grpc-web_out=import_style=commonjs,mode=grpcwebtext:${DIST_DIR} \
     ./schema/model/*.proto \

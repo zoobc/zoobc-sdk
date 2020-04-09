@@ -12,7 +12,9 @@ export { RegisterNodeInterface } from './helper/transaction-builder/register-nod
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
-export { getZBCAdress, ZBCAddressValidation, isZBCPublicKeyValid } from './helper/utils';
+export { EscrowApprovalInterface } from './helper/transaction-builder/escrow-transaction';
+export { SendMoneyInterface } from './helper/transaction-builder/send-money';
+export { getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
 declare const zoobc: {
@@ -20,11 +22,13 @@ declare const zoobc: {
         sendMoney: (data: import("./helper/transaction-builder/send-money").SendMoneyInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
         get: (id: string) => Promise<import("../grpc/model/transaction_pb").Transaction.AsObject>;
         getList: (params?: import("./Transactions").TransactionListParams | undefined) => Promise<import("../grpc/model/transaction_pb").GetTransactionsResponse.AsObject>;
+        getTransactionMinimumFee: (data: import("./helper/transaction-builder/send-money").SendMoneyInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").GetTransactionMinimumFeeResponse.AsObject>;
     };
     Network: {
         list: (hosts: import("./Network").HostInterface[]) => void;
         set: (idx: number) => void;
         selected: () => import("./Network").HostInterface;
+        ping: () => Promise<string>;
     };
     Wallet: {
         encryptPassphrase: typeof import("./Wallet").encryptPassphrase;
@@ -61,8 +65,8 @@ declare const zoobc: {
     };
     Block: {
         getBlocks: (params: import("./Block").BlockListParams) => Promise<import("../grpc/model/block_pb").GetBlocksResponse.AsObject>;
-        getBlockById: (id: string, transport?: import("@improbable-eng/grpc-web/dist/typings/transports/Transport").TransportFactory | undefined) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
-        getBlockByHeight: (height: number, transport?: import("@improbable-eng/grpc-web/dist/typings/transports/Transport").TransportFactory | undefined) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
+        getBlockById: (id: string) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
+        getBlockByHeight: (height: number) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
     };
 };
 export default zoobc;
