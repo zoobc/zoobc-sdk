@@ -68,5 +68,9 @@ declare const zoobc: {
         getBlockById: (id: string) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
         getBlockByHeight: (height: number) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
     };
+    MultiSignature: {
+        createMultiSigAddressBuffer: typeof import("./MultiSignature").createMultiSigAddressBuffer;
+        getMultiSignAddress: typeof import("./MultiSignature").getMultiSignAddress;
+    };
 };
 export default zoobc;

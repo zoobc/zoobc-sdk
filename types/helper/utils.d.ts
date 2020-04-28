@@ -1,5 +1,6 @@
 /// <reference types="node" />
 export declare function getZBCAdress(publicKey: Uint8Array): string;
+export declare function getChecksumByte(bytes: Uint8Array): Uint8Array;
 export declare function encryptPassword(password: string, salt?: string): string;
 export declare function isZBCAddressValid(address: string): boolean;
 export declare function isZBCPublicKeyValid(pubkey: string): boolean;

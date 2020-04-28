@@ -8,6 +8,7 @@ import Node from './Node';
 import Escrows from './Escrows';
 import Poown from './Poown';
 import Block from './Block';
+import MultiSignature from './MultiSignature';
 
 export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
@@ -41,6 +42,7 @@ const zoobc = {
   Escrows,
   Mempool,
   Block,
+  MultiSignature,
 };
 
 export default zoobc;

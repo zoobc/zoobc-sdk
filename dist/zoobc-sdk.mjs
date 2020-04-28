@@ -3,6 +3,7 @@ import grpcWeb, { grpc as grpc$a } from '@improbable-eng/grpc-web';
 import { PBKDF2, AES, enc } from 'crypto-js';
 import BN from 'bn.js';
 import { Observable } from 'rxjs';
+import { sha3_256 } from 'js-sha3';
 import { sign } from 'tweetnacl';
 import { mnemonicToSeedSync, setDefaultWordlist, generateMnemonic, validateMnemonic } from 'bip39';
 import { fromSeed } from 'bip32';
@@ -38169,6 +38170,37 @@ function getBlockByHeight(height) {
 }
 var Block = { getBlocks: getBlocks, getBlockById: getBlockById, getBlockByHeight: getBlockByHeight };
 
+function createMultiSigAddressBuffer(multiSigAddress) {
+    var nonce = multiSigAddress.nonce, minSigs = multiSigAddress.minSigs;
+    var participants = multiSigAddress.participants;
+    participants = participants.sort();
+    var nonceB = writeInt32(nonce);
+    var minSigB = writeInt32(minSigs);
+    var lengthParticipants = writeInt32(participants.length);
+    var participantsB = new Buffer([]);
+    participants.forEach(function (p) {
+        var lengthAddress = writeInt32(p.length);
+        var address = Buffer.from(p, 'utf-8');
+        participantsB = Buffer.concat([participantsB, lengthAddress, address]);
+    });
+    return Buffer.concat([minSigB, nonceB, lengthParticipants, participantsB]);
+}
+function getMultiSignAddress(multiSigAddress) {
+    var buffer = createMultiSigAddressBuffer(multiSigAddress);
+    var hashed = Buffer.from(sha3_256(buffer), 'hex');
+    var checksum = Buffer.from(getChecksumByte(hashed));
+    var binary = '';
+    var bytes = new Buffer([]);
+    console.log(checksum);
+    bytes = Buffer.concat([hashed, checksum]);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return toBase64Url(window.btoa(binary));
+}
+var MultiSignature = { createMultiSigAddressBuffer: createMultiSigAddressBuffer, getMultiSignAddress: getMultiSignAddress };
+
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -39297,6 +39329,7 @@ var zoobc = {
     Escrows: Escrows,
     Mempool: Mempool,
     Block: Block,
+    MultiSignature: MultiSignature,
 };
 
 export default zoobc;
