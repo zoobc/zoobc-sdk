@@ -3,7 +3,7 @@ import { AccountBalanceServiceClient } from '../grpc/service/accountBalance_pb_s
 import Network from './Network';
 import { grpc } from '@improbable-eng/grpc-web';
 
-export function getBalance(address: string): Promise<GetAccountBalanceResponse.AsObject> {
+function getBalance(address: string): Promise<GetAccountBalanceResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetAccountBalanceRequest();

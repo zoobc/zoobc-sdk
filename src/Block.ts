@@ -1,8 +1,6 @@
 import { GetBlocksResponse, GetBlocksRequest, GetBlockRequest, BlockExtendedInfo } from '../grpc/model/block_pb';
 import { BlockServiceClient } from '../grpc/service/block_pb_service';
 import Network from './Network';
-import { RpcOptions } from '@improbable-eng/grpc-web/dist/typings/client';
-import { TransportFactory } from '@improbable-eng/grpc-web/dist/typings/transports/Transport';
 
 export interface BlockListParams {
   height: number;
@@ -30,11 +28,10 @@ function getBlockById(id: string): Promise<BlockExtendedInfo.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetBlockRequest();
-    const clientOptions: RpcOptions = {};
 
     request.setId(id);
 
-    const client = new BlockServiceClient(networkIP.host, clientOptions);
+    const client = new BlockServiceClient(networkIP.host);
     client.getBlock(request, (err, res) => {
       if (err) reject(err);
       if (res) resolve(res.toObject());
