@@ -8,17 +8,28 @@ import Node from './Node';
 import Escrows from './Escrows';
 import Poown from './Poown';
 import Block from './Block';
+import MultiSignature from './MultiSignature';
 
 export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
 
+// EXPORT INTERFACE
 export { EscrowListParams } from './Escrows';
 export { NodeListParams, NodeParams } from './Node';
 export { MempoolListParams } from './Mempool';
 export { TransactionListParams } from './Transactions';
 export { BlockListParams } from './Block';
+export {
+  MultiSigAddress,
+  MultisigPendingListParams,
+  MultisigInfoParams,
+  MultisigPendingTxResponse,
+  MultisigPendingTxDetailResponse,
+  MultisigInfoResponse,
+} from './MultiSignature';
 
+// EXPORT HELPER INTERFACE
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
@@ -41,6 +52,7 @@ const zoobc = {
   Escrows,
   Mempool,
   Block,
+  MultiSignature,
 };
 
 export default zoobc;

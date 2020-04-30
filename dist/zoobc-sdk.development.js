@@ -10,6 +10,7 @@ var grpcWeb__default = _interopDefault(grpcWeb);
 var CryptoJS = require('crypto-js');
 var BN = _interopDefault(require('bn.js'));
 var rxjs = require('rxjs');
+var jsSha3 = require('js-sha3');
 var tweetnacl = require('tweetnacl');
 var bip39 = require('bip39');
 var bip32 = require('bip32');
@@ -17915,6 +17916,9 @@ proto.model.PendingTransactionStatus = {
 
 goog.object.extend(exports, proto.model);
 });
+var multiSignature_pb_1 = multiSignature_pb.GetPendingTransactionsRequest;
+var multiSignature_pb_2 = multiSignature_pb.GetPendingTransactionDetailByTransactionHashRequest;
+var multiSignature_pb_3 = multiSignature_pb.GetMultisignatureInfoRequest;
 
 var transaction_pb = createCommonjsModule(function (module, exports) {
 // source: model/transaction.proto
@@ -38149,9 +38153,8 @@ function getBlockById(id) {
     return new Promise(function (resolve, reject) {
         var networkIP = Network$1.selected();
         var request = new block_pb_2();
-        var clientOptions = {};
         request.setId(id);
-        var client = new BlockServiceClient_1(networkIP.host, clientOptions);
+        var client = new BlockServiceClient_1(networkIP.host);
         client.getBlock(request, function (err, res) {
             if (err)
                 reject(err);
@@ -38175,6 +38178,256 @@ function getBlockByHeight(height) {
     });
 }
 var Block = { getBlocks: getBlocks, getBlockById: getBlockById, getBlockByHeight: getBlockByHeight };
+
+// source: service/multiSignature.proto
+/**
+ * @fileoverview
+ * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
+ * @public
+ */
+// GENERATED CODE -- DO NOT EDIT!
+
+
+var goog$a = googleProtobuf;
+var global$a = Function('return this')();
+
+
+goog$a.object.extend(proto, multiSignature_pb);
+
+goog$a.object.extend(proto, annotations_pb);
+
+// package: service
+// file: service/multiSignature.proto
+
+
+
+var grpc$a = grpcWeb__default.grpc;
+
+var MultisigService = (function () {
+  function MultisigService() {}
+  MultisigService.serviceName = "service.MultisigService";
+  return MultisigService;
+}());
+
+MultisigService.GetPendingTransactions = {
+  methodName: "GetPendingTransactions",
+  service: MultisigService,
+  requestStream: false,
+  responseStream: false,
+  requestType: multiSignature_pb.GetPendingTransactionsRequest,
+  responseType: multiSignature_pb.GetPendingTransactionsResponse
+};
+
+MultisigService.GetPendingTransactionDetailByTransactionHash = {
+  methodName: "GetPendingTransactionDetailByTransactionHash",
+  service: MultisigService,
+  requestStream: false,
+  responseStream: false,
+  requestType: multiSignature_pb.GetPendingTransactionDetailByTransactionHashRequest,
+  responseType: multiSignature_pb.GetPendingTransactionDetailByTransactionHashResponse
+};
+
+MultisigService.GetMultisignatureInfo = {
+  methodName: "GetMultisignatureInfo",
+  service: MultisigService,
+  requestStream: false,
+  responseStream: false,
+  requestType: multiSignature_pb.GetMultisignatureInfoRequest,
+  responseType: multiSignature_pb.GetMultisignatureInfoResponse
+};
+
+function MultisigServiceClient(serviceHost, options) {
+  this.serviceHost = serviceHost;
+  this.options = options || {};
+}
+
+MultisigServiceClient.prototype.getPendingTransactions = function getPendingTransactions(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc$a.unary(MultisigService.GetPendingTransactions, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc$a.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+MultisigServiceClient.prototype.getPendingTransactionDetailByTransactionHash = function getPendingTransactionDetailByTransactionHash(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc$a.unary(MultisigService.GetPendingTransactionDetailByTransactionHash, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc$a.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+MultisigServiceClient.prototype.getMultisignatureInfo = function getMultisignatureInfo(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc$a.unary(MultisigService.GetMultisignatureInfo, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc$a.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+var MultisigServiceClient_1 = MultisigServiceClient;
+
+function generateMultiSigInfo(multiSigAddress) {
+    var nonce = multiSigAddress.nonce, minSigs = multiSigAddress.minSigs;
+    var participants = multiSigAddress.participants;
+    participants = participants.sort();
+    var nonceB = writeInt32(nonce);
+    var minSigB = writeInt32(minSigs);
+    var lengthParticipants = writeInt32(participants.length);
+    var participantsB = new Buffer([]);
+    participants.forEach(function (p) {
+        var lengthAddress = writeInt32(p.length);
+        var address = Buffer.from(p, 'utf-8');
+        participantsB = Buffer.concat([participantsB, lengthAddress, address]);
+    });
+    return Buffer.concat([minSigB, nonceB, lengthParticipants, participantsB]);
+}
+function createMultiSigAddress(multiSigAddress) {
+    var buffer = generateMultiSigInfo(multiSigAddress);
+    var hashed = Buffer.from(jsSha3.sha3_256(buffer), 'hex');
+    var checksum = Buffer.from(getChecksumByte(hashed));
+    var binary = '';
+    var bytes = new Buffer([]);
+    bytes = Buffer.concat([hashed, checksum]);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return toBase64Url(window.btoa(binary));
+}
+function getPendingList(params) {
+    return new Promise(function (resolve, reject) {
+        var request = new multiSignature_pb_1();
+        var networkIP = Network$1.selected();
+        var address = params.address, pagination = params.pagination, status = params.status;
+        if (address)
+            request.setSenderaddress(address);
+        if (status)
+            request.setStatus(status);
+        if (pagination) {
+            var reqPagination = new pagination_pb_1();
+            reqPagination.setLimit(pagination.limit || 10);
+            reqPagination.setPage(pagination.page || 1);
+            reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
+            request.setPagination(reqPagination);
+        }
+        var client = new MultisigServiceClient_1(networkIP.host);
+        client.getPendingTransactions(request, function (err, res) {
+            if (err)
+                reject(err);
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+function getPendingByTxHash(txHash) {
+    return new Promise(function (resolve, reject) {
+        var request = new multiSignature_pb_2();
+        var networkIP = Network$1.selected();
+        request.setTransactionhashhex(txHash);
+        var client = new MultisigServiceClient_1(networkIP.host);
+        client.getPendingTransactionDetailByTransactionHash(request, function (err, res) {
+            if (err)
+                reject(err);
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+function getMultisigInfo(params) {
+    return new Promise(function (resolve, reject) {
+        var request = new multiSignature_pb_3();
+        var networkIP = Network$1.selected();
+        var address = params.address, pagination = params.pagination;
+        request.setMultisigaddress(address);
+        if (pagination) {
+            var reqPagination = new pagination_pb_1();
+            reqPagination.setLimit(pagination.limit || 10);
+            reqPagination.setPage(pagination.page || 1);
+            reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
+            request.setPagination(reqPagination);
+        }
+        var client = new MultisigServiceClient_1(networkIP.host);
+        client.getMultisignatureInfo(request, function (err, res) {
+            if (err)
+                reject(err);
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+var MultiSignature = { getPendingByTxHash: getPendingByTxHash, getPendingList: getPendingList, createMultiSigAddress: createMultiSigAddress, generateMultiSigInfo: generateMultiSigInfo, getMultisigInfo: getMultisigInfo };
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -39304,6 +39557,7 @@ var zoobc = {
     Escrows: Escrows,
     Mempool: Mempool,
     Block: Block,
+    MultiSignature: MultiSignature,
 };
 
 exports.RequestType = auth_pb_1;
