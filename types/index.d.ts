@@ -8,6 +8,7 @@ export { MempoolListParams } from './Mempool';
 export { TransactionListParams } from './Transactions';
 export { BlockListParams } from './Block';
 export { MultiSigAddress, MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, } from './MultiSignature';
+export { AccountDatasetListParams, AccountDatasetParams } from './AccountDataset';
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
@@ -75,6 +76,10 @@ declare const zoobc: {
         createMultiSigAddress: (multiSigAddress: import("./MultiSignature").MultiSigAddress) => string;
         generateMultiSigInfo: (multiSigAddress: import("./MultiSignature").MultiSigAddress) => Buffer;
         getMultisigInfo: (params: import("./MultiSignature").MultisigInfoParams) => Promise<import("../grpc/model/multiSignature_pb").GetMultisignatureInfoResponse.AsObject>;
+    };
+    AccountDataset: {
+        getList: typeof import("./AccountDataset").getList;
+        get: typeof import("./AccountDataset").get;
     };
 };
 export default zoobc;
