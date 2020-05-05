@@ -35175,7 +35175,7 @@ HostServiceClient.prototype.getHostPeers = function getHostPeers(requestMessage,
 
 var HostServiceClient_1 = HostServiceClient;
 
-function getBlock() {
+function getInfo() {
     return new Promise(function (resolve, reject) {
         var networkIP = Network$1.selected();
         var request = new empty_pb_1();
@@ -35188,7 +35188,7 @@ function getBlock() {
         });
     });
 }
-var Host = { getBlock: getBlock };
+var Host = { getInfo: getInfo };
 
 var nodeHardware_pb = createCommonjsModule(function (module, exports) {
 // source: model/nodeHardware.proto

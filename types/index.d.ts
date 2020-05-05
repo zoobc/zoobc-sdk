@@ -40,7 +40,7 @@ declare const zoobc: {
         getBalance: (address: string) => Promise<import("../grpc/model/accountBalance_pb").GetAccountBalanceResponse.AsObject>;
     };
     Host: {
-        getBlock: () => Promise<import("../grpc/model/host_pb").HostInfo.AsObject>;
+        getInfo: () => Promise<import("../grpc/model/host_pb").HostInfo.AsObject>;
     };
     Node: {
         register: (data: import("./helper/transaction-builder/register-node").RegisterNodeInterface, childSeed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
