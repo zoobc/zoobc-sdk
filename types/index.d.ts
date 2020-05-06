@@ -7,6 +7,8 @@ export { NodeListParams, NodeParams } from './Node';
 export { MempoolListParams } from './Mempool';
 export { TransactionListParams } from './Transactions';
 export { BlockListParams } from './Block';
+export { MultiSigAddress, MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, } from './MultiSignature';
+export { AccountDatasetListParams, AccountDatasetParams } from './AccountDataset';
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
@@ -31,14 +33,14 @@ declare const zoobc: {
         ping: () => Promise<string>;
     };
     Wallet: {
-        encryptPassphrase: typeof import("./Wallet").encryptPassphrase;
-        decryptPassphrase: typeof import("./Wallet").decryptPassphrase;
+        encryptPassphrase: (passphrase: string, password: string, salt?: string) => string;
+        decryptPassphrase: (encPassphrase: string, password: string, salt?: string) => string;
     };
     Account: {
-        getBalance: typeof import("./Account").getBalance;
+        getBalance: (address: string) => Promise<import("../grpc/model/accountBalance_pb").GetAccountBalanceResponse.AsObject>;
     };
     Host: {
-        getBlock: () => Promise<import("../grpc/model/host_pb").HostInfo.AsObject>;
+        getInfo: () => Promise<import("../grpc/model/host_pb").HostInfo.AsObject>;
     };
     Node: {
         register: (data: import("./helper/transaction-builder/register-node").RegisterNodeInterface, childSeed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
@@ -67,6 +69,17 @@ declare const zoobc: {
         getBlocks: (params: import("./Block").BlockListParams) => Promise<import("../grpc/model/block_pb").GetBlocksResponse.AsObject>;
         getBlockById: (id: string) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
         getBlockByHeight: (height: number) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
+    };
+    MultiSignature: {
+        getPendingByTxHash: (txHash: string) => Promise<import("../grpc/model/multiSignature_pb").GetPendingTransactionDetailByTransactionHashResponse.AsObject>;
+        getPendingList: (params: import("./MultiSignature").MultisigPendingListParams) => Promise<import("../grpc/model/multiSignature_pb").GetPendingTransactionsResponse.AsObject>;
+        createMultiSigAddress: (multiSigAddress: import("./MultiSignature").MultiSigAddress) => string;
+        generateMultiSigInfo: (multiSigAddress: import("./MultiSignature").MultiSigAddress) => Buffer;
+        getMultisigInfo: (params: import("./MultiSignature").MultisigInfoParams) => Promise<import("../grpc/model/multiSignature_pb").GetMultisignatureInfoResponse.AsObject>;
+    };
+    AccountDataset: {
+        getList: typeof import("./AccountDataset").getList;
+        get: typeof import("./AccountDataset").get;
     };
 };
 export default zoobc;

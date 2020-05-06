@@ -1,8 +1,9 @@
 import googleProtobuf from 'google-protobuf';
-import grpcWeb, { grpc as grpc$a } from '@improbable-eng/grpc-web';
+import grpcWeb, { grpc as grpc$c } from '@improbable-eng/grpc-web';
 import { PBKDF2, AES, enc } from 'crypto-js';
 import BN from 'bn.js';
 import { Observable } from 'rxjs';
+import { sha3_256 } from 'js-sha3';
 import { sign } from 'tweetnacl';
 import { mnemonicToSeedSync, setDefaultWordlist, generateMnemonic, validateMnemonic } from 'bip39';
 import { fromSeed } from 'bip32';
@@ -17908,6 +17909,9 @@ proto.model.PendingTransactionStatus = {
 
 goog.object.extend(exports, proto.model);
 });
+var multiSignature_pb_1 = multiSignature_pb.GetPendingTransactionsRequest;
+var multiSignature_pb_2 = multiSignature_pb.GetPendingTransactionDetailByTransactionHashRequest;
+var multiSignature_pb_3 = multiSignature_pb.GetMultisignatureInfoRequest;
 
 var transaction_pb = createCommonjsModule(function (module, exports) {
 // source: model/transaction.proto
@@ -26779,7 +26783,7 @@ function getBalance(address) {
         client.getAccountBalance(request, function (err, res) {
             if (err) {
                 var code = err.code, message = err.message;
-                if (code == grpc$a.Code.NotFound) {
+                if (code == grpc$c.Code.NotFound) {
                     return resolve({
                         accountbalance: {
                             spendablebalance: '0',
@@ -26791,7 +26795,7 @@ function getBalance(address) {
                         },
                     });
                 }
-                else if (code != grpc$a.Code.OK)
+                else if (code != grpc$c.Code.OK)
                     return reject(message);
             }
             if (res)
@@ -35164,7 +35168,7 @@ HostServiceClient.prototype.getHostPeers = function getHostPeers(requestMessage,
 
 var HostServiceClient_1 = HostServiceClient;
 
-function getBlock() {
+function getInfo() {
     return new Promise(function (resolve, reject) {
         var networkIP = Network$1.selected();
         var request = new empty_pb_1();
@@ -35177,7 +35181,7 @@ function getBlock() {
         });
     });
 }
-var Host = { getBlock: getBlock };
+var Host = { getInfo: getInfo };
 
 var nodeHardware_pb = createCommonjsModule(function (module, exports) {
 // source: model/nodeHardware.proto
@@ -37590,7 +37594,7 @@ function createAuth(requestType, seed) {
 function request(auth, networkIp) {
     return new Promise(function (resolve, reject) {
         var request = new proofOfOwnership_pb_1();
-        var metadata = new grpc$a.Metadata({ authorization: auth });
+        var metadata = new grpc$c.Metadata({ authorization: auth });
         var client = new NodeAdminServiceClient_1(networkIp);
         client.getProofOfOwnership(request, metadata, function (err, res) {
             if (err)
@@ -37612,7 +37616,7 @@ function getHardwareInfo(networkIP, childSeed) {
         var auth = Poown.createAuth(auth_pb_1.GETNODEHARDWARE, childSeed);
         var request = new nodeHardware_pb_1();
         var client = new NodeHardwareServiceClient_1(networkIP)
-            .getNodeHardware(new grpc$a.Metadata({ authorization: auth }))
+            .getNodeHardware(new grpc$c.Metadata({ authorization: auth }))
             .write(request)
             .on('data', function (message) {
             observer.next(message.toObject());
@@ -37626,7 +37630,7 @@ function getHardwareInfo(networkIP, childSeed) {
 function generateNodeKey(networkIP, childSeed) {
     return new Promise(function (resolve, reject) {
         var auth = Poown.createAuth(auth_pb_1.GENERATETNODEKEY, childSeed);
-        var metadata = new grpc$a.Metadata({ authorization: auth });
+        var metadata = new grpc$c.Metadata({ authorization: auth });
         var request = new node_pb_1();
         var client = new NodeAdminServiceClient_1(networkIP);
         client.generateNodeKey(request, metadata, function (err, res) {
@@ -37691,9 +37695,9 @@ function get$2(params) {
         client.getNodeRegistration(request, function (err, res) {
             if (err) {
                 var code = err.code, message = err.message;
-                if (code == grpc$a.Code.NotFound)
+                if (code == grpc$c.Code.NotFound)
                     return resolve(undefined);
-                else if (code != grpc$a.Code.OK)
+                else if (code != grpc$c.Code.OK)
                     return reject(message);
             }
             if (res)
@@ -38142,9 +38146,8 @@ function getBlockById(id) {
     return new Promise(function (resolve, reject) {
         var networkIP = Network$1.selected();
         var request = new block_pb_2();
-        var clientOptions = {};
         request.setId(id);
-        var client = new BlockServiceClient_1(networkIP.host, clientOptions);
+        var client = new BlockServiceClient_1(networkIP.host);
         client.getBlock(request, function (err, res) {
             if (err)
                 reject(err);
@@ -38168,6 +38171,1493 @@ function getBlockByHeight(height) {
     });
 }
 var Block = { getBlocks: getBlocks, getBlockById: getBlockById, getBlockByHeight: getBlockByHeight };
+
+// source: service/multiSignature.proto
+/**
+ * @fileoverview
+ * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
+ * @public
+ */
+// GENERATED CODE -- DO NOT EDIT!
+
+
+var goog$a = googleProtobuf;
+var global$a = Function('return this')();
+
+
+goog$a.object.extend(proto, multiSignature_pb);
+
+goog$a.object.extend(proto, annotations_pb);
+
+// package: service
+// file: service/multiSignature.proto
+
+
+
+var grpc$a = grpcWeb.grpc;
+
+var MultisigService = (function () {
+  function MultisigService() {}
+  MultisigService.serviceName = "service.MultisigService";
+  return MultisigService;
+}());
+
+MultisigService.GetPendingTransactions = {
+  methodName: "GetPendingTransactions",
+  service: MultisigService,
+  requestStream: false,
+  responseStream: false,
+  requestType: multiSignature_pb.GetPendingTransactionsRequest,
+  responseType: multiSignature_pb.GetPendingTransactionsResponse
+};
+
+MultisigService.GetPendingTransactionDetailByTransactionHash = {
+  methodName: "GetPendingTransactionDetailByTransactionHash",
+  service: MultisigService,
+  requestStream: false,
+  responseStream: false,
+  requestType: multiSignature_pb.GetPendingTransactionDetailByTransactionHashRequest,
+  responseType: multiSignature_pb.GetPendingTransactionDetailByTransactionHashResponse
+};
+
+MultisigService.GetMultisignatureInfo = {
+  methodName: "GetMultisignatureInfo",
+  service: MultisigService,
+  requestStream: false,
+  responseStream: false,
+  requestType: multiSignature_pb.GetMultisignatureInfoRequest,
+  responseType: multiSignature_pb.GetMultisignatureInfoResponse
+};
+
+function MultisigServiceClient(serviceHost, options) {
+  this.serviceHost = serviceHost;
+  this.options = options || {};
+}
+
+MultisigServiceClient.prototype.getPendingTransactions = function getPendingTransactions(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc$a.unary(MultisigService.GetPendingTransactions, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc$a.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+MultisigServiceClient.prototype.getPendingTransactionDetailByTransactionHash = function getPendingTransactionDetailByTransactionHash(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc$a.unary(MultisigService.GetPendingTransactionDetailByTransactionHash, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc$a.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+MultisigServiceClient.prototype.getMultisignatureInfo = function getMultisignatureInfo(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc$a.unary(MultisigService.GetMultisignatureInfo, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc$a.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+var MultisigServiceClient_1 = MultisigServiceClient;
+
+function generateMultiSigInfo(multiSigAddress) {
+    var nonce = multiSigAddress.nonce, minSigs = multiSigAddress.minSigs;
+    var participants = multiSigAddress.participants;
+    participants = participants.sort();
+    var nonceB = writeInt32(nonce);
+    var minSigB = writeInt32(minSigs);
+    var lengthParticipants = writeInt32(participants.length);
+    var participantsB = new Buffer([]);
+    participants.forEach(function (p) {
+        var lengthAddress = writeInt32(p.length);
+        var address = Buffer.from(p, 'utf-8');
+        participantsB = Buffer.concat([participantsB, lengthAddress, address]);
+    });
+    return Buffer.concat([minSigB, nonceB, lengthParticipants, participantsB]);
+}
+function createMultiSigAddress(multiSigAddress) {
+    var buffer = generateMultiSigInfo(multiSigAddress);
+    var hashed = Buffer.from(sha3_256(buffer), 'hex');
+    var checksum = Buffer.from(getChecksumByte(hashed));
+    var binary = '';
+    var bytes = new Buffer([]);
+    bytes = Buffer.concat([hashed, checksum]);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return toBase64Url(window.btoa(binary));
+}
+function getPendingList(params) {
+    return new Promise(function (resolve, reject) {
+        var request = new multiSignature_pb_1();
+        var networkIP = Network$1.selected();
+        var address = params.address, pagination = params.pagination, status = params.status;
+        if (address)
+            request.setSenderaddress(address);
+        if (status)
+            request.setStatus(status);
+        if (pagination) {
+            var reqPagination = new pagination_pb_1();
+            reqPagination.setLimit(pagination.limit || 10);
+            reqPagination.setPage(pagination.page || 1);
+            reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
+            request.setPagination(reqPagination);
+        }
+        var client = new MultisigServiceClient_1(networkIP.host);
+        client.getPendingTransactions(request, function (err, res) {
+            if (err)
+                reject(err);
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+function getPendingByTxHash(txHash) {
+    return new Promise(function (resolve, reject) {
+        var request = new multiSignature_pb_2();
+        var networkIP = Network$1.selected();
+        request.setTransactionhashhex(txHash);
+        var client = new MultisigServiceClient_1(networkIP.host);
+        client.getPendingTransactionDetailByTransactionHash(request, function (err, res) {
+            if (err)
+                reject(err);
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+function getMultisigInfo(params) {
+    return new Promise(function (resolve, reject) {
+        var request = new multiSignature_pb_3();
+        var networkIP = Network$1.selected();
+        var address = params.address, pagination = params.pagination;
+        request.setMultisigaddress(address);
+        if (pagination) {
+            var reqPagination = new pagination_pb_1();
+            reqPagination.setLimit(pagination.limit || 10);
+            reqPagination.setPage(pagination.page || 1);
+            reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
+            request.setPagination(reqPagination);
+        }
+        var client = new MultisigServiceClient_1(networkIP.host);
+        client.getMultisignatureInfo(request, function (err, res) {
+            if (err)
+                reject(err);
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+var MultiSignature = { getPendingByTxHash: getPendingByTxHash, getPendingList: getPendingList, createMultiSigAddress: createMultiSigAddress, generateMultiSigInfo: generateMultiSigInfo, getMultisigInfo: getMultisigInfo };
+
+var accountDataset_pb = createCommonjsModule(function (module, exports) {
+// source: model/accountDataset.proto
+/**
+ * @fileoverview
+ * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
+ * @public
+ */
+// GENERATED CODE -- DO NOT EDIT!
+
+
+var goog = googleProtobuf;
+var global = Function('return this')();
+
+
+goog.object.extend(proto, pagination_pb);
+goog.exportSymbol('proto.model.AccountDataset', null, global);
+goog.exportSymbol('proto.model.AccountDatasetProperty', null, global);
+goog.exportSymbol('proto.model.GetAccountDatasetRequest', null, global);
+goog.exportSymbol('proto.model.GetAccountDatasetsRequest', null, global);
+goog.exportSymbol('proto.model.GetAccountDatasetsResponse', null, global);
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.model.AccountDataset = function(opt_data) {
+  googleProtobuf.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.model.AccountDataset, googleProtobuf.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.model.AccountDataset.displayName = 'proto.model.AccountDataset';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.model.GetAccountDatasetsRequest = function(opt_data) {
+  googleProtobuf.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.model.GetAccountDatasetsRequest, googleProtobuf.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.model.GetAccountDatasetsRequest.displayName = 'proto.model.GetAccountDatasetsRequest';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.model.GetAccountDatasetsResponse = function(opt_data) {
+  googleProtobuf.Message.initialize(this, opt_data, 0, -1, proto.model.GetAccountDatasetsResponse.repeatedFields_, null);
+};
+goog.inherits(proto.model.GetAccountDatasetsResponse, googleProtobuf.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.model.GetAccountDatasetsResponse.displayName = 'proto.model.GetAccountDatasetsResponse';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.model.GetAccountDatasetRequest = function(opt_data) {
+  googleProtobuf.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.model.GetAccountDatasetRequest, googleProtobuf.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.model.GetAccountDatasetRequest.displayName = 'proto.model.GetAccountDatasetRequest';
+}
+
+
+
+if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.model.AccountDataset.prototype.toObject = function(opt_includeInstance) {
+  return proto.model.AccountDataset.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.model.AccountDataset} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.AccountDataset.toObject = function(includeInstance, msg) {
+  var obj = {
+    setteraccountaddress: googleProtobuf.Message.getFieldWithDefault(msg, 1, ""),
+    recipientaccountaddress: googleProtobuf.Message.getFieldWithDefault(msg, 2, ""),
+    property: googleProtobuf.Message.getFieldWithDefault(msg, 3, ""),
+    value: googleProtobuf.Message.getFieldWithDefault(msg, 4, ""),
+    timestampstarts: googleProtobuf.Message.getFieldWithDefault(msg, 5, 0),
+    timestampexpires: googleProtobuf.Message.getFieldWithDefault(msg, 6, 0),
+    height: googleProtobuf.Message.getFieldWithDefault(msg, 7, 0),
+    latest: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 8, false)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.model.AccountDataset}
+ */
+proto.model.AccountDataset.deserializeBinary = function(bytes) {
+  var reader = new googleProtobuf.BinaryReader(bytes);
+  var msg = new proto.model.AccountDataset;
+  return proto.model.AccountDataset.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.model.AccountDataset} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.model.AccountDataset}
+ */
+proto.model.AccountDataset.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setSetteraccountaddress(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setRecipientaccountaddress(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setProperty(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setValue(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setTimestampstarts(value);
+      break;
+    case 6:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setTimestampexpires(value);
+      break;
+    case 7:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setHeight(value);
+      break;
+    case 8:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setLatest(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.model.AccountDataset.prototype.serializeBinary = function() {
+  var writer = new googleProtobuf.BinaryWriter();
+  proto.model.AccountDataset.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.model.AccountDataset} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.AccountDataset.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getSetteraccountaddress();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getRecipientaccountaddress();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+  f = message.getProperty();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
+  f = message.getValue();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
+  f = message.getTimestampstarts();
+  if (f !== 0) {
+    writer.writeUint64(
+      5,
+      f
+    );
+  }
+  f = message.getTimestampexpires();
+  if (f !== 0) {
+    writer.writeUint64(
+      6,
+      f
+    );
+  }
+  f = message.getHeight();
+  if (f !== 0) {
+    writer.writeUint32(
+      7,
+      f
+    );
+  }
+  f = message.getLatest();
+  if (f) {
+    writer.writeBool(
+      8,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string SetterAccountAddress = 1;
+ * @return {string}
+ */
+proto.model.AccountDataset.prototype.getSetteraccountaddress = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/** @param {string} value */
+proto.model.AccountDataset.prototype.setSetteraccountaddress = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string RecipientAccountAddress = 2;
+ * @return {string}
+ */
+proto.model.AccountDataset.prototype.getRecipientaccountaddress = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/** @param {string} value */
+proto.model.AccountDataset.prototype.setRecipientaccountaddress = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string Property = 3;
+ * @return {string}
+ */
+proto.model.AccountDataset.prototype.getProperty = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/** @param {string} value */
+proto.model.AccountDataset.prototype.setProperty = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional string Value = 4;
+ * @return {string}
+ */
+proto.model.AccountDataset.prototype.getValue = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/** @param {string} value */
+proto.model.AccountDataset.prototype.setValue = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 4, value);
+};
+
+
+/**
+ * optional uint64 TimestampStarts = 5;
+ * @return {number}
+ */
+proto.model.AccountDataset.prototype.getTimestampstarts = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/** @param {number} value */
+proto.model.AccountDataset.prototype.setTimestampstarts = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * optional uint64 TimestampExpires = 6;
+ * @return {number}
+ */
+proto.model.AccountDataset.prototype.getTimestampexpires = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/** @param {number} value */
+proto.model.AccountDataset.prototype.setTimestampexpires = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 6, value);
+};
+
+
+/**
+ * optional uint32 Height = 7;
+ * @return {number}
+ */
+proto.model.AccountDataset.prototype.getHeight = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 7, 0));
+};
+
+
+/** @param {number} value */
+proto.model.AccountDataset.prototype.setHeight = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 7, value);
+};
+
+
+/**
+ * optional bool Latest = 8;
+ * @return {boolean}
+ */
+proto.model.AccountDataset.prototype.getLatest = function() {
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 8, false));
+};
+
+
+/** @param {boolean} value */
+proto.model.AccountDataset.prototype.setLatest = function(value) {
+  googleProtobuf.Message.setProto3BooleanField(this, 8, value);
+};
+
+
+
+
+
+if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.model.GetAccountDatasetsRequest.prototype.toObject = function(opt_includeInstance) {
+  return proto.model.GetAccountDatasetsRequest.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.model.GetAccountDatasetsRequest} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetAccountDatasetsRequest.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    property: googleProtobuf.Message.getFieldWithDefault(msg, 1, ""),
+    value: googleProtobuf.Message.getFieldWithDefault(msg, 2, ""),
+    recipientaccountaddress: googleProtobuf.Message.getFieldWithDefault(msg, 3, ""),
+    setteraccountaddress: googleProtobuf.Message.getFieldWithDefault(msg, 4, ""),
+    height: googleProtobuf.Message.getFieldWithDefault(msg, 5, 0),
+    pagination: (f = msg.getPagination()) && pagination_pb.Pagination.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.model.GetAccountDatasetsRequest}
+ */
+proto.model.GetAccountDatasetsRequest.deserializeBinary = function(bytes) {
+  var reader = new googleProtobuf.BinaryReader(bytes);
+  var msg = new proto.model.GetAccountDatasetsRequest;
+  return proto.model.GetAccountDatasetsRequest.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.model.GetAccountDatasetsRequest} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.model.GetAccountDatasetsRequest}
+ */
+proto.model.GetAccountDatasetsRequest.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setProperty(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setValue(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setRecipientaccountaddress(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setSetteraccountaddress(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setHeight(value);
+      break;
+    case 6:
+      var value = new pagination_pb.Pagination;
+      reader.readMessage(value,pagination_pb.Pagination.deserializeBinaryFromReader);
+      msg.setPagination(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.model.GetAccountDatasetsRequest.prototype.serializeBinary = function() {
+  var writer = new googleProtobuf.BinaryWriter();
+  proto.model.GetAccountDatasetsRequest.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.model.GetAccountDatasetsRequest} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetAccountDatasetsRequest.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getProperty();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getValue();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+  f = message.getRecipientaccountaddress();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
+  f = message.getSetteraccountaddress();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
+  f = message.getHeight();
+  if (f !== 0) {
+    writer.writeUint32(
+      5,
+      f
+    );
+  }
+  f = message.getPagination();
+  if (f != null) {
+    writer.writeMessage(
+      6,
+      f,
+      pagination_pb.Pagination.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional string Property = 1;
+ * @return {string}
+ */
+proto.model.GetAccountDatasetsRequest.prototype.getProperty = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/** @param {string} value */
+proto.model.GetAccountDatasetsRequest.prototype.setProperty = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string Value = 2;
+ * @return {string}
+ */
+proto.model.GetAccountDatasetsRequest.prototype.getValue = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/** @param {string} value */
+proto.model.GetAccountDatasetsRequest.prototype.setValue = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string RecipientAccountAddress = 3;
+ * @return {string}
+ */
+proto.model.GetAccountDatasetsRequest.prototype.getRecipientaccountaddress = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/** @param {string} value */
+proto.model.GetAccountDatasetsRequest.prototype.setRecipientaccountaddress = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional string SetterAccountAddress = 4;
+ * @return {string}
+ */
+proto.model.GetAccountDatasetsRequest.prototype.getSetteraccountaddress = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/** @param {string} value */
+proto.model.GetAccountDatasetsRequest.prototype.setSetteraccountaddress = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 4, value);
+};
+
+
+/**
+ * optional uint32 Height = 5;
+ * @return {number}
+ */
+proto.model.GetAccountDatasetsRequest.prototype.getHeight = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/** @param {number} value */
+proto.model.GetAccountDatasetsRequest.prototype.setHeight = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * optional Pagination Pagination = 6;
+ * @return {?proto.model.Pagination}
+ */
+proto.model.GetAccountDatasetsRequest.prototype.getPagination = function() {
+  return /** @type{?proto.model.Pagination} */ (
+    googleProtobuf.Message.getWrapperField(this, pagination_pb.Pagination, 6));
+};
+
+
+/** @param {?proto.model.Pagination|undefined} value */
+proto.model.GetAccountDatasetsRequest.prototype.setPagination = function(value) {
+  googleProtobuf.Message.setWrapperField(this, 6, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ */
+proto.model.GetAccountDatasetsRequest.prototype.clearPagination = function() {
+  this.setPagination(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.model.GetAccountDatasetsRequest.prototype.hasPagination = function() {
+  return googleProtobuf.Message.getField(this, 6) != null;
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.model.GetAccountDatasetsResponse.repeatedFields_ = [2];
+
+
+
+if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.model.GetAccountDatasetsResponse.prototype.toObject = function(opt_includeInstance) {
+  return proto.model.GetAccountDatasetsResponse.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.model.GetAccountDatasetsResponse} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetAccountDatasetsResponse.toObject = function(includeInstance, msg) {
+  var obj = {
+    total: googleProtobuf.Message.getFieldWithDefault(msg, 1, "0"),
+    accountdatasetsList: googleProtobuf.Message.toObjectList(msg.getAccountdatasetsList(),
+    proto.model.AccountDataset.toObject, includeInstance)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.model.GetAccountDatasetsResponse}
+ */
+proto.model.GetAccountDatasetsResponse.deserializeBinary = function(bytes) {
+  var reader = new googleProtobuf.BinaryReader(bytes);
+  var msg = new proto.model.GetAccountDatasetsResponse;
+  return proto.model.GetAccountDatasetsResponse.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.model.GetAccountDatasetsResponse} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.model.GetAccountDatasetsResponse}
+ */
+proto.model.GetAccountDatasetsResponse.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readUint64String());
+      msg.setTotal(value);
+      break;
+    case 2:
+      var value = new proto.model.AccountDataset;
+      reader.readMessage(value,proto.model.AccountDataset.deserializeBinaryFromReader);
+      msg.addAccountdatasets(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.model.GetAccountDatasetsResponse.prototype.serializeBinary = function() {
+  var writer = new googleProtobuf.BinaryWriter();
+  proto.model.GetAccountDatasetsResponse.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.model.GetAccountDatasetsResponse} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetAccountDatasetsResponse.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getTotal();
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
+      1,
+      f
+    );
+  }
+  f = message.getAccountdatasetsList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      2,
+      f,
+      proto.model.AccountDataset.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional uint64 Total = 1;
+ * @return {string}
+ */
+proto.model.GetAccountDatasetsResponse.prototype.getTotal = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, "0"));
+};
+
+
+/** @param {string} value */
+proto.model.GetAccountDatasetsResponse.prototype.setTotal = function(value) {
+  googleProtobuf.Message.setProto3StringIntField(this, 1, value);
+};
+
+
+/**
+ * repeated AccountDataset AccountDatasets = 2;
+ * @return {!Array<!proto.model.AccountDataset>}
+ */
+proto.model.GetAccountDatasetsResponse.prototype.getAccountdatasetsList = function() {
+  return /** @type{!Array<!proto.model.AccountDataset>} */ (
+    googleProtobuf.Message.getRepeatedWrapperField(this, proto.model.AccountDataset, 2));
+};
+
+
+/** @param {!Array<!proto.model.AccountDataset>} value */
+proto.model.GetAccountDatasetsResponse.prototype.setAccountdatasetsList = function(value) {
+  googleProtobuf.Message.setRepeatedWrapperField(this, 2, value);
+};
+
+
+/**
+ * @param {!proto.model.AccountDataset=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.AccountDataset}
+ */
+proto.model.GetAccountDatasetsResponse.prototype.addAccountdatasets = function(opt_value, opt_index) {
+  return googleProtobuf.Message.addToRepeatedWrapperField(this, 2, opt_value, proto.model.AccountDataset, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.GetAccountDatasetsResponse.prototype.clearAccountdatasetsList = function() {
+  this.setAccountdatasetsList([]);
+};
+
+
+
+
+
+if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.model.GetAccountDatasetRequest.prototype.toObject = function(opt_includeInstance) {
+  return proto.model.GetAccountDatasetRequest.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.model.GetAccountDatasetRequest} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetAccountDatasetRequest.toObject = function(includeInstance, msg) {
+  var obj = {
+    property: googleProtobuf.Message.getFieldWithDefault(msg, 1, ""),
+    recipientaccountaddress: googleProtobuf.Message.getFieldWithDefault(msg, 2, "")
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.model.GetAccountDatasetRequest}
+ */
+proto.model.GetAccountDatasetRequest.deserializeBinary = function(bytes) {
+  var reader = new googleProtobuf.BinaryReader(bytes);
+  var msg = new proto.model.GetAccountDatasetRequest;
+  return proto.model.GetAccountDatasetRequest.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.model.GetAccountDatasetRequest} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.model.GetAccountDatasetRequest}
+ */
+proto.model.GetAccountDatasetRequest.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setProperty(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setRecipientaccountaddress(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.model.GetAccountDatasetRequest.prototype.serializeBinary = function() {
+  var writer = new googleProtobuf.BinaryWriter();
+  proto.model.GetAccountDatasetRequest.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.model.GetAccountDatasetRequest} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetAccountDatasetRequest.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getProperty();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getRecipientaccountaddress();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string Property = 1;
+ * @return {string}
+ */
+proto.model.GetAccountDatasetRequest.prototype.getProperty = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/** @param {string} value */
+proto.model.GetAccountDatasetRequest.prototype.setProperty = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string RecipientAccountAddress = 2;
+ * @return {string}
+ */
+proto.model.GetAccountDatasetRequest.prototype.getRecipientaccountaddress = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/** @param {string} value */
+proto.model.GetAccountDatasetRequest.prototype.setRecipientaccountaddress = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * @enum {number}
+ */
+proto.model.AccountDatasetProperty = {
+  ACCOUNTDATASETESCROWAPPROVAL: 0
+};
+
+goog.object.extend(exports, proto.model);
+});
+var accountDataset_pb_1 = accountDataset_pb.GetAccountDatasetsRequest;
+var accountDataset_pb_2 = accountDataset_pb.GetAccountDatasetRequest;
+
+// source: service/accountDataset.proto
+/**
+ * @fileoverview
+ * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
+ * @public
+ */
+// GENERATED CODE -- DO NOT EDIT!
+
+
+var goog$b = googleProtobuf;
+var global$b = Function('return this')();
+
+
+goog$b.object.extend(proto, accountDataset_pb);
+
+goog$b.object.extend(proto, annotations_pb);
+
+// package: service
+// file: service/accountDataset.proto
+
+
+
+var grpc$b = grpcWeb.grpc;
+
+var AccountDatasetService = (function () {
+  function AccountDatasetService() {}
+  AccountDatasetService.serviceName = "service.AccountDatasetService";
+  return AccountDatasetService;
+}());
+
+AccountDatasetService.GetAccountDatasets = {
+  methodName: "GetAccountDatasets",
+  service: AccountDatasetService,
+  requestStream: false,
+  responseStream: false,
+  requestType: accountDataset_pb.GetAccountDatasetsRequest,
+  responseType: accountDataset_pb.GetAccountDatasetsResponse
+};
+
+AccountDatasetService.GetAccountDataset = {
+  methodName: "GetAccountDataset",
+  service: AccountDatasetService,
+  requestStream: false,
+  responseStream: false,
+  requestType: accountDataset_pb.GetAccountDatasetRequest,
+  responseType: accountDataset_pb.AccountDataset
+};
+
+function AccountDatasetServiceClient(serviceHost, options) {
+  this.serviceHost = serviceHost;
+  this.options = options || {};
+}
+
+AccountDatasetServiceClient.prototype.getAccountDatasets = function getAccountDatasets(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc$b.unary(AccountDatasetService.GetAccountDatasets, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc$b.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+AccountDatasetServiceClient.prototype.getAccountDataset = function getAccountDataset(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc$b.unary(AccountDatasetService.GetAccountDataset, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc$b.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+var AccountDatasetServiceClient_1 = AccountDatasetServiceClient;
+
+function getList$4(params) {
+    return new Promise(function (resolve, reject) {
+        var networkIP = Network$1.selected();
+        var request = new accountDataset_pb_1();
+        if (params) {
+            var property = params.property, value = params.value, recipientAccountAddress = params.recipientAccountAddress, setterAccountAddress = params.setterAccountAddress, height = params.height, pagination = params.pagination;
+            if (property)
+                request.setProperty(property);
+            if (value)
+                request.setValue(value);
+            if (recipientAccountAddress)
+                request.setValue(recipientAccountAddress);
+            if (setterAccountAddress)
+                request.setSetteraccountaddress(setterAccountAddress);
+            if (height)
+                request.setHeight(height);
+            if (pagination) {
+                var reqPagination = new pagination_pb_1();
+                reqPagination.setLimit(pagination.limit || 10);
+                reqPagination.setPage(pagination.page || 1);
+                reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
+                request.setPagination(reqPagination);
+            }
+        }
+        var client = new AccountDatasetServiceClient_1(networkIP.host);
+        client.getAccountDatasets(request, function (err, res) {
+            if (err)
+                reject(err);
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+function get$4(params) {
+    return new Promise(function (resolve, reject) {
+        var networkIP = Network$1.selected();
+        var request = new accountDataset_pb_2();
+        request.setProperty(params.property);
+        request.setRecipientaccountaddress(params.recipientAccountAddress);
+        var client = new AccountDatasetServiceClient_1(networkIP.host);
+        client.getAccountDataset(request, function (err, res) {
+            if (err) {
+                var code = err.code, message = err.message;
+                if (code == grpc$c.Code.NotFound) {
+                    return resolve({
+                        setteraccountaddress: '',
+                        recipientaccountaddress: '',
+                        property: '',
+                        value: '',
+                        timestampstarts: 0,
+                        timestampexpires: 0,
+                        height: 0,
+                        latest: true,
+                    });
+                }
+                else if (code != grpc$c.Code.OK)
+                    return reject(message);
+            }
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+var AccountDataset = { getList: getList$4, get: get$4 };
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -39297,6 +40787,8 @@ var zoobc = {
     Escrows: Escrows,
     Mempool: Mempool,
     Block: Block,
+    MultiSignature: MultiSignature,
+    AccountDataset: AccountDataset,
 };
 
 export default zoobc;

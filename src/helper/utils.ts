@@ -17,7 +17,7 @@ export function getZBCAdress(publicKey: Uint8Array): string {
   return toBase64Url(window.btoa(binary));
 }
 
-function getChecksumByte(bytes: Uint8Array): Uint8Array {
+export function getChecksumByte(bytes: Uint8Array): Uint8Array {
   let n = bytes.length;
   let a = 0;
   for (let i = 0; i < n; i++) {
