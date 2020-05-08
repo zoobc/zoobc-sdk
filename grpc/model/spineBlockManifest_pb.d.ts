@@ -17,8 +17,11 @@ export class SpineBlockManifest extends jspb.Message {
   getFilechunkhashes_asB64(): string;
   setFilechunkhashes(value: Uint8Array | string): void;
 
-  getSpineblockmanifestheight(): number;
-  setSpineblockmanifestheight(value: number): void;
+  getManifestreferenceheight(): number;
+  setManifestreferenceheight(value: number): void;
+
+  getManifestspineblockheight(): number;
+  setManifestspineblockheight(value: number): void;
 
   getChaintype(): number;
   setChaintype(value: number): void;
@@ -44,7 +47,8 @@ export namespace SpineBlockManifest {
     id: string,
     fullfilehash: Uint8Array | string,
     filechunkhashes: Uint8Array | string,
-    spineblockmanifestheight: number,
+    manifestreferenceheight: number,
+    manifestspineblockheight: number,
     chaintype: number,
     spineblockmanifesttype: SpineBlockManifestTypeMap[keyof SpineBlockManifestTypeMap],
     expirationtimestamp: number,

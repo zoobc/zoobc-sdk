@@ -17,17 +17,14 @@ export class AccountDataset extends jspb.Message {
   getValue(): string;
   setValue(value: string): void;
 
-  getTimestampstarts(): number;
-  setTimestampstarts(value: number): void;
-
-  getTimestampexpires(): number;
-  setTimestampexpires(value: number): void;
-
-  getHeight(): number;
-  setHeight(value: number): void;
+  getIsactive(): boolean;
+  setIsactive(value: boolean): void;
 
   getLatest(): boolean;
   setLatest(value: boolean): void;
+
+  getHeight(): number;
+  setHeight(value: number): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): AccountDataset.AsObject;
@@ -45,10 +42,9 @@ export namespace AccountDataset {
     recipientaccountaddress: string,
     property: string,
     value: string,
-    timestampstarts: number,
-    timestampexpires: number,
-    height: number,
+    isactive: boolean,
     latest: boolean,
+    height: number,
   }
 }
 

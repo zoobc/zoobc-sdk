@@ -139,10 +139,9 @@ proto.model.AccountDataset.toObject = function(includeInstance, msg) {
     recipientaccountaddress: jspb.Message.getFieldWithDefault(msg, 2, ""),
     property: jspb.Message.getFieldWithDefault(msg, 3, ""),
     value: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    timestampstarts: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    timestampexpires: jspb.Message.getFieldWithDefault(msg, 6, 0),
-    height: jspb.Message.getFieldWithDefault(msg, 7, 0),
-    latest: jspb.Message.getBooleanFieldWithDefault(msg, 8, false)
+    isactive: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
+    latest: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
+    height: jspb.Message.getFieldWithDefault(msg, 7, 0)
   };
 
   if (includeInstance) {
@@ -196,20 +195,16 @@ proto.model.AccountDataset.deserializeBinaryFromReader = function(msg, reader) {
       msg.setValue(value);
       break;
     case 5:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setTimestampstarts(value);
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIsactive(value);
       break;
     case 6:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setTimestampexpires(value);
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setLatest(value);
       break;
     case 7:
       var value = /** @type {number} */ (reader.readUint32());
       msg.setHeight(value);
-      break;
-    case 8:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setLatest(value);
       break;
     default:
       reader.skipField();
@@ -268,16 +263,16 @@ proto.model.AccountDataset.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getTimestampstarts();
-  if (f !== 0) {
-    writer.writeUint64(
+  f = message.getIsactive();
+  if (f) {
+    writer.writeBool(
       5,
       f
     );
   }
-  f = message.getTimestampexpires();
-  if (f !== 0) {
-    writer.writeUint64(
+  f = message.getLatest();
+  if (f) {
+    writer.writeBool(
       6,
       f
     );
@@ -286,13 +281,6 @@ proto.model.AccountDataset.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0) {
     writer.writeUint32(
       7,
-      f
-    );
-  }
-  f = message.getLatest();
-  if (f) {
-    writer.writeBool(
-      8,
       f
     );
   }
@@ -360,32 +348,32 @@ proto.model.AccountDataset.prototype.setValue = function(value) {
 
 
 /**
- * optional uint64 TimestampStarts = 5;
- * @return {number}
+ * optional bool IsActive = 5;
+ * @return {boolean}
  */
-proto.model.AccountDataset.prototype.getTimestampstarts = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+proto.model.AccountDataset.prototype.getIsactive = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 5, false));
 };
 
 
-/** @param {number} value */
-proto.model.AccountDataset.prototype.setTimestampstarts = function(value) {
-  jspb.Message.setProto3IntField(this, 5, value);
+/** @param {boolean} value */
+proto.model.AccountDataset.prototype.setIsactive = function(value) {
+  jspb.Message.setProto3BooleanField(this, 5, value);
 };
 
 
 /**
- * optional uint64 TimestampExpires = 6;
- * @return {number}
+ * optional bool Latest = 6;
+ * @return {boolean}
  */
-proto.model.AccountDataset.prototype.getTimestampexpires = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+proto.model.AccountDataset.prototype.getLatest = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 6, false));
 };
 
 
-/** @param {number} value */
-proto.model.AccountDataset.prototype.setTimestampexpires = function(value) {
-  jspb.Message.setProto3IntField(this, 6, value);
+/** @param {boolean} value */
+proto.model.AccountDataset.prototype.setLatest = function(value) {
+  jspb.Message.setProto3BooleanField(this, 6, value);
 };
 
 
@@ -401,21 +389,6 @@ proto.model.AccountDataset.prototype.getHeight = function() {
 /** @param {number} value */
 proto.model.AccountDataset.prototype.setHeight = function(value) {
   jspb.Message.setProto3IntField(this, 7, value);
-};
-
-
-/**
- * optional bool Latest = 8;
- * @return {boolean}
- */
-proto.model.AccountDataset.prototype.getLatest = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 8, false));
-};
-
-
-/** @param {boolean} value */
-proto.model.AccountDataset.prototype.setLatest = function(value) {
-  jspb.Message.setProto3BooleanField(this, 8, value);
 };
 
 
