@@ -20758,8 +20758,7 @@ proto.model.SetupAccountDatasetTransactionBody.toObject = function(includeInstan
     setteraccountaddress: googleProtobuf.Message.getFieldWithDefault(msg, 1, ""),
     recipientaccountaddress: googleProtobuf.Message.getFieldWithDefault(msg, 2, ""),
     property: googleProtobuf.Message.getFieldWithDefault(msg, 3, ""),
-    value: googleProtobuf.Message.getFieldWithDefault(msg, 4, ""),
-    muchtime: googleProtobuf.Message.getFieldWithDefault(msg, 5, "0")
+    value: googleProtobuf.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -20811,10 +20810,6 @@ proto.model.SetupAccountDatasetTransactionBody.deserializeBinaryFromReader = fun
     case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setValue(value);
-      break;
-    case 5:
-      var value = /** @type {string} */ (reader.readUint64String());
-      msg.setMuchtime(value);
       break;
     default:
       reader.skipField();
@@ -20870,13 +20865,6 @@ proto.model.SetupAccountDatasetTransactionBody.serializeBinaryToWriter = functio
   if (f.length > 0) {
     writer.writeString(
       4,
-      f
-    );
-  }
-  f = message.getMuchtime();
-  if (parseInt(f, 10) !== 0) {
-    writer.writeUint64String(
-      5,
       f
     );
   }
@@ -20940,21 +20928,6 @@ proto.model.SetupAccountDatasetTransactionBody.prototype.getValue = function() {
 /** @param {string} value */
 proto.model.SetupAccountDatasetTransactionBody.prototype.setValue = function(value) {
   googleProtobuf.Message.setProto3StringField(this, 4, value);
-};
-
-
-/**
- * optional uint64 MuchTime = 5;
- * @return {string}
- */
-proto.model.SetupAccountDatasetTransactionBody.prototype.getMuchtime = function() {
-  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 5, "0"));
-};
-
-
-/** @param {string} value */
-proto.model.SetupAccountDatasetTransactionBody.prototype.setMuchtime = function(value) {
-  googleProtobuf.Message.setProto3StringIntField(this, 5, value);
 };
 
 
@@ -25612,7 +25585,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.model.GetAccountBalancesRequest = function(opt_data) {
-  googleProtobuf.Message.initialize(this, opt_data, 0, -1, null, null);
+  googleProtobuf.Message.initialize(this, opt_data, 0, -1, proto.model.GetAccountBalancesRequest.repeatedFields_, null);
 };
 goog.inherits(proto.model.GetAccountBalancesRequest, googleProtobuf.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -26180,6 +26153,13 @@ proto.model.GetAccountBalanceResponse.prototype.hasAccountbalance = function() {
 
 
 
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.model.GetAccountBalancesRequest.repeatedFields_ = [1];
+
 
 
 if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
@@ -26210,14 +26190,8 @@ proto.model.GetAccountBalancesRequest.prototype.toObject = function(opt_includeI
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.model.GetAccountBalancesRequest.toObject = function(includeInstance, msg) {
-  var obj = {
-    balancelowerthan: googleProtobuf.Message.getFieldWithDefault(msg, 1, 0),
-    balancehigherthan: googleProtobuf.Message.getFieldWithDefault(msg, 2, 0),
-    spendablebalancelowerthan: googleProtobuf.Message.getFieldWithDefault(msg, 3, 0),
-    spendablebalancehigherthan: googleProtobuf.Message.getFieldWithDefault(msg, 4, 0),
-    poprevenuebalancelowerthan: googleProtobuf.Message.getFieldWithDefault(msg, 5, 0),
-    poprevenuebalancehigherthan: googleProtobuf.Message.getFieldWithDefault(msg, 6, 0),
-    blockheight: googleProtobuf.Message.getFieldWithDefault(msg, 7, 0)
+  var f, obj = {
+    accountaddressesList: (f = googleProtobuf.Message.getRepeatedField(msg, 1)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -26255,32 +26229,8 @@ proto.model.GetAccountBalancesRequest.deserializeBinaryFromReader = function(msg
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setBalancelowerthan(value);
-      break;
-    case 2:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setBalancehigherthan(value);
-      break;
-    case 3:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setSpendablebalancelowerthan(value);
-      break;
-    case 4:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setSpendablebalancehigherthan(value);
-      break;
-    case 5:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setPoprevenuebalancelowerthan(value);
-      break;
-    case 6:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setPoprevenuebalancehigherthan(value);
-      break;
-    case 7:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setBlockheight(value);
+      var value = /** @type {string} */ (reader.readString());
+      msg.addAccountaddresses(value);
       break;
     default:
       reader.skipField();
@@ -26311,160 +26261,45 @@ proto.model.GetAccountBalancesRequest.prototype.serializeBinary = function() {
  */
 proto.model.GetAccountBalancesRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getBalancelowerthan();
-  if (f !== 0) {
-    writer.writeUint32(
+  f = message.getAccountaddressesList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
       1,
       f
     );
   }
-  f = message.getBalancehigherthan();
-  if (f !== 0) {
-    writer.writeUint32(
-      2,
-      f
-    );
-  }
-  f = message.getSpendablebalancelowerthan();
-  if (f !== 0) {
-    writer.writeUint32(
-      3,
-      f
-    );
-  }
-  f = message.getSpendablebalancehigherthan();
-  if (f !== 0) {
-    writer.writeUint32(
-      4,
-      f
-    );
-  }
-  f = message.getPoprevenuebalancelowerthan();
-  if (f !== 0) {
-    writer.writeUint32(
-      5,
-      f
-    );
-  }
-  f = message.getPoprevenuebalancehigherthan();
-  if (f !== 0) {
-    writer.writeUint32(
-      6,
-      f
-    );
-  }
-  f = message.getBlockheight();
-  if (f !== 0) {
-    writer.writeUint32(
-      7,
-      f
-    );
-  }
 };
 
 
 /**
- * optional uint32 BalanceLowerThan = 1;
- * @return {number}
+ * repeated string AccountAddresses = 1;
+ * @return {!Array<string>}
  */
-proto.model.GetAccountBalancesRequest.prototype.getBalancelowerthan = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, 0));
+proto.model.GetAccountBalancesRequest.prototype.getAccountaddressesList = function() {
+  return /** @type {!Array<string>} */ (googleProtobuf.Message.getRepeatedField(this, 1));
 };
 
 
-/** @param {number} value */
-proto.model.GetAccountBalancesRequest.prototype.setBalancelowerthan = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 1, value);
+/** @param {!Array<string>} value */
+proto.model.GetAccountBalancesRequest.prototype.setAccountaddressesList = function(value) {
+  googleProtobuf.Message.setField(this, 1, value || []);
 };
 
 
 /**
- * optional uint32 BalanceHigherThan = 2;
- * @return {number}
+ * @param {string} value
+ * @param {number=} opt_index
  */
-proto.model.GetAccountBalancesRequest.prototype.getBalancehigherthan = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 2, 0));
-};
-
-
-/** @param {number} value */
-proto.model.GetAccountBalancesRequest.prototype.setBalancehigherthan = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 2, value);
+proto.model.GetAccountBalancesRequest.prototype.addAccountaddresses = function(value, opt_index) {
+  googleProtobuf.Message.addToRepeatedField(this, 1, value, opt_index);
 };
 
 
 /**
- * optional uint32 SpendableBalanceLowerThan = 3;
- * @return {number}
+ * Clears the list making it empty but non-null.
  */
-proto.model.GetAccountBalancesRequest.prototype.getSpendablebalancelowerthan = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 3, 0));
-};
-
-
-/** @param {number} value */
-proto.model.GetAccountBalancesRequest.prototype.setSpendablebalancelowerthan = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 3, value);
-};
-
-
-/**
- * optional uint32 SpendableBalanceHigherThan = 4;
- * @return {number}
- */
-proto.model.GetAccountBalancesRequest.prototype.getSpendablebalancehigherthan = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, 0));
-};
-
-
-/** @param {number} value */
-proto.model.GetAccountBalancesRequest.prototype.setSpendablebalancehigherthan = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 4, value);
-};
-
-
-/**
- * optional uint32 PopRevenueBalanceLowerThan = 5;
- * @return {number}
- */
-proto.model.GetAccountBalancesRequest.prototype.getPoprevenuebalancelowerthan = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 5, 0));
-};
-
-
-/** @param {number} value */
-proto.model.GetAccountBalancesRequest.prototype.setPoprevenuebalancelowerthan = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 5, value);
-};
-
-
-/**
- * optional uint32 PopRevenueBalanceHigherThan = 6;
- * @return {number}
- */
-proto.model.GetAccountBalancesRequest.prototype.getPoprevenuebalancehigherthan = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 6, 0));
-};
-
-
-/** @param {number} value */
-proto.model.GetAccountBalancesRequest.prototype.setPoprevenuebalancehigherthan = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 6, value);
-};
-
-
-/**
- * optional uint32 BlockHeight = 7;
- * @return {number}
- */
-proto.model.GetAccountBalancesRequest.prototype.getBlockheight = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 7, 0));
-};
-
-
-/** @param {number} value */
-proto.model.GetAccountBalancesRequest.prototype.setBlockheight = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 7, value);
+proto.model.GetAccountBalancesRequest.prototype.clearAccountaddressesList = function() {
+  this.setAccountaddressesList([]);
 };
 
 
@@ -26508,7 +26343,7 @@ proto.model.GetAccountBalancesResponse.prototype.toObject = function(opt_include
 proto.model.GetAccountBalancesResponse.toObject = function(includeInstance, msg) {
   var obj = {
     accountbalancesize: googleProtobuf.Message.getFieldWithDefault(msg, 1, 0),
-    accountbalanceList: googleProtobuf.Message.toObjectList(msg.getAccountbalanceList(),
+    accountbalancesList: googleProtobuf.Message.toObjectList(msg.getAccountbalancesList(),
     proto.model.AccountBalance.toObject, includeInstance)
   };
 
@@ -26553,7 +26388,7 @@ proto.model.GetAccountBalancesResponse.deserializeBinaryFromReader = function(ms
     case 2:
       var value = new proto.model.AccountBalance;
       reader.readMessage(value,proto.model.AccountBalance.deserializeBinaryFromReader);
-      msg.addAccountbalance(value);
+      msg.addAccountbalances(value);
       break;
     default:
       reader.skipField();
@@ -26591,7 +26426,7 @@ proto.model.GetAccountBalancesResponse.serializeBinaryToWriter = function(messag
       f
     );
   }
-  f = message.getAccountbalanceList();
+  f = message.getAccountbalancesList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
       2,
@@ -26618,17 +26453,17 @@ proto.model.GetAccountBalancesResponse.prototype.setAccountbalancesize = functio
 
 
 /**
- * repeated AccountBalance AccountBalance = 2;
+ * repeated AccountBalance AccountBalances = 2;
  * @return {!Array<!proto.model.AccountBalance>}
  */
-proto.model.GetAccountBalancesResponse.prototype.getAccountbalanceList = function() {
+proto.model.GetAccountBalancesResponse.prototype.getAccountbalancesList = function() {
   return /** @type{!Array<!proto.model.AccountBalance>} */ (
     googleProtobuf.Message.getRepeatedWrapperField(this, proto.model.AccountBalance, 2));
 };
 
 
 /** @param {!Array<!proto.model.AccountBalance>} value */
-proto.model.GetAccountBalancesResponse.prototype.setAccountbalanceList = function(value) {
+proto.model.GetAccountBalancesResponse.prototype.setAccountbalancesList = function(value) {
   googleProtobuf.Message.setRepeatedWrapperField(this, 2, value);
 };
 
@@ -26638,7 +26473,7 @@ proto.model.GetAccountBalancesResponse.prototype.setAccountbalanceList = functio
  * @param {number=} opt_index
  * @return {!proto.model.AccountBalance}
  */
-proto.model.GetAccountBalancesResponse.prototype.addAccountbalance = function(opt_value, opt_index) {
+proto.model.GetAccountBalancesResponse.prototype.addAccountbalances = function(opt_value, opt_index) {
   return googleProtobuf.Message.addToRepeatedWrapperField(this, 2, opt_value, proto.model.AccountBalance, opt_index);
 };
 
@@ -26646,14 +26481,15 @@ proto.model.GetAccountBalancesResponse.prototype.addAccountbalance = function(op
 /**
  * Clears the list making it empty but non-null.
  */
-proto.model.GetAccountBalancesResponse.prototype.clearAccountbalanceList = function() {
-  this.setAccountbalanceList([]);
+proto.model.GetAccountBalancesResponse.prototype.clearAccountbalancesList = function() {
+  this.setAccountbalancesList([]);
 };
 
 
 goog.object.extend(exports, proto.model);
 });
 var accountBalance_pb_1 = accountBalance_pb.GetAccountBalanceRequest;
+var accountBalance_pb_2 = accountBalance_pb.GetAccountBalancesRequest;
 
 // source: service/accountBalance.proto
 /**
@@ -26803,7 +26639,21 @@ function getBalance(address) {
         });
     });
 }
-var Account = { getBalance: getBalance };
+function getBalances(params) {
+    return new Promise(function (resolve, reject) {
+        var networkIP = Network$1.selected();
+        var request = new accountBalance_pb_2();
+        request.setAccountaddressesList(params.accountAddressList);
+        var client = new AccountBalanceServiceClient_1(networkIP.host);
+        client.getAccountBalances(request, function (err, res) {
+            if (err)
+                reject(err);
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+var Account = { getBalance: getBalance, getBalances: getBalances };
 
 var node_pb = createCommonjsModule(function (module, exports) {
 // source: model/node.proto
@@ -29751,10 +29601,11 @@ proto.model.SpineBlockManifest.toObject = function(includeInstance, msg) {
     id: googleProtobuf.Message.getFieldWithDefault(msg, 1, "0"),
     fullfilehash: msg.getFullfilehash_asB64(),
     filechunkhashes: msg.getFilechunkhashes_asB64(),
-    spineblockmanifestheight: googleProtobuf.Message.getFieldWithDefault(msg, 4, 0),
-    chaintype: googleProtobuf.Message.getFieldWithDefault(msg, 5, 0),
-    spineblockmanifesttype: googleProtobuf.Message.getFieldWithDefault(msg, 6, 0),
-    expirationtimestamp: googleProtobuf.Message.getFieldWithDefault(msg, 7, 0)
+    manifestreferenceheight: googleProtobuf.Message.getFieldWithDefault(msg, 4, 0),
+    manifestspineblockheight: googleProtobuf.Message.getFieldWithDefault(msg, 5, 0),
+    chaintype: googleProtobuf.Message.getFieldWithDefault(msg, 6, 0),
+    spineblockmanifesttype: googleProtobuf.Message.getFieldWithDefault(msg, 7, 0),
+    expirationtimestamp: googleProtobuf.Message.getFieldWithDefault(msg, 8, 0)
   };
 
   if (includeInstance) {
@@ -29805,17 +29656,21 @@ proto.model.SpineBlockManifest.deserializeBinaryFromReader = function(msg, reade
       break;
     case 4:
       var value = /** @type {number} */ (reader.readUint32());
-      msg.setSpineblockmanifestheight(value);
+      msg.setManifestreferenceheight(value);
       break;
     case 5:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setManifestspineblockheight(value);
+      break;
+    case 6:
       var value = /** @type {number} */ (reader.readInt32());
       msg.setChaintype(value);
       break;
-    case 6:
+    case 7:
       var value = /** @type {!proto.model.SpineBlockManifestType} */ (reader.readEnum());
       msg.setSpineblockmanifesttype(value);
       break;
-    case 7:
+    case 8:
       var value = /** @type {number} */ (reader.readInt64());
       msg.setExpirationtimestamp(value);
       break;
@@ -29869,31 +29724,38 @@ proto.model.SpineBlockManifest.serializeBinaryToWriter = function(message, write
       f
     );
   }
-  f = message.getSpineblockmanifestheight();
+  f = message.getManifestreferenceheight();
   if (f !== 0) {
     writer.writeUint32(
       4,
       f
     );
   }
+  f = message.getManifestspineblockheight();
+  if (f !== 0) {
+    writer.writeUint32(
+      5,
+      f
+    );
+  }
   f = message.getChaintype();
   if (f !== 0) {
     writer.writeInt32(
-      5,
+      6,
       f
     );
   }
   f = message.getSpineblockmanifesttype();
   if (f !== 0.0) {
     writer.writeEnum(
-      6,
+      7,
       f
     );
   }
   f = message.getExpirationtimestamp();
   if (f !== 0) {
     writer.writeInt64(
-      7,
+      8,
       f
     );
   }
@@ -29994,62 +29856,77 @@ proto.model.SpineBlockManifest.prototype.setFilechunkhashes = function(value) {
 
 
 /**
- * optional uint32 SpineBlockManifestHeight = 4;
+ * optional uint32 ManifestReferenceHeight = 4;
  * @return {number}
  */
-proto.model.SpineBlockManifest.prototype.getSpineblockmanifestheight = function() {
+proto.model.SpineBlockManifest.prototype.getManifestreferenceheight = function() {
   return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, 0));
 };
 
 
 /** @param {number} value */
-proto.model.SpineBlockManifest.prototype.setSpineblockmanifestheight = function(value) {
+proto.model.SpineBlockManifest.prototype.setManifestreferenceheight = function(value) {
   googleProtobuf.Message.setProto3IntField(this, 4, value);
 };
 
 
 /**
- * optional int32 ChainType = 5;
+ * optional uint32 ManifestSpineBlockHeight = 5;
  * @return {number}
  */
-proto.model.SpineBlockManifest.prototype.getChaintype = function() {
+proto.model.SpineBlockManifest.prototype.getManifestspineblockheight = function() {
   return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 5, 0));
 };
 
 
 /** @param {number} value */
-proto.model.SpineBlockManifest.prototype.setChaintype = function(value) {
+proto.model.SpineBlockManifest.prototype.setManifestspineblockheight = function(value) {
   googleProtobuf.Message.setProto3IntField(this, 5, value);
 };
 
 
 /**
- * optional SpineBlockManifestType SpineBlockManifestType = 6;
+ * optional int32 ChainType = 6;
+ * @return {number}
+ */
+proto.model.SpineBlockManifest.prototype.getChaintype = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/** @param {number} value */
+proto.model.SpineBlockManifest.prototype.setChaintype = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 6, value);
+};
+
+
+/**
+ * optional SpineBlockManifestType SpineBlockManifestType = 7;
  * @return {!proto.model.SpineBlockManifestType}
  */
 proto.model.SpineBlockManifest.prototype.getSpineblockmanifesttype = function() {
-  return /** @type {!proto.model.SpineBlockManifestType} */ (googleProtobuf.Message.getFieldWithDefault(this, 6, 0));
+  return /** @type {!proto.model.SpineBlockManifestType} */ (googleProtobuf.Message.getFieldWithDefault(this, 7, 0));
 };
 
 
 /** @param {!proto.model.SpineBlockManifestType} value */
 proto.model.SpineBlockManifest.prototype.setSpineblockmanifesttype = function(value) {
-  googleProtobuf.Message.setProto3EnumField(this, 6, value);
+  googleProtobuf.Message.setProto3EnumField(this, 7, value);
 };
 
 
 /**
- * optional int64 ExpirationTimestamp = 7;
+ * optional int64 ExpirationTimestamp = 8;
  * @return {number}
  */
 proto.model.SpineBlockManifest.prototype.getExpirationtimestamp = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 7, 0));
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 8, 0));
 };
 
 
 /** @param {number} value */
 proto.model.SpineBlockManifest.prototype.setExpirationtimestamp = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 7, value);
+  googleProtobuf.Message.setProto3IntField(this, 8, value);
 };
 
 
@@ -38564,10 +38441,9 @@ proto.model.AccountDataset.toObject = function(includeInstance, msg) {
     recipientaccountaddress: googleProtobuf.Message.getFieldWithDefault(msg, 2, ""),
     property: googleProtobuf.Message.getFieldWithDefault(msg, 3, ""),
     value: googleProtobuf.Message.getFieldWithDefault(msg, 4, ""),
-    timestampstarts: googleProtobuf.Message.getFieldWithDefault(msg, 5, 0),
-    timestampexpires: googleProtobuf.Message.getFieldWithDefault(msg, 6, 0),
-    height: googleProtobuf.Message.getFieldWithDefault(msg, 7, 0),
-    latest: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 8, false)
+    isactive: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 5, false),
+    latest: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 6, false),
+    height: googleProtobuf.Message.getFieldWithDefault(msg, 7, 0)
   };
 
   if (includeInstance) {
@@ -38621,20 +38497,16 @@ proto.model.AccountDataset.deserializeBinaryFromReader = function(msg, reader) {
       msg.setValue(value);
       break;
     case 5:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setTimestampstarts(value);
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIsactive(value);
       break;
     case 6:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setTimestampexpires(value);
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setLatest(value);
       break;
     case 7:
       var value = /** @type {number} */ (reader.readUint32());
       msg.setHeight(value);
-      break;
-    case 8:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setLatest(value);
       break;
     default:
       reader.skipField();
@@ -38693,16 +38565,16 @@ proto.model.AccountDataset.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getTimestampstarts();
-  if (f !== 0) {
-    writer.writeUint64(
+  f = message.getIsactive();
+  if (f) {
+    writer.writeBool(
       5,
       f
     );
   }
-  f = message.getTimestampexpires();
-  if (f !== 0) {
-    writer.writeUint64(
+  f = message.getLatest();
+  if (f) {
+    writer.writeBool(
       6,
       f
     );
@@ -38711,13 +38583,6 @@ proto.model.AccountDataset.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0) {
     writer.writeUint32(
       7,
-      f
-    );
-  }
-  f = message.getLatest();
-  if (f) {
-    writer.writeBool(
-      8,
       f
     );
   }
@@ -38785,32 +38650,32 @@ proto.model.AccountDataset.prototype.setValue = function(value) {
 
 
 /**
- * optional uint64 TimestampStarts = 5;
- * @return {number}
+ * optional bool IsActive = 5;
+ * @return {boolean}
  */
-proto.model.AccountDataset.prototype.getTimestampstarts = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 5, 0));
+proto.model.AccountDataset.prototype.getIsactive = function() {
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 5, false));
 };
 
 
-/** @param {number} value */
-proto.model.AccountDataset.prototype.setTimestampstarts = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 5, value);
+/** @param {boolean} value */
+proto.model.AccountDataset.prototype.setIsactive = function(value) {
+  googleProtobuf.Message.setProto3BooleanField(this, 5, value);
 };
 
 
 /**
- * optional uint64 TimestampExpires = 6;
- * @return {number}
+ * optional bool Latest = 6;
+ * @return {boolean}
  */
-proto.model.AccountDataset.prototype.getTimestampexpires = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 6, 0));
+proto.model.AccountDataset.prototype.getLatest = function() {
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 6, false));
 };
 
 
-/** @param {number} value */
-proto.model.AccountDataset.prototype.setTimestampexpires = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 6, value);
+/** @param {boolean} value */
+proto.model.AccountDataset.prototype.setLatest = function(value) {
+  googleProtobuf.Message.setProto3BooleanField(this, 6, value);
 };
 
 
@@ -38826,21 +38691,6 @@ proto.model.AccountDataset.prototype.getHeight = function() {
 /** @param {number} value */
 proto.model.AccountDataset.prototype.setHeight = function(value) {
   googleProtobuf.Message.setProto3IntField(this, 7, value);
-};
-
-
-/**
- * optional bool Latest = 8;
- * @return {boolean}
- */
-proto.model.AccountDataset.prototype.getLatest = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 8, false));
-};
-
-
-/** @param {boolean} value */
-proto.model.AccountDataset.prototype.setLatest = function(value) {
-  googleProtobuf.Message.setProto3BooleanField(this, 8, value);
 };
 
 
@@ -39643,9 +39493,8 @@ function get$4(params) {
                         recipientaccountaddress: '',
                         property: '',
                         value: '',
-                        timestampstarts: 0,
-                        timestampexpires: 0,
                         height: 0,
+                        isactive: true,
                         latest: true,
                     });
                 }
@@ -39660,18 +39509,18 @@ function get$4(params) {
 var AccountDataset = { getList: getList$4, get: get$4 };
 
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
+Copyright (c) Microsoft Corporation.
 
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
 
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
 var __assign = function() {

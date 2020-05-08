@@ -70,9 +70,8 @@ export function get(params: AccountDatasetParams): Promise<AccountDataset.AsObje
             recipientaccountaddress: '',
             property: '',
             value: '',
-            timestampstarts: 0,
-            timestampexpires: 0,
             height: 0,
+            isactive: true,
             latest: true,
           });
         } else if (code != grpc.Code.OK) return reject(message);

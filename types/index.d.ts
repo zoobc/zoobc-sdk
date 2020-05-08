@@ -9,6 +9,7 @@ export { TransactionListParams } from './Transactions';
 export { BlockListParams } from './Block';
 export { MultiSigAddress, MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, } from './MultiSignature';
 export { AccountDatasetListParams, AccountDatasetParams } from './AccountDataset';
+export { AccountBalancesParams } from './Account';
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
@@ -38,6 +39,7 @@ declare const zoobc: {
     };
     Account: {
         getBalance: (address: string) => Promise<import("../grpc/model/accountBalance_pb").GetAccountBalanceResponse.AsObject>;
+        getBalances: (params: import("./Account").AccountBalancesParams) => Promise<import("../grpc/model/accountBalance_pb").GetAccountBalancesResponse.AsObject>;
     };
     Host: {
         getInfo: () => Promise<import("../grpc/model/host_pb").HostInfo.AsObject>;

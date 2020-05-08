@@ -18,7 +18,7 @@ const commonjsPulgin = () => {
       ],
       './grpc/model/pagination_pb': ['Pagination', 'OrderBy'],
       './grpc/model/mempool_pb': ['GetMempoolTransactionsRequest', 'GetMempoolTransactionRequest'],
-      './grpc/model/accountBalance_pb': ['GetAccountBalanceRequest'],
+      './grpc/model/accountBalance_pb': ['GetAccountBalanceRequest', 'GetAccountBalancesRequest'],
       './grpc/model/empty_pb': ['Empty'],
       './grpc/model/proofOfOwnership_pb': ['GetProofOfOwnershipRequest'],
       './grpc/model/auth_pb': ['RequestType'],

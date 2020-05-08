@@ -30,7 +30,7 @@ export {
   MultisigInfoResponse,
 } from './MultiSignature';
 export { AccountDatasetListParams, AccountDatasetParams } from './AccountDataset';
-
+export { AccountBalancesParams } from './Account';
 // EXPORT HELPER INTERFACE
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
