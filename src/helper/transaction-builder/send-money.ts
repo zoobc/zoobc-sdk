@@ -15,7 +15,7 @@ export interface SendMoneyInterface {
   instruction?: string;
 }
 
-export function sendMoneyBuilder(data: SendMoneyInterface, seed: BIP32Interface): Buffer {
+export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface): Buffer {
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
@@ -48,8 +48,10 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed: BIP32Interface)
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
   }
 
-  const signatureType = writeInt32(0);
-  const signature = seed.sign(bytes);
-  const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-  return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+  if (seed) {
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+  } else return bytes;
 }

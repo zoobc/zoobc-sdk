@@ -24070,10 +24070,14 @@ function sendMoneyBuilder(data, seed) {
         var instructionLength = writeInt32(0);
         bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     }
-    var signatureType = writeInt32(0);
-    var signature = seed.sign(bytes);
-    var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    if (seed) {
+        var signatureType = writeInt32(0);
+        var signature = seed.sign(bytes);
+        var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    }
+    else
+        return bytes;
 }
 
 function getList(params) {
@@ -38331,6 +38335,84 @@ MultisigServiceClient.prototype.getMultisignatureInfo = function getMultisignatu
 
 var MultisigServiceClient_1 = MultisigServiceClient;
 
+var TRANSACTION_TYPE$6 = new Buffer([5, 0, 0, 0]);
+function multisignatureBuilder(data, seed) {
+    var multisigInfo = data.multisigInfo, unisgnedTransactions = data.unisgnedTransactions, signaturesInfo = data.signaturesInfo;
+    var bytes;
+    var timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    var accountAddress = Buffer.from(data.accountAddress, 'utf-8');
+    var recipient = new Buffer(ADDRESS_LENGTH);
+    var addressLength = writeInt32(ADDRESS_LENGTH);
+    var fee = writeInt64(data.fee * 1e8);
+    // MULTISIG INFO
+    var multisigInfoBytes = writeInt32(0);
+    if (multisigInfo) {
+        var multisigPresent = writeInt32(1);
+        var minSign = writeInt32(multisigInfo.minSigs);
+        var nonce = writeInt64(multisigInfo.nonce);
+        var participants_1 = Buffer.from([]);
+        multisigInfo.participants.forEach(function (participant) {
+            var address = Buffer.from(participant, 'utf-8');
+            participants_1 = Buffer.concat([participants_1, addressLength, address]);
+        });
+        var totalParticipants = writeInt32(multisigInfo.participants.length);
+        multisigInfoBytes = Buffer.concat([multisigPresent, minSign, nonce, totalParticipants, participants_1]);
+    }
+    // UNSIGNED TRANSACTIONS
+    var transactionBytes = writeInt32(0);
+    if (unisgnedTransactions) {
+        var txBytes = sendMoneyBuilder(unisgnedTransactions);
+        var txBytesLen = writeInt32(txBytes.length);
+        transactionBytes = Buffer.concat([txBytesLen, txBytes]);
+    }
+    // SIGNATURES INFO
+    var signaturesInfoBytes = writeInt32(0);
+    if (signaturesInfo) {
+        var signatureInfoPresent = writeInt32(1);
+        var txHash = base64ToBuffer(signaturesInfo.txHash);
+        var totalParticipants = writeInt32(signaturesInfo.participants.length);
+        var participants_2 = Buffer.from([]);
+        signaturesInfo.participants.forEach(function (participant) {
+            var address = Buffer.from(participant.address, 'utf-8');
+            var signatureLen = writeInt32(participant.signature.length);
+            participants_2 = Buffer.concat([participants_2, addressLength, address, signatureLen, participant.signature]);
+        });
+        signaturesInfoBytes = Buffer.concat([signatureInfoPresent, txHash, totalParticipants, participants_2]);
+    }
+    var bodyLength = writeInt32(multisigInfoBytes.length + transactionBytes.length + signaturesInfoBytes.length);
+    bytes = Buffer.concat([
+        TRANSACTION_TYPE$6,
+        VERSION,
+        timestamp,
+        addressLength,
+        accountAddress,
+        addressLength,
+        recipient,
+        fee,
+        bodyLength,
+        multisigInfoBytes,
+        transactionBytes,
+        signaturesInfoBytes,
+    ]);
+    // ========== NULLIFYING THE ESCROW ===========
+    var approverAddressLength = writeInt32(0);
+    var commission = writeInt64(0);
+    var timeout = writeInt64(0);
+    var instructionLength = writeInt32(0);
+    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    // ========== END NULLIFYING THE ESCROW =========
+    var signatureType = writeInt32(0);
+    var signature = seed.sign(bytes);
+    var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+}
+function signTransactionHash(txHash, seed) {
+    var signatureType = writeInt32(0);
+    var txHashBytes = base64ToBuffer(txHash);
+    var signature = seed.sign(txHashBytes);
+    return Buffer.concat([signatureType, signature]);
+}
+
 function generateMultiSigInfo(multiSigAddress) {
     var nonce = multiSigAddress.nonce, minSigs = multiSigAddress.minSigs;
     var participants = multiSigAddress.participants;
@@ -38420,7 +38502,22 @@ function getMultisigInfo(params) {
         });
     });
 }
-var MultiSignature = { getPendingByTxHash: getPendingByTxHash, getPendingList: getPendingList, createMultiSigAddress: createMultiSigAddress, generateMultiSigInfo: generateMultiSigInfo, getMultisigInfo: getMultisigInfo };
+function postTransaction(data, childSeed) {
+    return new Promise(function (resolve, reject) {
+        var bytes = multisignatureBuilder(data, childSeed);
+        var request = new transaction_pb_3();
+        request.setTransactionbytes(bytes);
+        var networkIP = Network$1.selected();
+        var client = new TransactionServiceClient_1(networkIP.host);
+        client.postTransaction(request, function (err, res) {
+            if (err)
+                reject(err);
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+var MultiSignature = { getPendingByTxHash: getPendingByTxHash, getPendingList: getPendingList, createMultiSigAddress: createMultiSigAddress, generateMultiSigInfo: generateMultiSigInfo, getMultisigInfo: getMultisigInfo, postTransaction: postTransaction };
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -39554,5 +39651,5 @@ var zoobc = {
 };
 
 export default zoobc;
-export { auth_pb_1 as RequestType, ZooKeyring, getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid, toTransactionListWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet };
+export { auth_pb_1 as RequestType, ZooKeyring, getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid, signTransactionHash, toTransactionListWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet };
 //# sourceMappingURL=zoobc-sdk.mjs.map

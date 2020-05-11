@@ -21,7 +21,6 @@ export { MempoolListParams } from './Mempool';
 export { TransactionListParams } from './Transactions';
 export { BlockListParams } from './Block';
 export {
-  MultiSigAddress,
   MultisigPendingListParams,
   MultisigInfoParams,
   MultisigPendingTxResponse,
@@ -40,6 +39,7 @@ export { SendMoneyInterface } from './helper/transaction-builder/send-money';
 export { getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
+export { MultiSigInterface, signTransactionHash, MultiSigAddress } from './helper/transaction-builder/multisignature';
 
 const zoobc = {
   Transactions,

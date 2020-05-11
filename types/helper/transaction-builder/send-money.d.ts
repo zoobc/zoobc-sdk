@@ -10,4 +10,4 @@ export interface SendMoneyInterface {
     timeout?: number;
     instruction?: string;
 }
-export declare function sendMoneyBuilder(data: SendMoneyInterface, seed: BIP32Interface): Buffer;
+export declare function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface): Buffer;

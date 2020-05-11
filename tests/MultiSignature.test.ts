@@ -1,4 +1,4 @@
-import zoobc from '../src';
+import zoobc, { MultiSigInterface, ZooKeyring } from '../src';
 import { expect } from 'chai';
 import { MultiSigAddress, MultisigPendingListParams, MultisigInfoParams } from '../src/MultiSignature';
 import {
@@ -8,6 +8,8 @@ import {
 } from '../grpc/model/multiSignature_pb';
 import { FakeTransportBuilder } from '@improbable-eng/grpc-web-fake-transport';
 import { grpc } from '@improbable-eng/grpc-web';
+import { multisignatureBuilder } from '../src/helper/transaction-builder/multisignature';
+import { PostTransactionResponse, Transaction } from '../grpc/model/transaction_pb';
 
 const multisigs: MultiSigAddress[] = [
   {
@@ -30,6 +32,11 @@ const base64s: string[] = [
 const hosts = [{ host: 'http://85.90.246.90:8002', name: '168 Testnet' }];
 zoobc.Network.list(hosts);
 
+const passphare =
+  'stand cheap entire summer claw subject victory supreme top divide tooth park change excite legend category motor text zebra bottom mystery off garage energy';
+const keyring = new ZooKeyring(passphare, 'p4ssphr4se');
+const childSeed = keyring.calcDerivationPath(0);
+
 function mockPendingTxTransport() {
   const transactions = new GetPendingTransactionsResponse();
   transactions.setPage(1);
@@ -50,6 +57,18 @@ function mockMultisigInfoTransport() {
   multisigInfo.setMultisignatureinfoList([]);
   multisigInfo.setPage(1);
   return new FakeTransportBuilder().withMessages([multisigInfo]).build();
+}
+
+function mockRegister(data: MultiSigInterface) {
+  const bytes = multisignatureBuilder(data, childSeed);
+
+  const response = new PostTransactionResponse();
+  const transaction = new Transaction();
+
+  transaction.setTransactionbodybytes(bytes);
+  response.setTransaction(transaction);
+
+  return new FakeTransportBuilder().withMessages([response]).build();
 }
 
 describe('MultiSignature Unit Testing: ', () => {
@@ -112,6 +131,33 @@ describe('MultiSignature Unit Testing: ', () => {
       expect(multisigInfo).to.be.an('object');
       expect(multisigInfo.page).to.be.an('number');
       expect(multisigInfo.multisignatureinfoList).to.be.an('array');
+    });
+  });
+
+  describe('Create Multisig Transactions', () => {
+    it('should return new transaction object', async () => {
+      const data: MultiSigInterface = {
+        accountAddress: 'iSJt3H8wFOzlWKsy_UoEWF_OjF6oymHMqthyUMDKSyxb',
+        fee: 0.01,
+        multisigInfo: {
+          participants: ['AFiTqqX99kYXjLFJJ2AWuzKK5zxYUT1Pn0p3s6lutkai', 'iSJt3H8wFOzlWKsy_UoEWF_OjF6oymHMqthyUMDKSyxb'],
+          nonce: 2,
+          minSigs: 2,
+          multisigAddress: 'SEMS5t3u8m95Ua6ff5P8qC8yjB4T6k97hd0tni3fqYS0',
+        },
+        unisgnedTransactions: {
+          sender: 'SEMS5t3u8m95Ua6ff5P8qC8yjB4T6k97hd0tni3fqYS0',
+          recipient: 'AFiTqqX99kYXjLFJJ2AWuzKK5zxYUT1Pn0p3s6lutkai',
+          amount: 1,
+          fee: 0.01,
+        },
+      };
+
+      const transport = mockRegister({ ...data });
+      grpc.setDefaultTransport(transport);
+
+      const result = await zoobc.MultiSignature.postTransaction(data, childSeed);
+      expect(result).to.be.an('object');
     });
   });
 });
