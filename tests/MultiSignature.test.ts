@@ -1,6 +1,6 @@
 import zoobc, { MultiSigInterface, ZooKeyring } from '../src';
 import { expect } from 'chai';
-import { MultiSigAddress, MultisigPendingListParams, MultisigInfoParams } from '../src/MultiSignature';
+import { MultisigPendingListParams, MultisigInfoParams } from '../src/MultiSignature';
 import {
   GetPendingTransactionsResponse,
   GetPendingTransactionDetailByTransactionHashResponse,
@@ -8,7 +8,7 @@ import {
 } from '../grpc/model/multiSignature_pb';
 import { FakeTransportBuilder } from '@improbable-eng/grpc-web-fake-transport';
 import { grpc } from '@improbable-eng/grpc-web';
-import { multisignatureBuilder } from '../src/helper/transaction-builder/multisignature';
+import { multisignatureBuilder, MultiSigAddress } from '../src/helper/transaction-builder/multisignature';
 import { PostTransactionResponse, Transaction } from '../grpc/model/transaction_pb';
 
 const multisigs: MultiSigAddress[] = [

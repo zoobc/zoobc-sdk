@@ -8,6 +8,8 @@ export { MempoolListParams } from './Mempool';
 export { TransactionListParams } from './Transactions';
 export { BlockListParams } from './Block';
 export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, } from './MultiSignature';
+export { AccountDatasetListParams, AccountDatasetParams } from './AccountDataset';
+export { AccountBalancesParams } from './Account';
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
@@ -38,9 +40,10 @@ declare const zoobc: {
     };
     Account: {
         getBalance: (address: string) => Promise<import("../grpc/model/accountBalance_pb").GetAccountBalanceResponse.AsObject>;
+        getBalances: (params: import("./Account").AccountBalancesParams) => Promise<import("../grpc/model/accountBalance_pb").GetAccountBalancesResponse.AsObject>;
     };
     Host: {
-        getBlock: () => Promise<import("../grpc/model/host_pb").HostInfo.AsObject>;
+        getInfo: () => Promise<import("../grpc/model/host_pb").HostInfo.AsObject>;
     };
     Node: {
         register: (data: import("./helper/transaction-builder/register-node").RegisterNodeInterface, childSeed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
@@ -77,6 +80,10 @@ declare const zoobc: {
         generateMultiSigInfo: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigAddress) => Buffer;
         getMultisigInfo: (params: import("./MultiSignature").MultisigInfoParams) => Promise<import("../grpc/model/multiSignature_pb").GetMultisignatureInfoResponse.AsObject>;
         postTransaction: (data: import("./helper/transaction-builder/multisignature").MultiSigInterface, childSeed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
+    };
+    AccountDataset: {
+        getList: typeof import("./AccountDataset").getList;
+        get: typeof import("./AccountDataset").get;
     };
 };
 export default zoobc;

@@ -351,9 +351,6 @@ export class SetupAccountDatasetTransactionBody extends jspb.Message {
   getValue(): string;
   setValue(value: string): void;
 
-  getMuchtime(): string;
-  setMuchtime(value: string): void;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SetupAccountDatasetTransactionBody.AsObject;
   static toObject(includeInstance: boolean, msg: SetupAccountDatasetTransactionBody): SetupAccountDatasetTransactionBody.AsObject;
@@ -370,7 +367,6 @@ export namespace SetupAccountDatasetTransactionBody {
     recipientaccountaddress: string,
     property: string,
     value: string,
-    muchtime: string,
   }
 }
 

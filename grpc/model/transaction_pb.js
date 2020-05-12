@@ -2843,8 +2843,7 @@ proto.model.SetupAccountDatasetTransactionBody.toObject = function(includeInstan
     setteraccountaddress: jspb.Message.getFieldWithDefault(msg, 1, ""),
     recipientaccountaddress: jspb.Message.getFieldWithDefault(msg, 2, ""),
     property: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    value: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    muchtime: jspb.Message.getFieldWithDefault(msg, 5, "0")
+    value: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -2896,10 +2895,6 @@ proto.model.SetupAccountDatasetTransactionBody.deserializeBinaryFromReader = fun
     case 4:
       var value = /** @type {string} */ (reader.readString());
       msg.setValue(value);
-      break;
-    case 5:
-      var value = /** @type {string} */ (reader.readUint64String());
-      msg.setMuchtime(value);
       break;
     default:
       reader.skipField();
@@ -2955,13 +2950,6 @@ proto.model.SetupAccountDatasetTransactionBody.serializeBinaryToWriter = functio
   if (f.length > 0) {
     writer.writeString(
       4,
-      f
-    );
-  }
-  f = message.getMuchtime();
-  if (parseInt(f, 10) !== 0) {
-    writer.writeUint64String(
-      5,
       f
     );
   }
@@ -3025,21 +3013,6 @@ proto.model.SetupAccountDatasetTransactionBody.prototype.getValue = function() {
 /** @param {string} value */
 proto.model.SetupAccountDatasetTransactionBody.prototype.setValue = function(value) {
   jspb.Message.setProto3StringField(this, 4, value);
-};
-
-
-/**
- * optional uint64 MuchTime = 5;
- * @return {string}
- */
-proto.model.SetupAccountDatasetTransactionBody.prototype.getMuchtime = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, "0"));
-};
-
-
-/** @param {string} value */
-proto.model.SetupAccountDatasetTransactionBody.prototype.setMuchtime = function(value) {
-  jspb.Message.setProto3StringIntField(this, 5, value);
 };
 
 

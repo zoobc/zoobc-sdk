@@ -1,6 +1,6 @@
 import { HostInfo } from '../grpc/model/host_pb';
-declare function getBlock(): Promise<HostInfo.AsObject>;
+declare function getInfo(): Promise<HostInfo.AsObject>;
 declare const _default: {
-    getBlock: typeof getBlock;
+    getInfo: typeof getInfo;
 };
 export default _default;

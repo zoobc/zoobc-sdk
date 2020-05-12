@@ -9,6 +9,7 @@ import Escrows from './Escrows';
 import Poown from './Poown';
 import Block from './Block';
 import MultiSignature from './MultiSignature';
+import AccountDataset from './AccountDataset';
 
 export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
@@ -27,7 +28,8 @@ export {
   MultisigPendingTxDetailResponse,
   MultisigInfoResponse,
 } from './MultiSignature';
-
+export { AccountDatasetListParams, AccountDatasetParams } from './AccountDataset';
+export { AccountBalancesParams } from './Account';
 // EXPORT HELPER INTERFACE
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
@@ -53,6 +55,7 @@ const zoobc = {
   Mempool,
   Block,
   MultiSignature,
+  AccountDataset,
 };
 
 export default zoobc;

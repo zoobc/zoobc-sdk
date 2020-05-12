@@ -86,26 +86,10 @@ export namespace GetAccountBalanceResponse {
 }
 
 export class GetAccountBalancesRequest extends jspb.Message {
-  getBalancelowerthan(): number;
-  setBalancelowerthan(value: number): void;
-
-  getBalancehigherthan(): number;
-  setBalancehigherthan(value: number): void;
-
-  getSpendablebalancelowerthan(): number;
-  setSpendablebalancelowerthan(value: number): void;
-
-  getSpendablebalancehigherthan(): number;
-  setSpendablebalancehigherthan(value: number): void;
-
-  getPoprevenuebalancelowerthan(): number;
-  setPoprevenuebalancelowerthan(value: number): void;
-
-  getPoprevenuebalancehigherthan(): number;
-  setPoprevenuebalancehigherthan(value: number): void;
-
-  getBlockheight(): number;
-  setBlockheight(value: number): void;
+  clearAccountaddressesList(): void;
+  getAccountaddressesList(): Array<string>;
+  setAccountaddressesList(value: Array<string>): void;
+  addAccountaddresses(value: string, index?: number): string;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetAccountBalancesRequest.AsObject;
@@ -119,13 +103,7 @@ export class GetAccountBalancesRequest extends jspb.Message {
 
 export namespace GetAccountBalancesRequest {
   export type AsObject = {
-    balancelowerthan: number,
-    balancehigherthan: number,
-    spendablebalancelowerthan: number,
-    spendablebalancehigherthan: number,
-    poprevenuebalancelowerthan: number,
-    poprevenuebalancehigherthan: number,
-    blockheight: number,
+    accountaddressesList: Array<string>,
   }
 }
 
@@ -133,10 +111,10 @@ export class GetAccountBalancesResponse extends jspb.Message {
   getAccountbalancesize(): number;
   setAccountbalancesize(value: number): void;
 
-  clearAccountbalanceList(): void;
-  getAccountbalanceList(): Array<AccountBalance>;
-  setAccountbalanceList(value: Array<AccountBalance>): void;
-  addAccountbalance(value?: AccountBalance, index?: number): AccountBalance;
+  clearAccountbalancesList(): void;
+  getAccountbalancesList(): Array<AccountBalance>;
+  setAccountbalancesList(value: Array<AccountBalance>): void;
+  addAccountbalances(value?: AccountBalance, index?: number): AccountBalance;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetAccountBalancesResponse.AsObject;
@@ -151,7 +129,7 @@ export class GetAccountBalancesResponse extends jspb.Message {
 export namespace GetAccountBalancesResponse {
   export type AsObject = {
     accountbalancesize: number,
-    accountbalanceList: Array<AccountBalance.AsObject>,
+    accountbalancesList: Array<AccountBalance.AsObject>,
   }
 }
 
