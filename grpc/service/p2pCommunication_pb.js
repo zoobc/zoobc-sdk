@@ -14,8 +14,6 @@ var global = Function('return this')();
 
 var model_peer_pb = require('../model/peer_pb.js');
 goog.object.extend(proto, model_peer_pb);
-var model_node_pb = require('../model/node_pb.js');
-goog.object.extend(proto, model_node_pb);
 var model_empty_pb = require('../model/empty_pb.js');
 goog.object.extend(proto, model_empty_pb);
 var model_block_pb = require('../model/block_pb.js');

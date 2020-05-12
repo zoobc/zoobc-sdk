@@ -14,8 +14,6 @@ grpc.web = require('grpc-web');
 
 var model_peer_pb = require('../model/peer_pb.js')
 
-var model_node_pb = require('../model/node_pb.js')
-
 var model_empty_pb = require('../model/empty_pb.js')
 
 var model_block_pb = require('../model/block_pb.js')

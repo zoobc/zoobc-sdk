@@ -91,7 +91,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.model.GetAccountBalancesRequest = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.model.GetAccountBalancesRequest.repeatedFields_, null);
 };
 goog.inherits(proto.model.GetAccountBalancesRequest, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -659,6 +659,13 @@ proto.model.GetAccountBalanceResponse.prototype.hasAccountbalance = function() {
 
 
 
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.model.GetAccountBalancesRequest.repeatedFields_ = [1];
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -690,13 +697,7 @@ proto.model.GetAccountBalancesRequest.prototype.toObject = function(opt_includeI
  */
 proto.model.GetAccountBalancesRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    balancelowerthan: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    balancehigherthan: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    spendablebalancelowerthan: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    spendablebalancehigherthan: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    poprevenuebalancelowerthan: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    poprevenuebalancehigherthan: jspb.Message.getFieldWithDefault(msg, 6, 0),
-    blockheight: jspb.Message.getFieldWithDefault(msg, 7, 0)
+    accountaddressesList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -734,32 +735,8 @@ proto.model.GetAccountBalancesRequest.deserializeBinaryFromReader = function(msg
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setBalancelowerthan(value);
-      break;
-    case 2:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setBalancehigherthan(value);
-      break;
-    case 3:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setSpendablebalancelowerthan(value);
-      break;
-    case 4:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setSpendablebalancehigherthan(value);
-      break;
-    case 5:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setPoprevenuebalancelowerthan(value);
-      break;
-    case 6:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setPoprevenuebalancehigherthan(value);
-      break;
-    case 7:
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setBlockheight(value);
+      var value = /** @type {string} */ (reader.readString());
+      msg.addAccountaddresses(value);
       break;
     default:
       reader.skipField();
@@ -790,160 +767,45 @@ proto.model.GetAccountBalancesRequest.prototype.serializeBinary = function() {
  */
 proto.model.GetAccountBalancesRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getBalancelowerthan();
-  if (f !== 0) {
-    writer.writeUint32(
+  f = message.getAccountaddressesList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
       1,
       f
     );
   }
-  f = message.getBalancehigherthan();
-  if (f !== 0) {
-    writer.writeUint32(
-      2,
-      f
-    );
-  }
-  f = message.getSpendablebalancelowerthan();
-  if (f !== 0) {
-    writer.writeUint32(
-      3,
-      f
-    );
-  }
-  f = message.getSpendablebalancehigherthan();
-  if (f !== 0) {
-    writer.writeUint32(
-      4,
-      f
-    );
-  }
-  f = message.getPoprevenuebalancelowerthan();
-  if (f !== 0) {
-    writer.writeUint32(
-      5,
-      f
-    );
-  }
-  f = message.getPoprevenuebalancehigherthan();
-  if (f !== 0) {
-    writer.writeUint32(
-      6,
-      f
-    );
-  }
-  f = message.getBlockheight();
-  if (f !== 0) {
-    writer.writeUint32(
-      7,
-      f
-    );
-  }
 };
 
 
 /**
- * optional uint32 BalanceLowerThan = 1;
- * @return {number}
+ * repeated string AccountAddresses = 1;
+ * @return {!Array<string>}
  */
-proto.model.GetAccountBalancesRequest.prototype.getBalancelowerthan = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+proto.model.GetAccountBalancesRequest.prototype.getAccountaddressesList = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 1));
 };
 
 
-/** @param {number} value */
-proto.model.GetAccountBalancesRequest.prototype.setBalancelowerthan = function(value) {
-  jspb.Message.setProto3IntField(this, 1, value);
+/** @param {!Array<string>} value */
+proto.model.GetAccountBalancesRequest.prototype.setAccountaddressesList = function(value) {
+  jspb.Message.setField(this, 1, value || []);
 };
 
 
 /**
- * optional uint32 BalanceHigherThan = 2;
- * @return {number}
+ * @param {string} value
+ * @param {number=} opt_index
  */
-proto.model.GetAccountBalancesRequest.prototype.getBalancehigherthan = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
-};
-
-
-/** @param {number} value */
-proto.model.GetAccountBalancesRequest.prototype.setBalancehigherthan = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
+proto.model.GetAccountBalancesRequest.prototype.addAccountaddresses = function(value, opt_index) {
+  jspb.Message.addToRepeatedField(this, 1, value, opt_index);
 };
 
 
 /**
- * optional uint32 SpendableBalanceLowerThan = 3;
- * @return {number}
+ * Clears the list making it empty but non-null.
  */
-proto.model.GetAccountBalancesRequest.prototype.getSpendablebalancelowerthan = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
-};
-
-
-/** @param {number} value */
-proto.model.GetAccountBalancesRequest.prototype.setSpendablebalancelowerthan = function(value) {
-  jspb.Message.setProto3IntField(this, 3, value);
-};
-
-
-/**
- * optional uint32 SpendableBalanceHigherThan = 4;
- * @return {number}
- */
-proto.model.GetAccountBalancesRequest.prototype.getSpendablebalancehigherthan = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
-};
-
-
-/** @param {number} value */
-proto.model.GetAccountBalancesRequest.prototype.setSpendablebalancehigherthan = function(value) {
-  jspb.Message.setProto3IntField(this, 4, value);
-};
-
-
-/**
- * optional uint32 PopRevenueBalanceLowerThan = 5;
- * @return {number}
- */
-proto.model.GetAccountBalancesRequest.prototype.getPoprevenuebalancelowerthan = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
-};
-
-
-/** @param {number} value */
-proto.model.GetAccountBalancesRequest.prototype.setPoprevenuebalancelowerthan = function(value) {
-  jspb.Message.setProto3IntField(this, 5, value);
-};
-
-
-/**
- * optional uint32 PopRevenueBalanceHigherThan = 6;
- * @return {number}
- */
-proto.model.GetAccountBalancesRequest.prototype.getPoprevenuebalancehigherthan = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
-};
-
-
-/** @param {number} value */
-proto.model.GetAccountBalancesRequest.prototype.setPoprevenuebalancehigherthan = function(value) {
-  jspb.Message.setProto3IntField(this, 6, value);
-};
-
-
-/**
- * optional uint32 BlockHeight = 7;
- * @return {number}
- */
-proto.model.GetAccountBalancesRequest.prototype.getBlockheight = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 7, 0));
-};
-
-
-/** @param {number} value */
-proto.model.GetAccountBalancesRequest.prototype.setBlockheight = function(value) {
-  jspb.Message.setProto3IntField(this, 7, value);
+proto.model.GetAccountBalancesRequest.prototype.clearAccountaddressesList = function() {
+  this.setAccountaddressesList([]);
 };
 
 
@@ -987,7 +849,7 @@ proto.model.GetAccountBalancesResponse.prototype.toObject = function(opt_include
 proto.model.GetAccountBalancesResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
     accountbalancesize: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    accountbalanceList: jspb.Message.toObjectList(msg.getAccountbalanceList(),
+    accountbalancesList: jspb.Message.toObjectList(msg.getAccountbalancesList(),
     proto.model.AccountBalance.toObject, includeInstance)
   };
 
@@ -1032,7 +894,7 @@ proto.model.GetAccountBalancesResponse.deserializeBinaryFromReader = function(ms
     case 2:
       var value = new proto.model.AccountBalance;
       reader.readMessage(value,proto.model.AccountBalance.deserializeBinaryFromReader);
-      msg.addAccountbalance(value);
+      msg.addAccountbalances(value);
       break;
     default:
       reader.skipField();
@@ -1070,7 +932,7 @@ proto.model.GetAccountBalancesResponse.serializeBinaryToWriter = function(messag
       f
     );
   }
-  f = message.getAccountbalanceList();
+  f = message.getAccountbalancesList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
       2,
@@ -1097,17 +959,17 @@ proto.model.GetAccountBalancesResponse.prototype.setAccountbalancesize = functio
 
 
 /**
- * repeated AccountBalance AccountBalance = 2;
+ * repeated AccountBalance AccountBalances = 2;
  * @return {!Array<!proto.model.AccountBalance>}
  */
-proto.model.GetAccountBalancesResponse.prototype.getAccountbalanceList = function() {
+proto.model.GetAccountBalancesResponse.prototype.getAccountbalancesList = function() {
   return /** @type{!Array<!proto.model.AccountBalance>} */ (
     jspb.Message.getRepeatedWrapperField(this, proto.model.AccountBalance, 2));
 };
 
 
 /** @param {!Array<!proto.model.AccountBalance>} value */
-proto.model.GetAccountBalancesResponse.prototype.setAccountbalanceList = function(value) {
+proto.model.GetAccountBalancesResponse.prototype.setAccountbalancesList = function(value) {
   jspb.Message.setRepeatedWrapperField(this, 2, value);
 };
 
@@ -1117,7 +979,7 @@ proto.model.GetAccountBalancesResponse.prototype.setAccountbalanceList = functio
  * @param {number=} opt_index
  * @return {!proto.model.AccountBalance}
  */
-proto.model.GetAccountBalancesResponse.prototype.addAccountbalance = function(opt_value, opt_index) {
+proto.model.GetAccountBalancesResponse.prototype.addAccountbalances = function(opt_value, opt_index) {
   return jspb.Message.addToRepeatedWrapperField(this, 2, opt_value, proto.model.AccountBalance, opt_index);
 };
 
@@ -1125,8 +987,8 @@ proto.model.GetAccountBalancesResponse.prototype.addAccountbalance = function(op
 /**
  * Clears the list making it empty but non-null.
  */
-proto.model.GetAccountBalancesResponse.prototype.clearAccountbalanceList = function() {
-  this.setAccountbalanceList([]);
+proto.model.GetAccountBalancesResponse.prototype.clearAccountbalancesList = function() {
+  this.setAccountbalancesList([]);
 };
 
 
