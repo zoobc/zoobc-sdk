@@ -100,7 +100,6 @@ describe('Transactions Unit Testing :', () => {
       grpc.setDefaultTransport(transport);
 
       const result = await zoobc.Transactions.getTransactionMinimumFee(data, childSeed);
-      console.log(result);
       expect(result).to.be.an('object');
       expect(result).to.be.have.property('fee');
     });

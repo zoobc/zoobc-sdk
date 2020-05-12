@@ -7,7 +7,7 @@ export { NodeListParams, NodeParams } from './Node';
 export { MempoolListParams } from './Mempool';
 export { TransactionListParams } from './Transactions';
 export { BlockListParams } from './Block';
-export { MultiSigAddress, MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, } from './MultiSignature';
+export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, } from './MultiSignature';
 export { AccountDatasetListParams, AccountDatasetParams } from './AccountDataset';
 export { AccountBalancesParams } from './Account';
 export { HostInterface } from './Network';
@@ -20,6 +20,7 @@ export { SendMoneyInterface } from './helper/transaction-builder/send-money';
 export { getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
+export { MultiSigInterface, signTransactionHash, MultiSigAddress } from './helper/transaction-builder/multisignature';
 declare const zoobc: {
     Transactions: {
         sendMoney: (data: import("./helper/transaction-builder/send-money").SendMoneyInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
@@ -75,9 +76,10 @@ declare const zoobc: {
     MultiSignature: {
         getPendingByTxHash: (txHash: string) => Promise<import("../grpc/model/multiSignature_pb").GetPendingTransactionDetailByTransactionHashResponse.AsObject>;
         getPendingList: (params: import("./MultiSignature").MultisigPendingListParams) => Promise<import("../grpc/model/multiSignature_pb").GetPendingTransactionsResponse.AsObject>;
-        createMultiSigAddress: (multiSigAddress: import("./MultiSignature").MultiSigAddress) => string;
-        generateMultiSigInfo: (multiSigAddress: import("./MultiSignature").MultiSigAddress) => Buffer;
+        createMultiSigAddress: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigAddress) => string;
+        generateMultiSigInfo: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigAddress) => Buffer;
         getMultisigInfo: (params: import("./MultiSignature").MultisigInfoParams) => Promise<import("../grpc/model/multiSignature_pb").GetMultisignatureInfoResponse.AsObject>;
+        postTransaction: (data: import("./helper/transaction-builder/multisignature").MultiSigInterface, childSeed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
     };
     AccountDataset: {
         getList: typeof import("./AccountDataset").getList;

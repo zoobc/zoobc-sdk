@@ -12,16 +12,14 @@ import {
   GetMultisignatureInfoRequest,
 } from '../grpc/model/multiSignature_pb';
 import { MultisigServiceClient } from '../grpc/service/multiSignature_pb_service';
+import { MultiSigInterface, multisignatureBuilder, MultiSigAddress } from './helper/transaction-builder/multisignature';
+import { BIP32Interface } from 'bip32';
+import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
+import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 
 export type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
 export type MultisigInfoResponse = GetMultisignatureInfoResponse.AsObject;
-
-export interface MultiSigAddress {
-  participants: string[];
-  nonce: number;
-  minSigs: number;
-}
 
 export interface MultisigPendingListParams {
   address?: string;
@@ -138,4 +136,20 @@ function getMultisigInfo(params: MultisigInfoParams): Promise<MultisigInfoRespon
   });
 }
 
-export default { getPendingByTxHash, getPendingList, createMultiSigAddress, generateMultiSigInfo, getMultisigInfo };
+function postTransaction(data: MultiSigInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
+  return new Promise((resolve, reject) => {
+    const bytes = multisignatureBuilder(data, childSeed);
+
+    const request = new PostTransactionRequest();
+    request.setTransactionbytes(bytes);
+
+    const networkIP = Network.selected();
+    const client = new TransactionServiceClient(networkIP.host);
+    client.postTransaction(request, (err, res) => {
+      if (err) reject(err);
+      if (res) resolve(res.toObject());
+    });
+  });
+}
+
+export default { getPendingByTxHash, getPendingList, createMultiSigAddress, generateMultiSigInfo, getMultisigInfo, postTransaction };
