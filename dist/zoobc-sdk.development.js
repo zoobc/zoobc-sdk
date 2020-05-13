@@ -39613,18 +39613,18 @@ function get$4(params) {
 var AccountDataset = { getList: getList$4, get: get$4 };
 
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
+Copyright (c) Microsoft Corporation.
 
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
 
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
 var __assign = function() {
@@ -40729,6 +40729,30 @@ function toTransactionListWallet(res, ownAddress) {
     };
 }
 
+function toGetPendingList(res) {
+    var list = res.pendingtransactionsList.map(function (tx) {
+        var bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
+        var amount = readInt64(bytes, 121);
+        var fee = readInt64(bytes, 109);
+        var timestamp = readInt64(bytes, 5);
+        return {
+            amount: amount,
+            blockheight: tx.blockheight,
+            fee: fee,
+            latest: tx.latest,
+            senderaddress: tx.senderaddress,
+            status: tx.status,
+            timestamp: timestamp,
+            transactionhash: tx.transactionhash,
+        };
+    });
+    return {
+        count: res.count,
+        page: res.page,
+        pendingtransactionsList: list,
+    };
+}
+
 var zoobc = {
     Transactions: Transactions,
     Network: Network$1,
@@ -40751,6 +40775,7 @@ exports.getZBCAdress = getZBCAdress;
 exports.isZBCAddressValid = isZBCAddressValid;
 exports.isZBCPublicKeyValid = isZBCPublicKeyValid;
 exports.signTransactionHash = signTransactionHash;
+exports.toGetPendingList = toGetPendingList;
 exports.toTransactionListWallet = toTransactionListWallet;
 exports.toUnconfirmTransactionNodeWallet = toUnconfirmTransactionNodeWallet;
 exports.toUnconfirmedSendMoneyWallet = toUnconfirmedSendMoneyWallet;
