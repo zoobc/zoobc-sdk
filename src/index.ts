@@ -42,6 +42,7 @@ export { getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid } from './helper/u
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
 export { MultiSigInterface, signTransactionHash, MultiSigAddress } from './helper/transaction-builder/multisignature';
+export { toGetPendingList } from './helper/wallet/MultiSignature';
 
 const zoobc = {
   Transactions,
