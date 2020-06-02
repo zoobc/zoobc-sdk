@@ -1,4 +1,5 @@
 import { MultisigPendingTxResponse } from '../../MultiSignature';
+import { SendMoneyInterface } from '../transaction-builder/send-money';
 export declare function toGetPendingList(res: MultisigPendingTxResponse): {
     count: number;
     page: number;
@@ -14,3 +15,4 @@ export declare function toGetPendingList(res: MultisigPendingTxResponse): {
         transactionhash: string | Uint8Array;
     }[];
 };
+export declare function generateTransactionHash(data: SendMoneyInterface): string;
