@@ -21,7 +21,7 @@ export { getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid } from './helper/u
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
 export { MultiSigInterface, signTransactionHash, MultiSigAddress } from './helper/transaction-builder/multisignature';
-export { toGetPendingList } from './helper/wallet/MultiSignature';
+export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
 declare const zoobc: {
     Transactions: {
         sendMoney: (data: import("./helper/transaction-builder/send-money").SendMoneyInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;

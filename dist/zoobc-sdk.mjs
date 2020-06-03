@@ -40795,6 +40795,16 @@ function toGetPendingList(res) {
         pendingtransactionsList: list,
     };
 }
+function generateTransactionHash(data) {
+    var buffer = sendMoneyBuilder(data);
+    var hashed = Buffer.from(sha3_256(buffer), 'base64');
+    var binary = '';
+    var len = hashed.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode(hashed[i]);
+    }
+    return toBase64Url(window.btoa(binary));
+}
 
 var zoobc = {
     Transactions: Transactions,
@@ -40812,5 +40822,5 @@ var zoobc = {
 };
 
 export default zoobc;
-export { auth_pb_1 as RequestType, ZooKeyring, getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid, signTransactionHash, toGetPendingList, toTransactionListWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet };
+export { auth_pb_1 as RequestType, ZooKeyring, generateTransactionHash, getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid, signTransactionHash, toGetPendingList, toTransactionListWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet };
 //# sourceMappingURL=zoobc-sdk.mjs.map
