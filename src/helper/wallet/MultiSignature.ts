@@ -32,7 +32,7 @@ export function toGetPendingList(res: MultisigPendingTxResponse) {
 
 export function generateTransactionHash(data: SendMoneyInterface) {
   const buffer = sendMoneyBuilder(data);
-  const hashed = Buffer.from(sha3_256(buffer), 'base64');
+  const hashed = Buffer.from(sha3_256(buffer), 'hex');
   let binary = '';
   const len = hashed.byteLength;
   for (let i = 0; i < len; i++) {
