@@ -40804,7 +40804,7 @@ function toGetPendingList(res) {
 }
 function generateTransactionHash(data) {
     var buffer = sendMoneyBuilder(data);
-    var hashed = Buffer.from(jsSha3.sha3_256(buffer), 'base64');
+    var hashed = Buffer.from(jsSha3.sha3_256(buffer), 'hex');
     var binary = '';
     var len = hashed.byteLength;
     for (var i = 0; i < len; i++) {
