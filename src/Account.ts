@@ -8,10 +8,6 @@ import { AccountBalanceServiceClient } from '../grpc/service/accountBalance_pb_s
 import Network from './Network';
 import { grpc } from '@improbable-eng/grpc-web';
 
-export interface AccountBalancesParams {
-  accountAddressList: string[];
-}
-
 function getBalance(address: string): Promise<GetAccountBalanceResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
@@ -40,11 +36,11 @@ function getBalance(address: string): Promise<GetAccountBalanceResponse.AsObject
   });
 }
 
-function getBalances(params: AccountBalancesParams): Promise<GetAccountBalancesResponse.AsObject> {
+function getBalances(addresses: string[]): Promise<GetAccountBalancesResponse.AsObject> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetAccountBalancesRequest();
-    request.setAccountaddressesList(params.accountAddressList);
+    request.setAccountaddressesList(addresses);
     const client = new AccountBalanceServiceClient(networkIP.host);
     client.getAccountBalances(request, (err, res) => {
       if (err) reject(err);

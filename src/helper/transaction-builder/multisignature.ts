@@ -1,4 +1,3 @@
-import { SendMoneyInterface, sendMoneyBuilder } from './send-money';
 import { BIP32Interface } from 'bip32';
 import { writeInt64, writeInt32 } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
@@ -10,7 +9,7 @@ export interface MultiSigInterface {
   accountAddress: string;
   fee: number;
   multisigInfo?: MultiSigInfo;
-  unisgnedTransactions?: SendMoneyInterface;
+  unisgnedTransactions?: Buffer;
   signaturesInfo?: SignatureInfo;
 }
 
@@ -66,10 +65,8 @@ export function multisignatureBuilder(data: MultiSigInterface, seed: BIP32Interf
   // UNSIGNED TRANSACTIONS
   let transactionBytes = writeInt32(0);
   if (unisgnedTransactions) {
-    const txBytes = sendMoneyBuilder(unisgnedTransactions);
-    const txBytesLen = writeInt32(txBytes.length);
-
-    transactionBytes = Buffer.concat([txBytesLen, txBytes]);
+    const txBytesLen = writeInt32(unisgnedTransactions.length);
+    transactionBytes = Buffer.concat([txBytesLen, unisgnedTransactions]);
   }
 
   // SIGNATURES INFO
