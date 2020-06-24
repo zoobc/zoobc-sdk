@@ -9,6 +9,9 @@ var grpcWeb = require('@improbable-eng/grpc-web');
 var grpcWeb__default = _interopDefault(grpcWeb);
 var CryptoJS = require('crypto-js');
 var BN = _interopDefault(require('bn.js'));
+var SHA3 = _interopDefault(require('sha3'));
+var B32Enc = _interopDefault(require('base32-encode'));
+var B32Dec = _interopDefault(require('base32-decode'));
 var rxjs = require('rxjs');
 var jsSha3 = require('js-sha3');
 var tweetnacl = require('tweetnacl');
@@ -4264,8 +4267,7 @@ proto.google.protobuf.FieldDescriptorProto.toObject = function(includeInstance, 
     defaultValue: (f = googleProtobuf.Message.getField(msg, 7)) == null ? undefined : f,
     oneofIndex: (f = googleProtobuf.Message.getField(msg, 9)) == null ? undefined : f,
     jsonName: (f = googleProtobuf.Message.getField(msg, 10)) == null ? undefined : f,
-    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f),
-    proto3Optional: (f = googleProtobuf.Message.getBooleanField(msg, 17)) == null ? undefined : f
+    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -4342,10 +4344,6 @@ proto.google.protobuf.FieldDescriptorProto.deserializeBinaryFromReader = functio
       var value = new proto.google.protobuf.FieldOptions;
       reader.readMessage(value,proto.google.protobuf.FieldOptions.deserializeBinaryFromReader);
       msg.setOptions(value);
-      break;
-    case 17:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setProto3Optional(value);
       break;
     default:
       reader.skipField();
@@ -4445,13 +4443,6 @@ proto.google.protobuf.FieldDescriptorProto.serializeBinaryToWriter = function(me
       8,
       f,
       proto.google.protobuf.FieldOptions.serializeBinaryToWriter
-    );
-  }
-  f = /** @type {boolean} */ (googleProtobuf.Message.getField(message, 17));
-  if (f != null) {
-    writer.writeBool(
-      17,
-      f
     );
   }
 };
@@ -4848,42 +4839,6 @@ proto.google.protobuf.FieldDescriptorProto.prototype.clearOptions = function() {
  */
 proto.google.protobuf.FieldDescriptorProto.prototype.hasOptions = function() {
   return googleProtobuf.Message.getField(this, 8) != null;
-};
-
-
-/**
- * optional bool proto3_optional = 17;
- * @return {boolean}
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.getProto3Optional = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 17, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.setProto3Optional = function(value) {
-  return googleProtobuf.Message.setField(this, 17, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.clearProto3Optional = function() {
-  return googleProtobuf.Message.setField(this, 17, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.hasProto3Optional = function() {
-  return googleProtobuf.Message.getField(this, 17) != null;
 };
 
 
@@ -6591,7 +6546,7 @@ proto.google.protobuf.FileOptions.toObject = function(includeInstance, msg) {
     pyGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 18, false),
     phpGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 42, false),
     deprecated: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 23, false),
-    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, true),
+    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, false),
     objcClassPrefix: (f = googleProtobuf.Message.getField(msg, 36)) == null ? undefined : f,
     csharpNamespace: (f = googleProtobuf.Message.getField(msg, 37)) == null ? undefined : f,
     swiftPrefix: (f = googleProtobuf.Message.getField(msg, 39)) == null ? undefined : f,
@@ -7356,7 +7311,7 @@ proto.google.protobuf.FileOptions.prototype.hasDeprecated = function() {
  * @return {boolean}
  */
 proto.google.protobuf.FileOptions.prototype.getCcEnableArenas = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, true));
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, false));
 };
 
 
@@ -23983,26 +23938,32 @@ function toBase64Url(base64Str) {
         .replace(/\//g, '_')
         .replace(/\=/g, '');
 }
-function fromBase64Url(base64Str) {
-    var base64 = base64Str.replace(/\-/g, '+').replace(/\_/g, '/');
-    var pad = base64.length % 4;
-    if (pad)
-        base64 += new Array(5 - pad).join('=');
-    return base64;
-}
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
 function getZBCAdress(publicKey) {
-    var checksum = getChecksumByte(publicKey);
-    var binary = '';
-    var bytes = new Uint8Array(33);
-    bytes.set(publicKey, 0);
-    bytes.set([checksum[0]], 32);
-    var len = bytes.byteLength;
-    for (var i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
-    }
-    return toBase64Url(window.btoa(binary));
+    var prefix = 'ZBC';
+    var bytes = Buffer.alloc(35);
+    for (var i = 0; i < 32; i++)
+        bytes[i] = publicKey[i];
+    for (var i = 0; i < 3; i++)
+        bytes[i + 32] = prefix.charCodeAt(i);
+    var checksum = hash(bytes);
+    for (var i = 0; i < 3; i++)
+        bytes[i + 32] = Number(checksum[i]);
+    var segs = [prefix];
+    var b32 = B32Enc(bytes, 'RFC4648');
+    for (var i = 0; i < 7; i++)
+        segs.push(b32.substr(i * 8, 8));
+    return segs.join('_');
+}
+function hash(str, format) {
+    if (format === void 0) { format = 'buffer'; }
+    var h = new SHA3(256);
+    h.update(str);
+    var b = h.digest();
+    if (format == 'buffer')
+        return b;
+    return b.toString(format);
 }
 function getChecksumByte(bytes) {
     var n = bytes.length;
@@ -24021,13 +23982,31 @@ function encryptPassword(password, salt) {
     }).toString();
 }
 function isZBCAddressValid(address) {
-    var addressBase64 = fromBase64Url(address);
-    var addressBytes = base64ToBuffer(addressBase64);
-    if (addressBytes.length == 33 && addressBase64.length == 44) {
-        return true;
-    }
-    else
+    if (address.length != 66)
         return false;
+    var segs = address.split('_');
+    var stdPrefix = 'ZBC';
+    var prefix = segs[0];
+    if (prefix != stdPrefix)
+        return false;
+    segs.shift();
+    if (segs.length != 7)
+        return false;
+    for (var i = 0; i < segs.length; i++)
+        if (!/[A-Z2-7]{8}/.test(segs[i]))
+            return false;
+    var b32 = segs.join('');
+    var buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
+    var inputChecksum = [];
+    for (var i = 0; i < 3; i++)
+        inputChecksum.push(buffer[i + 32]);
+    for (var i = 0; i < 3; i++)
+        buffer[i + 32] = prefix.charCodeAt(i);
+    var checksum = hash(buffer);
+    for (var i = 0; i < 3; i++)
+        if (checksum[i] != inputChecksum[i])
+            return false;
+    return true;
 }
 function isZBCPublicKeyValid(pubkey) {
     var addressBytes = base64ToBuffer(pubkey);
