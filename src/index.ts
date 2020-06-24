@@ -29,7 +29,6 @@ export {
   MultisigInfoResponse,
 } from './MultiSignature';
 export { AccountDatasetListParams, AccountDatasetParams } from './AccountDataset';
-export { AccountBalancesParams } from './Account';
 // EXPORT HELPER INTERFACE
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
@@ -37,7 +36,7 @@ export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
 export { EscrowApprovalInterface } from './helper/transaction-builder/escrow-transaction';
-export { SendMoneyInterface } from './helper/transaction-builder/send-money';
+export { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
 export { getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';

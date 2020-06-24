@@ -1,11 +1,10 @@
 /// <reference types="node" />
-import { SendMoneyInterface } from './send-money';
 import { BIP32Interface } from 'bip32';
 export interface MultiSigInterface {
     accountAddress: string;
     fee: number;
     multisigInfo?: MultiSigInfo;
-    unisgnedTransactions?: SendMoneyInterface;
+    unisgnedTransactions?: Buffer;
     signaturesInfo?: SignatureInfo;
 }
 export interface MultiSigAddress {
