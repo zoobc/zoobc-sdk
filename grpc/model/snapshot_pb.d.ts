@@ -115,6 +115,11 @@ export class SnapshotPayload extends jspb.Message {
   setSkippedblocksmithsList(value: Array<model_skippedBlocksmith_pb.SkippedBlocksmith>): void;
   addSkippedblocksmiths(value?: model_skippedBlocksmith_pb.SkippedBlocksmith, index?: number): model_skippedBlocksmith_pb.SkippedBlocksmith;
 
+  clearMultisignatureparticipantsList(): void;
+  getMultisignatureparticipantsList(): Array<model_multiSignature_pb.MultiSignatureParticipant>;
+  setMultisignatureparticipantsList(value: Array<model_multiSignature_pb.MultiSignatureParticipant>): void;
+  addMultisignatureparticipants(value?: model_multiSignature_pb.MultiSignatureParticipant, index?: number): model_multiSignature_pb.MultiSignatureParticipant;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SnapshotPayload.AsObject;
   static toObject(includeInstance: boolean, msg: SnapshotPayload): SnapshotPayload.AsObject;
@@ -138,6 +143,7 @@ export namespace SnapshotPayload {
     pendingsignaturesList: Array<model_multiSignature_pb.PendingSignature.AsObject>,
     multisignatureinfosList: Array<model_multiSignature_pb.MultiSignatureInfo.AsObject>,
     skippedblocksmithsList: Array<model_skippedBlocksmith_pb.SkippedBlocksmith.AsObject>,
+    multisignatureparticipantsList: Array<model_multiSignature_pb.MultiSignatureParticipant.AsObject>,
   }
 }
 

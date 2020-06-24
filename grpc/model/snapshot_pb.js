@@ -416,7 +416,7 @@ proto.model.SnapshotFileInfo.prototype.clearFilechunkshashesList = function() {
  * @private {!Array<number>}
  * @const
  */
-proto.model.SnapshotPayload.repeatedFields_ = [1,2,3,4,5,6,7,8,9,10,11];
+proto.model.SnapshotPayload.repeatedFields_ = [1,2,3,4,5,6,7,8,9,10,11,12];
 
 
 
@@ -470,7 +470,9 @@ proto.model.SnapshotPayload.toObject = function(includeInstance, msg) {
     multisignatureinfosList: jspb.Message.toObjectList(msg.getMultisignatureinfosList(),
     model_multiSignature_pb.MultiSignatureInfo.toObject, includeInstance),
     skippedblocksmithsList: jspb.Message.toObjectList(msg.getSkippedblocksmithsList(),
-    model_skippedBlocksmith_pb.SkippedBlocksmith.toObject, includeInstance)
+    model_skippedBlocksmith_pb.SkippedBlocksmith.toObject, includeInstance),
+    multisignatureparticipantsList: jspb.Message.toObjectList(msg.getMultisignatureparticipantsList(),
+    model_multiSignature_pb.MultiSignatureParticipant.toObject, includeInstance)
   };
 
   if (includeInstance) {
@@ -561,6 +563,11 @@ proto.model.SnapshotPayload.deserializeBinaryFromReader = function(msg, reader) 
       var value = new model_skippedBlocksmith_pb.SkippedBlocksmith;
       reader.readMessage(value,model_skippedBlocksmith_pb.SkippedBlocksmith.deserializeBinaryFromReader);
       msg.addSkippedblocksmiths(value);
+      break;
+    case 12:
+      var value = new model_multiSignature_pb.MultiSignatureParticipant;
+      reader.readMessage(value,model_multiSignature_pb.MultiSignatureParticipant.deserializeBinaryFromReader);
+      msg.addMultisignatureparticipants(value);
       break;
     default:
       reader.skipField();
@@ -677,6 +684,14 @@ proto.model.SnapshotPayload.serializeBinaryToWriter = function(message, writer) 
       11,
       f,
       model_skippedBlocksmith_pb.SkippedBlocksmith.serializeBinaryToWriter
+    );
+  }
+  f = message.getMultisignatureparticipantsList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      12,
+      f,
+      model_multiSignature_pb.MultiSignatureParticipant.serializeBinaryToWriter
     );
   }
 };
@@ -1053,6 +1068,40 @@ proto.model.SnapshotPayload.prototype.addSkippedblocksmiths = function(opt_value
  */
 proto.model.SnapshotPayload.prototype.clearSkippedblocksmithsList = function() {
   this.setSkippedblocksmithsList([]);
+};
+
+
+/**
+ * repeated MultiSignatureParticipant MultiSignatureParticipants = 12;
+ * @return {!Array<!proto.model.MultiSignatureParticipant>}
+ */
+proto.model.SnapshotPayload.prototype.getMultisignatureparticipantsList = function() {
+  return /** @type{!Array<!proto.model.MultiSignatureParticipant>} */ (
+    jspb.Message.getRepeatedWrapperField(this, model_multiSignature_pb.MultiSignatureParticipant, 12));
+};
+
+
+/** @param {!Array<!proto.model.MultiSignatureParticipant>} value */
+proto.model.SnapshotPayload.prototype.setMultisignatureparticipantsList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 12, value);
+};
+
+
+/**
+ * @param {!proto.model.MultiSignatureParticipant=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.MultiSignatureParticipant}
+ */
+proto.model.SnapshotPayload.prototype.addMultisignatureparticipants = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 12, opt_value, proto.model.MultiSignatureParticipant, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.SnapshotPayload.prototype.clearMultisignatureparticipantsList = function() {
+  this.setMultisignatureparticipantsList([]);
 };
 
 
