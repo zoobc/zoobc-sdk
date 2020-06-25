@@ -1,20 +1,31 @@
 import { toBase64Url, base64ToBuffer, fromBase64Url } from './converters';
 import * as CryptoJS from 'crypto-js';
 import BN from 'bn.js';
+import SHA3 from 'sha3';
+import B32Enc from 'base32-encode';
+import B32Dec from 'base32-decode';
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
 export function getZBCAdress(publicKey: Uint8Array): string {
-  const checksum = getChecksumByte(publicKey);
-  let binary = '';
-  const bytes = new Uint8Array(33);
-  bytes.set(publicKey, 0);
-  bytes.set([checksum[0]], 32);
+  const prefix = 'ZBC';
+  const bytes = Buffer.alloc(35);
+  for (let i = 0; i < 32; i++) bytes[i] = publicKey[i];
+  for (let i = 0; i < 3; i++) bytes[i + 32] = prefix.charCodeAt(i);
+  const checksum = hash(bytes);
+  for (let i = 0; i < 3; i++) bytes[i + 32] = Number(checksum[i]);
+  const segs = [prefix];
+  const b32 = B32Enc(bytes, 'RFC4648');
+  for (let i = 0; i < 7; i++) segs.push(b32.substr(i * 8, 8));
 
-  const len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return toBase64Url(window.btoa(binary));
+  return segs.join('_');
+}
+
+export function hash(str: any, format: string = 'buffer') {
+  const h = new SHA3(256);
+  h.update(str);
+  const b = h.digest();
+  if (format == 'buffer') return b;
+  return b.toString(format);
 }
 
 export function getChecksumByte(bytes: Uint8Array): Uint8Array {
@@ -35,11 +46,22 @@ export function encryptPassword(password: string, salt: string = 'salt'): string
 }
 
 export function isZBCAddressValid(address: string): boolean {
-  const addressBase64 = fromBase64Url(address);
-  const addressBytes = base64ToBuffer(addressBase64);
-  if (addressBytes.length == 33 && addressBase64.length == 44) {
-    return true;
-  } else return false;
+  if (address.length != 66) return false;
+  const segs = address.split('_');
+  const stdPrefix = 'ZBC';
+  const prefix = segs[0];
+  if (prefix != stdPrefix) return false;
+  segs.shift();
+  if (segs.length != 7) return false;
+  for (let i = 0; i < segs.length; i++) if (!/[A-Z2-7]{8}/.test(segs[i])) return false;
+  const b32 = segs.join('');
+  const buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
+  const inputChecksum = [];
+  for (let i = 0; i < 3; i++) inputChecksum.push(buffer[i + 32]);
+  for (let i = 0; i < 3; i++) buffer[i + 32] = prefix.charCodeAt(i);
+  const checksum = hash(buffer);
+  for (let i = 0; i < 3; i++) if (checksum[i] != inputChecksum[i]) return false;
+  return true;
 }
 
 export function isZBCPublicKeyValid(pubkey: string): boolean {
