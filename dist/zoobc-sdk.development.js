@@ -24222,15 +24222,6 @@ function hash(str, format) {
         return b;
     return b.toString(format);
 }
-function getChecksumByte(bytes) {
-    var n = bytes.length;
-    var a = 0;
-    for (var i = 0; i < n; i++) {
-        a += bytes[i];
-    }
-    var res = new Uint8Array([a]);
-    return res;
-}
 function encryptPassword(password, salt) {
     if (salt === void 0) { salt = 'salt'; }
     return CryptoJS.PBKDF2(password, salt, {
@@ -24302,7 +24293,7 @@ function writeInt32(number) {
     return byte;
 }
 
-var ADDRESS_LENGTH = 44;
+var ADDRESS_LENGTH = 66;
 var VERSION = new Buffer([1]);
 
 var TRANSACTION_TYPE = new Buffer([1, 0, 0, 0]);
@@ -38598,15 +38589,7 @@ function generateMultiSigInfo(multiSigAddress) {
 function createMultiSigAddress(multiSigAddress) {
     var buffer = generateMultiSigInfo(multiSigAddress);
     var hashed = Buffer.from(jsSha3.sha3_256(buffer), 'hex');
-    var checksum = Buffer.from(getChecksumByte(hashed));
-    var binary = '';
-    var bytes = new Buffer([]);
-    bytes = Buffer.concat([hashed, checksum]);
-    var len = bytes.byteLength;
-    for (var i = 0; i < len; i++) {
-        binary += String.fromCharCode(bytes[i]);
-    }
-    return toBase64Url(window.btoa(binary));
+    return getZBCAdress(hashed);
 }
 function getPendingList(params) {
     return new Promise(function (resolve, reject) {
@@ -39896,18 +39879,18 @@ function get$4(params) {
 var AccountDataset = { getList: getList$4, get: get$4 };
 
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
 
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
 
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
 ***************************************************************************** */
 
 var __assign = function() {
@@ -40942,8 +40925,8 @@ function toUnconfirmedSendMoneyWallet(res, ownAddress) {
     });
     transactions = transactions.map(function (tx) {
         var bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        var amount = readInt64(bytes, 121);
-        var fee = readInt64(bytes, 109);
+        var amount = readInt64(bytes, 164);
+        var fee = readInt64(bytes, 153);
         var friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
         var type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
         return {
@@ -41015,10 +40998,10 @@ function toTransactionListWallet(res, ownAddress) {
 function toGetPendingList(res) {
     var list = res.pendingtransactionsList.map(function (tx) {
         var bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        var amount = readInt64(bytes, 121);
-        var fee = readInt64(bytes, 109);
+        var amount = readInt64(bytes, 164);
+        var fee = readInt64(bytes, 153);
         var timestamp = readInt64(bytes, 5);
-        var recipient = bytes.slice(65, 109);
+        var recipient = bytes.slice(87, 153);
         return {
             amount: amount,
             blockheight: tx.blockheight,
