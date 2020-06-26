@@ -19,8 +19,18 @@ export { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-build
 export { getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
-export { MultiSigInterface, signTransactionHash, MultiSigAddress } from './helper/transaction-builder/multisignature';
+export { MultiSigInterface, signTransactionHash, MultiSigAddress, MultiSigInfo, SignatureInfo, } from './helper/transaction-builder/multisignature';
 export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
+export { AccountDatasetProperty } from '../grpc/model/accountDataset_pb';
+export { EscrowStatus, EscrowApproval } from '../grpc/model/escrow_pb';
+export { EventType } from '../grpc/model/event_pb';
+export { PendingTransactionStatus } from '../grpc/model/multiSignature_pb';
+export { NodeRegistrationState } from '../grpc/model/nodeRegistration_pb';
+export { OrderBy } from '../grpc/model/pagination_pb';
+export { SignatureType, PrivateKeyBytesLength, BitcoinPublicKeyFormat } from '../grpc/model/signature_pb';
+export { SpinePublicKeyAction } from '../grpc/model/spine_pb';
+export { SpineBlockManifestType } from '../grpc/model/spineBlockManifest_pb';
+export { TransactionType } from '../grpc/model/transaction_pb';
 declare const zoobc: {
     Transactions: {
         sendMoney: (data: import("./helper/transaction-builder/send-money").SendMoneyInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
