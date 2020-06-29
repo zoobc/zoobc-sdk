@@ -6,6 +6,7 @@ import { PostTransactionResponse } from '../grpc/model/transaction_pb';
 export declare type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export declare type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
 export declare type MultisigInfoResponse = GetMultisignatureInfoResponse.AsObject;
+export declare type MultisigPostTransactionResponse = PostTransactionResponse.AsObject;
 export interface MultisigPendingListParams {
     address?: string;
     status?: 0 | 1 | 2 | 3;

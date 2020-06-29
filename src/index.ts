@@ -16,19 +16,33 @@ export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
 
 // EXPORT INTERFACE
-export { EscrowListParams } from './Escrows';
-export { NodeListParams, NodeParams } from './Node';
-export { MempoolListParams } from './Mempool';
-export { TransactionListParams } from './Transactions';
-export { BlockListParams } from './Block';
+export { EscrowListParams, EscrowTransactionsResponse, EscrowTransactionResponse, ApprovalEscrowTransactionResponse } from './Escrows';
+export {
+  NodeListParams,
+  NodeParams,
+  NodeHardwareResponse,
+  GenerateNodeKeyResponses,
+  NodeRegistrationsResponse,
+  NodePostTransactionResponse,
+} from './Node';
+export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
+export {
+  TransactionListParams,
+  TransactionsResponse,
+  TransactionResponse,
+  PostTransactionResponses,
+  TransactionMinimumFeeResponse,
+} from './Transactions';
+export { BlockListParams, BlocksResponse, BlockResponse } from './Block';
 export {
   MultisigPendingListParams,
   MultisigInfoParams,
   MultisigPendingTxResponse,
   MultisigPendingTxDetailResponse,
   MultisigInfoResponse,
+  MultisigPostTransactionResponse,
 } from './MultiSignature';
-export { AccountDatasetListParams, AccountDatasetParams } from './AccountDataset';
+export { AccountDatasetListParams, AccountDatasetParams, AccountDatasetsResponse, AccountDatasetResponse } from './AccountDataset';
 // EXPORT HELPER INTERFACE
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
@@ -48,6 +62,8 @@ export {
   SignatureInfo,
 } from './helper/transaction-builder/multisignature';
 export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
+export { AccountBalanceResponse, AccountBalancesResponse } from './Account';
+export { HostInfoResponse } from './Host';
 // Export type
 export { AccountDatasetProperty } from '../grpc/model/accountDataset_pb';
 export { EscrowStatus, EscrowApproval } from '../grpc/model/escrow_pb';
