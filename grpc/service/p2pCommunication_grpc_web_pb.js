@@ -14,8 +14,6 @@ grpc.web = require('grpc-web');
 
 var model_peer_pb = require('../model/peer_pb.js')
 
-var model_node_pb = require('../model/node_pb.js')
-
 var model_empty_pb = require('../model/empty_pb.js')
 
 var model_block_pb = require('../model/block_pb.js')
@@ -104,18 +102,18 @@ proto.service.P2PCommunicationPromiseClient =
  * @const
  * @type {!grpc.web.MethodDescriptor<
  *   !proto.model.GetPeerInfoRequest,
- *   !proto.model.Node>}
+ *   !proto.model.GetPeerInfoResponse>}
  */
 const methodDescriptor_P2PCommunication_GetPeerInfo = new grpc.web.MethodDescriptor(
   '/service.P2PCommunication/GetPeerInfo',
   grpc.web.MethodType.UNARY,
   model_peer_pb.GetPeerInfoRequest,
-  model_node_pb.Node,
+  model_peer_pb.GetPeerInfoResponse,
   /** @param {!proto.model.GetPeerInfoRequest} request */
   function(request) {
     return request.serializeBinary();
   },
-  model_node_pb.Node.deserializeBinary
+  model_peer_pb.GetPeerInfoResponse.deserializeBinary
 );
 
 
@@ -123,15 +121,15 @@ const methodDescriptor_P2PCommunication_GetPeerInfo = new grpc.web.MethodDescrip
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
  *   !proto.model.GetPeerInfoRequest,
- *   !proto.model.Node>}
+ *   !proto.model.GetPeerInfoResponse>}
  */
 const methodInfo_P2PCommunication_GetPeerInfo = new grpc.web.AbstractClientBase.MethodInfo(
-  model_node_pb.Node,
+  model_peer_pb.GetPeerInfoResponse,
   /** @param {!proto.model.GetPeerInfoRequest} request */
   function(request) {
     return request.serializeBinary();
   },
-  model_node_pb.Node.deserializeBinary
+  model_peer_pb.GetPeerInfoResponse.deserializeBinary
 );
 
 
@@ -140,9 +138,9 @@ const methodInfo_P2PCommunication_GetPeerInfo = new grpc.web.AbstractClientBase.
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.model.Node)}
+ * @param {function(?grpc.web.Error, ?proto.model.GetPeerInfoResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.model.Node>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.model.GetPeerInfoResponse>|undefined}
  *     The XHR Node Readable Stream
  */
 proto.service.P2PCommunicationClient.prototype.getPeerInfo =
@@ -161,7 +159,7 @@ proto.service.P2PCommunicationClient.prototype.getPeerInfo =
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.model.Node>}
+ * @return {!Promise<!proto.model.GetPeerInfoResponse>}
  *     A native promise that resolves to the response
  */
 proto.service.P2PCommunicationPromiseClient.prototype.getPeerInfo =

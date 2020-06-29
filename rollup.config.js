@@ -9,10 +9,16 @@ const commonjsPulgin = () => {
   return commonjs({
     extensions: ['.js', '.ts'],
     namedExports: {
-      './grpc/model/transaction_pb': ['GetTransactionsRequest', 'GetTransactionRequest', 'PostTransactionRequest', 'GetTransactionMinimumFeeRequest', 'TransactionType'],
+      './grpc/model/transaction_pb': [
+        'GetTransactionsRequest',
+        'GetTransactionRequest',
+        'PostTransactionRequest',
+        'GetTransactionMinimumFeeRequest',
+        'TransactionType',
+      ],
       './grpc/model/pagination_pb': ['Pagination', 'OrderBy'],
       './grpc/model/mempool_pb': ['GetMempoolTransactionsRequest', 'GetMempoolTransactionRequest'],
-      './grpc/model/accountBalance_pb': ['GetAccountBalanceRequest'],
+      './grpc/model/accountBalance_pb': ['GetAccountBalanceRequest', 'GetAccountBalancesRequest'],
       './grpc/model/empty_pb': ['Empty'],
       './grpc/model/proofOfOwnership_pb': ['GetProofOfOwnershipRequest'],
       './grpc/model/auth_pb': ['RequestType'],
@@ -21,8 +27,14 @@ const commonjsPulgin = () => {
       './grpc/model/nodeRegistration_pb': ['GetNodeRegistrationRequest', 'GetNodeRegistrationsRequest', 'NodeAddress'],
       './grpc/model/escrow_pb.js': ['GetEscrowTransactionsRequest', 'GetEscrowTransactionRequest'],
       './grpc/model/block_pb.js': ['GetBlocksRequest', 'GetBlockRequest'],
-    }
-  })
+      './grpc/model/multiSignature_pb.js': [
+        'GetPendingTransactionsRequest',
+        'GetPendingTransactionDetailByTransactionHashRequest',
+        'GetMultisignatureInfoRequest',
+      ],
+      './grpc/model/accountDataset_pb.js': ['GetAccountDatasetsRequest', 'GetAccountDatasetRequest'],
+    },
+  });
 }
 
 const typescriptPlugin = () => typescript({ typescript: require('typescript'), useTsconfigDeclarationDir: true })

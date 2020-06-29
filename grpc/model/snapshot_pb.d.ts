@@ -5,10 +5,13 @@ import * as jspb from "google-protobuf";
 import * as model_spineBlockManifest_pb from "../model/spineBlockManifest_pb";
 import * as model_accountBalance_pb from "../model/accountBalance_pb";
 import * as model_nodeRegistration_pb from "../model/nodeRegistration_pb";
-import * as model_accountDatasets_pb from "../model/accountDatasets_pb";
+import * as model_accountDataset_pb from "../model/accountDataset_pb";
 import * as model_participationScore_pb from "../model/participationScore_pb";
 import * as model_publishedReceipt_pb from "../model/publishedReceipt_pb";
 import * as model_escrow_pb from "../model/escrow_pb";
+import * as model_multiSignature_pb from "../model/multiSignature_pb";
+import * as model_block_pb from "../model/block_pb";
+import * as model_skippedBlocksmith_pb from "../model/skippedBlocksmith_pb";
 
 export class SnapshotFileInfo extends jspb.Message {
   getSnapshotfilehash(): Uint8Array | string;
@@ -57,6 +60,11 @@ export namespace SnapshotFileInfo {
 }
 
 export class SnapshotPayload extends jspb.Message {
+  clearBlocksList(): void;
+  getBlocksList(): Array<model_block_pb.Block>;
+  setBlocksList(value: Array<model_block_pb.Block>): void;
+  addBlocks(value?: model_block_pb.Block, index?: number): model_block_pb.Block;
+
   clearAccountbalancesList(): void;
   getAccountbalancesList(): Array<model_accountBalance_pb.AccountBalance>;
   setAccountbalancesList(value: Array<model_accountBalance_pb.AccountBalance>): void;
@@ -68,9 +76,9 @@ export class SnapshotPayload extends jspb.Message {
   addNoderegistrations(value?: model_nodeRegistration_pb.NodeRegistration, index?: number): model_nodeRegistration_pb.NodeRegistration;
 
   clearAccountdatasetsList(): void;
-  getAccountdatasetsList(): Array<model_accountDatasets_pb.AccountDataset>;
-  setAccountdatasetsList(value: Array<model_accountDatasets_pb.AccountDataset>): void;
-  addAccountdatasets(value?: model_accountDatasets_pb.AccountDataset, index?: number): model_accountDatasets_pb.AccountDataset;
+  getAccountdatasetsList(): Array<model_accountDataset_pb.AccountDataset>;
+  setAccountdatasetsList(value: Array<model_accountDataset_pb.AccountDataset>): void;
+  addAccountdatasets(value?: model_accountDataset_pb.AccountDataset, index?: number): model_accountDataset_pb.AccountDataset;
 
   clearParticipationscoresList(): void;
   getParticipationscoresList(): Array<model_participationScore_pb.ParticipationScore>;
@@ -87,6 +95,31 @@ export class SnapshotPayload extends jspb.Message {
   setEscrowtransactionsList(value: Array<model_escrow_pb.Escrow>): void;
   addEscrowtransactions(value?: model_escrow_pb.Escrow, index?: number): model_escrow_pb.Escrow;
 
+  clearPendingtransactionsList(): void;
+  getPendingtransactionsList(): Array<model_multiSignature_pb.PendingTransaction>;
+  setPendingtransactionsList(value: Array<model_multiSignature_pb.PendingTransaction>): void;
+  addPendingtransactions(value?: model_multiSignature_pb.PendingTransaction, index?: number): model_multiSignature_pb.PendingTransaction;
+
+  clearPendingsignaturesList(): void;
+  getPendingsignaturesList(): Array<model_multiSignature_pb.PendingSignature>;
+  setPendingsignaturesList(value: Array<model_multiSignature_pb.PendingSignature>): void;
+  addPendingsignatures(value?: model_multiSignature_pb.PendingSignature, index?: number): model_multiSignature_pb.PendingSignature;
+
+  clearMultisignatureinfosList(): void;
+  getMultisignatureinfosList(): Array<model_multiSignature_pb.MultiSignatureInfo>;
+  setMultisignatureinfosList(value: Array<model_multiSignature_pb.MultiSignatureInfo>): void;
+  addMultisignatureinfos(value?: model_multiSignature_pb.MultiSignatureInfo, index?: number): model_multiSignature_pb.MultiSignatureInfo;
+
+  clearSkippedblocksmithsList(): void;
+  getSkippedblocksmithsList(): Array<model_skippedBlocksmith_pb.SkippedBlocksmith>;
+  setSkippedblocksmithsList(value: Array<model_skippedBlocksmith_pb.SkippedBlocksmith>): void;
+  addSkippedblocksmiths(value?: model_skippedBlocksmith_pb.SkippedBlocksmith, index?: number): model_skippedBlocksmith_pb.SkippedBlocksmith;
+
+  clearMultisignatureparticipantsList(): void;
+  getMultisignatureparticipantsList(): Array<model_multiSignature_pb.MultiSignatureParticipant>;
+  setMultisignatureparticipantsList(value: Array<model_multiSignature_pb.MultiSignatureParticipant>): void;
+  addMultisignatureparticipants(value?: model_multiSignature_pb.MultiSignatureParticipant, index?: number): model_multiSignature_pb.MultiSignatureParticipant;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SnapshotPayload.AsObject;
   static toObject(includeInstance: boolean, msg: SnapshotPayload): SnapshotPayload.AsObject;
@@ -99,12 +132,18 @@ export class SnapshotPayload extends jspb.Message {
 
 export namespace SnapshotPayload {
   export type AsObject = {
+    blocksList: Array<model_block_pb.Block.AsObject>,
     accountbalancesList: Array<model_accountBalance_pb.AccountBalance.AsObject>,
     noderegistrationsList: Array<model_nodeRegistration_pb.NodeRegistration.AsObject>,
-    accountdatasetsList: Array<model_accountDatasets_pb.AccountDataset.AsObject>,
+    accountdatasetsList: Array<model_accountDataset_pb.AccountDataset.AsObject>,
     participationscoresList: Array<model_participationScore_pb.ParticipationScore.AsObject>,
     publishedreceiptsList: Array<model_publishedReceipt_pb.PublishedReceipt.AsObject>,
     escrowtransactionsList: Array<model_escrow_pb.Escrow.AsObject>,
+    pendingtransactionsList: Array<model_multiSignature_pb.PendingTransaction.AsObject>,
+    pendingsignaturesList: Array<model_multiSignature_pb.PendingSignature.AsObject>,
+    multisignatureinfosList: Array<model_multiSignature_pb.MultiSignatureInfo.AsObject>,
+    skippedblocksmithsList: Array<model_skippedBlocksmith_pb.SkippedBlocksmith.AsObject>,
+    multisignatureparticipantsList: Array<model_multiSignature_pb.MultiSignatureParticipant.AsObject>,
   }
 }
 

@@ -18,14 +18,20 @@ var model_accountBalance_pb = require('../model/accountBalance_pb.js');
 goog.object.extend(proto, model_accountBalance_pb);
 var model_nodeRegistration_pb = require('../model/nodeRegistration_pb.js');
 goog.object.extend(proto, model_nodeRegistration_pb);
-var model_accountDatasets_pb = require('../model/accountDatasets_pb.js');
-goog.object.extend(proto, model_accountDatasets_pb);
+var model_accountDataset_pb = require('../model/accountDataset_pb.js');
+goog.object.extend(proto, model_accountDataset_pb);
 var model_participationScore_pb = require('../model/participationScore_pb.js');
 goog.object.extend(proto, model_participationScore_pb);
 var model_publishedReceipt_pb = require('../model/publishedReceipt_pb.js');
 goog.object.extend(proto, model_publishedReceipt_pb);
 var model_escrow_pb = require('../model/escrow_pb.js');
 goog.object.extend(proto, model_escrow_pb);
+var model_multiSignature_pb = require('../model/multiSignature_pb.js');
+goog.object.extend(proto, model_multiSignature_pb);
+var model_block_pb = require('../model/block_pb.js');
+goog.object.extend(proto, model_block_pb);
+var model_skippedBlocksmith_pb = require('../model/skippedBlocksmith_pb.js');
+goog.object.extend(proto, model_skippedBlocksmith_pb);
 goog.exportSymbol('proto.model.SnapshotFileInfo', null, global);
 goog.exportSymbol('proto.model.SnapshotPayload', null, global);
 /**
@@ -410,7 +416,7 @@ proto.model.SnapshotFileInfo.prototype.clearFilechunkshashesList = function() {
  * @private {!Array<number>}
  * @const
  */
-proto.model.SnapshotPayload.repeatedFields_ = [1,2,3,4,5,6];
+proto.model.SnapshotPayload.repeatedFields_ = [1,2,3,4,5,6,7,8,9,10,11,12];
 
 
 
@@ -443,18 +449,30 @@ proto.model.SnapshotPayload.prototype.toObject = function(opt_includeInstance) {
  */
 proto.model.SnapshotPayload.toObject = function(includeInstance, msg) {
   var f, obj = {
+    blocksList: jspb.Message.toObjectList(msg.getBlocksList(),
+    model_block_pb.Block.toObject, includeInstance),
     accountbalancesList: jspb.Message.toObjectList(msg.getAccountbalancesList(),
     model_accountBalance_pb.AccountBalance.toObject, includeInstance),
     noderegistrationsList: jspb.Message.toObjectList(msg.getNoderegistrationsList(),
     model_nodeRegistration_pb.NodeRegistration.toObject, includeInstance),
     accountdatasetsList: jspb.Message.toObjectList(msg.getAccountdatasetsList(),
-    model_accountDatasets_pb.AccountDataset.toObject, includeInstance),
+    model_accountDataset_pb.AccountDataset.toObject, includeInstance),
     participationscoresList: jspb.Message.toObjectList(msg.getParticipationscoresList(),
     model_participationScore_pb.ParticipationScore.toObject, includeInstance),
     publishedreceiptsList: jspb.Message.toObjectList(msg.getPublishedreceiptsList(),
     model_publishedReceipt_pb.PublishedReceipt.toObject, includeInstance),
     escrowtransactionsList: jspb.Message.toObjectList(msg.getEscrowtransactionsList(),
-    model_escrow_pb.Escrow.toObject, includeInstance)
+    model_escrow_pb.Escrow.toObject, includeInstance),
+    pendingtransactionsList: jspb.Message.toObjectList(msg.getPendingtransactionsList(),
+    model_multiSignature_pb.PendingTransaction.toObject, includeInstance),
+    pendingsignaturesList: jspb.Message.toObjectList(msg.getPendingsignaturesList(),
+    model_multiSignature_pb.PendingSignature.toObject, includeInstance),
+    multisignatureinfosList: jspb.Message.toObjectList(msg.getMultisignatureinfosList(),
+    model_multiSignature_pb.MultiSignatureInfo.toObject, includeInstance),
+    skippedblocksmithsList: jspb.Message.toObjectList(msg.getSkippedblocksmithsList(),
+    model_skippedBlocksmith_pb.SkippedBlocksmith.toObject, includeInstance),
+    multisignatureparticipantsList: jspb.Message.toObjectList(msg.getMultisignatureparticipantsList(),
+    model_multiSignature_pb.MultiSignatureParticipant.toObject, includeInstance)
   };
 
   if (includeInstance) {
@@ -492,34 +510,64 @@ proto.model.SnapshotPayload.deserializeBinaryFromReader = function(msg, reader) 
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
+      var value = new model_block_pb.Block;
+      reader.readMessage(value,model_block_pb.Block.deserializeBinaryFromReader);
+      msg.addBlocks(value);
+      break;
+    case 2:
       var value = new model_accountBalance_pb.AccountBalance;
       reader.readMessage(value,model_accountBalance_pb.AccountBalance.deserializeBinaryFromReader);
       msg.addAccountbalances(value);
       break;
-    case 2:
+    case 3:
       var value = new model_nodeRegistration_pb.NodeRegistration;
       reader.readMessage(value,model_nodeRegistration_pb.NodeRegistration.deserializeBinaryFromReader);
       msg.addNoderegistrations(value);
       break;
-    case 3:
-      var value = new model_accountDatasets_pb.AccountDataset;
-      reader.readMessage(value,model_accountDatasets_pb.AccountDataset.deserializeBinaryFromReader);
+    case 4:
+      var value = new model_accountDataset_pb.AccountDataset;
+      reader.readMessage(value,model_accountDataset_pb.AccountDataset.deserializeBinaryFromReader);
       msg.addAccountdatasets(value);
       break;
-    case 4:
+    case 5:
       var value = new model_participationScore_pb.ParticipationScore;
       reader.readMessage(value,model_participationScore_pb.ParticipationScore.deserializeBinaryFromReader);
       msg.addParticipationscores(value);
       break;
-    case 5:
+    case 6:
       var value = new model_publishedReceipt_pb.PublishedReceipt;
       reader.readMessage(value,model_publishedReceipt_pb.PublishedReceipt.deserializeBinaryFromReader);
       msg.addPublishedreceipts(value);
       break;
-    case 6:
+    case 7:
       var value = new model_escrow_pb.Escrow;
       reader.readMessage(value,model_escrow_pb.Escrow.deserializeBinaryFromReader);
       msg.addEscrowtransactions(value);
+      break;
+    case 8:
+      var value = new model_multiSignature_pb.PendingTransaction;
+      reader.readMessage(value,model_multiSignature_pb.PendingTransaction.deserializeBinaryFromReader);
+      msg.addPendingtransactions(value);
+      break;
+    case 9:
+      var value = new model_multiSignature_pb.PendingSignature;
+      reader.readMessage(value,model_multiSignature_pb.PendingSignature.deserializeBinaryFromReader);
+      msg.addPendingsignatures(value);
+      break;
+    case 10:
+      var value = new model_multiSignature_pb.MultiSignatureInfo;
+      reader.readMessage(value,model_multiSignature_pb.MultiSignatureInfo.deserializeBinaryFromReader);
+      msg.addMultisignatureinfos(value);
+      break;
+    case 11:
+      var value = new model_skippedBlocksmith_pb.SkippedBlocksmith;
+      reader.readMessage(value,model_skippedBlocksmith_pb.SkippedBlocksmith.deserializeBinaryFromReader);
+      msg.addSkippedblocksmiths(value);
+      break;
+    case 12:
+      var value = new model_multiSignature_pb.MultiSignatureParticipant;
+      reader.readMessage(value,model_multiSignature_pb.MultiSignatureParticipant.deserializeBinaryFromReader);
+      msg.addMultisignatureparticipants(value);
       break;
     default:
       reader.skipField();
@@ -550,10 +598,18 @@ proto.model.SnapshotPayload.prototype.serializeBinary = function() {
  */
 proto.model.SnapshotPayload.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getAccountbalancesList();
+  f = message.getBlocksList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
       1,
+      f,
+      model_block_pb.Block.serializeBinaryToWriter
+    );
+  }
+  f = message.getAccountbalancesList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      2,
       f,
       model_accountBalance_pb.AccountBalance.serializeBinaryToWriter
     );
@@ -561,7 +617,7 @@ proto.model.SnapshotPayload.serializeBinaryToWriter = function(message, writer) 
   f = message.getNoderegistrationsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      2,
+      3,
       f,
       model_nodeRegistration_pb.NodeRegistration.serializeBinaryToWriter
     );
@@ -569,15 +625,15 @@ proto.model.SnapshotPayload.serializeBinaryToWriter = function(message, writer) 
   f = message.getAccountdatasetsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      3,
+      4,
       f,
-      model_accountDatasets_pb.AccountDataset.serializeBinaryToWriter
+      model_accountDataset_pb.AccountDataset.serializeBinaryToWriter
     );
   }
   f = message.getParticipationscoresList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      4,
+      5,
       f,
       model_participationScore_pb.ParticipationScore.serializeBinaryToWriter
     );
@@ -585,7 +641,7 @@ proto.model.SnapshotPayload.serializeBinaryToWriter = function(message, writer) 
   f = message.getPublishedreceiptsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      5,
+      6,
       f,
       model_publishedReceipt_pb.PublishedReceipt.serializeBinaryToWriter
     );
@@ -593,27 +649,101 @@ proto.model.SnapshotPayload.serializeBinaryToWriter = function(message, writer) 
   f = message.getEscrowtransactionsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      6,
+      7,
       f,
       model_escrow_pb.Escrow.serializeBinaryToWriter
+    );
+  }
+  f = message.getPendingtransactionsList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      8,
+      f,
+      model_multiSignature_pb.PendingTransaction.serializeBinaryToWriter
+    );
+  }
+  f = message.getPendingsignaturesList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      9,
+      f,
+      model_multiSignature_pb.PendingSignature.serializeBinaryToWriter
+    );
+  }
+  f = message.getMultisignatureinfosList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      10,
+      f,
+      model_multiSignature_pb.MultiSignatureInfo.serializeBinaryToWriter
+    );
+  }
+  f = message.getSkippedblocksmithsList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      11,
+      f,
+      model_skippedBlocksmith_pb.SkippedBlocksmith.serializeBinaryToWriter
+    );
+  }
+  f = message.getMultisignatureparticipantsList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      12,
+      f,
+      model_multiSignature_pb.MultiSignatureParticipant.serializeBinaryToWriter
     );
   }
 };
 
 
 /**
- * repeated AccountBalance AccountBalances = 1;
+ * repeated Block Blocks = 1;
+ * @return {!Array<!proto.model.Block>}
+ */
+proto.model.SnapshotPayload.prototype.getBlocksList = function() {
+  return /** @type{!Array<!proto.model.Block>} */ (
+    jspb.Message.getRepeatedWrapperField(this, model_block_pb.Block, 1));
+};
+
+
+/** @param {!Array<!proto.model.Block>} value */
+proto.model.SnapshotPayload.prototype.setBlocksList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 1, value);
+};
+
+
+/**
+ * @param {!proto.model.Block=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.Block}
+ */
+proto.model.SnapshotPayload.prototype.addBlocks = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.model.Block, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.SnapshotPayload.prototype.clearBlocksList = function() {
+  this.setBlocksList([]);
+};
+
+
+/**
+ * repeated AccountBalance AccountBalances = 2;
  * @return {!Array<!proto.model.AccountBalance>}
  */
 proto.model.SnapshotPayload.prototype.getAccountbalancesList = function() {
   return /** @type{!Array<!proto.model.AccountBalance>} */ (
-    jspb.Message.getRepeatedWrapperField(this, model_accountBalance_pb.AccountBalance, 1));
+    jspb.Message.getRepeatedWrapperField(this, model_accountBalance_pb.AccountBalance, 2));
 };
 
 
 /** @param {!Array<!proto.model.AccountBalance>} value */
 proto.model.SnapshotPayload.prototype.setAccountbalancesList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 1, value);
+  jspb.Message.setRepeatedWrapperField(this, 2, value);
 };
 
 
@@ -623,7 +753,7 @@ proto.model.SnapshotPayload.prototype.setAccountbalancesList = function(value) {
  * @return {!proto.model.AccountBalance}
  */
 proto.model.SnapshotPayload.prototype.addAccountbalances = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.model.AccountBalance, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 2, opt_value, proto.model.AccountBalance, opt_index);
 };
 
 
@@ -636,18 +766,18 @@ proto.model.SnapshotPayload.prototype.clearAccountbalancesList = function() {
 
 
 /**
- * repeated NodeRegistration NodeRegistrations = 2;
+ * repeated NodeRegistration NodeRegistrations = 3;
  * @return {!Array<!proto.model.NodeRegistration>}
  */
 proto.model.SnapshotPayload.prototype.getNoderegistrationsList = function() {
   return /** @type{!Array<!proto.model.NodeRegistration>} */ (
-    jspb.Message.getRepeatedWrapperField(this, model_nodeRegistration_pb.NodeRegistration, 2));
+    jspb.Message.getRepeatedWrapperField(this, model_nodeRegistration_pb.NodeRegistration, 3));
 };
 
 
 /** @param {!Array<!proto.model.NodeRegistration>} value */
 proto.model.SnapshotPayload.prototype.setNoderegistrationsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 2, value);
+  jspb.Message.setRepeatedWrapperField(this, 3, value);
 };
 
 
@@ -657,7 +787,7 @@ proto.model.SnapshotPayload.prototype.setNoderegistrationsList = function(value)
  * @return {!proto.model.NodeRegistration}
  */
 proto.model.SnapshotPayload.prototype.addNoderegistrations = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 2, opt_value, proto.model.NodeRegistration, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 3, opt_value, proto.model.NodeRegistration, opt_index);
 };
 
 
@@ -670,18 +800,18 @@ proto.model.SnapshotPayload.prototype.clearNoderegistrationsList = function() {
 
 
 /**
- * repeated AccountDataset AccountDatasets = 3;
+ * repeated AccountDataset AccountDatasets = 4;
  * @return {!Array<!proto.model.AccountDataset>}
  */
 proto.model.SnapshotPayload.prototype.getAccountdatasetsList = function() {
   return /** @type{!Array<!proto.model.AccountDataset>} */ (
-    jspb.Message.getRepeatedWrapperField(this, model_accountDatasets_pb.AccountDataset, 3));
+    jspb.Message.getRepeatedWrapperField(this, model_accountDataset_pb.AccountDataset, 4));
 };
 
 
 /** @param {!Array<!proto.model.AccountDataset>} value */
 proto.model.SnapshotPayload.prototype.setAccountdatasetsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 3, value);
+  jspb.Message.setRepeatedWrapperField(this, 4, value);
 };
 
 
@@ -691,7 +821,7 @@ proto.model.SnapshotPayload.prototype.setAccountdatasetsList = function(value) {
  * @return {!proto.model.AccountDataset}
  */
 proto.model.SnapshotPayload.prototype.addAccountdatasets = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 3, opt_value, proto.model.AccountDataset, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 4, opt_value, proto.model.AccountDataset, opt_index);
 };
 
 
@@ -704,18 +834,18 @@ proto.model.SnapshotPayload.prototype.clearAccountdatasetsList = function() {
 
 
 /**
- * repeated ParticipationScore ParticipationScores = 4;
+ * repeated ParticipationScore ParticipationScores = 5;
  * @return {!Array<!proto.model.ParticipationScore>}
  */
 proto.model.SnapshotPayload.prototype.getParticipationscoresList = function() {
   return /** @type{!Array<!proto.model.ParticipationScore>} */ (
-    jspb.Message.getRepeatedWrapperField(this, model_participationScore_pb.ParticipationScore, 4));
+    jspb.Message.getRepeatedWrapperField(this, model_participationScore_pb.ParticipationScore, 5));
 };
 
 
 /** @param {!Array<!proto.model.ParticipationScore>} value */
 proto.model.SnapshotPayload.prototype.setParticipationscoresList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 4, value);
+  jspb.Message.setRepeatedWrapperField(this, 5, value);
 };
 
 
@@ -725,7 +855,7 @@ proto.model.SnapshotPayload.prototype.setParticipationscoresList = function(valu
  * @return {!proto.model.ParticipationScore}
  */
 proto.model.SnapshotPayload.prototype.addParticipationscores = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 4, opt_value, proto.model.ParticipationScore, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 5, opt_value, proto.model.ParticipationScore, opt_index);
 };
 
 
@@ -738,18 +868,18 @@ proto.model.SnapshotPayload.prototype.clearParticipationscoresList = function() 
 
 
 /**
- * repeated PublishedReceipt PublishedReceipts = 5;
+ * repeated PublishedReceipt PublishedReceipts = 6;
  * @return {!Array<!proto.model.PublishedReceipt>}
  */
 proto.model.SnapshotPayload.prototype.getPublishedreceiptsList = function() {
   return /** @type{!Array<!proto.model.PublishedReceipt>} */ (
-    jspb.Message.getRepeatedWrapperField(this, model_publishedReceipt_pb.PublishedReceipt, 5));
+    jspb.Message.getRepeatedWrapperField(this, model_publishedReceipt_pb.PublishedReceipt, 6));
 };
 
 
 /** @param {!Array<!proto.model.PublishedReceipt>} value */
 proto.model.SnapshotPayload.prototype.setPublishedreceiptsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 5, value);
+  jspb.Message.setRepeatedWrapperField(this, 6, value);
 };
 
 
@@ -759,7 +889,7 @@ proto.model.SnapshotPayload.prototype.setPublishedreceiptsList = function(value)
  * @return {!proto.model.PublishedReceipt}
  */
 proto.model.SnapshotPayload.prototype.addPublishedreceipts = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 5, opt_value, proto.model.PublishedReceipt, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 6, opt_value, proto.model.PublishedReceipt, opt_index);
 };
 
 
@@ -772,18 +902,18 @@ proto.model.SnapshotPayload.prototype.clearPublishedreceiptsList = function() {
 
 
 /**
- * repeated Escrow EscrowTransactions = 6;
+ * repeated Escrow EscrowTransactions = 7;
  * @return {!Array<!proto.model.Escrow>}
  */
 proto.model.SnapshotPayload.prototype.getEscrowtransactionsList = function() {
   return /** @type{!Array<!proto.model.Escrow>} */ (
-    jspb.Message.getRepeatedWrapperField(this, model_escrow_pb.Escrow, 6));
+    jspb.Message.getRepeatedWrapperField(this, model_escrow_pb.Escrow, 7));
 };
 
 
 /** @param {!Array<!proto.model.Escrow>} value */
 proto.model.SnapshotPayload.prototype.setEscrowtransactionsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 6, value);
+  jspb.Message.setRepeatedWrapperField(this, 7, value);
 };
 
 
@@ -793,7 +923,7 @@ proto.model.SnapshotPayload.prototype.setEscrowtransactionsList = function(value
  * @return {!proto.model.Escrow}
  */
 proto.model.SnapshotPayload.prototype.addEscrowtransactions = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 6, opt_value, proto.model.Escrow, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 7, opt_value, proto.model.Escrow, opt_index);
 };
 
 
@@ -802,6 +932,176 @@ proto.model.SnapshotPayload.prototype.addEscrowtransactions = function(opt_value
  */
 proto.model.SnapshotPayload.prototype.clearEscrowtransactionsList = function() {
   this.setEscrowtransactionsList([]);
+};
+
+
+/**
+ * repeated PendingTransaction PendingTransactions = 8;
+ * @return {!Array<!proto.model.PendingTransaction>}
+ */
+proto.model.SnapshotPayload.prototype.getPendingtransactionsList = function() {
+  return /** @type{!Array<!proto.model.PendingTransaction>} */ (
+    jspb.Message.getRepeatedWrapperField(this, model_multiSignature_pb.PendingTransaction, 8));
+};
+
+
+/** @param {!Array<!proto.model.PendingTransaction>} value */
+proto.model.SnapshotPayload.prototype.setPendingtransactionsList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 8, value);
+};
+
+
+/**
+ * @param {!proto.model.PendingTransaction=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.PendingTransaction}
+ */
+proto.model.SnapshotPayload.prototype.addPendingtransactions = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 8, opt_value, proto.model.PendingTransaction, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.SnapshotPayload.prototype.clearPendingtransactionsList = function() {
+  this.setPendingtransactionsList([]);
+};
+
+
+/**
+ * repeated PendingSignature PendingSignatures = 9;
+ * @return {!Array<!proto.model.PendingSignature>}
+ */
+proto.model.SnapshotPayload.prototype.getPendingsignaturesList = function() {
+  return /** @type{!Array<!proto.model.PendingSignature>} */ (
+    jspb.Message.getRepeatedWrapperField(this, model_multiSignature_pb.PendingSignature, 9));
+};
+
+
+/** @param {!Array<!proto.model.PendingSignature>} value */
+proto.model.SnapshotPayload.prototype.setPendingsignaturesList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 9, value);
+};
+
+
+/**
+ * @param {!proto.model.PendingSignature=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.PendingSignature}
+ */
+proto.model.SnapshotPayload.prototype.addPendingsignatures = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 9, opt_value, proto.model.PendingSignature, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.SnapshotPayload.prototype.clearPendingsignaturesList = function() {
+  this.setPendingsignaturesList([]);
+};
+
+
+/**
+ * repeated MultiSignatureInfo MultiSignatureInfos = 10;
+ * @return {!Array<!proto.model.MultiSignatureInfo>}
+ */
+proto.model.SnapshotPayload.prototype.getMultisignatureinfosList = function() {
+  return /** @type{!Array<!proto.model.MultiSignatureInfo>} */ (
+    jspb.Message.getRepeatedWrapperField(this, model_multiSignature_pb.MultiSignatureInfo, 10));
+};
+
+
+/** @param {!Array<!proto.model.MultiSignatureInfo>} value */
+proto.model.SnapshotPayload.prototype.setMultisignatureinfosList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 10, value);
+};
+
+
+/**
+ * @param {!proto.model.MultiSignatureInfo=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.MultiSignatureInfo}
+ */
+proto.model.SnapshotPayload.prototype.addMultisignatureinfos = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 10, opt_value, proto.model.MultiSignatureInfo, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.SnapshotPayload.prototype.clearMultisignatureinfosList = function() {
+  this.setMultisignatureinfosList([]);
+};
+
+
+/**
+ * repeated SkippedBlocksmith SkippedBlocksmiths = 11;
+ * @return {!Array<!proto.model.SkippedBlocksmith>}
+ */
+proto.model.SnapshotPayload.prototype.getSkippedblocksmithsList = function() {
+  return /** @type{!Array<!proto.model.SkippedBlocksmith>} */ (
+    jspb.Message.getRepeatedWrapperField(this, model_skippedBlocksmith_pb.SkippedBlocksmith, 11));
+};
+
+
+/** @param {!Array<!proto.model.SkippedBlocksmith>} value */
+proto.model.SnapshotPayload.prototype.setSkippedblocksmithsList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 11, value);
+};
+
+
+/**
+ * @param {!proto.model.SkippedBlocksmith=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.SkippedBlocksmith}
+ */
+proto.model.SnapshotPayload.prototype.addSkippedblocksmiths = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 11, opt_value, proto.model.SkippedBlocksmith, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.SnapshotPayload.prototype.clearSkippedblocksmithsList = function() {
+  this.setSkippedblocksmithsList([]);
+};
+
+
+/**
+ * repeated MultiSignatureParticipant MultiSignatureParticipants = 12;
+ * @return {!Array<!proto.model.MultiSignatureParticipant>}
+ */
+proto.model.SnapshotPayload.prototype.getMultisignatureparticipantsList = function() {
+  return /** @type{!Array<!proto.model.MultiSignatureParticipant>} */ (
+    jspb.Message.getRepeatedWrapperField(this, model_multiSignature_pb.MultiSignatureParticipant, 12));
+};
+
+
+/** @param {!Array<!proto.model.MultiSignatureParticipant>} value */
+proto.model.SnapshotPayload.prototype.setMultisignatureparticipantsList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 12, value);
+};
+
+
+/**
+ * @param {!proto.model.MultiSignatureParticipant=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.MultiSignatureParticipant}
+ */
+proto.model.SnapshotPayload.prototype.addMultisignatureparticipants = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 12, opt_value, proto.model.MultiSignatureParticipant, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.SnapshotPayload.prototype.clearMultisignatureparticipantsList = function() {
+  this.setMultisignatureparticipantsList([]);
 };
 
 
