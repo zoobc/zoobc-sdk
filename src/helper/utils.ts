@@ -6,8 +6,7 @@ import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
-export function getZBCAdress(publicKey: Uint8Array): string {
-  const prefix = 'ZBC';
+export function getZBCAdress(publicKey: Uint8Array, prefix: string = 'ZBC'): string {
   const bytes = Buffer.alloc(35);
   for (let i = 0; i < 32; i++) bytes[i] = publicKey[i];
   for (let i = 0; i < 3; i++) bytes[i + 32] = prefix.charCodeAt(i);
@@ -45,10 +44,9 @@ export function encryptPassword(password: string, salt: string = 'salt'): string
   }).toString();
 }
 
-export function isZBCAddressValid(address: string): boolean {
+export function isZBCAddressValid(address: string, stdPrefix: string = 'ZBC'): boolean {
   if (address.length != 66) return false;
   const segs = address.split('_');
-  const stdPrefix = 'ZBC';
   const prefix = segs[0];
   if (prefix != stdPrefix) return false;
   segs.shift();
