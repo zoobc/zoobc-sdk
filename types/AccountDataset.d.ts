@@ -1,4 +1,6 @@
 import { GetAccountDatasetsResponse, AccountDataset } from '../grpc/model/accountDataset_pb';
+export declare type AccountDatasetsResponse = GetAccountDatasetsResponse.AsObject;
+export declare type AccountDatasetResponse = AccountDataset.AsObject;
 export interface AccountDatasetListParams {
     property?: string;
     value?: string;
@@ -15,8 +17,8 @@ export interface AccountDatasetParams {
     property: string;
     recipientAccountAddress: string;
 }
-export declare function getList(params?: AccountDatasetListParams): Promise<GetAccountDatasetsResponse.AsObject>;
-export declare function get(params: AccountDatasetParams): Promise<AccountDataset.AsObject>;
+export declare function getList(params?: AccountDatasetListParams): Promise<AccountDatasetsResponse>;
+export declare function get(params: AccountDatasetParams): Promise<AccountDatasetResponse>;
 declare const _default: {
     getList: typeof getList;
     get: typeof get;

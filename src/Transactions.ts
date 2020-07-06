@@ -14,6 +14,11 @@ import { TransactionServiceClient } from '../grpc/service/transaction_pb_service
 import { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
 import { BIP32Interface } from 'bip32';
 
+export type TransactionsResponse = GetTransactionsResponse.AsObject;
+export type TransactionResponse = Transaction.AsObject;
+export type PostTransactionResponses = PostTransactionResponse.AsObject;
+export type TransactionMinimumFeeResponse = GetTransactionMinimumFeeResponse.AsObject;
+
 export interface TransactionListParams {
   address?: string;
   height?: number;
@@ -27,7 +32,7 @@ export interface TransactionListParams {
   };
 }
 
-function getList(params?: TransactionListParams): Promise<GetTransactionsResponse.AsObject> {
+function getList(params?: TransactionListParams): Promise<TransactionsResponse> {
   return new Promise((resolve, reject) => {
     const request = new GetTransactionsRequest();
     const networkIP = Network.selected();
@@ -57,7 +62,7 @@ function getList(params?: TransactionListParams): Promise<GetTransactionsRespons
   });
 }
 
-function get(id: string): Promise<Transaction.AsObject> {
+function get(id: string): Promise<TransactionResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetTransactionRequest();
@@ -71,7 +76,7 @@ function get(id: string): Promise<Transaction.AsObject> {
   });
 }
 
-function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
+function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<PostTransactionResponses> {
   const txBytes = sendMoneyBuilder(data, seed);
 
   return new Promise((resolve, reject) => {
@@ -88,7 +93,7 @@ function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<Post
   });
 }
 
-function getTransactionMinimumFee(data: SendMoneyInterface, seed: BIP32Interface): Promise<GetTransactionMinimumFeeResponse.AsObject> {
+function getTransactionMinimumFee(data: SendMoneyInterface, seed: BIP32Interface): Promise<TransactionMinimumFeeResponse> {
   const txBytes = sendMoneyBuilder(data, seed);
 
   return new Promise((resolve, reject) => {
