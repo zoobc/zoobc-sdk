@@ -9,6 +9,9 @@ import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import Network from './Network';
 import { grpc } from '@improbable-eng/grpc-web';
 
+export type AccountDatasetsResponse = GetAccountDatasetsResponse.AsObject;
+export type AccountDatasetResponse = AccountDataset.AsObject;
+
 export interface AccountDatasetListParams {
   property?: string;
   value?: string;
@@ -27,7 +30,7 @@ export interface AccountDatasetParams {
   recipientAccountAddress: string;
 }
 
-export function getList(params?: AccountDatasetListParams): Promise<GetAccountDatasetsResponse.AsObject> {
+export function getList(params?: AccountDatasetListParams): Promise<AccountDatasetsResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetAccountDatasetsRequest();
@@ -54,7 +57,7 @@ export function getList(params?: AccountDatasetListParams): Promise<GetAccountDa
   });
 }
 
-export function get(params: AccountDatasetParams): Promise<AccountDataset.AsObject> {
+export function get(params: AccountDatasetParams): Promise<AccountDatasetResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetAccountDatasetRequest();

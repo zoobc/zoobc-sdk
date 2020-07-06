@@ -4267,7 +4267,8 @@ proto.google.protobuf.FieldDescriptorProto.toObject = function(includeInstance, 
     defaultValue: (f = googleProtobuf.Message.getField(msg, 7)) == null ? undefined : f,
     oneofIndex: (f = googleProtobuf.Message.getField(msg, 9)) == null ? undefined : f,
     jsonName: (f = googleProtobuf.Message.getField(msg, 10)) == null ? undefined : f,
-    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f)
+    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f),
+    proto3Optional: (f = googleProtobuf.Message.getBooleanField(msg, 17)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -4344,6 +4345,10 @@ proto.google.protobuf.FieldDescriptorProto.deserializeBinaryFromReader = functio
       var value = new proto.google.protobuf.FieldOptions;
       reader.readMessage(value,proto.google.protobuf.FieldOptions.deserializeBinaryFromReader);
       msg.setOptions(value);
+      break;
+    case 17:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setProto3Optional(value);
       break;
     default:
       reader.skipField();
@@ -4443,6 +4448,13 @@ proto.google.protobuf.FieldDescriptorProto.serializeBinaryToWriter = function(me
       8,
       f,
       proto.google.protobuf.FieldOptions.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {boolean} */ (googleProtobuf.Message.getField(message, 17));
+  if (f != null) {
+    writer.writeBool(
+      17,
+      f
     );
   }
 };
@@ -4839,6 +4851,42 @@ proto.google.protobuf.FieldDescriptorProto.prototype.clearOptions = function() {
  */
 proto.google.protobuf.FieldDescriptorProto.prototype.hasOptions = function() {
   return googleProtobuf.Message.getField(this, 8) != null;
+};
+
+
+/**
+ * optional bool proto3_optional = 17;
+ * @return {boolean}
+ */
+proto.google.protobuf.FieldDescriptorProto.prototype.getProto3Optional = function() {
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 17, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
+ */
+proto.google.protobuf.FieldDescriptorProto.prototype.setProto3Optional = function(value) {
+  return googleProtobuf.Message.setField(this, 17, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
+ */
+proto.google.protobuf.FieldDescriptorProto.prototype.clearProto3Optional = function() {
+  return googleProtobuf.Message.setField(this, 17, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.google.protobuf.FieldDescriptorProto.prototype.hasProto3Optional = function() {
+  return googleProtobuf.Message.getField(this, 17) != null;
 };
 
 
@@ -6546,7 +6594,7 @@ proto.google.protobuf.FileOptions.toObject = function(includeInstance, msg) {
     pyGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 18, false),
     phpGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 42, false),
     deprecated: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 23, false),
-    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, false),
+    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, true),
     objcClassPrefix: (f = googleProtobuf.Message.getField(msg, 36)) == null ? undefined : f,
     csharpNamespace: (f = googleProtobuf.Message.getField(msg, 37)) == null ? undefined : f,
     swiftPrefix: (f = googleProtobuf.Message.getField(msg, 39)) == null ? undefined : f,
@@ -7311,7 +7359,7 @@ proto.google.protobuf.FileOptions.prototype.hasDeprecated = function() {
  * @return {boolean}
  */
 proto.google.protobuf.FileOptions.prototype.getCcEnableArenas = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, false));
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, true));
 };
 
 
@@ -14291,6 +14339,7 @@ goog.object.extend(exports, proto.model);
 var nodeRegistration_pb_1 = nodeRegistration_pb.GetNodeRegistrationRequest;
 var nodeRegistration_pb_2 = nodeRegistration_pb.GetNodeRegistrationsRequest;
 var nodeRegistration_pb_3 = nodeRegistration_pb.NodeAddress;
+var nodeRegistration_pb_4 = nodeRegistration_pb.NodeRegistrationState;
 
 var escrow_pb = createCommonjsModule(function (module, exports) {
 // source: model/escrow.proto
@@ -15434,6 +15483,8 @@ goog.object.extend(exports, proto.model);
 });
 var escrow_pb_1 = escrow_pb.GetEscrowTransactionsRequest;
 var escrow_pb_2 = escrow_pb.GetEscrowTransactionRequest;
+var escrow_pb_3 = escrow_pb.EscrowStatus;
+var escrow_pb_4 = escrow_pb.EscrowApproval;
 
 var multiSignature_pb = createCommonjsModule(function (module, exports) {
 // source: model/multiSignature.proto
@@ -18179,6 +18230,7 @@ goog.object.extend(exports, proto.model);
 var multiSignature_pb_1 = multiSignature_pb.GetPendingTransactionsRequest;
 var multiSignature_pb_2 = multiSignature_pb.GetPendingTransactionDetailByTransactionHashRequest;
 var multiSignature_pb_3 = multiSignature_pb.GetMultisignatureInfoRequest;
+var multiSignature_pb_4 = multiSignature_pb.PendingTransactionStatus;
 
 var transaction_pb = createCommonjsModule(function (module, exports) {
 // source: model/transaction.proto
@@ -29822,6 +29874,7 @@ proto.model.SpinePublicKeyAction = {
 
 goog.object.extend(exports, proto.model);
 });
+var spine_pb_1 = spine_pb.SpinePublicKeyAction;
 
 var spineBlockManifest_pb = createCommonjsModule(function (module, exports) {
 // source: model/spineBlockManifest.proto
@@ -30234,6 +30287,7 @@ proto.model.SpineBlockManifestType = {
 
 goog.object.extend(exports, proto.model);
 });
+var spineBlockManifest_pb_1 = spineBlockManifest_pb.SpineBlockManifestType;
 
 var block_pb = createCommonjsModule(function (module, exports) {
 // source: model/block.proto
@@ -39711,6 +39765,7 @@ goog.object.extend(exports, proto.model);
 });
 var accountDataset_pb_1 = accountDataset_pb.GetAccountDatasetsRequest;
 var accountDataset_pb_2 = accountDataset_pb.GetAccountDatasetRequest;
+var accountDataset_pb_3 = accountDataset_pb.AccountDatasetProperty;
 
 // source: service/accountDataset.proto
 /**
@@ -41048,6 +41103,94 @@ function generateTransactionHash(data) {
     return toBase64Url(window.btoa(binary));
 }
 
+var event_pb = createCommonjsModule(function (module, exports) {
+// source: model/event.proto
+/**
+ * @fileoverview
+ * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
+ * @public
+ */
+// GENERATED CODE -- DO NOT EDIT!
+
+
+var goog = googleProtobuf;
+var global = Function('return this')();
+
+goog.exportSymbol('proto.model.EventType', null, global);
+/**
+ * @enum {number}
+ */
+proto.model.EventType = {
+  EVENTANY: 0,
+  EVENTSENDMONEYTRANSACTION: 1,
+  EVENTNODEREGISTRATIONTRANSACTION: 2,
+  EVENTUPDATENODEREGISTRATIONTRANSACTION: 3,
+  EVENTREMOVENODEREGISTRATIONTRANSACTION: 4,
+  EVENTCLAIMNODEREGISTRATIONTRANSACTION: 5,
+  EVENTSETUPACCOUNTDATASETTRANSACTION: 6,
+  EVENTREMOVEACCOUNTDATASETTRANSACTION: 7,
+  EVENTREWARD: 8,
+  EVENTAPPROVALESCROWTRANSACTION: 9,
+  EVENTMULTISIGNATURETRANSACTION: 10
+};
+
+goog.object.extend(exports, proto.model);
+});
+var event_pb_1 = event_pb.EventType;
+
+var signature_pb = createCommonjsModule(function (module, exports) {
+// source: model/signature.proto
+/**
+ * @fileoverview
+ * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
+ * @public
+ */
+// GENERATED CODE -- DO NOT EDIT!
+
+
+var goog = googleProtobuf;
+var global = Function('return this')();
+
+goog.exportSymbol('proto.model.BitcoinPublicKeyFormat', null, global);
+goog.exportSymbol('proto.model.PrivateKeyBytesLength', null, global);
+goog.exportSymbol('proto.model.SignatureType', null, global);
+/**
+ * @enum {number}
+ */
+proto.model.SignatureType = {
+  DEFAULTSIGNATURE: 0,
+  BITCOINSIGNATURE: 1,
+  MULTISIGSIGNATURE: 2
+};
+
+/**
+ * @enum {number}
+ */
+proto.model.PrivateKeyBytesLength = {
+  PRIVATEKEYINVALID: 0,
+  PRIVATEKEY256BITS: 32,
+  PRIVATEKEY384BITS: 48,
+  PRIVATEKEY512BITS: 64
+};
+
+/**
+ * @enum {number}
+ */
+proto.model.BitcoinPublicKeyFormat = {
+  PUBLICKEYFORMATUNCOMPRESSED: 0,
+  PUBLICKEYFORMATCOMPRESSED: 1
+};
+
+goog.object.extend(exports, proto.model);
+});
+var signature_pb_1 = signature_pb.SignatureType;
+var signature_pb_2 = signature_pb.PrivateKeyBytesLength;
+var signature_pb_3 = signature_pb.BitcoinPublicKeyFormat;
+
 var zoobc = {
     Transactions: Transactions,
     Network: Network$1,
@@ -41063,7 +41206,20 @@ var zoobc = {
     AccountDataset: AccountDataset,
 };
 
+exports.AccountDatasetProperty = accountDataset_pb_3;
+exports.BitcoinPublicKeyFormat = signature_pb_3;
+exports.EscrowApproval = escrow_pb_4;
+exports.EscrowStatus = escrow_pb_3;
+exports.EventType = event_pb_1;
+exports.NodeRegistrationState = nodeRegistration_pb_4;
+exports.OrderBy = pagination_pb_2;
+exports.PendingTransactionStatus = multiSignature_pb_4;
+exports.PrivateKeyBytesLength = signature_pb_2;
 exports.RequestType = auth_pb_1;
+exports.SignatureType = signature_pb_1;
+exports.SpineBlockManifestType = spineBlockManifest_pb_1;
+exports.SpinePublicKeyAction = spine_pb_1;
+exports.TransactionType = transaction_pb_5;
 exports.ZooKeyring = ZooKeyring;
 exports.default = zoobc;
 exports.generateTransactionHash = generateTransactionHash;

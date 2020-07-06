@@ -24,6 +24,11 @@ import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/t
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 
+export type NodeHardwareResponse = GetNodeHardwareResponse.AsObject;
+export type GenerateNodeKeyResponses = GenerateNodeKeyResponse.AsObject;
+export type NodeRegistrationsResponse = GetNodeRegistrationResponse.AsObject;
+export type NodePostTransactionResponse = PostTransactionResponse.AsObject;
+
 export interface NodeListParams {
   minHeight?: number;
   maxHeight?: number;
@@ -45,7 +50,7 @@ export interface NodeParams {
   };
 }
 
-function getHardwareInfo(networkIP: string, childSeed: BIP32Interface): Observable<GetNodeHardwareResponse.AsObject> {
+function getHardwareInfo(networkIP: string, childSeed: BIP32Interface): Observable<NodeHardwareResponse> {
   return new Observable(observer => {
     const auth = Poown.createAuth(RequestType.GETNODEHARDWARE, childSeed);
     const request = new GetNodeHardwareRequest();
@@ -63,7 +68,7 @@ function getHardwareInfo(networkIP: string, childSeed: BIP32Interface): Observab
   });
 }
 
-function generateNodeKey(networkIP: string, childSeed: BIP32Interface): Promise<GenerateNodeKeyResponse.AsObject> {
+function generateNodeKey(networkIP: string, childSeed: BIP32Interface): Promise<GenerateNodeKeyResponses> {
   return new Promise((resolve, reject) => {
     const auth = Poown.createAuth(RequestType.GENERATETNODEKEY, childSeed);
     const metadata = new grpc.Metadata({ authorization: auth });
@@ -105,7 +110,7 @@ function getList(params?: NodeListParams): Promise<GetNodeRegistrationsResponse.
   });
 }
 
-function get(params: NodeParams): Promise<GetNodeRegistrationResponse.AsObject> {
+function get(params: NodeParams): Promise<NodeRegistrationsResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetNodeRegistrationRequest();
@@ -136,7 +141,7 @@ function get(params: NodeParams): Promise<GetNodeRegistrationResponse.AsObject> 
   });
 }
 
-function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
+function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promise<NodePostTransactionResponse> {
   return new Promise((resolve, reject) => {
     const auth = Poown.createAuth(RequestType.GETPROOFOFOWNERSHIP, childSeed);
     Poown.request(auth, data.nodeAddress).then(poown => {
@@ -155,7 +160,7 @@ function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promi
   });
 }
 
-function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
+function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<NodePostTransactionResponse> {
   return new Promise((resolve, reject) => {
     const auth = Poown.createAuth(RequestType.GETPROOFOFOWNERSHIP, childSeed);
     Poown.request(auth, data.nodeAddress)
@@ -178,7 +183,7 @@ function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<P
   });
 }
 
-function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
+function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<NodePostTransactionResponse> {
   return new Promise((resolve, reject) => {
     const bytes = removeNodeBuilder(data, childSeed);
 
@@ -194,7 +199,7 @@ function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<P
   });
 }
 
-function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
+function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<NodePostTransactionResponse> {
   return new Promise((resolve, reject) => {
     const auth = Poown.createAuth(RequestType.GETPROOFOFOWNERSHIP, childSeed);
     Poown.request(auth, data.nodeAddress).then(poown => {
