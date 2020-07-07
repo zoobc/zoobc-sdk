@@ -145,12 +145,7 @@ describe('MultiSignature Unit Testing: ', () => {
           minSigs: 2,
           multisigAddress: 'SEMS5t3u8m95Ua6ff5P8qC8yjB4T6k97hd0tni3fqYS0',
         },
-        unisgnedTransactions: {
-          sender: 'SEMS5t3u8m95Ua6ff5P8qC8yjB4T6k97hd0tni3fqYS0',
-          recipient: 'AFiTqqX99kYXjLFJJ2AWuzKK5zxYUT1Pn0p3s6lutkai',
-          amount: 1,
-          fee: 0.01,
-        },
+        unisgnedTransactions: Buffer.from([0, 0, 0, 0]),
       };
 
       const transport = mockRegister({ ...data });
