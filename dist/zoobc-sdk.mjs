@@ -24242,8 +24242,8 @@ function toBase64Url(base64Str) {
 }
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
-function getZBCAdress(publicKey) {
-    var prefix = 'ZBC';
+function getZBCAdress(publicKey, prefix) {
+    if (prefix === void 0) { prefix = 'ZBC'; }
     var bytes = Buffer.alloc(35);
     for (var i = 0; i < 32; i++)
         bytes[i] = publicKey[i];
@@ -24283,11 +24283,11 @@ function encryptPassword(password, salt) {
         iterations: 10000,
     }).toString();
 }
-function isZBCAddressValid(address) {
+function isZBCAddressValid(address, stdPrefix) {
+    if (stdPrefix === void 0) { stdPrefix = 'ZBC'; }
     if (address.length != 66)
         return false;
     var segs = address.split('_');
-    var stdPrefix = 'ZBC';
     var prefix = segs[0];
     if (prefix != stdPrefix)
         return false;
