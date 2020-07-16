@@ -312,5 +312,79 @@ proto.service.MultisigServicePromiseClient.prototype.getMultisignatureInfo =
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.model.GetMultisigAddressByParticipantAddressesRequest,
+ *   !proto.model.GetMultisigAddressByParticipantAddressesResponse>}
+ */
+const methodDescriptor_MultisigService_GetMultisigAddressByParticipantAddresses = new grpc.web.MethodDescriptor(
+  '/service.MultisigService/GetMultisigAddressByParticipantAddresses',
+  grpc.web.MethodType.UNARY,
+  model_multiSignature_pb.GetMultisigAddressByParticipantAddressesRequest,
+  model_multiSignature_pb.GetMultisigAddressByParticipantAddressesResponse,
+  /** @param {!proto.model.GetMultisigAddressByParticipantAddressesRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_multiSignature_pb.GetMultisigAddressByParticipantAddressesResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.model.GetMultisigAddressByParticipantAddressesRequest,
+ *   !proto.model.GetMultisigAddressByParticipantAddressesResponse>}
+ */
+const methodInfo_MultisigService_GetMultisigAddressByParticipantAddresses = new grpc.web.AbstractClientBase.MethodInfo(
+  model_multiSignature_pb.GetMultisigAddressByParticipantAddressesResponse,
+  /** @param {!proto.model.GetMultisigAddressByParticipantAddressesRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_multiSignature_pb.GetMultisigAddressByParticipantAddressesResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.model.GetMultisigAddressByParticipantAddressesRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.model.GetMultisigAddressByParticipantAddressesResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.model.GetMultisigAddressByParticipantAddressesResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.service.MultisigServiceClient.prototype.getMultisigAddressByParticipantAddresses =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/service.MultisigService/GetMultisigAddressByParticipantAddresses',
+      request,
+      metadata || {},
+      methodDescriptor_MultisigService_GetMultisigAddressByParticipantAddresses,
+      callback);
+};
+
+
+/**
+ * @param {!proto.model.GetMultisigAddressByParticipantAddressesRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.model.GetMultisigAddressByParticipantAddressesResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.service.MultisigServicePromiseClient.prototype.getMultisigAddressByParticipantAddresses =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/service.MultisigService/GetMultisigAddressByParticipantAddresses',
+      request,
+      metadata || {},
+      methodDescriptor_MultisigService_GetMultisigAddressByParticipantAddresses);
+};
+
+
 module.exports = proto.service;
 
