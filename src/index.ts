@@ -10,6 +10,7 @@ import Poown from './Poown';
 import Block from './Block';
 import MultiSignature from './MultiSignature';
 import AccountDataset from './AccountDataset';
+import AccountLedger from './AccountLedger';
 
 export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
@@ -43,6 +44,7 @@ export {
   MultisigPostTransactionResponse,
 } from './MultiSignature';
 export { AccountDatasetListParams, AccountDatasetParams, AccountDatasetsResponse, AccountDatasetResponse } from './AccountDataset';
+export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
 // EXPORT HELPER INTERFACE
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
@@ -89,6 +91,7 @@ const zoobc = {
   Block,
   MultiSignature,
   AccountDataset,
+  AccountLedger,
 };
 
 export default zoobc;

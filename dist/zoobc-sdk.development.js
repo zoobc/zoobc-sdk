@@ -4267,8 +4267,7 @@ proto.google.protobuf.FieldDescriptorProto.toObject = function(includeInstance, 
     defaultValue: (f = googleProtobuf.Message.getField(msg, 7)) == null ? undefined : f,
     oneofIndex: (f = googleProtobuf.Message.getField(msg, 9)) == null ? undefined : f,
     jsonName: (f = googleProtobuf.Message.getField(msg, 10)) == null ? undefined : f,
-    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f),
-    proto3Optional: (f = googleProtobuf.Message.getBooleanField(msg, 17)) == null ? undefined : f
+    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -4345,10 +4344,6 @@ proto.google.protobuf.FieldDescriptorProto.deserializeBinaryFromReader = functio
       var value = new proto.google.protobuf.FieldOptions;
       reader.readMessage(value,proto.google.protobuf.FieldOptions.deserializeBinaryFromReader);
       msg.setOptions(value);
-      break;
-    case 17:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setProto3Optional(value);
       break;
     default:
       reader.skipField();
@@ -4448,13 +4443,6 @@ proto.google.protobuf.FieldDescriptorProto.serializeBinaryToWriter = function(me
       8,
       f,
       proto.google.protobuf.FieldOptions.serializeBinaryToWriter
-    );
-  }
-  f = /** @type {boolean} */ (googleProtobuf.Message.getField(message, 17));
-  if (f != null) {
-    writer.writeBool(
-      17,
-      f
     );
   }
 };
@@ -4851,42 +4839,6 @@ proto.google.protobuf.FieldDescriptorProto.prototype.clearOptions = function() {
  */
 proto.google.protobuf.FieldDescriptorProto.prototype.hasOptions = function() {
   return googleProtobuf.Message.getField(this, 8) != null;
-};
-
-
-/**
- * optional bool proto3_optional = 17;
- * @return {boolean}
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.getProto3Optional = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 17, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.setProto3Optional = function(value) {
-  return googleProtobuf.Message.setField(this, 17, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.clearProto3Optional = function() {
-  return googleProtobuf.Message.setField(this, 17, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.hasProto3Optional = function() {
-  return googleProtobuf.Message.getField(this, 17) != null;
 };
 
 
@@ -6594,7 +6546,7 @@ proto.google.protobuf.FileOptions.toObject = function(includeInstance, msg) {
     pyGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 18, false),
     phpGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 42, false),
     deprecated: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 23, false),
-    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, true),
+    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, false),
     objcClassPrefix: (f = googleProtobuf.Message.getField(msg, 36)) == null ? undefined : f,
     csharpNamespace: (f = googleProtobuf.Message.getField(msg, 37)) == null ? undefined : f,
     swiftPrefix: (f = googleProtobuf.Message.getField(msg, 39)) == null ? undefined : f,
@@ -7359,7 +7311,7 @@ proto.google.protobuf.FileOptions.prototype.hasDeprecated = function() {
  * @return {boolean}
  */
 proto.google.protobuf.FileOptions.prototype.getCcEnableArenas = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, true));
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, false));
 };
 
 
@@ -39950,6 +39902,973 @@ function get$4(params) {
 }
 var AccountDataset = { getList: getList$4, get: get$4 };
 
+var event_pb = createCommonjsModule(function (module, exports) {
+// source: model/event.proto
+/**
+ * @fileoverview
+ * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
+ * @public
+ */
+// GENERATED CODE -- DO NOT EDIT!
+
+
+var goog = googleProtobuf;
+var global = Function('return this')();
+
+goog.exportSymbol('proto.model.EventType', null, global);
+/**
+ * @enum {number}
+ */
+proto.model.EventType = {
+  EVENTANY: 0,
+  EVENTSENDMONEYTRANSACTION: 1,
+  EVENTNODEREGISTRATIONTRANSACTION: 2,
+  EVENTUPDATENODEREGISTRATIONTRANSACTION: 3,
+  EVENTREMOVENODEREGISTRATIONTRANSACTION: 4,
+  EVENTCLAIMNODEREGISTRATIONTRANSACTION: 5,
+  EVENTSETUPACCOUNTDATASETTRANSACTION: 6,
+  EVENTREMOVEACCOUNTDATASETTRANSACTION: 7,
+  EVENTREWARD: 8,
+  EVENTAPPROVALESCROWTRANSACTION: 9,
+  EVENTMULTISIGNATURETRANSACTION: 10
+};
+
+goog.object.extend(exports, proto.model);
+});
+var event_pb_1 = event_pb.EventType;
+
+var accountLedger_pb = createCommonjsModule(function (module, exports) {
+// source: model/accountLedger.proto
+/**
+ * @fileoverview
+ * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
+ * @public
+ */
+// GENERATED CODE -- DO NOT EDIT!
+
+
+var goog = googleProtobuf;
+var global = Function('return this')();
+
+
+goog.object.extend(proto, event_pb);
+
+goog.object.extend(proto, pagination_pb);
+goog.exportSymbol('proto.model.AccountLedger', null, global);
+goog.exportSymbol('proto.model.GetAccountLedgersRequest', null, global);
+goog.exportSymbol('proto.model.GetAccountLedgersResponse', null, global);
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.model.AccountLedger = function(opt_data) {
+  googleProtobuf.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.model.AccountLedger, googleProtobuf.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.model.AccountLedger.displayName = 'proto.model.AccountLedger';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.model.GetAccountLedgersRequest = function(opt_data) {
+  googleProtobuf.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.model.GetAccountLedgersRequest, googleProtobuf.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.model.GetAccountLedgersRequest.displayName = 'proto.model.GetAccountLedgersRequest';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.model.GetAccountLedgersResponse = function(opt_data) {
+  googleProtobuf.Message.initialize(this, opt_data, 0, -1, proto.model.GetAccountLedgersResponse.repeatedFields_, null);
+};
+goog.inherits(proto.model.GetAccountLedgersResponse, googleProtobuf.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.model.GetAccountLedgersResponse.displayName = 'proto.model.GetAccountLedgersResponse';
+}
+
+
+
+if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.model.AccountLedger.prototype.toObject = function(opt_includeInstance) {
+  return proto.model.AccountLedger.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.model.AccountLedger} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.AccountLedger.toObject = function(includeInstance, msg) {
+  var obj = {
+    accountaddress: googleProtobuf.Message.getFieldWithDefault(msg, 1, ""),
+    balancechange: googleProtobuf.Message.getFieldWithDefault(msg, 2, 0),
+    blockheight: googleProtobuf.Message.getFieldWithDefault(msg, 3, 0),
+    transactionid: googleProtobuf.Message.getFieldWithDefault(msg, 4, "0"),
+    timestamp: googleProtobuf.Message.getFieldWithDefault(msg, 5, 0),
+    eventtype: googleProtobuf.Message.getFieldWithDefault(msg, 6, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.model.AccountLedger}
+ */
+proto.model.AccountLedger.deserializeBinary = function(bytes) {
+  var reader = new googleProtobuf.BinaryReader(bytes);
+  var msg = new proto.model.AccountLedger;
+  return proto.model.AccountLedger.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.model.AccountLedger} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.model.AccountLedger}
+ */
+proto.model.AccountLedger.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setAccountaddress(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setBalancechange(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setBlockheight(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readInt64String());
+      msg.setTransactionid(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setTimestamp(value);
+      break;
+    case 6:
+      var value = /** @type {!proto.model.EventType} */ (reader.readEnum());
+      msg.setEventtype(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.model.AccountLedger.prototype.serializeBinary = function() {
+  var writer = new googleProtobuf.BinaryWriter();
+  proto.model.AccountLedger.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.model.AccountLedger} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.AccountLedger.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getAccountaddress();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getBalancechange();
+  if (f !== 0) {
+    writer.writeInt64(
+      2,
+      f
+    );
+  }
+  f = message.getBlockheight();
+  if (f !== 0) {
+    writer.writeUint32(
+      3,
+      f
+    );
+  }
+  f = message.getTransactionid();
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
+      4,
+      f
+    );
+  }
+  f = message.getTimestamp();
+  if (f !== 0) {
+    writer.writeUint64(
+      5,
+      f
+    );
+  }
+  f = message.getEventtype();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      6,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string AccountAddress = 1;
+ * @return {string}
+ */
+proto.model.AccountLedger.prototype.getAccountaddress = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/** @param {string} value */
+proto.model.AccountLedger.prototype.setAccountaddress = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional int64 BalanceChange = 2;
+ * @return {number}
+ */
+proto.model.AccountLedger.prototype.getBalancechange = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {number} value */
+proto.model.AccountLedger.prototype.setBalancechange = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional uint32 BlockHeight = 3;
+ * @return {number}
+ */
+proto.model.AccountLedger.prototype.getBlockheight = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {number} value */
+proto.model.AccountLedger.prototype.setBlockheight = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 3, value);
+};
+
+
+/**
+ * optional int64 TransactionID = 4;
+ * @return {string}
+ */
+proto.model.AccountLedger.prototype.getTransactionid = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, "0"));
+};
+
+
+/** @param {string} value */
+proto.model.AccountLedger.prototype.setTransactionid = function(value) {
+  googleProtobuf.Message.setProto3StringIntField(this, 4, value);
+};
+
+
+/**
+ * optional uint64 Timestamp = 5;
+ * @return {number}
+ */
+proto.model.AccountLedger.prototype.getTimestamp = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/** @param {number} value */
+proto.model.AccountLedger.prototype.setTimestamp = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * optional EventType EventType = 6;
+ * @return {!proto.model.EventType}
+ */
+proto.model.AccountLedger.prototype.getEventtype = function() {
+  return /** @type {!proto.model.EventType} */ (googleProtobuf.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/** @param {!proto.model.EventType} value */
+proto.model.AccountLedger.prototype.setEventtype = function(value) {
+  googleProtobuf.Message.setProto3EnumField(this, 6, value);
+};
+
+
+
+
+
+if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.model.GetAccountLedgersRequest.prototype.toObject = function(opt_includeInstance) {
+  return proto.model.GetAccountLedgersRequest.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.model.GetAccountLedgersRequest} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetAccountLedgersRequest.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    accountaddress: googleProtobuf.Message.getFieldWithDefault(msg, 1, ""),
+    eventtype: googleProtobuf.Message.getFieldWithDefault(msg, 2, 0),
+    transactionid: googleProtobuf.Message.getFieldWithDefault(msg, 3, "0"),
+    timestampstart: googleProtobuf.Message.getFieldWithDefault(msg, 4, 0),
+    timestampend: googleProtobuf.Message.getFieldWithDefault(msg, 5, 0),
+    pagination: (f = msg.getPagination()) && pagination_pb.Pagination.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.model.GetAccountLedgersRequest}
+ */
+proto.model.GetAccountLedgersRequest.deserializeBinary = function(bytes) {
+  var reader = new googleProtobuf.BinaryReader(bytes);
+  var msg = new proto.model.GetAccountLedgersRequest;
+  return proto.model.GetAccountLedgersRequest.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.model.GetAccountLedgersRequest} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.model.GetAccountLedgersRequest}
+ */
+proto.model.GetAccountLedgersRequest.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setAccountaddress(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.model.EventType} */ (reader.readEnum());
+      msg.setEventtype(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readInt64String());
+      msg.setTransactionid(value);
+      break;
+    case 4:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setTimestampstart(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setTimestampend(value);
+      break;
+    case 6:
+      var value = new pagination_pb.Pagination;
+      reader.readMessage(value,pagination_pb.Pagination.deserializeBinaryFromReader);
+      msg.setPagination(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.model.GetAccountLedgersRequest.prototype.serializeBinary = function() {
+  var writer = new googleProtobuf.BinaryWriter();
+  proto.model.GetAccountLedgersRequest.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.model.GetAccountLedgersRequest} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetAccountLedgersRequest.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getAccountaddress();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getEventtype();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
+  f = message.getTransactionid();
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
+      3,
+      f
+    );
+  }
+  f = message.getTimestampstart();
+  if (f !== 0) {
+    writer.writeUint64(
+      4,
+      f
+    );
+  }
+  f = message.getTimestampend();
+  if (f !== 0) {
+    writer.writeUint32(
+      5,
+      f
+    );
+  }
+  f = message.getPagination();
+  if (f != null) {
+    writer.writeMessage(
+      6,
+      f,
+      pagination_pb.Pagination.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional string AccountAddress = 1;
+ * @return {string}
+ */
+proto.model.GetAccountLedgersRequest.prototype.getAccountaddress = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/** @param {string} value */
+proto.model.GetAccountLedgersRequest.prototype.setAccountaddress = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional EventType EventType = 2;
+ * @return {!proto.model.EventType}
+ */
+proto.model.GetAccountLedgersRequest.prototype.getEventtype = function() {
+  return /** @type {!proto.model.EventType} */ (googleProtobuf.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {!proto.model.EventType} value */
+proto.model.GetAccountLedgersRequest.prototype.setEventtype = function(value) {
+  googleProtobuf.Message.setProto3EnumField(this, 2, value);
+};
+
+
+/**
+ * optional int64 TransactionID = 3;
+ * @return {string}
+ */
+proto.model.GetAccountLedgersRequest.prototype.getTransactionid = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 3, "0"));
+};
+
+
+/** @param {string} value */
+proto.model.GetAccountLedgersRequest.prototype.setTransactionid = function(value) {
+  googleProtobuf.Message.setProto3StringIntField(this, 3, value);
+};
+
+
+/**
+ * optional uint64 TimestampStart = 4;
+ * @return {number}
+ */
+proto.model.GetAccountLedgersRequest.prototype.getTimestampstart = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/** @param {number} value */
+proto.model.GetAccountLedgersRequest.prototype.setTimestampstart = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 4, value);
+};
+
+
+/**
+ * optional uint32 TimestampEnd = 5;
+ * @return {number}
+ */
+proto.model.GetAccountLedgersRequest.prototype.getTimestampend = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/** @param {number} value */
+proto.model.GetAccountLedgersRequest.prototype.setTimestampend = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * optional Pagination Pagination = 6;
+ * @return {?proto.model.Pagination}
+ */
+proto.model.GetAccountLedgersRequest.prototype.getPagination = function() {
+  return /** @type{?proto.model.Pagination} */ (
+    googleProtobuf.Message.getWrapperField(this, pagination_pb.Pagination, 6));
+};
+
+
+/** @param {?proto.model.Pagination|undefined} value */
+proto.model.GetAccountLedgersRequest.prototype.setPagination = function(value) {
+  googleProtobuf.Message.setWrapperField(this, 6, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ */
+proto.model.GetAccountLedgersRequest.prototype.clearPagination = function() {
+  this.setPagination(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.model.GetAccountLedgersRequest.prototype.hasPagination = function() {
+  return googleProtobuf.Message.getField(this, 6) != null;
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.model.GetAccountLedgersResponse.repeatedFields_ = [2];
+
+
+
+if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.model.GetAccountLedgersResponse.prototype.toObject = function(opt_includeInstance) {
+  return proto.model.GetAccountLedgersResponse.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.model.GetAccountLedgersResponse} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetAccountLedgersResponse.toObject = function(includeInstance, msg) {
+  var obj = {
+    total: googleProtobuf.Message.getFieldWithDefault(msg, 1, "0"),
+    accountledgersList: googleProtobuf.Message.toObjectList(msg.getAccountledgersList(),
+    proto.model.AccountLedger.toObject, includeInstance)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.model.GetAccountLedgersResponse}
+ */
+proto.model.GetAccountLedgersResponse.deserializeBinary = function(bytes) {
+  var reader = new googleProtobuf.BinaryReader(bytes);
+  var msg = new proto.model.GetAccountLedgersResponse;
+  return proto.model.GetAccountLedgersResponse.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.model.GetAccountLedgersResponse} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.model.GetAccountLedgersResponse}
+ */
+proto.model.GetAccountLedgersResponse.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readUint64String());
+      msg.setTotal(value);
+      break;
+    case 2:
+      var value = new proto.model.AccountLedger;
+      reader.readMessage(value,proto.model.AccountLedger.deserializeBinaryFromReader);
+      msg.addAccountledgers(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.model.GetAccountLedgersResponse.prototype.serializeBinary = function() {
+  var writer = new googleProtobuf.BinaryWriter();
+  proto.model.GetAccountLedgersResponse.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.model.GetAccountLedgersResponse} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetAccountLedgersResponse.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getTotal();
+  if (parseInt(f, 10) !== 0) {
+    writer.writeUint64String(
+      1,
+      f
+    );
+  }
+  f = message.getAccountledgersList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      2,
+      f,
+      proto.model.AccountLedger.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional uint64 Total = 1;
+ * @return {string}
+ */
+proto.model.GetAccountLedgersResponse.prototype.getTotal = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, "0"));
+};
+
+
+/** @param {string} value */
+proto.model.GetAccountLedgersResponse.prototype.setTotal = function(value) {
+  googleProtobuf.Message.setProto3StringIntField(this, 1, value);
+};
+
+
+/**
+ * repeated AccountLedger AccountLedgers = 2;
+ * @return {!Array<!proto.model.AccountLedger>}
+ */
+proto.model.GetAccountLedgersResponse.prototype.getAccountledgersList = function() {
+  return /** @type{!Array<!proto.model.AccountLedger>} */ (
+    googleProtobuf.Message.getRepeatedWrapperField(this, proto.model.AccountLedger, 2));
+};
+
+
+/** @param {!Array<!proto.model.AccountLedger>} value */
+proto.model.GetAccountLedgersResponse.prototype.setAccountledgersList = function(value) {
+  googleProtobuf.Message.setRepeatedWrapperField(this, 2, value);
+};
+
+
+/**
+ * @param {!proto.model.AccountLedger=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.AccountLedger}
+ */
+proto.model.GetAccountLedgersResponse.prototype.addAccountledgers = function(opt_value, opt_index) {
+  return googleProtobuf.Message.addToRepeatedWrapperField(this, 2, opt_value, proto.model.AccountLedger, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.GetAccountLedgersResponse.prototype.clearAccountledgersList = function() {
+  this.setAccountledgersList([]);
+};
+
+
+goog.object.extend(exports, proto.model);
+});
+var accountLedger_pb_1 = accountLedger_pb.GetAccountLedgersRequest;
+
+// source: service/accountLedger.proto
+/**
+ * @fileoverview
+ * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
+ * @public
+ */
+// GENERATED CODE -- DO NOT EDIT!
+
+
+var goog$c = googleProtobuf;
+var global$c = Function('return this')();
+
+
+goog$c.object.extend(proto, accountLedger_pb);
+
+goog$c.object.extend(proto, annotations_pb);
+
+// package: service
+// file: service/accountLedger.proto
+
+
+
+var grpc$c = grpcWeb__default.grpc;
+
+var AccountLedgerService = (function () {
+  function AccountLedgerService() {}
+  AccountLedgerService.serviceName = "service.AccountLedgerService";
+  return AccountLedgerService;
+}());
+
+AccountLedgerService.GetAccountLedgers = {
+  methodName: "GetAccountLedgers",
+  service: AccountLedgerService,
+  requestStream: false,
+  responseStream: false,
+  requestType: accountLedger_pb.GetAccountLedgersRequest,
+  responseType: accountLedger_pb.GetAccountLedgersResponse
+};
+
+function AccountLedgerServiceClient(serviceHost, options) {
+  this.serviceHost = serviceHost;
+  this.options = options || {};
+}
+
+AccountLedgerServiceClient.prototype.getAccountLedgers = function getAccountLedgers(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc$c.unary(AccountLedgerService.GetAccountLedgers, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc$c.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+var AccountLedgerServiceClient_1 = AccountLedgerServiceClient;
+
+function getList$5(params) {
+    return new Promise(function (resolve, reject) {
+        var networkIP = Network$1.selected();
+        var request = new accountLedger_pb_1();
+        if (params) {
+            var accountAddress = params.accountAddress, eventType = params.eventType, transactionId = params.transactionId, timeStampStart = params.timeStampStart, timeStampEnd = params.timeStampEnd, pagination = params.pagination;
+            if (accountAddress)
+                request.setAccountaddress(accountAddress);
+            if (eventType)
+                request.setEventtype(eventType);
+            if (transactionId)
+                request.setTransactionid(transactionId);
+            if (timeStampStart)
+                request.setTimestampstart(timeStampStart);
+            if (timeStampEnd)
+                request.setTimestampend(timeStampEnd);
+            if (pagination) {
+                var reqPagination = new pagination_pb_1();
+                reqPagination.setLimit(pagination.limit || 10);
+                reqPagination.setPage(pagination.page || 1);
+                reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
+                request.setPagination(reqPagination);
+            }
+        }
+        var client = new AccountLedgerServiceClient_1(networkIP.host);
+        client.getAccountLedgers(request, function (err, res) {
+            if (err)
+                reject(err);
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+var AccountLedger = { getList: getList$5 };
+
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
 
@@ -41103,43 +42022,6 @@ function generateTransactionHash(data) {
     return toBase64Url(window.btoa(binary));
 }
 
-var event_pb = createCommonjsModule(function (module, exports) {
-// source: model/event.proto
-/**
- * @fileoverview
- * @enhanceable
- * @suppress {messageConventions} JS Compiler reports an error if a variable or
- *     field starts with 'MSG_' and isn't a translatable message.
- * @public
- */
-// GENERATED CODE -- DO NOT EDIT!
-
-
-var goog = googleProtobuf;
-var global = Function('return this')();
-
-goog.exportSymbol('proto.model.EventType', null, global);
-/**
- * @enum {number}
- */
-proto.model.EventType = {
-  EVENTANY: 0,
-  EVENTSENDMONEYTRANSACTION: 1,
-  EVENTNODEREGISTRATIONTRANSACTION: 2,
-  EVENTUPDATENODEREGISTRATIONTRANSACTION: 3,
-  EVENTREMOVENODEREGISTRATIONTRANSACTION: 4,
-  EVENTCLAIMNODEREGISTRATIONTRANSACTION: 5,
-  EVENTSETUPACCOUNTDATASETTRANSACTION: 6,
-  EVENTREMOVEACCOUNTDATASETTRANSACTION: 7,
-  EVENTREWARD: 8,
-  EVENTAPPROVALESCROWTRANSACTION: 9,
-  EVENTMULTISIGNATURETRANSACTION: 10
-};
-
-goog.object.extend(exports, proto.model);
-});
-var event_pb_1 = event_pb.EventType;
-
 var signature_pb = createCommonjsModule(function (module, exports) {
 // source: model/signature.proto
 /**
@@ -41204,6 +42086,7 @@ var zoobc = {
     Block: Block,
     MultiSignature: MultiSignature,
     AccountDataset: AccountDataset,
+    AccountLedger: AccountLedger,
 };
 
 exports.AccountDatasetProperty = accountDataset_pb_3;
