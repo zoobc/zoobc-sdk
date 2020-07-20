@@ -43,8 +43,14 @@ export {
   MultisigInfoResponse,
   MultisigPostTransactionResponse,
 } from './MultiSignature';
-export { AccountDatasetListParams, AccountDatasetParams, AccountDatasetsResponse, AccountDatasetResponse } from './AccountDataset';
 export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
+export {
+  AccountDatasetListParams,
+  AccountDatasetParams,
+  AccountDatasetsResponse,
+  AccountDatasetResponse,
+  SetupDatasetResponse,
+} from './AccountDataset';
 // EXPORT HELPER INTERFACE
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';

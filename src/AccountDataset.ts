@@ -8,9 +8,14 @@ import { AccountDatasetServiceClient } from '../grpc/service/accountDataset_pb_s
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import Network from './Network';
 import { grpc } from '@improbable-eng/grpc-web';
+import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
+import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
+import { setupDatasetBuilder, SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
+import { BIP32Interface } from 'bip32';
 
 export type AccountDatasetsResponse = GetAccountDatasetsResponse.AsObject;
 export type AccountDatasetResponse = AccountDataset.AsObject;
+export type SetupDatasetResponse = PostTransactionResponse.AsObject;
 
 export interface AccountDatasetListParams {
   property?: string;
@@ -40,6 +45,7 @@ export function getList(params?: AccountDatasetListParams): Promise<AccountDatas
       if (value) request.setValue(value);
       if (recipientAccountAddress) request.setValue(recipientAccountAddress);
       if (setterAccountAddress) request.setSetteraccountaddress(setterAccountAddress);
+      if (recipientAccountAddress) request.setRecipientaccountaddress(recipientAccountAddress);
       if (height) request.setHeight(height);
       if (pagination) {
         const reqPagination = new Pagination();
@@ -84,4 +90,20 @@ export function get(params: AccountDatasetParams): Promise<AccountDatasetRespons
   });
 }
 
-export default { getList, get };
+export function setupDataset(data: SetupDatasetInterface, childSeed: BIP32Interface): Promise<SetupDatasetResponse> {
+  return new Promise((resolve, reject) => {
+    const bytes = setupDatasetBuilder(data, childSeed);
+
+    const request = new PostTransactionRequest();
+    request.setTransactionbytes(bytes);
+
+    const networkIP = Network.selected();
+    const client = new TransactionServiceClient(networkIP.host);
+    client.postTransaction(request, (err, res) => {
+      if (err) reject(err);
+      if (res) resolve(res.toObject());
+    });
+  });
+}
+
+export default { getList, get, setupDataset };
