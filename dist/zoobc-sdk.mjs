@@ -40906,6 +40906,7 @@ var ZooKeyring = /** @class */ (function () {
         var _a = findCoin(coinName).curveName, curveName = _a === void 0 ? 'secp256k1' : _a;
         passphrase = passphrase
             .replace(/\s\s+/g, ' ') // and then using regex to make sure dont have double space after phrase, case: "stand cheap      entire"
+            .replace(/(\r\n|\n|\r)/gm, '')
             .toLowerCase()
             .trim(); // first we need remove space using trim, case: "     stand cheap     "
         this.seed = mnemonicToSeedSync(passphrase, password);
@@ -40925,6 +40926,7 @@ var ZooKeyring = /** @class */ (function () {
         if (lang === void 0) { lang = 'english'; }
         passphrase = passphrase
             .replace(/\s\s+/g, ' ')
+            .replace(/(\r\n|\n|\r)/gm, '')
             .toLowerCase()
             .trim();
         setDefaultWordlist(lang);

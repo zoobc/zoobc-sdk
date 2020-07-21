@@ -42,6 +42,7 @@ export class ZooKeyring {
     const { curveName = 'secp256k1' } = findCoin(coinName);
     passphrase = passphrase
       .replace(/\s\s+/g, ' ') // and then using regex to make sure dont have double space after phrase, case: "stand cheap      entire"
+      .replace(/(\r\n|\n|\r)/gm, '')
       .toLowerCase()
       .trim(); // first we need remove space using trim, case: "     stand cheap     "
     this.seed = bip39.mnemonicToSeedSync(passphrase, password);
@@ -59,8 +60,10 @@ export class ZooKeyring {
   static isPassphraseValid(passphrase: string, lang: string = 'english') {
     passphrase = passphrase
       .replace(/\s\s+/g, ' ')
+      .replace(/(\r\n|\n|\r)/gm, '')
       .toLowerCase()
       .trim();
+
     bip39.setDefaultWordlist(lang);
     return bip39.validateMnemonic(passphrase);
   }
