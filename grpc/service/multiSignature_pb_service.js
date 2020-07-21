@@ -38,6 +38,15 @@ MultisigService.GetMultisignatureInfo = {
   responseType: model_multiSignature_pb.GetMultisignatureInfoResponse
 };
 
+MultisigService.GetMultisigAddressByParticipantAddresses = {
+  methodName: "GetMultisigAddressByParticipantAddresses",
+  service: MultisigService,
+  requestStream: false,
+  responseStream: false,
+  requestType: model_multiSignature_pb.GetMultisigAddressByParticipantAddressesRequest,
+  responseType: model_multiSignature_pb.GetMultisigAddressByParticipantAddressesResponse
+};
+
 exports.MultisigService = MultisigService;
 
 function MultisigServiceClient(serviceHost, options) {
@@ -112,6 +121,37 @@ MultisigServiceClient.prototype.getMultisignatureInfo = function getMultisignatu
     callback = arguments[1];
   }
   var client = grpc.unary(MultisigService.GetMultisignatureInfo, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+MultisigServiceClient.prototype.getMultisigAddressByParticipantAddresses = function getMultisigAddressByParticipantAddresses(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(MultisigService.GetMultisigAddressByParticipantAddresses, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,

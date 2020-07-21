@@ -1132,7 +1132,8 @@ proto.model.EscrowStatus = {
  */
 proto.model.EscrowApproval = {
   APPROVE: 0,
-  REJECT: 1
+  REJECT: 1,
+  EXPIRE: 2
 };
 
 goog.object.extend(exports, proto.model);

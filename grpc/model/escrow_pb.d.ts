@@ -166,6 +166,7 @@ export const EscrowStatus: EscrowStatusMap;
 export interface EscrowApprovalMap {
   APPROVE: 0;
   REJECT: 1;
+  EXPIRE: 2;
 }
 
 export const EscrowApproval: EscrowApprovalMap;
