@@ -40574,6 +40574,58 @@ function setupDatasetBuilder(data, seed) {
     return Buffer$1.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
+var TRANSACTION_TYPE$8 = new Buffer$1([3, 1, 0, 0]);
+function removeDatasetBuilder(data, seed) {
+    var bytes;
+    var timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    var setterAccountAddress = Buffer$1.from(data.setterAccountAddress, 'utf-8');
+    var recipient = Buffer$1.from(data.recipientAccountAddress, 'utf-8');
+    var addressLength = writeInt32(ADDRESS_LENGTH);
+    var fee = writeInt64(data.fee * 1e8);
+    var property = Buffer$1.from(data.property, 'utf-8');
+    var propertyLength = writeInt32(property.length);
+    var value = Buffer$1.from(data.value, 'utf-8');
+    var valueLength = writeInt32(value.length);
+    var bodyLength = writeInt32(addressLength.length +
+        setterAccountAddress.length +
+        addressLength.length +
+        recipient.length +
+        propertyLength.length +
+        property.length +
+        valueLength.length +
+        value.length);
+    bytes = Buffer$1.concat([
+        TRANSACTION_TYPE$8,
+        VERSION,
+        timestamp,
+        addressLength,
+        setterAccountAddress,
+        addressLength,
+        recipient,
+        fee,
+        bodyLength,
+        addressLength,
+        setterAccountAddress,
+        addressLength,
+        recipient,
+        propertyLength,
+        property,
+        valueLength,
+        value,
+    ]);
+    // ========== NULLIFYING THE ESCROW ===========
+    var approverAddressLength = writeInt32(0);
+    var commission = writeInt64(0);
+    var timeout = writeInt64(0);
+    var instructionLength = writeInt32(0);
+    bytes = Buffer$1.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    // ========== END NULLIFYING THE ESCROW =========
+    var signatureType = writeInt32(0);
+    var signature = seed.sign(bytes);
+    var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    return Buffer$1.concat([bytes, bodyLengthSignature, signatureType, signature]);
+}
+
 function getList$4(params) {
     return new Promise(function (resolve, reject) {
         var networkIP = Network$1.selected();
@@ -40653,7 +40705,22 @@ function setupDataset(data, childSeed) {
         });
     });
 }
-var AccountDataset = { getList: getList$4, get: get$4, setupDataset: setupDataset };
+function removeDataset(data, childseed) {
+    return new Promise(function (resolve, reject) {
+        var bytes = removeDatasetBuilder(data, childseed);
+        var request = new transaction_pb_3();
+        request.setTransactionbytes(bytes);
+        var networkIP = Network$1.selected();
+        var client = new TransactionServiceClient_1(networkIP.host);
+        client.postTransaction(request, function (err, res) {
+            if (err)
+                reject(err);
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+var AccountDataset = { getList: getList$4, get: get$4, setupDataset: setupDataset, removeDataset: removeDataset };
 
 var event_pb = createCommonjsModule(function (module, exports) {
 // source: model/event.proto

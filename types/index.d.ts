@@ -9,7 +9,7 @@ export { TransactionListParams, TransactionsResponse, TransactionResponse, PostT
 export { BlockListParams, BlocksResponse, BlockResponse } from './Block';
 export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, MultisigPostTransactionResponse, } from './MultiSignature';
 export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
-export { AccountDatasetListParams, AccountDatasetParams, AccountDatasetsResponse, AccountDatasetResponse, SetupDatasetResponse, } from './AccountDataset';
+export { AccountDatasetListParams, AccountDatasetParams, AccountDatasetsResponse, AccountDatasetResponse, SetupDatasetResponse, RemoveAccountDatasetResponse, } from './AccountDataset';
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
@@ -17,6 +17,8 @@ export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
 export { EscrowApprovalInterface } from './helper/transaction-builder/escrow-transaction';
 export { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
+export { RemoveDatasetInterface } from './helper/transaction-builder/remove-account-dataset';
+export { SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
 export { getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
@@ -98,6 +100,7 @@ declare const zoobc: {
         getList: typeof import("./AccountDataset").getList;
         get: typeof import("./AccountDataset").get;
         setupDataset: typeof import("./AccountDataset").setupDataset;
+        removeDataset: typeof import("./AccountDataset").removeDataset;
     };
     AccountLedger: {
         getList: typeof import("./AccountLedger").getList;

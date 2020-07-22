@@ -6,6 +6,7 @@ import { grpc } from '@improbable-eng/grpc-web';
 import { expect } from 'chai';
 import { SetupDatasetInterface, setupDatasetBuilder } from '../src/helper/transaction-builder/setup-account-dataset';
 import { PostTransactionResponse, Transaction } from '../grpc/model/transaction_pb';
+import { RemoveDatasetInterface, removeDatasetBuilder } from '../src/helper/transaction-builder/remove-account-dataset';
 
 interface IMockAccountDatasetTransport {
   property: string;
@@ -32,6 +33,18 @@ function mockAccountDataset(params: IMockAccountDatasetTransport) {
 
 function mockSetupDataset(data: SetupDatasetInterface) {
   const bytes = setupDatasetBuilder(data, childSeed);
+
+  const response = new PostTransactionResponse();
+  const transaction = new Transaction();
+
+  transaction.setTransactionbodybytes(bytes);
+  response.setTransaction(transaction);
+
+  return new FakeTransportBuilder().withMessages([response]).build();
+}
+
+function mockRemoveDataset(data: RemoveDatasetInterface) {
+  const bytes = removeDatasetBuilder(data, childSeed);
 
   const response = new PostTransactionResponse();
   const transaction = new Transaction();
@@ -86,6 +99,23 @@ describe('Account Dataset Unit Testing :', () => {
       grpc.setDefaultTransport(transport);
 
       const result = await zoobc.AccountDataset.setupDataset(data, childSeed);
+      expect(result).to.be.an('object');
+    });
+  });
+  describe('Remove Account Dataset', () => {
+    it('should return new transaction object', async () => {
+      const data: RemoveDatasetInterface = {
+        setterAccountAddress: 'iSJt3H8wFOzlWKsy_UoEWF_OjF6oymHMqthyUMDKSyxb',
+        property: 'Admin',
+        value: 'Welcome',
+        fee: 1,
+        recipientAccountAddress: 'AFiTqqX99kYXjLFJJ2AWuzKK5zxYUT1Pn0p3s6lutkai',
+      };
+
+      const transport = mockRemoveDataset({ ...data });
+      grpc.setDefaultTransport(transport);
+
+      const result = await zoobc.AccountDataset.removeDataset(data, childSeed);
       expect(result).to.be.an('object');
     });
   });
