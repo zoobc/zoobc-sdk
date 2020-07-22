@@ -9,7 +9,7 @@ export { TransactionListParams, TransactionsResponse, TransactionResponse, PostT
 export { BlockListParams, BlocksResponse, BlockResponse } from './Block';
 export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, MultisigPostTransactionResponse, } from './MultiSignature';
 export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
-export { AccountDatasetListParams, AccountDatasetParams, AccountDatasetsResponse, AccountDatasetResponse, SetupDatasetResponse, } from './AccountDataset';
+export { AccountDatasetListParams, AccountDatasetParams, AccountDatasetsResponse, AccountDatasetResponse, SetupDatasetResponse, RemoveAccountDatasetResponse, } from './AccountDataset';
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
@@ -98,6 +98,7 @@ declare const zoobc: {
         getList: typeof import("./AccountDataset").getList;
         get: typeof import("./AccountDataset").get;
         setupDataset: typeof import("./AccountDataset").setupDataset;
+        removeDataset: typeof import("./AccountDataset").removeDataset;
     };
     AccountLedger: {
         getList: typeof import("./AccountLedger").getList;

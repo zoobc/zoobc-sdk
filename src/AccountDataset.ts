@@ -12,10 +12,12 @@ import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/t
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { setupDatasetBuilder, SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
 import { BIP32Interface } from 'bip32';
+import { RemoveDatasetInterface, removeDatasetBuilder } from './helper/transaction-builder/remove-account-dataset';
 
 export type AccountDatasetsResponse = GetAccountDatasetsResponse.AsObject;
 export type AccountDatasetResponse = AccountDataset.AsObject;
 export type SetupDatasetResponse = PostTransactionResponse.AsObject;
+export type RemoveAccountDatasetResponse = PostTransactionResponse.AsObject;
 
 export interface AccountDatasetListParams {
   property?: string;
@@ -93,7 +95,6 @@ export function get(params: AccountDatasetParams): Promise<AccountDatasetRespons
 export function setupDataset(data: SetupDatasetInterface, childSeed: BIP32Interface): Promise<SetupDatasetResponse> {
   return new Promise((resolve, reject) => {
     const bytes = setupDatasetBuilder(data, childSeed);
-
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
 
@@ -106,4 +107,19 @@ export function setupDataset(data: SetupDatasetInterface, childSeed: BIP32Interf
   });
 }
 
-export default { getList, get, setupDataset };
+export function removeDataset(data: RemoveDatasetInterface, childseed: BIP32Interface): Promise<RemoveAccountDatasetResponse> {
+  return new Promise((resolve, reject) => {
+    const bytes = removeDatasetBuilder(data, childseed);
+    const request = new PostTransactionRequest();
+    request.setTransactionbytes(bytes);
+
+    const networkIP = Network.selected();
+    const client = new TransactionServiceClient(networkIP.host);
+    client.postTransaction(request, (err, res) => {
+      if (err) reject(err);
+      if (res) resolve(res.toObject());
+    });
+  });
+}
+
+export default { getList, get, setupDataset, removeDataset };

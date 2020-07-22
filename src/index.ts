@@ -50,6 +50,7 @@ export {
   AccountDatasetsResponse,
   AccountDatasetResponse,
   SetupDatasetResponse,
+  RemoveAccountDatasetResponse,
 } from './AccountDataset';
 // EXPORT HELPER INTERFACE
 export { HostInterface } from './Network';
