@@ -60,6 +60,8 @@ export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
 export { EscrowApprovalInterface } from './helper/transaction-builder/escrow-transaction';
 export { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
+export { RemoveDatasetInterface } from './helper/transaction-builder/remove-account-dataset';
+export { SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
 export { getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
