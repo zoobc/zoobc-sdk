@@ -42590,11 +42590,12 @@ var ZooKeyring = /** @class */ (function () {
         if (coinName === void 0) { coinName = 'ZBC'; }
         this.coinName = 'ZBC';
         var _a = findCoin(coinName).curveName, curveName = _a === void 0 ? 'secp256k1' : _a;
-        // first we need remove space using trim, case: "     stand cheap     "
-        var passphraseTrim = passphrase.trim();
-        // and then using regex to make sure dont have double space after phrase, case: "stand cheap      entire"
-        var resultPassphrase = passphraseTrim.replace(/\s\s+/g, ' ');
-        this.seed = bip39.mnemonicToSeedSync(resultPassphrase, password);
+        passphrase = passphrase
+            .replace(/\s\s+/g, ' ') // and then using regex to make sure dont have double space after phrase, case: "stand cheap      entire"
+            .replace(/(\r\n|\n|\r)/gm, '')
+            .toLowerCase()
+            .trim(); // first we need remove space using trim, case: "     stand cheap     "
+        this.seed = bip39.mnemonicToSeedSync(passphrase, password);
         this.coinName = coinName;
         this.bip32RootKey = bip32.fromSeed(this.seed, BITCOIN, curveName);
     }
@@ -42609,6 +42610,11 @@ var ZooKeyring = /** @class */ (function () {
     };
     ZooKeyring.isPassphraseValid = function (passphrase, lang) {
         if (lang === void 0) { lang = 'english'; }
+        passphrase = passphrase
+            .replace(/\s\s+/g, ' ')
+            .replace(/(\r\n|\n|\r)/gm, '')
+            .toLowerCase()
+            .trim();
         bip39.setDefaultWordlist(lang);
         return bip39.validateMnemonic(passphrase);
     };
