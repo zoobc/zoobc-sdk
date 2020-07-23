@@ -45,7 +45,6 @@ export function getList(params?: AccountDatasetListParams): Promise<AccountDatas
       const { property, value, recipientAccountAddress, setterAccountAddress, height, pagination } = params;
       if (property) request.setProperty(property);
       if (value) request.setValue(value);
-      if (recipientAccountAddress) request.setValue(recipientAccountAddress);
       if (setterAccountAddress) request.setSetteraccountaddress(setterAccountAddress);
       if (recipientAccountAddress) request.setRecipientaccountaddress(recipientAccountAddress);
       if (height) request.setHeight(height);

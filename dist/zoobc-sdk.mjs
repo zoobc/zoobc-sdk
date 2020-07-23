@@ -40636,8 +40636,6 @@ function getList$4(params) {
                 request.setProperty(property);
             if (value)
                 request.setValue(value);
-            if (recipientAccountAddress)
-                request.setValue(recipientAccountAddress);
             if (setterAccountAddress)
                 request.setSetteraccountaddress(setterAccountAddress);
             if (recipientAccountAddress)
