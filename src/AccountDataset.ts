@@ -8,6 +8,16 @@ import { AccountDatasetServiceClient } from '../grpc/service/accountDataset_pb_s
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import Network from './Network';
 import { grpc } from '@improbable-eng/grpc-web';
+import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
+import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
+import { setupDatasetBuilder, SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
+import { BIP32Interface } from 'bip32';
+import { RemoveDatasetInterface, removeDatasetBuilder } from './helper/transaction-builder/remove-account-dataset';
+
+export type AccountDatasetsResponse = GetAccountDatasetsResponse.AsObject;
+export type AccountDatasetResponse = AccountDataset.AsObject;
+export type SetupDatasetResponse = PostTransactionResponse.AsObject;
+export type RemoveAccountDatasetResponse = PostTransactionResponse.AsObject;
 
 export interface AccountDatasetListParams {
   property?: string;
@@ -27,7 +37,7 @@ export interface AccountDatasetParams {
   recipientAccountAddress: string;
 }
 
-export function getList(params?: AccountDatasetListParams): Promise<GetAccountDatasetsResponse.AsObject> {
+export function getList(params?: AccountDatasetListParams): Promise<AccountDatasetsResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetAccountDatasetsRequest();
@@ -35,8 +45,8 @@ export function getList(params?: AccountDatasetListParams): Promise<GetAccountDa
       const { property, value, recipientAccountAddress, setterAccountAddress, height, pagination } = params;
       if (property) request.setProperty(property);
       if (value) request.setValue(value);
-      if (recipientAccountAddress) request.setValue(recipientAccountAddress);
       if (setterAccountAddress) request.setSetteraccountaddress(setterAccountAddress);
+      if (recipientAccountAddress) request.setRecipientaccountaddress(recipientAccountAddress);
       if (height) request.setHeight(height);
       if (pagination) {
         const reqPagination = new Pagination();
@@ -54,7 +64,7 @@ export function getList(params?: AccountDatasetListParams): Promise<GetAccountDa
   });
 }
 
-export function get(params: AccountDatasetParams): Promise<AccountDataset.AsObject> {
+export function get(params: AccountDatasetParams): Promise<AccountDatasetResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetAccountDatasetRequest();
@@ -81,4 +91,34 @@ export function get(params: AccountDatasetParams): Promise<AccountDataset.AsObje
   });
 }
 
-export default { getList, get };
+export function setupDataset(data: SetupDatasetInterface, childSeed: BIP32Interface): Promise<SetupDatasetResponse> {
+  return new Promise((resolve, reject) => {
+    const bytes = setupDatasetBuilder(data, childSeed);
+    const request = new PostTransactionRequest();
+    request.setTransactionbytes(bytes);
+
+    const networkIP = Network.selected();
+    const client = new TransactionServiceClient(networkIP.host);
+    client.postTransaction(request, (err, res) => {
+      if (err) reject(err);
+      if (res) resolve(res.toObject());
+    });
+  });
+}
+
+export function removeDataset(data: RemoveDatasetInterface, childseed: BIP32Interface): Promise<RemoveAccountDatasetResponse> {
+  return new Promise((resolve, reject) => {
+    const bytes = removeDatasetBuilder(data, childseed);
+    const request = new PostTransactionRequest();
+    request.setTransactionbytes(bytes);
+
+    const networkIP = Network.selected();
+    const client = new TransactionServiceClient(networkIP.host);
+    client.postTransaction(request, (err, res) => {
+      if (err) reject(err);
+      if (res) resolve(res.toObject());
+    });
+  });
+}
+
+export default { getList, get, setupDataset, removeDataset };

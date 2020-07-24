@@ -19,6 +19,7 @@ import { TransactionServiceClient } from '../grpc/service/transaction_pb_service
 export type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
 export type MultisigInfoResponse = GetMultisignatureInfoResponse.AsObject;
+export type MultisigPostTransactionResponse = PostTransactionResponse.AsObject;
 
 export interface MultisigPendingListParams {
   address?: string;

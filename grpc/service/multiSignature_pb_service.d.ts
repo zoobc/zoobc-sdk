@@ -32,11 +32,21 @@ type MultisigServiceGetMultisignatureInfo = {
   readonly responseType: typeof model_multiSignature_pb.GetMultisignatureInfoResponse;
 };
 
+type MultisigServiceGetMultisigAddressByParticipantAddresses = {
+  readonly methodName: string;
+  readonly service: typeof MultisigService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof model_multiSignature_pb.GetMultisigAddressByParticipantAddressesRequest;
+  readonly responseType: typeof model_multiSignature_pb.GetMultisigAddressByParticipantAddressesResponse;
+};
+
 export class MultisigService {
   static readonly serviceName: string;
   static readonly GetPendingTransactions: MultisigServiceGetPendingTransactions;
   static readonly GetPendingTransactionDetailByTransactionHash: MultisigServiceGetPendingTransactionDetailByTransactionHash;
   static readonly GetMultisignatureInfo: MultisigServiceGetMultisignatureInfo;
+  static readonly GetMultisigAddressByParticipantAddresses: MultisigServiceGetMultisigAddressByParticipantAddresses;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -97,6 +107,15 @@ export class MultisigServiceClient {
   getMultisignatureInfo(
     requestMessage: model_multiSignature_pb.GetMultisignatureInfoRequest,
     callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisignatureInfoResponse|null) => void
+  ): UnaryResponse;
+  getMultisigAddressByParticipantAddresses(
+    requestMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressesRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressesResponse|null) => void
+  ): UnaryResponse;
+  getMultisigAddressByParticipantAddresses(
+    requestMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressesRequest,
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressesResponse|null) => void
   ): UnaryResponse;
 }
 

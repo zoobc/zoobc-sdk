@@ -2,13 +2,14 @@
 export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
-export { EscrowListParams } from './Escrows';
-export { NodeListParams, NodeParams } from './Node';
-export { MempoolListParams } from './Mempool';
-export { TransactionListParams } from './Transactions';
-export { BlockListParams } from './Block';
-export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, } from './MultiSignature';
-export { AccountDatasetListParams, AccountDatasetParams } from './AccountDataset';
+export { EscrowListParams, EscrowTransactionsResponse, EscrowTransactionResponse, ApprovalEscrowTransactionResponse } from './Escrows';
+export { NodeListParams, NodeParams, NodeHardwareResponse, GenerateNodeKeyResponses, NodeRegistrationsResponse, NodePostTransactionResponse, } from './Node';
+export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
+export { TransactionListParams, TransactionsResponse, TransactionResponse, PostTransactionResponses, TransactionMinimumFeeResponse, } from './Transactions';
+export { BlockListParams, BlocksResponse, BlockResponse } from './Block';
+export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, MultisigPostTransactionResponse, } from './MultiSignature';
+export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
+export { AccountDatasetListParams, AccountDatasetParams, AccountDatasetsResponse, AccountDatasetResponse, SetupDatasetResponse, RemoveAccountDatasetResponse, } from './AccountDataset';
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
@@ -16,11 +17,25 @@ export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
 export { EscrowApprovalInterface } from './helper/transaction-builder/escrow-transaction';
 export { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
+export { RemoveDatasetInterface } from './helper/transaction-builder/remove-account-dataset';
+export { SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
 export { getZBCAdress, isZBCAddressValid, isZBCPublicKeyValid } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
-export { MultiSigInterface, signTransactionHash, MultiSigAddress } from './helper/transaction-builder/multisignature';
+export { MultiSigInterface, signTransactionHash, MultiSigAddress, MultiSigInfo, SignatureInfo, } from './helper/transaction-builder/multisignature';
 export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
+export { AccountBalanceResponse, AccountBalancesResponse } from './Account';
+export { HostInfoResponse } from './Host';
+export { AccountDatasetProperty } from '../grpc/model/accountDataset_pb';
+export { EscrowStatus, EscrowApproval } from '../grpc/model/escrow_pb';
+export { EventType } from '../grpc/model/event_pb';
+export { PendingTransactionStatus } from '../grpc/model/multiSignature_pb';
+export { NodeRegistrationState } from '../grpc/model/nodeRegistration_pb';
+export { OrderBy } from '../grpc/model/pagination_pb';
+export { SignatureType, PrivateKeyBytesLength, BitcoinPublicKeyFormat } from '../grpc/model/signature_pb';
+export { SpinePublicKeyAction } from '../grpc/model/spine_pb';
+export { SpineBlockManifestType } from '../grpc/model/spineBlockManifest_pb';
+export { TransactionType } from '../grpc/model/transaction_pb';
 declare const zoobc: {
     Transactions: {
         sendMoney: (data: import("./helper/transaction-builder/send-money").SendMoneyInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
@@ -84,6 +99,11 @@ declare const zoobc: {
     AccountDataset: {
         getList: typeof import("./AccountDataset").getList;
         get: typeof import("./AccountDataset").get;
+        setupDataset: typeof import("./AccountDataset").setupDataset;
+        removeDataset: typeof import("./AccountDataset").removeDataset;
+    };
+    AccountLedger: {
+        getList: typeof import("./AccountLedger").getList;
     };
 };
 export default zoobc;

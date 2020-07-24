@@ -2,12 +2,15 @@ import { GetBlocksResponse, GetBlocksRequest, GetBlockRequest, BlockExtendedInfo
 import { BlockServiceClient } from '../grpc/service/block_pb_service';
 import Network from './Network';
 
+export type BlocksResponse = GetBlocksResponse.AsObject;
+export type BlockResponse = BlockExtendedInfo.AsObject;
+
 export interface BlockListParams {
   height: number;
   limit?: number;
 }
 
-function getBlocks(params: BlockListParams): Promise<GetBlocksResponse.AsObject> {
+function getBlocks(params: BlockListParams): Promise<BlocksResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetBlocksRequest();
@@ -24,7 +27,7 @@ function getBlocks(params: BlockListParams): Promise<GetBlocksResponse.AsObject>
   });
 }
 
-function getBlockById(id: string): Promise<BlockExtendedInfo.AsObject> {
+function getBlockById(id: string): Promise<BlockResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetBlockRequest();
@@ -39,7 +42,7 @@ function getBlockById(id: string): Promise<BlockExtendedInfo.AsObject> {
   });
 }
 
-function getBlockByHeight(height: number): Promise<BlockExtendedInfo.AsObject> {
+function getBlockByHeight(height: number): Promise<BlockResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetBlockRequest();

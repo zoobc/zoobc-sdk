@@ -1,14 +1,22 @@
 import 'mocha';
-import zoobc from '../src';
+import zoobc, { ZooKeyring } from '../src';
 import { GetAccountDatasetsRequest, GetAccountDatasetRequest } from '../grpc/model/accountDataset_pb';
 import { FakeTransportBuilder } from '@improbable-eng/grpc-web-fake-transport';
 import { grpc } from '@improbable-eng/grpc-web';
 import { expect } from 'chai';
+import { SetupDatasetInterface, setupDatasetBuilder } from '../src/helper/transaction-builder/setup-account-dataset';
+import { PostTransactionResponse, Transaction } from '../grpc/model/transaction_pb';
+import { RemoveDatasetInterface, removeDatasetBuilder } from '../src/helper/transaction-builder/remove-account-dataset';
 
 interface IMockAccountDatasetTransport {
   property: string;
   recipientAccountAddress: string;
 }
+
+const passphare =
+  'stand cheap entire summer claw subject victory supreme top divide tooth park change excite legend category motor text zebra bottom mystery off garage energy';
+const keyring = new ZooKeyring(passphare, 'p4ssphr4se');
+const childSeed = keyring.calcDerivationPath(0);
 
 function mockListAccountDataset(height: number) {
   const request = new GetAccountDatasetsRequest();
@@ -21,6 +29,30 @@ function mockAccountDataset(params: IMockAccountDatasetTransport) {
   request.setProperty(params.property);
   request.setRecipientaccountaddress(params.recipientAccountAddress);
   return new FakeTransportBuilder().withMessages([request]).build();
+}
+
+function mockSetupDataset(data: SetupDatasetInterface) {
+  const bytes = setupDatasetBuilder(data, childSeed);
+
+  const response = new PostTransactionResponse();
+  const transaction = new Transaction();
+
+  transaction.setTransactionbodybytes(bytes);
+  response.setTransaction(transaction);
+
+  return new FakeTransportBuilder().withMessages([response]).build();
+}
+
+function mockRemoveDataset(data: RemoveDatasetInterface) {
+  const bytes = removeDatasetBuilder(data, childSeed);
+
+  const response = new PostTransactionResponse();
+  const transaction = new Transaction();
+
+  transaction.setTransactionbodybytes(bytes);
+  response.setTransaction(transaction);
+
+  return new FakeTransportBuilder().withMessages([response]).build();
 }
 
 describe('Account Dataset Unit Testing :', () => {
@@ -50,6 +82,40 @@ describe('Account Dataset Unit Testing :', () => {
       grpc.setDefaultTransport(transport);
 
       const result = await zoobc.AccountDataset.get(params);
+      expect(result).to.be.an('object');
+    });
+  });
+  describe('Setup Account Dataset', () => {
+    it('should return new transaction object', async () => {
+      const data: SetupDatasetInterface = {
+        setterAccountAddress: 'iSJt3H8wFOzlWKsy_UoEWF_OjF6oymHMqthyUMDKSyxb',
+        property: 'Admin',
+        value: 'Welcome',
+        fee: 1,
+        recipientAccountAddress: 'AFiTqqX99kYXjLFJJ2AWuzKK5zxYUT1Pn0p3s6lutkai',
+      };
+
+      const transport = mockSetupDataset({ ...data });
+      grpc.setDefaultTransport(transport);
+
+      const result = await zoobc.AccountDataset.setupDataset(data, childSeed);
+      expect(result).to.be.an('object');
+    });
+  });
+  describe('Remove Account Dataset', () => {
+    it('should return new transaction object', async () => {
+      const data: RemoveDatasetInterface = {
+        setterAccountAddress: 'iSJt3H8wFOzlWKsy_UoEWF_OjF6oymHMqthyUMDKSyxb',
+        property: 'Admin',
+        value: 'Welcome',
+        fee: 1,
+        recipientAccountAddress: 'AFiTqqX99kYXjLFJJ2AWuzKK5zxYUT1Pn0p3s6lutkai',
+      };
+
+      const transport = mockRemoveDataset({ ...data });
+      grpc.setDefaultTransport(transport);
+
+      const result = await zoobc.AccountDataset.removeDataset(data, childSeed);
       expect(result).to.be.an('object');
     });
   });
