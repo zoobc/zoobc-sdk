@@ -10,8 +10,8 @@ export function toUnconfirmedSendMoneyWallet(res: GetMempoolTransactionsResponse
   transactions = transactions.map((tx: any) => {
     const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
 
-    const amount = readInt64(bytes, 121);
-    const fee = readInt64(bytes, 109);
+    const amount = readInt64(bytes, 164);
+    const fee = readInt64(bytes, 153);
     const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
     const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
 
