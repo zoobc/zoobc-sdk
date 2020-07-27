@@ -58,7 +58,10 @@ export function getList(params?: AccountDatasetListParams): Promise<AccountDatas
     }
     const client = new AccountDatasetServiceClient(networkIP.host);
     client.getAccountDatasets(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -73,18 +76,8 @@ export function get(params: AccountDatasetParams): Promise<AccountDatasetRespons
     const client = new AccountDatasetServiceClient(networkIP.host);
     client.getAccountDataset(request, (err, res) => {
       if (err) {
-        const { code, message } = err;
-        if (code == grpc.Code.NotFound) {
-          return resolve({
-            setteraccountaddress: '',
-            recipientaccountaddress: '',
-            property: '',
-            value: '',
-            height: 0,
-            isactive: true,
-            latest: true,
-          });
-        } else if (code != grpc.Code.OK) return reject(message);
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
       }
       if (res) resolve(res.toObject());
     });
@@ -100,7 +93,10 @@ export function setupDataset(data: SetupDatasetInterface, childSeed: BIP32Interf
     const networkIP = Network.selected();
     const client = new TransactionServiceClient(networkIP.host);
     client.postTransaction(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -115,7 +111,10 @@ export function removeDataset(data: RemoveDatasetInterface, childseed: BIP32Inte
     const networkIP = Network.selected();
     const client = new TransactionServiceClient(networkIP.host);
     client.postTransaction(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });

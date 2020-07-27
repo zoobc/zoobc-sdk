@@ -21,7 +21,10 @@ function getBlocks(params: BlockListParams): Promise<BlocksResponse> {
 
     const client = new BlockServiceClient(networkIP.host);
     client.getBlocks(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -36,7 +39,10 @@ function getBlockById(id: string): Promise<BlockResponse> {
 
     const client = new BlockServiceClient(networkIP.host);
     client.getBlock(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -51,7 +57,10 @@ function getBlockByHeight(height: number): Promise<BlockResponse> {
 
     const client = new BlockServiceClient(networkIP.host);
     client.getBlock(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });

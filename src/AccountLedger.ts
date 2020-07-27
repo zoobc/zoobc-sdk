@@ -39,7 +39,10 @@ export function getList(params?: AccountLedgerListParams): Promise<AccountLedger
     }
     const client = new AccountLedgerServiceClient(networkIP.host);
     client.getAccountLedgers(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });

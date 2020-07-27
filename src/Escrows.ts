@@ -49,7 +49,10 @@ function getList(params?: EscrowListParams): Promise<EscrowTransactionsResponse>
 
     const client = new EscrowTransactionServiceClient(networkIP.host);
     client.getEscrowTransactions(request, (err, res) => {
-      if (err) return reject(err.message);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       resolve(res?.toObject());
     });
   });
@@ -63,7 +66,10 @@ function get(id: string): Promise<EscrowTransactionResponse> {
 
     const client = new EscrowTransactionServiceClient(networkIP.host);
     client.getEscrowTransaction(request, (err, res) => {
-      if (err) reject(err.message);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       resolve(res?.toObject());
     });
   });
@@ -79,7 +85,10 @@ function approval(data: EscrowApprovalInterface, seed: BIP32Interface): Promise<
 
     const client = new TransactionServiceClient(networkIP.host);
     client.postTransaction(request, (err, res) => {
-      if (err) reject(err.message);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       resolve(res?.toObject());
     });
   });
