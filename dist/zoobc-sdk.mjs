@@ -42771,7 +42771,7 @@ function toUnconfirmedSendMoneyWallet(res, ownAddress) {
     });
     transactions = transactions.map(function (tx) {
         var bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        var amount = readInt64(bytes, 164);
+        var amount = readInt64(bytes, 165);
         var fee = readInt64(bytes, 153);
         var friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
         var type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
