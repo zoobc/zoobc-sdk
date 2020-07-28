@@ -24,7 +24,10 @@ function request(auth: string, networkIp: string): Promise<Buffer> {
     const client = new NodeAdminServiceClient(networkIp);
 
     client.getProofOfOwnership(request, metadata, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) {
         const bytes = Buffer.concat([
           Buffer.from(res.toObject().messagebytes.toString(), 'base64'),

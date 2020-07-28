@@ -48,7 +48,10 @@ function ping(): Promise<string> {
     const request = new Empty();
 
     client.healthCheck(request, err => {
-      if (err) return reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       return resolve('PONG');
     });
   });

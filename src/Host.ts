@@ -12,7 +12,10 @@ function getInfo(): Promise<HostInfoResponse> {
 
     const client = new HostServiceClient(networkIP.host);
     client.getHostInfo(request, (err, res) => {
-      if (err) reject(err.message);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });

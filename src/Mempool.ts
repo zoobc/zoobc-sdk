@@ -44,7 +44,10 @@ function getList(params?: MempoolListParams): Promise<MempoolTransactionsRespons
 
     const client = new MempoolServiceClient(networkIP.host);
     client.getMempoolTransactions(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -59,7 +62,10 @@ function get(id: string): Promise<MempoolTransactionResponse> {
 
     const client = new MempoolServiceClient(networkIP.host);
     client.getMempoolTransaction(request, (err, res) => {
-      if (err) reject(err.message);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject().transaction);
     });
   });

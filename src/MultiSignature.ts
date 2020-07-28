@@ -83,7 +83,10 @@ function getPendingList(params: MultisigPendingListParams): Promise<MultisigPend
 
     const client = new MultisigServiceClient(networkIP.host);
     client.getPendingTransactions(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -97,7 +100,10 @@ function getPendingByTxHash(txHash: string): Promise<MultisigPendingTxDetailResp
     request.setTransactionhashhex(txHash);
     const client = new MultisigServiceClient(networkIP.host);
     client.getPendingTransactionDetailByTransactionHash(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -120,7 +126,10 @@ function getMultisigInfo(params: MultisigInfoParams): Promise<MultisigInfoRespon
 
     const client = new MultisigServiceClient(networkIP.host);
     client.getMultisignatureInfo(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -136,7 +145,10 @@ function postTransaction(data: MultiSigInterface, childSeed: BIP32Interface): Pr
     const networkIP = Network.selected();
     const client = new TransactionServiceClient(networkIP.host);
     client.postTransaction(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });

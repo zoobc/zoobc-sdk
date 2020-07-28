@@ -75,7 +75,10 @@ function generateNodeKey(networkIP: string, childSeed: BIP32Interface): Promise<
     const request = new GenerateNodeKeyRequest();
     const client = new NodeAdminServiceClient(networkIP);
     client.generateNodeKey(request, metadata, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -104,7 +107,10 @@ function getList(params?: NodeListParams): Promise<GetNodeRegistrationsResponse.
 
     const client = new NodeRegistrationServiceClient(networkIP.host);
     client.getNodeRegistrations(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -132,9 +138,9 @@ function get(params: NodeParams): Promise<NodeRegistrationsResponse> {
     const client = new NodeRegistrationServiceClient(networkIP.host);
     client.getNodeRegistration(request, (err, res) => {
       if (err) {
-        const { code, message } = err;
+        const { code, message, metadata } = err;
         if (code == grpc.Code.NotFound) return resolve(undefined);
-        else if (code != grpc.Code.OK) return reject(message);
+        else if (code != grpc.Code.OK) return reject({ code, message, metadata });
       }
       if (res) resolve(res.toObject());
     });
@@ -153,7 +159,10 @@ function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promi
       const networkIP = Network.selected();
       const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
-        if (err) reject(err);
+        if (err) {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        }
         if (res) resolve(res.toObject());
       });
     });
@@ -173,13 +182,14 @@ function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<N
         const networkIP = Network.selected();
         const client = new TransactionServiceClient(networkIP.host);
         client.postTransaction(request, (err, res) => {
-          if (err) reject(err);
+          if (err) {
+            const { code, message, metadata } = err;
+            reject({ code, message, metadata });
+          }
           if (res) resolve(res.toObject());
         });
       })
-      .catch(err => {
-        reject(err);
-      });
+      .catch(err => reject(err));
   });
 }
 
@@ -193,7 +203,10 @@ function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<N
     const networkIP = Network.selected();
     const client = new TransactionServiceClient(networkIP.host);
     client.postTransaction(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -202,19 +215,24 @@ function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<N
 function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<NodePostTransactionResponse> {
   return new Promise((resolve, reject) => {
     const auth = Poown.createAuth(RequestType.GETPROOFOFOWNERSHIP, childSeed);
-    Poown.request(auth, data.nodeAddress).then(poown => {
-      const bytes = claimNodeBuilder(data, poown, childSeed);
+    Poown.request(auth, data.nodeAddress)
+      .then(poown => {
+        const bytes = claimNodeBuilder(data, poown, childSeed);
 
-      const request = new PostTransactionRequest();
-      request.setTransactionbytes(bytes);
+        const request = new PostTransactionRequest();
+        request.setTransactionbytes(bytes);
 
-      const networkIP = Network.selected();
-      const client = new TransactionServiceClient(networkIP.host);
-      client.postTransaction(request, (err, res) => {
-        if (err) reject(err);
-        if (res) resolve(res.toObject());
-      });
-    });
+        const networkIP = Network.selected();
+        const client = new TransactionServiceClient(networkIP.host);
+        client.postTransaction(request, (err, res) => {
+          if (err) {
+            const { code, message, metadata } = err;
+            reject({ code, message, metadata });
+          }
+          if (res) resolve(res.toObject());
+        });
+      })
+      .catch(err => reject(err));
   });
 }
 

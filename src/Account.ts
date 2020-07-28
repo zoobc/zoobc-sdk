@@ -20,7 +20,7 @@ function getBalance(address: string): Promise<AccountBalanceResponse> {
     const client = new AccountBalanceServiceClient(networkIP.host);
     client.getAccountBalance(request, (err, res) => {
       if (err) {
-        const { code, message } = err;
+        const { code, message, metadata } = err;
         if (code == grpc.Code.NotFound) {
           return resolve({
             accountbalance: {
@@ -32,7 +32,7 @@ function getBalance(address: string): Promise<AccountBalanceResponse> {
               latest: true,
             },
           });
-        } else if (code != grpc.Code.OK) return reject(message);
+        } else if (code != grpc.Code.OK) return reject({ code, message, metadata });
       }
       if (res) resolve(res.toObject());
     });
@@ -46,7 +46,10 @@ function getBalances(addresses: string[]): Promise<AccountBalancesResponse> {
     request.setAccountaddressesList(addresses);
     const client = new AccountBalanceServiceClient(networkIP.host);
     client.getAccountBalances(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });

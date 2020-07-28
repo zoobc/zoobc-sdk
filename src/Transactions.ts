@@ -56,7 +56,10 @@ function getList(params?: TransactionListParams): Promise<TransactionsResponse> 
 
     const client = new TransactionServiceClient(networkIP.host);
     client.getTransactions(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -70,7 +73,10 @@ function get(id: string): Promise<TransactionResponse> {
 
     const client = new TransactionServiceClient(networkIP.host);
     client.getTransaction(request, (err, res) => {
-      if (err) reject(err.message);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -87,7 +93,10 @@ function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<Post
 
     const client = new TransactionServiceClient(networkIP.host);
     client.postTransaction(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -104,7 +113,10 @@ function getTransactionMinimumFee(data: SendMoneyInterface, seed: BIP32Interface
 
     const client = new TransactionServiceClient(networkIP.host);
     client.getTransactionMinimumFee(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });

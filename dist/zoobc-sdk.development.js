@@ -11435,7 +11435,7 @@ var Network = /** @class */ (function () {
         set: function (hosts) {
             this.hosts = hosts;
         },
-        enumerable: false,
+        enumerable: true,
         configurable: true
     });
     Object.defineProperty(Network.prototype, "id", {
@@ -11445,7 +11445,7 @@ var Network = /** @class */ (function () {
         set: function (id) {
             this.idx = id;
         },
-        enumerable: false,
+        enumerable: true,
         configurable: true
     });
     return Network;
@@ -11466,8 +11466,10 @@ function ping() {
         var client = new HealthCheckServiceClient_1(networkIP.host);
         var request = new empty_pb_1();
         client.healthCheck(request, function (err) {
-            if (err)
-                return reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             return resolve('PONG');
         });
     });
@@ -25016,8 +25018,10 @@ function getList(params) {
         }
         var client = new TransactionServiceClient_1(networkIP.host);
         client.getTransactions(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -25030,8 +25034,10 @@ function get(id) {
         request.setId(id);
         var client = new TransactionServiceClient_1(networkIP.host);
         client.getTransaction(request, function (err, res) {
-            if (err)
-                reject(err.message);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -25045,8 +25051,10 @@ function sendMoney(data, seed) {
         request.setTransactionbytes(txBytes);
         var client = new TransactionServiceClient_1(networkIP.host);
         client.postTransaction(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -25060,8 +25068,10 @@ function getTransactionMinimumFee(data, seed) {
         request.setTransactionbytes(txBytes);
         var client = new TransactionServiceClient_1(networkIP.host);
         client.getTransactionMinimumFee(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -26389,8 +26399,10 @@ function getList$1(params) {
         }
         var client = new MempoolServiceClient_1(networkIP.host);
         client.getMempoolTransactions(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -26403,8 +26415,10 @@ function get$1(id) {
         request.setId(id);
         var client = new MempoolServiceClient_1(networkIP.host);
         client.getMempoolTransaction(request, function (err, res) {
-            if (err)
-                reject(err.message);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject().transaction);
         });
@@ -27559,7 +27573,7 @@ function getBalance(address) {
         var client = new AccountBalanceServiceClient_1(networkIP.host);
         client.getAccountBalance(request, function (err, res) {
             if (err) {
-                var code = err.code, message = err.message;
+                var code = err.code, message = err.message, metadata = err.metadata;
                 if (code == grpcWeb.grpc.Code.NotFound) {
                     return resolve({
                         accountbalance: {
@@ -27573,7 +27587,7 @@ function getBalance(address) {
                     });
                 }
                 else if (code != grpcWeb.grpc.Code.OK)
-                    return reject(message);
+                    return reject({ code: code, message: message, metadata: metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -27587,8 +27601,10 @@ function getBalances(addresses) {
         request.setAccountaddressesList(addresses);
         var client = new AccountBalanceServiceClient_1(networkIP.host);
         client.getAccountBalances(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -35994,8 +36010,10 @@ function getInfo() {
         var request = new empty_pb_1();
         var client = new HostServiceClient_1(networkIP.host);
         client.getHostInfo(request, function (err, res) {
-            if (err)
-                reject(err.message);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -38417,8 +38435,10 @@ function request(auth, networkIp) {
         var metadata = new grpcWeb.grpc.Metadata({ authorization: auth });
         var client = new NodeAdminServiceClient_1(networkIp);
         client.getProofOfOwnership(request, metadata, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata_1 = err.metadata;
+                reject({ code: code, message: message, metadata: metadata_1 });
+            }
             if (res) {
                 var bytes = Buffer.concat([
                     Buffer.from(res.toObject().messagebytes.toString(), 'base64'),
@@ -38454,8 +38474,10 @@ function generateNodeKey(networkIP, childSeed) {
         var request = new node_pb_1();
         var client = new NodeAdminServiceClient_1(networkIP);
         client.generateNodeKey(request, metadata, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata_1 = err.metadata;
+                reject({ code: code, message: message, metadata: metadata_1 });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -38483,8 +38505,10 @@ function getList$2(params) {
         }
         var client = new NodeRegistrationServiceClient_1(networkIP.host);
         client.getNodeRegistrations(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -38514,11 +38538,11 @@ function get$2(params) {
         var client = new NodeRegistrationServiceClient_1(networkIP.host);
         client.getNodeRegistration(request, function (err, res) {
             if (err) {
-                var code = err.code, message = err.message;
+                var code = err.code, message = err.message, metadata = err.metadata;
                 if (code == grpcWeb.grpc.Code.NotFound)
                     return resolve(undefined);
                 else if (code != grpcWeb.grpc.Code.OK)
-                    return reject(message);
+                    return reject({ code: code, message: message, metadata: metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -38535,8 +38559,10 @@ function register(data, childSeed) {
             var networkIP = Network$1.selected();
             var client = new TransactionServiceClient_1(networkIP.host);
             client.postTransaction(request, function (err, res) {
-                if (err)
-                    reject(err);
+                if (err) {
+                    var code = err.code, message = err.message, metadata = err.metadata;
+                    reject({ code: code, message: message, metadata: metadata });
+                }
                 if (res)
                     resolve(res.toObject());
             });
@@ -38554,15 +38580,15 @@ function update(data, childSeed) {
             var networkIP = Network$1.selected();
             var client = new TransactionServiceClient_1(networkIP.host);
             client.postTransaction(request, function (err, res) {
-                if (err)
-                    reject(err);
+                if (err) {
+                    var code = err.code, message = err.message, metadata = err.metadata;
+                    reject({ code: code, message: message, metadata: metadata });
+                }
                 if (res)
                     resolve(res.toObject());
             });
         })
-            .catch(function (err) {
-            reject(err);
-        });
+            .catch(function (err) { return reject(err); });
     });
 }
 function remove(data, childSeed) {
@@ -38573,8 +38599,10 @@ function remove(data, childSeed) {
         var networkIP = Network$1.selected();
         var client = new TransactionServiceClient_1(networkIP.host);
         client.postTransaction(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -38583,19 +38611,23 @@ function remove(data, childSeed) {
 function claim(data, childSeed) {
     return new Promise(function (resolve, reject) {
         var auth = Poown.createAuth(auth_pb_1.GETPROOFOFOWNERSHIP, childSeed);
-        Poown.request(auth, data.nodeAddress).then(function (poown) {
+        Poown.request(auth, data.nodeAddress)
+            .then(function (poown) {
             var bytes = claimNodeBuilder(data, poown, childSeed);
             var request = new transaction_pb_3();
             request.setTransactionbytes(bytes);
             var networkIP = Network$1.selected();
             var client = new TransactionServiceClient_1(networkIP.host);
             client.postTransaction(request, function (err, res) {
-                if (err)
-                    reject(err);
+                if (err) {
+                    var code = err.code, message = err.message, metadata = err.metadata;
+                    reject({ code: code, message: message, metadata: metadata });
+                }
                 if (res)
                     resolve(res.toObject());
             });
-        });
+        })
+            .catch(function (err) { return reject(err); });
     });
 }
 var Node = {
@@ -38792,8 +38824,10 @@ function getList$3(params) {
         }
         var client = new EscrowTransactionServiceClient_1(networkIP.host);
         client.getEscrowTransactions(request, function (err, res) {
-            if (err)
-                return reject(err.message);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             resolve(res === null || res === void 0 ? void 0 : res.toObject());
         });
     });
@@ -38805,8 +38839,10 @@ function get$3(id) {
         request.setId(id);
         var client = new EscrowTransactionServiceClient_1(networkIP.host);
         client.getEscrowTransaction(request, function (err, res) {
-            if (err)
-                reject(err.message);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             resolve(res === null || res === void 0 ? void 0 : res.toObject());
         });
     });
@@ -38819,8 +38855,10 @@ function approval(data, seed) {
         request.setTransactionbytes(txBytes);
         var client = new TransactionServiceClient_1(networkIP.host);
         client.postTransaction(request, function (err, res) {
-            if (err)
-                reject(err.message);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             resolve(res === null || res === void 0 ? void 0 : res.toObject());
         });
     });
@@ -38955,8 +38993,10 @@ function getBlocks(params) {
         request.setLimit(limit || 10);
         var client = new BlockServiceClient_1(networkIP.host);
         client.getBlocks(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -38969,8 +39009,10 @@ function getBlockById(id) {
         request.setId(id);
         var client = new BlockServiceClient_1(networkIP.host);
         client.getBlock(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -38983,8 +39025,10 @@ function getBlockByHeight(height) {
         request.setHeight(height);
         var client = new BlockServiceClient_1(networkIP.host);
         client.getBlock(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -39306,8 +39350,10 @@ function getPendingList(params) {
         }
         var client = new MultisigServiceClient_1(networkIP.host);
         client.getPendingTransactions(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -39320,8 +39366,10 @@ function getPendingByTxHash(txHash) {
         request.setTransactionhashhex(txHash);
         var client = new MultisigServiceClient_1(networkIP.host);
         client.getPendingTransactionDetailByTransactionHash(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -39342,8 +39390,10 @@ function getMultisigInfo(params) {
         }
         var client = new MultisigServiceClient_1(networkIP.host);
         client.getMultisignatureInfo(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -39357,8 +39407,10 @@ function postTransaction(data, childSeed) {
         var networkIP = Network$1.selected();
         var client = new TransactionServiceClient_1(networkIP.host);
         client.postTransaction(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -40642,8 +40694,10 @@ function getList$4(params) {
         }
         var client = new AccountDatasetServiceClient_1(networkIP.host);
         client.getAccountDatasets(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -40658,20 +40712,8 @@ function get$4(params) {
         var client = new AccountDatasetServiceClient_1(networkIP.host);
         client.getAccountDataset(request, function (err, res) {
             if (err) {
-                var code = err.code, message = err.message;
-                if (code == grpcWeb.grpc.Code.NotFound) {
-                    return resolve({
-                        setteraccountaddress: '',
-                        recipientaccountaddress: '',
-                        property: '',
-                        value: '',
-                        height: 0,
-                        isactive: true,
-                        latest: true,
-                    });
-                }
-                else if (code != grpcWeb.grpc.Code.OK)
-                    return reject(message);
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -40686,8 +40728,10 @@ function setupDataset(data, childSeed) {
         var networkIP = Network$1.selected();
         var client = new TransactionServiceClient_1(networkIP.host);
         client.postTransaction(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -40701,8 +40745,10 @@ function removeDataset(data, childseed) {
         var networkIP = Network$1.selected();
         var client = new TransactionServiceClient_1(networkIP.host);
         client.postTransaction(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
@@ -41668,8 +41714,10 @@ function getList$5(params) {
         }
         var client = new AccountLedgerServiceClient_1(networkIP.host);
         client.getAccountLedgers(request, function (err, res) {
-            if (err)
-                reject(err);
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
             if (res)
                 resolve(res.toObject());
         });
