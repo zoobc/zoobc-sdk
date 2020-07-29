@@ -8,7 +8,7 @@ const TRANSACTION_TYPE = new Buffer([2, 0, 0, 0]);
 export interface RegisterNodeInterface {
   accountAddress: string;
   fee: number;
-  nodePublicKey: string;
+  nodePublicKey: Buffer;
   nodeAddress: string;
   funds: number;
 }
@@ -22,7 +22,7 @@ export function registerNodeBuilder(data: RegisterNodeInterface, poown: Buffer, 
   const addressLength = writeInt32(ADDRESS_LENGTH);
   const fee = writeInt64(data.fee * 1e8);
 
-  const nodePublicKey = base64ToBuffer(data.nodePublicKey);
+  const nodePublicKey = data.nodePublicKey;
   const nodeAddress = Buffer.from(data.nodeAddress, 'utf-8');
   const nodeAddressLength = writeInt32(nodeAddress.length);
   const funds = writeInt64(data.funds * 1e8);
