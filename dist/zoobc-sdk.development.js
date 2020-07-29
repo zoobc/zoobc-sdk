@@ -24843,16 +24843,6 @@ TransactionServiceClient.prototype.getTransactionMinimumFee = function getTransa
 
 var TransactionServiceClient_1 = TransactionServiceClient;
 
-function base64ToBuffer(base64) {
-    return new Buffer(base64, 'base64');
-}
-function toBase64Url(base64Str) {
-    return base64Str
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/\=/g, '');
-}
-
 // getAddressFromPublicKey Get the formatted address from a raw public key
 function getZBCAdress(publicKey, prefix) {
     if (prefix === void 0) { prefix = 'ZBC'; }
@@ -24913,13 +24903,12 @@ function isZBCAddressValid(address, stdPrefix) {
             return false;
     return true;
 }
-function isZBCPublicKeyValid(pubkey) {
-    var addressBytes = base64ToBuffer(pubkey);
-    if (addressBytes.length == 32 && pubkey.length == 44) {
-        return true;
-    }
-    else
-        return false;
+function ZBCAddressToBytes(address) {
+    var segs = address.split('_');
+    segs.shift();
+    var b32 = segs.join('');
+    var buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
+    return buffer.slice(0, 32);
 }
 function writeInt64(number, base, endian) {
     number = number.toString();
@@ -38265,7 +38254,7 @@ function registerNodeBuilder(data, poown, seed) {
     var recipient = new Buffer(ADDRESS_LENGTH);
     var addressLength = writeInt32(ADDRESS_LENGTH);
     var fee = writeInt64(data.fee * 1e8);
-    var nodePublicKey = base64ToBuffer(data.nodePublicKey);
+    var nodePublicKey = data.nodePublicKey;
     var nodeAddress = Buffer.from(data.nodeAddress, 'utf-8');
     var nodeAddressLength = writeInt32(nodeAddress.length);
     var funds = writeInt64(data.funds * 1e8);
@@ -38315,7 +38304,7 @@ function updateNodeBuilder(data, poown, seed) {
     var recipient = new Buffer(ADDRESS_LENGTH);
     var addressLength = writeInt32(ADDRESS_LENGTH);
     var fee = writeInt64(data.fee * 1e8);
-    var nodePublicKey = base64ToBuffer(data.nodePublicKey);
+    var nodePublicKey = data.nodePublicKey;
     var nodeAddress = Buffer.from(data.nodeAddress, 'utf-8');
     var nodeAddressLength = writeInt32(nodeAddress.length);
     var funds = writeInt64(data.funds * 1e8);
@@ -38357,7 +38346,7 @@ function removeNodeBuilder(data, seed) {
     var recipient = new Buffer(ADDRESS_LENGTH);
     var addressLength = writeInt32(ADDRESS_LENGTH);
     var fee = writeInt64(data.fee * 1e8);
-    var nodePublicKey = base64ToBuffer(data.nodePublicKey);
+    var nodePublicKey = data.nodePublicKey;
     var bodyLength = writeInt32(nodePublicKey.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE$3,
@@ -38392,7 +38381,7 @@ function claimNodeBuilder(data, poown, seed) {
     var recipient = new Buffer(ADDRESS_LENGTH);
     var addressLength = writeInt32(ADDRESS_LENGTH);
     var fee = writeInt64(data.fee * 1e8);
-    var nodePublicKey = Buffer.from(base64ToBuffer(data.nodePublicKey));
+    var nodePublicKey = data.nodePublicKey;
     var bodyLength = writeInt32(nodePublicKey.length + poown.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE$4,
@@ -39234,6 +39223,16 @@ MultisigServiceClient.prototype.getMultisigAddressByParticipantAddresses = funct
 };
 
 var MultisigServiceClient_1 = MultisigServiceClient;
+
+function base64ToBuffer(base64) {
+    return new Buffer(base64, 'base64');
+}
+function toBase64Url(base64Str) {
+    return base64Str
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/\=/g, '');
+}
 
 var TRANSACTION_TYPE$6 = new Buffer([5, 0, 0, 0]);
 function multisignatureBuilder(data, seed) {
@@ -42965,12 +42964,12 @@ exports.SignatureType = signature_pb_1;
 exports.SpineBlockManifestType = spineBlockManifest_pb_1;
 exports.SpinePublicKeyAction = spine_pb_1;
 exports.TransactionType = transaction_pb_5;
+exports.ZBCAddressToBytes = ZBCAddressToBytes;
 exports.ZooKeyring = ZooKeyring;
 exports.default = zoobc;
 exports.generateTransactionHash = generateTransactionHash;
 exports.getZBCAdress = getZBCAdress;
 exports.isZBCAddressValid = isZBCAddressValid;
-exports.isZBCPublicKeyValid = isZBCPublicKeyValid;
 exports.sendMoneyBuilder = sendMoneyBuilder;
 exports.signTransactionHash = signTransactionHash;
 exports.toGetPendingList = toGetPendingList;
