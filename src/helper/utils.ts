@@ -62,12 +62,11 @@ export function isZBCAddressValid(address: string, stdPrefix: string = 'ZBC'): b
   return true;
 }
 
-export function ZBCAddressToBytes(address: string): Buffer {
-  const segs = address.split('_');
-  segs.shift();
-  const b32 = segs.join('');
-  const buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
-  return buffer.slice(0, 32);
+export function isZBCPublicKeyValid(pubkey: string): boolean {
+  const addressBytes = base64ToBuffer(pubkey);
+  if (addressBytes.length == 32 && pubkey.length == 44) {
+    return true;
+  } else return false;
 }
 
 export function writeInt64(number: number | string, base?: number, endian?: any): Buffer {

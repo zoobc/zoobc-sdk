@@ -3,7 +3,7 @@ import { BIP32Interface } from 'bip32';
 export interface RegisterNodeInterface {
     accountAddress: string;
     fee: number;
-    nodePublicKey: Buffer;
+    nodePublicKey: string;
     nodeAddress: string;
     funds: number;
 }
