@@ -8,7 +8,7 @@ const TRANSACTION_TYPE = new Buffer([2, 3, 0, 0]);
 export interface ClaimNodeInterface {
   accountAddress: string;
   fee: number;
-  nodePublicKey: string;
+  nodePublicKey: Buffer;
   nodeAddress: string;
 }
 
@@ -21,7 +21,7 @@ export function claimNodeBuilder(data: ClaimNodeInterface, poown: Buffer, seed: 
   const addressLength = writeInt32(ADDRESS_LENGTH);
   const fee = writeInt64(data.fee * 1e8);
 
-  const nodePublicKey = Buffer.from(base64ToBuffer(data.nodePublicKey));
+  const nodePublicKey = data.nodePublicKey;
   const bodyLength = writeInt32(nodePublicKey.length + poown.length);
 
   bytes = Buffer.concat([
