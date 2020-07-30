@@ -34,22 +34,12 @@ export function encryptPassword(password: string, salt: string = 'salt'): string
   }).toString();
 }
 
-export function isZBCAddressValid(address: string, stdPrefix: string = 'ZBC'): boolean {
-  if (address.length != 66) return false;
-  const segs = address.split('_');
-  const prefix = segs[0];
-  if (prefix != stdPrefix) return false;
-  segs.shift();
-  if (segs.length != 7) return false;
-  for (let i = 0; i < segs.length; i++) if (!/[A-Z2-7]{8}/.test(segs[i])) return false;
-  const b32 = segs.join('');
-  const buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
-  const inputChecksum = [];
-  for (let i = 0; i < 3; i++) inputChecksum.push(buffer[i + 32]);
-  for (let i = 0; i < 3; i++) buffer[i + 32] = prefix.charCodeAt(i);
-  const checksum = hash(buffer);
-  for (let i = 0; i < 3; i++) if (checksum[i] != inputChecksum[i]) return false;
-  return true;
+export function isZBCAddressValid(address: string): boolean {
+  const addressBase64 = fromBase64Url(address);
+  const addressBytes = base64ToBuffer(addressBase64);
+  if (addressBytes.length == 33 && addressBase64.length == 44) {
+    return true;
+  } else return false;
 }
 
 export function isZBCPublicKeyValid(pubkey: string): boolean {
