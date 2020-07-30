@@ -1,30 +1,20 @@
 import { toBase64Url, base64ToBuffer, fromBase64Url } from './converters';
 import * as CryptoJS from 'crypto-js';
 import BN from 'bn.js';
-import SHA3 from 'sha3';
-import B32Enc from 'base32-encode';
-import B32Dec from 'base32-decode';
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
-export function getZBCAdress(publicKey: Uint8Array, prefix: string = 'ZBC'): string {
-  const bytes = Buffer.alloc(35);
-  for (let i = 0; i < 32; i++) bytes[i] = publicKey[i];
-  for (let i = 0; i < 3; i++) bytes[i + 32] = prefix.charCodeAt(i);
-  const checksum = hash(bytes);
-  for (let i = 0; i < 3; i++) bytes[i + 32] = Number(checksum[i]);
-  const segs = [prefix];
-  const b32 = B32Enc(bytes, 'RFC4648');
-  for (let i = 0; i < 7; i++) segs.push(b32.substr(i * 8, 8));
+export function getZBCAdress(publicKey: Uint8Array): string {
+  const checksum = getChecksumByte(publicKey);
+  let binary = '';
+  const bytes = new Uint8Array(33);
+  bytes.set(publicKey, 0);
+  bytes.set([checksum[0]], 32);
 
-  return segs.join('_');
-}
-
-export function hash(str: any, format: string = 'buffer') {
-  const h = new SHA3(256);
-  h.update(str);
-  const b = h.digest();
-  if (format == 'buffer') return b;
-  return b.toString(format);
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return toBase64Url(window.btoa(binary));
 }
 
 export function getChecksumByte(bytes: Uint8Array): Uint8Array {
