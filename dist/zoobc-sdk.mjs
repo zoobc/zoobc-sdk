@@ -42821,7 +42821,7 @@ function toTransactionListWallet(res, ownAddress) {
 function toGetPendingList(res) {
     var list = res.pendingtransactionsList.map(function (tx) {
         var bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        var amount = readInt64(bytes, 164);
+        var amount = readInt64(bytes, 165);
         var fee = readInt64(bytes, 153);
         var timestamp = readInt64(bytes, 5);
         var recipient = bytes.slice(87, 153);
