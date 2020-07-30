@@ -1,4 +1,5 @@
-import { writeInt32, getZBCAdress } from './helper/utils';
+import { writeInt32, getChecksumByte } from './helper/utils';
+import { toBase64Url } from './helper/converters';
 import { sha3_256 } from 'js-sha3';
 import Network from './Network';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
@@ -62,7 +63,17 @@ function generateMultiSigInfo(multiSigAddress: MultiSigAddress): Buffer {
 function createMultiSigAddress(multiSigAddress: MultiSigAddress): string {
   const buffer = generateMultiSigInfo(multiSigAddress);
   const hashed = Buffer.from(sha3_256(buffer), 'hex');
-  return getZBCAdress(hashed);
+  const checksum = Buffer.from(getChecksumByte(hashed));
+  let binary = '';
+  let bytes = new Buffer([]);
+
+  bytes = Buffer.concat([hashed, checksum]);
+
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return toBase64Url(window.btoa(binary));
 }
 
 function getPendingList(params: MultisigPendingListParams): Promise<MultisigPendingTxResponse> {

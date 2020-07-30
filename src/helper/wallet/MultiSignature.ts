@@ -2,15 +2,15 @@ import { MultisigPendingTxResponse } from '../../MultiSignature';
 import { readInt64 } from '../utils';
 import { SendMoneyInterface, sendMoneyBuilder } from '../transaction-builder/send-money';
 import { sha3_256 } from 'js-sha3';
-import { toBase64Url } from '../converters';
+import { toBase64Url, bufferToBase64 } from '../converters';
 
 export function toGetPendingList(res: MultisigPendingTxResponse) {
   const list = res.pendingtransactionsList.map(tx => {
     const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-    const amount = readInt64(bytes, 164);
-    const fee = readInt64(bytes, 153);
+    const amount = readInt64(bytes, 121);
+    const fee = readInt64(bytes, 109);
     const timestamp = readInt64(bytes, 5);
-    const recipient = bytes.slice(87, 153);
+    const recipient = bytes.slice(65, 109);
     return {
       amount: amount,
       blockheight: tx.blockheight,
