@@ -26,16 +26,7 @@ export function setupDatasetBuilder(data: SetupDatasetInterface, seed: BIP32Inte
   const propertyLength = writeInt32(property.length);
   const value = Buffer.from(data.value, 'utf-8');
   const valueLength = writeInt32(value.length);
-  const bodyLength = writeInt32(
-    addressLength.length +
-      accountAddress.length +
-      addressLength.length +
-      recipient.length +
-      propertyLength.length +
-      property.length +
-      valueLength.length +
-      value.length,
-  );
+  const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
 
   bytes = Buffer.concat([
     TRANSACTION_TYPE,
@@ -47,10 +38,6 @@ export function setupDatasetBuilder(data: SetupDatasetInterface, seed: BIP32Inte
     recipient,
     fee,
     bodyLength,
-    addressLength,
-    accountAddress,
-    addressLength,
-    recipient,
     propertyLength,
     property,
     valueLength,
