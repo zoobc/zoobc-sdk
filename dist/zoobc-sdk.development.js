@@ -42949,14 +42949,7 @@ function setupDatasetBuilder(data, seed) {
     var propertyLength = writeInt32(property.length);
     var value = buffer.Buffer.from(data.value, 'utf-8');
     var valueLength = writeInt32(value.length);
-    var bodyLength = writeInt32(addressLength.length +
-        accountAddress.length +
-        addressLength.length +
-        recipient.length +
-        propertyLength.length +
-        property.length +
-        valueLength.length +
-        value.length);
+    var bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
     bytes = buffer.Buffer.concat([
         TRANSACTION_TYPE$7,
         VERSION,
@@ -42967,10 +42960,6 @@ function setupDatasetBuilder(data, seed) {
         recipient,
         fee,
         bodyLength,
-        addressLength,
-        accountAddress,
-        addressLength,
-        recipient,
         propertyLength,
         property,
         valueLength,
@@ -43001,14 +42990,7 @@ function removeDatasetBuilder(data, seed) {
     var propertyLength = writeInt32(property.length);
     var value = buffer.Buffer.from(data.value, 'utf-8');
     var valueLength = writeInt32(value.length);
-    var bodyLength = writeInt32(addressLength.length +
-        setterAccountAddress.length +
-        addressLength.length +
-        recipient.length +
-        propertyLength.length +
-        property.length +
-        valueLength.length +
-        value.length);
+    var bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
     bytes = buffer.Buffer.concat([
         TRANSACTION_TYPE$8,
         VERSION,
@@ -43019,10 +43001,6 @@ function removeDatasetBuilder(data, seed) {
         recipient,
         fee,
         bodyLength,
-        addressLength,
-        setterAccountAddress,
-        addressLength,
-        recipient,
         propertyLength,
         property,
         valueLength,
@@ -45229,7 +45207,7 @@ function toTransactionListWallet(res, ownAddress) {
 function toGetPendingList(res) {
     var list = res.pendingtransactionsList.map(function (tx) {
         var bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        var amount = readInt64(bytes, 164);
+        var amount = readInt64(bytes, 165);
         var fee = readInt64(bytes, 153);
         var timestamp = readInt64(bytes, 5);
         var recipient = bytes.slice(87, 153);

@@ -7,7 +7,7 @@ import { toBase64Url } from '../converters';
 export function toGetPendingList(res: MultisigPendingTxResponse) {
   const list = res.pendingtransactionsList.map(tx => {
     const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-    const amount = readInt64(bytes, 164);
+    const amount = readInt64(bytes, 165);
     const fee = readInt64(bytes, 153);
     const timestamp = readInt64(bytes, 5);
     const recipient = bytes.slice(87, 153);

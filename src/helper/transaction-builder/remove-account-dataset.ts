@@ -26,16 +26,7 @@ export function removeDatasetBuilder(data: RemoveDatasetInterface, seed: BIP32In
   const propertyLength = writeInt32(property.length);
   const value = Buffer.from(data.value, 'utf-8');
   const valueLength = writeInt32(value.length);
-  const bodyLength = writeInt32(
-    addressLength.length +
-      setterAccountAddress.length +
-      addressLength.length +
-      recipient.length +
-      propertyLength.length +
-      property.length +
-      valueLength.length +
-      value.length,
-  );
+  const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
 
   bytes = Buffer.concat([
     TRANSACTION_TYPE,
@@ -47,10 +38,6 @@ export function removeDatasetBuilder(data: RemoveDatasetInterface, seed: BIP32In
     recipient,
     fee,
     bodyLength,
-    addressLength,
-    setterAccountAddress,
-    addressLength,
-    recipient,
     propertyLength,
     property,
     valueLength,
