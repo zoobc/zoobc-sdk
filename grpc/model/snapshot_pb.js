@@ -32,6 +32,12 @@ var model_block_pb = require('../model/block_pb.js');
 goog.object.extend(proto, model_block_pb);
 var model_skippedBlocksmith_pb = require('../model/skippedBlocksmith_pb.js');
 goog.object.extend(proto, model_skippedBlocksmith_pb);
+var model_feeScale_pb = require('../model/feeScale_pb.js');
+goog.object.extend(proto, model_feeScale_pb);
+var model_feeVote_pb = require('../model/feeVote_pb.js');
+goog.object.extend(proto, model_feeVote_pb);
+var model_liquidPayment_pb = require('../model/liquidPayment_pb.js');
+goog.object.extend(proto, model_liquidPayment_pb);
 goog.exportSymbol('proto.model.SnapshotFileInfo', null, global);
 goog.exportSymbol('proto.model.SnapshotPayload', null, global);
 /**
@@ -416,7 +422,7 @@ proto.model.SnapshotFileInfo.prototype.clearFilechunkshashesList = function() {
  * @private {!Array<number>}
  * @const
  */
-proto.model.SnapshotPayload.repeatedFields_ = [1,2,3,4,5,6,7,8,9,10,11,12];
+proto.model.SnapshotPayload.repeatedFields_ = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
 
 
 
@@ -471,6 +477,16 @@ proto.model.SnapshotPayload.toObject = function(includeInstance, msg) {
     model_multiSignature_pb.MultiSignatureInfo.toObject, includeInstance),
     skippedblocksmithsList: jspb.Message.toObjectList(msg.getSkippedblocksmithsList(),
     model_skippedBlocksmith_pb.SkippedBlocksmith.toObject, includeInstance),
+    feescaleList: jspb.Message.toObjectList(msg.getFeescaleList(),
+    model_feeScale_pb.FeeScale.toObject, includeInstance),
+    feevotecommitmentvoteList: jspb.Message.toObjectList(msg.getFeevotecommitmentvoteList(),
+    model_feeVote_pb.FeeVoteCommitmentVote.toObject, includeInstance),
+    feevoterevealvoteList: jspb.Message.toObjectList(msg.getFeevoterevealvoteList(),
+    model_feeVote_pb.FeeVoteRevealVote.toObject, includeInstance),
+    liquidpaymentList: jspb.Message.toObjectList(msg.getLiquidpaymentList(),
+    model_liquidPayment_pb.LiquidPayment.toObject, includeInstance),
+    nodeadmissiontimestampList: jspb.Message.toObjectList(msg.getNodeadmissiontimestampList(),
+    model_nodeRegistration_pb.NodeAdmissionTimestamp.toObject, includeInstance),
     multisignatureparticipantsList: jspb.Message.toObjectList(msg.getMultisignatureparticipantsList(),
     model_multiSignature_pb.MultiSignatureParticipant.toObject, includeInstance)
   };
@@ -565,6 +581,31 @@ proto.model.SnapshotPayload.deserializeBinaryFromReader = function(msg, reader) 
       msg.addSkippedblocksmiths(value);
       break;
     case 12:
+      var value = new model_feeScale_pb.FeeScale;
+      reader.readMessage(value,model_feeScale_pb.FeeScale.deserializeBinaryFromReader);
+      msg.addFeescale(value);
+      break;
+    case 13:
+      var value = new model_feeVote_pb.FeeVoteCommitmentVote;
+      reader.readMessage(value,model_feeVote_pb.FeeVoteCommitmentVote.deserializeBinaryFromReader);
+      msg.addFeevotecommitmentvote(value);
+      break;
+    case 14:
+      var value = new model_feeVote_pb.FeeVoteRevealVote;
+      reader.readMessage(value,model_feeVote_pb.FeeVoteRevealVote.deserializeBinaryFromReader);
+      msg.addFeevoterevealvote(value);
+      break;
+    case 15:
+      var value = new model_liquidPayment_pb.LiquidPayment;
+      reader.readMessage(value,model_liquidPayment_pb.LiquidPayment.deserializeBinaryFromReader);
+      msg.addLiquidpayment(value);
+      break;
+    case 16:
+      var value = new model_nodeRegistration_pb.NodeAdmissionTimestamp;
+      reader.readMessage(value,model_nodeRegistration_pb.NodeAdmissionTimestamp.deserializeBinaryFromReader);
+      msg.addNodeadmissiontimestamp(value);
+      break;
+    case 17:
       var value = new model_multiSignature_pb.MultiSignatureParticipant;
       reader.readMessage(value,model_multiSignature_pb.MultiSignatureParticipant.deserializeBinaryFromReader);
       msg.addMultisignatureparticipants(value);
@@ -686,10 +727,50 @@ proto.model.SnapshotPayload.serializeBinaryToWriter = function(message, writer) 
       model_skippedBlocksmith_pb.SkippedBlocksmith.serializeBinaryToWriter
     );
   }
-  f = message.getMultisignatureparticipantsList();
+  f = message.getFeescaleList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
       12,
+      f,
+      model_feeScale_pb.FeeScale.serializeBinaryToWriter
+    );
+  }
+  f = message.getFeevotecommitmentvoteList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      13,
+      f,
+      model_feeVote_pb.FeeVoteCommitmentVote.serializeBinaryToWriter
+    );
+  }
+  f = message.getFeevoterevealvoteList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      14,
+      f,
+      model_feeVote_pb.FeeVoteRevealVote.serializeBinaryToWriter
+    );
+  }
+  f = message.getLiquidpaymentList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      15,
+      f,
+      model_liquidPayment_pb.LiquidPayment.serializeBinaryToWriter
+    );
+  }
+  f = message.getNodeadmissiontimestampList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      16,
+      f,
+      model_nodeRegistration_pb.NodeAdmissionTimestamp.serializeBinaryToWriter
+    );
+  }
+  f = message.getMultisignatureparticipantsList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      17,
       f,
       model_multiSignature_pb.MultiSignatureParticipant.serializeBinaryToWriter
     );
@@ -1072,18 +1153,188 @@ proto.model.SnapshotPayload.prototype.clearSkippedblocksmithsList = function() {
 
 
 /**
- * repeated MultiSignatureParticipant MultiSignatureParticipants = 12;
+ * repeated FeeScale FeeScale = 12;
+ * @return {!Array<!proto.model.FeeScale>}
+ */
+proto.model.SnapshotPayload.prototype.getFeescaleList = function() {
+  return /** @type{!Array<!proto.model.FeeScale>} */ (
+    jspb.Message.getRepeatedWrapperField(this, model_feeScale_pb.FeeScale, 12));
+};
+
+
+/** @param {!Array<!proto.model.FeeScale>} value */
+proto.model.SnapshotPayload.prototype.setFeescaleList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 12, value);
+};
+
+
+/**
+ * @param {!proto.model.FeeScale=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.FeeScale}
+ */
+proto.model.SnapshotPayload.prototype.addFeescale = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 12, opt_value, proto.model.FeeScale, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.SnapshotPayload.prototype.clearFeescaleList = function() {
+  this.setFeescaleList([]);
+};
+
+
+/**
+ * repeated FeeVoteCommitmentVote FeeVoteCommitmentVote = 13;
+ * @return {!Array<!proto.model.FeeVoteCommitmentVote>}
+ */
+proto.model.SnapshotPayload.prototype.getFeevotecommitmentvoteList = function() {
+  return /** @type{!Array<!proto.model.FeeVoteCommitmentVote>} */ (
+    jspb.Message.getRepeatedWrapperField(this, model_feeVote_pb.FeeVoteCommitmentVote, 13));
+};
+
+
+/** @param {!Array<!proto.model.FeeVoteCommitmentVote>} value */
+proto.model.SnapshotPayload.prototype.setFeevotecommitmentvoteList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 13, value);
+};
+
+
+/**
+ * @param {!proto.model.FeeVoteCommitmentVote=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.FeeVoteCommitmentVote}
+ */
+proto.model.SnapshotPayload.prototype.addFeevotecommitmentvote = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 13, opt_value, proto.model.FeeVoteCommitmentVote, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.SnapshotPayload.prototype.clearFeevotecommitmentvoteList = function() {
+  this.setFeevotecommitmentvoteList([]);
+};
+
+
+/**
+ * repeated FeeVoteRevealVote FeeVoteRevealVote = 14;
+ * @return {!Array<!proto.model.FeeVoteRevealVote>}
+ */
+proto.model.SnapshotPayload.prototype.getFeevoterevealvoteList = function() {
+  return /** @type{!Array<!proto.model.FeeVoteRevealVote>} */ (
+    jspb.Message.getRepeatedWrapperField(this, model_feeVote_pb.FeeVoteRevealVote, 14));
+};
+
+
+/** @param {!Array<!proto.model.FeeVoteRevealVote>} value */
+proto.model.SnapshotPayload.prototype.setFeevoterevealvoteList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 14, value);
+};
+
+
+/**
+ * @param {!proto.model.FeeVoteRevealVote=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.FeeVoteRevealVote}
+ */
+proto.model.SnapshotPayload.prototype.addFeevoterevealvote = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 14, opt_value, proto.model.FeeVoteRevealVote, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.SnapshotPayload.prototype.clearFeevoterevealvoteList = function() {
+  this.setFeevoterevealvoteList([]);
+};
+
+
+/**
+ * repeated LiquidPayment LiquidPayment = 15;
+ * @return {!Array<!proto.model.LiquidPayment>}
+ */
+proto.model.SnapshotPayload.prototype.getLiquidpaymentList = function() {
+  return /** @type{!Array<!proto.model.LiquidPayment>} */ (
+    jspb.Message.getRepeatedWrapperField(this, model_liquidPayment_pb.LiquidPayment, 15));
+};
+
+
+/** @param {!Array<!proto.model.LiquidPayment>} value */
+proto.model.SnapshotPayload.prototype.setLiquidpaymentList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 15, value);
+};
+
+
+/**
+ * @param {!proto.model.LiquidPayment=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.LiquidPayment}
+ */
+proto.model.SnapshotPayload.prototype.addLiquidpayment = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 15, opt_value, proto.model.LiquidPayment, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.SnapshotPayload.prototype.clearLiquidpaymentList = function() {
+  this.setLiquidpaymentList([]);
+};
+
+
+/**
+ * repeated NodeAdmissionTimestamp NodeAdmissionTimestamp = 16;
+ * @return {!Array<!proto.model.NodeAdmissionTimestamp>}
+ */
+proto.model.SnapshotPayload.prototype.getNodeadmissiontimestampList = function() {
+  return /** @type{!Array<!proto.model.NodeAdmissionTimestamp>} */ (
+    jspb.Message.getRepeatedWrapperField(this, model_nodeRegistration_pb.NodeAdmissionTimestamp, 16));
+};
+
+
+/** @param {!Array<!proto.model.NodeAdmissionTimestamp>} value */
+proto.model.SnapshotPayload.prototype.setNodeadmissiontimestampList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 16, value);
+};
+
+
+/**
+ * @param {!proto.model.NodeAdmissionTimestamp=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.NodeAdmissionTimestamp}
+ */
+proto.model.SnapshotPayload.prototype.addNodeadmissiontimestamp = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 16, opt_value, proto.model.NodeAdmissionTimestamp, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.SnapshotPayload.prototype.clearNodeadmissiontimestampList = function() {
+  this.setNodeadmissiontimestampList([]);
+};
+
+
+/**
+ * repeated MultiSignatureParticipant MultiSignatureParticipants = 17;
  * @return {!Array<!proto.model.MultiSignatureParticipant>}
  */
 proto.model.SnapshotPayload.prototype.getMultisignatureparticipantsList = function() {
   return /** @type{!Array<!proto.model.MultiSignatureParticipant>} */ (
-    jspb.Message.getRepeatedWrapperField(this, model_multiSignature_pb.MultiSignatureParticipant, 12));
+    jspb.Message.getRepeatedWrapperField(this, model_multiSignature_pb.MultiSignatureParticipant, 17));
 };
 
 
 /** @param {!Array<!proto.model.MultiSignatureParticipant>} value */
 proto.model.SnapshotPayload.prototype.setMultisignatureparticipantsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 12, value);
+  jspb.Message.setRepeatedWrapperField(this, 17, value);
 };
 
 
@@ -1093,7 +1344,7 @@ proto.model.SnapshotPayload.prototype.setMultisignatureparticipantsList = functi
  * @return {!proto.model.MultiSignatureParticipant}
  */
 proto.model.SnapshotPayload.prototype.addMultisignatureparticipants = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 12, opt_value, proto.model.MultiSignatureParticipant, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 17, opt_value, proto.model.MultiSignatureParticipant, opt_index);
 };
 
 
