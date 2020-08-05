@@ -12,6 +12,8 @@ var jspb = require('google-protobuf');
 var goog = jspb;
 var global = Function('return this')();
 
+var model_nodeAddressInfo_pb = require('../model/nodeAddressInfo_pb.js');
+goog.object.extend(proto, model_nodeAddressInfo_pb);
 goog.exportSymbol('proto.model.GenerateNodeKeyRequest', null, global);
 goog.exportSymbol('proto.model.GenerateNodeKeyResponse', null, global);
 goog.exportSymbol('proto.model.Node', null, global);
@@ -135,7 +137,8 @@ proto.model.Node.toObject = function(includeInstance, msg) {
     id: jspb.Message.getFieldWithDefault(msg, 1, 0),
     sharedaddress: jspb.Message.getFieldWithDefault(msg, 2, ""),
     address: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    port: jspb.Message.getFieldWithDefault(msg, 4, 0)
+    port: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    addressstatus: jspb.Message.getFieldWithDefault(msg, 5, 0)
   };
 
   if (includeInstance) {
@@ -187,6 +190,10 @@ proto.model.Node.deserializeBinaryFromReader = function(msg, reader) {
     case 4:
       var value = /** @type {number} */ (reader.readUint32());
       msg.setPort(value);
+      break;
+    case 5:
+      var value = /** @type {!proto.model.NodeAddressStatus} */ (reader.readEnum());
+      msg.setAddressstatus(value);
       break;
     default:
       reader.skipField();
@@ -242,6 +249,13 @@ proto.model.Node.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0) {
     writer.writeUint32(
       4,
+      f
+    );
+  }
+  f = message.getAddressstatus();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      5,
       f
     );
   }
@@ -305,6 +319,21 @@ proto.model.Node.prototype.getPort = function() {
 /** @param {number} value */
 proto.model.Node.prototype.setPort = function(value) {
   jspb.Message.setProto3IntField(this, 4, value);
+};
+
+
+/**
+ * optional NodeAddressStatus AddressStatus = 5;
+ * @return {!proto.model.NodeAddressStatus}
+ */
+proto.model.Node.prototype.getAddressstatus = function() {
+  return /** @type {!proto.model.NodeAddressStatus} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/** @param {!proto.model.NodeAddressStatus} value */
+proto.model.Node.prototype.setAddressstatus = function(value) {
+  jspb.Message.setProto3EnumField(this, 5, value);
 };
 
 

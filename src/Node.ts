@@ -13,7 +13,6 @@ import {
   GetNodeRegistrationResponse,
   GetNodeRegistrationsResponse,
   GetNodeRegistrationsRequest,
-  NodeAddress,
 } from '../grpc/model/nodeRegistration_pb';
 import { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
 import { UpdateNodeInterface, updateNodeBuilder } from './helper/transaction-builder/update-node';
@@ -123,12 +122,12 @@ function get(params: NodeParams): Promise<NodeRegistrationsResponse> {
     if (params) {
       const { nodeaddress, height, owner, publicKey } = params;
 
-      if (nodeaddress) {
-        const nodeAddress = new NodeAddress();
-        if (nodeaddress.address) nodeAddress.setAddress(nodeaddress.address);
-        if (nodeaddress.port) nodeAddress.setPort(nodeaddress.port);
-        request.setNodeaddress(nodeAddress);
-      }
+      // if (nodeaddress) {
+      //   const nodeAddress = new NodeAddress();
+      //   if (nodeaddress.address) nodeAddress.setAddress(nodeaddress.address);
+      //   if (nodeaddress.port) nodeAddress.setPort(nodeaddress.port);
+      //   request.setNodeaddress(nodeAddress);
+      // }
 
       if (owner) request.setAccountaddress(owner);
       if (publicKey) request.setNodepublickey(publicKey);

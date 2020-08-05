@@ -3,30 +3,7 @@
 
 import * as jspb from "google-protobuf";
 import * as model_pagination_pb from "../model/pagination_pb";
-
-export class NodeAddress extends jspb.Message {
-  getAddress(): string;
-  setAddress(value: string): void;
-
-  getPort(): number;
-  setPort(value: number): void;
-
-  serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): NodeAddress.AsObject;
-  static toObject(includeInstance: boolean, msg: NodeAddress): NodeAddress.AsObject;
-  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: NodeAddress, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): NodeAddress;
-  static deserializeBinaryFromReader(message: NodeAddress, reader: jspb.BinaryReader): NodeAddress;
-}
-
-export namespace NodeAddress {
-  export type AsObject = {
-    address: string,
-    port: number,
-  }
-}
+import * as model_nodeAddressInfo_pb from "../model/nodeAddressInfo_pb";
 
 export class NodeRegistration extends jspb.Message {
   getNodeid(): string;
@@ -43,11 +20,6 @@ export class NodeRegistration extends jspb.Message {
   getRegistrationheight(): number;
   setRegistrationheight(value: number): void;
 
-  hasNodeaddress(): boolean;
-  clearNodeaddress(): void;
-  getNodeaddress(): NodeAddress | undefined;
-  setNodeaddress(value?: NodeAddress): void;
-
   getLockedbalance(): string;
   setLockedbalance(value: string): void;
 
@@ -59,6 +31,11 @@ export class NodeRegistration extends jspb.Message {
 
   getHeight(): number;
   setHeight(value: number): void;
+
+  hasNodeaddressinfo(): boolean;
+  clearNodeaddressinfo(): void;
+  getNodeaddressinfo(): model_nodeAddressInfo_pb.NodeAddressInfo | undefined;
+  setNodeaddressinfo(value?: model_nodeAddressInfo_pb.NodeAddressInfo): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): NodeRegistration.AsObject;
@@ -76,11 +53,11 @@ export namespace NodeRegistration {
     nodepublickey: Uint8Array | string,
     accountaddress: string,
     registrationheight: number,
-    nodeaddress?: NodeAddress.AsObject,
     lockedbalance: string,
     registrationstatus: number,
     latest: boolean,
     height: number,
+    nodeaddressinfo?: model_nodeAddressInfo_pb.NodeAddressInfo.AsObject,
   }
 }
 
@@ -156,11 +133,6 @@ export class GetNodeRegistrationRequest extends jspb.Message {
   getRegistrationheight(): number;
   setRegistrationheight(value: number): void;
 
-  hasNodeaddress(): boolean;
-  clearNodeaddress(): void;
-  getNodeaddress(): NodeAddress | undefined;
-  setNodeaddress(value?: NodeAddress): void;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetNodeRegistrationRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetNodeRegistrationRequest): GetNodeRegistrationRequest.AsObject;
@@ -176,7 +148,6 @@ export namespace GetNodeRegistrationRequest {
     nodepublickey: Uint8Array | string,
     accountaddress: string,
     registrationheight: number,
-    nodeaddress?: NodeAddress.AsObject,
   }
 }
 
@@ -199,6 +170,34 @@ export class GetNodeRegistrationResponse extends jspb.Message {
 export namespace GetNodeRegistrationResponse {
   export type AsObject = {
     noderegistration?: NodeRegistration.AsObject,
+  }
+}
+
+export class NodeAdmissionTimestamp extends jspb.Message {
+  getTimestamp(): string;
+  setTimestamp(value: string): void;
+
+  getBlockheight(): number;
+  setBlockheight(value: number): void;
+
+  getLatest(): boolean;
+  setLatest(value: boolean): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): NodeAdmissionTimestamp.AsObject;
+  static toObject(includeInstance: boolean, msg: NodeAdmissionTimestamp): NodeAdmissionTimestamp.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: NodeAdmissionTimestamp, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): NodeAdmissionTimestamp;
+  static deserializeBinaryFromReader(message: NodeAdmissionTimestamp, reader: jspb.BinaryReader): NodeAdmissionTimestamp;
+}
+
+export namespace NodeAdmissionTimestamp {
+  export type AsObject = {
+    timestamp: string,
+    blockheight: number,
+    latest: boolean,
   }
 }
 
