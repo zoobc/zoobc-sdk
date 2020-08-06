@@ -2,7 +2,8 @@ import * as CryptoJS from 'crypto-js';
 import SHA3 from 'sha3';
 import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
-import { Int64LE } from 'int64-buffer';
+import BigNumber from 'bignumber.js';
+import BN from 'bn.js';
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
 export function getZBCAdress(publicKey: Uint8Array, prefix: string = 'ZBC'): string {
@@ -59,15 +60,31 @@ export function ZBCAddressToBytes(address: string): Buffer {
   return buffer.slice(0, 32);
 }
 
-export function writeInt64(number: number | string): Buffer {
+export function writeInt64(number: number | string, base?: number, endian?: any): Buffer {
   number = number.toString();
-  const buffer = new Int64LE(number);
-  return buffer.toBuffer();
+  let bn = new BN(number, base, endian);
+  let buffer = bn.toArrayLike(Buffer, 'le', 8);
+  if (number[0] == '-') {
+    let array = buffer.map((b, i) => {
+      if (i == 0) b = Math.abs(b - 256);
+      else b = Math.abs(b - 255);
+      return b;
+    });
+    buffer = new Buffer(array);
+  }
+  return buffer;
 }
 
 export function readInt64(buff: Buffer, offset: number): string {
-  const buffer = buff.slice(offset, offset + 8);
-  return new Int64LE(buffer) + '';
+  var buff1 = buff.readUInt32LE(offset);
+  var buff2 = buff.readUInt32LE(offset + 4);
+  const plus = new BigNumber(buff1).plus(new BigNumber(buff2).times(0x100000000));
+  const minus = new BigNumber(~buff2 >>> 0).times(0x100000000).plus(new BigNumber((~buff1 >>> 0) + 1));
+  const resPlus = plus.toString();
+  const resMinus = '-' + minus.toString();
+
+  if (!(buff2 & 0x80000000)) return resPlus;
+  return resMinus;
 }
 
 export function writeInt32(number: number): Buffer {
