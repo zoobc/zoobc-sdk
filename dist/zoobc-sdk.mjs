@@ -41584,6 +41584,14 @@ var MultisigServiceClient_1 = MultisigServiceClient;
 function base64ToBuffer(base64) {
     return new Buffer(base64, 'base64');
 }
+function bufferToBase64(bytes) {
+    var buf = bytes instanceof ArrayBuffer
+        ? Buffer.from(bytes)
+        : ArrayBuffer.isView(bytes)
+            ? Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength)
+            : Buffer.from(bytes);
+    return buf.toString('base64');
+}
 function toBase64Url(base64Str) {
     return base64Str
         .replace(/\+/g, '-')
@@ -45291,5 +45299,5 @@ var zoobc = {
 };
 
 export default zoobc;
-export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, generateTransactionHash, getZBCAdress, isZBCAddressValid, readInt64, sendMoneyBuilder, signTransactionHash, toGetPendingList, toTransactionListWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet };
+export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, bufferToBase64, generateTransactionHash, getZBCAdress, isZBCAddressValid, readInt64, sendMoneyBuilder, signTransactionHash, toGetPendingList, toTransactionListWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet };
 //# sourceMappingURL=zoobc-sdk.mjs.map

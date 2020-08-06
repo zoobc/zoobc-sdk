@@ -41591,6 +41591,14 @@ var MultisigServiceClient_1 = MultisigServiceClient;
 function base64ToBuffer(base64) {
     return new Buffer(base64, 'base64');
 }
+function bufferToBase64(bytes) {
+    var buf = bytes instanceof ArrayBuffer
+        ? Buffer.from(bytes)
+        : ArrayBuffer.isView(bytes)
+            ? Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength)
+            : Buffer.from(bytes);
+    return buf.toString('base64');
+}
 function toBase64Url(base64Str) {
     return base64Str
         .replace(/\+/g, '-')
@@ -45313,6 +45321,7 @@ exports.SpinePublicKeyAction = spine_pb_1;
 exports.TransactionType = transaction_pb_5;
 exports.ZBCAddressToBytes = ZBCAddressToBytes;
 exports.ZooKeyring = ZooKeyring;
+exports.bufferToBase64 = bufferToBase64;
 exports.default = zoobc;
 exports.generateTransactionHash = generateTransactionHash;
 exports.getZBCAdress = getZBCAdress;
