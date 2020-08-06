@@ -1,4 +1,3 @@
-import { base64ToBuffer } from '../converters';
 import { writeInt64, writeInt32 } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';

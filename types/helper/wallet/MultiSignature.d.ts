@@ -4,14 +4,14 @@ export declare function toGetPendingList(res: MultisigPendingTxResponse): {
     count: number;
     page: number;
     pendingtransactionsList: {
-        amount: number;
+        amount: string;
         blockheight: number;
-        fee: number;
+        fee: string;
         latest: boolean;
         senderaddress: string;
         recipientaddress: string;
         status: 0 | 1 | 2 | 3;
-        timestamp: number;
+        timestamp: string;
         transactionhash: string | Uint8Array;
     }[];
 };

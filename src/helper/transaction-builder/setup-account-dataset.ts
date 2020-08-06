@@ -1,7 +1,6 @@
 import { writeInt32, writeInt64 } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
-import { Buffer } from 'buffer';
 
 const TRANSACTION_TYPE = new Buffer([3, 0, 0, 0]);
 

@@ -19,7 +19,7 @@ export interface ZooTransactionsInterface {
 export function toTransactionListWallet(res: GetTransactionsResponse.AsObject, ownAddress: string): ZooTransactionsInterface {
   let transactionList = res.transactionsList.map(tx => {
     const bytes = Buffer.from(tx.transactionbodybytes.toString(), 'base64');
-    const amount = readInt64(bytes, 0);
+    const amount = parseInt(readInt64(bytes, 0));
     const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
     const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
     return {
