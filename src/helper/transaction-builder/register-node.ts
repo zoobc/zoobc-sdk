@@ -1,4 +1,3 @@
-import { base64ToBuffer } from '../converters';
 import { writeInt64, writeInt32 } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
@@ -23,18 +22,8 @@ export function registerNodeBuilder(data: RegisterNodeInterface, poown: Buffer, 
   const fee = writeInt64(data.fee * 1e8);
 
   const nodePublicKey = data.nodePublicKey;
-  const nodeAddress = Buffer.from(data.nodeAddress, 'utf-8');
-  const nodeAddressLength = writeInt32(nodeAddress.length);
   const funds = writeInt64(data.funds * 1e8);
-  const bodyLength = writeInt32(
-    nodePublicKey.length +
-      addressLength.length +
-      accountAddress.length +
-      nodeAddressLength.length +
-      nodeAddress.length +
-      funds.length +
-      poown.length,
-  );
+  const bodyLength = writeInt32(nodePublicKey.length + addressLength.length + accountAddress.length + funds.length + poown.length);
 
   bytes = Buffer.concat([
     TRANSACTION_TYPE,
@@ -49,8 +38,6 @@ export function registerNodeBuilder(data: RegisterNodeInterface, poown: Buffer, 
     nodePublicKey,
     addressLength,
     accountAddress,
-    nodeAddressLength,
-    nodeAddress,
     funds,
     poown,
   ]);

@@ -2,12 +2,7 @@ import 'mocha';
 import { expect } from 'chai';
 import { grpc } from '@improbable-eng/grpc-web';
 import { FakeTransportBuilder } from '@improbable-eng/grpc-web-fake-transport';
-import {
-  GetNodeRegistrationResponse,
-  GetNodeRegistrationsResponse,
-  NodeRegistration,
-  NodeAddress,
-} from '../grpc/model/nodeRegistration_pb';
+import { GetNodeRegistrationResponse, GetNodeRegistrationsResponse, NodeRegistration } from '../grpc/model/nodeRegistration_pb';
 import { Pagination } from '../grpc/model/pagination_pb';
 import { PostTransactionResponse, Transaction } from '../grpc/model/transaction_pb';
 import { NodeKey } from '../grpc/model/node_pb';
@@ -16,7 +11,7 @@ import { RegisterNodeInterface, registerNodeBuilder } from '../src//helper/trans
 import { UpdateNodeInterface, updateNodeBuilder } from '../src/helper/transaction-builder/update-node';
 import { RemoveNodeInterface, removeNodeBuilder } from '../src/helper/transaction-builder/remove-node';
 import { ClaimNodeInterface, claimNodeBuilder } from '../src/helper/transaction-builder/claim-node';
-import zoobc, { NodeListParams, NodeParams, ZooKeyring, RequestType } from '../src';
+import zoobc, { NodeListParams, NodeParams, ZooKeyring } from '../src';
 
 const hosts = [{ host: 'http://85.90.246.90:8002', name: '168 Testnet' }];
 zoobc.Network.list(hosts);
@@ -48,14 +43,7 @@ function mockGet(params: NodeParams) {
   const nodeRegistration = new NodeRegistration();
 
   if (params) {
-    const { nodeaddress, height, owner, publicKey } = params;
-
-    if (nodeaddress) {
-      const nodeAddress = new NodeAddress();
-      if (nodeaddress.address) nodeAddress.setAddress(nodeaddress.address);
-      if (nodeaddress.port) nodeAddress.setPort(nodeaddress.port);
-      nodeRegistration.setNodeaddress(nodeAddress);
-    }
+    const { height, owner, publicKey } = params;
 
     if (owner) nodeRegistration.setAccountaddress(owner);
     if (publicKey) nodeRegistration.setNodepublickey(publicKey);
@@ -172,13 +160,12 @@ describe('Node Unit Testing :', () => {
 
   describe('register', () => {
     it('register should return new transaction object', async () => {
-      const data = {
+      const data: RegisterNodeInterface = {
         accountAddress: 'zfMr7NYWL5xfZKEtxck1nISatFTVhUk3fCigN39MecoH',
         fee: 0,
-        nodePublicKey: '5E04hoe4JIYpnvSTMMvFr8+GGO7F7AQ/sSRPySagUxM=',
+        nodePublicKey: Buffer.from([]),
         nodeAddress: '',
         funds: 0,
-        poown: Buffer.alloc(8),
       };
 
       const transport = mockRegister({ ...data });
@@ -192,13 +179,12 @@ describe('Node Unit Testing :', () => {
 
   describe('update', () => {
     it('update should return new transaction object', async () => {
-      const data = {
+      const data: UpdateNodeInterface = {
         accountAddress: 'zfMr7NYWL5xfZKEtxck1nISatFTVhUk3fCigN39MecoH',
         fee: 0,
-        nodePublicKey: '5E04hoe4JIYpnvSTMMvFr8+GGO7F7AQ/sSRPySagUxM=',
+        nodePublicKey: Buffer.from([]),
         nodeAddress: '',
         funds: 0,
-        poown: Buffer.alloc(8),
       };
 
       const transport = mockUpdate({ ...data });
@@ -212,13 +198,10 @@ describe('Node Unit Testing :', () => {
 
   describe('remove', () => {
     it('remove should return new transaction object', async () => {
-      const data = {
+      const data: RemoveNodeInterface = {
         accountAddress: 'zfMr7NYWL5xfZKEtxck1nISatFTVhUk3fCigN39MecoH',
         fee: 0,
-        nodePublicKey: '5E04hoe4JIYpnvSTMMvFr8+GGO7F7AQ/sSRPySagUxM=',
-        nodeAddress: '',
-        funds: 0,
-        poown: Buffer.alloc(8),
+        nodePublicKey: Buffer.from([]),
       };
 
       const transport = mockRemove({ ...data });
@@ -235,7 +218,7 @@ describe('Node Unit Testing :', () => {
       const data: ClaimNodeInterface = {
         accountAddress: 'zfMr7NYWL5xfZKEtxck1nISatFTVhUk3fCigN39MecoH',
         fee: 0,
-        nodePublicKey: '5E04hoe4JIYpnvSTMMvFr8+GGO7F7AQ/sSRPySagUxM=',
+        nodePublicKey: Buffer.from([]),
         nodeAddress: '',
       };
 

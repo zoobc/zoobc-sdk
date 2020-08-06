@@ -1,13 +1,12 @@
 import googleProtobuf from 'google-protobuf';
 import grpcWeb, { grpc as grpc$d } from '@improbable-eng/grpc-web';
 import { PBKDF2, AES, enc } from 'crypto-js';
-import BN from 'bn.js';
 import SHA3 from 'sha3';
 import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
+import { Int64LE } from 'int64-buffer';
 import { Observable } from 'rxjs';
 import { sha3_256 } from 'js-sha3';
-import { Buffer as Buffer$1 } from 'buffer';
 import { sign } from 'tweetnacl';
 import { mnemonicToSeedSync, setDefaultWordlist, generateMnemonic, validateMnemonic } from 'bip39';
 import { fromSeed } from 'bip32';
@@ -4261,8 +4260,7 @@ proto.google.protobuf.FieldDescriptorProto.toObject = function(includeInstance, 
     defaultValue: (f = googleProtobuf.Message.getField(msg, 7)) == null ? undefined : f,
     oneofIndex: (f = googleProtobuf.Message.getField(msg, 9)) == null ? undefined : f,
     jsonName: (f = googleProtobuf.Message.getField(msg, 10)) == null ? undefined : f,
-    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f),
-    proto3Optional: (f = googleProtobuf.Message.getBooleanField(msg, 17)) == null ? undefined : f
+    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -4339,10 +4337,6 @@ proto.google.protobuf.FieldDescriptorProto.deserializeBinaryFromReader = functio
       var value = new proto.google.protobuf.FieldOptions;
       reader.readMessage(value,proto.google.protobuf.FieldOptions.deserializeBinaryFromReader);
       msg.setOptions(value);
-      break;
-    case 17:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setProto3Optional(value);
       break;
     default:
       reader.skipField();
@@ -4442,13 +4436,6 @@ proto.google.protobuf.FieldDescriptorProto.serializeBinaryToWriter = function(me
       8,
       f,
       proto.google.protobuf.FieldOptions.serializeBinaryToWriter
-    );
-  }
-  f = /** @type {boolean} */ (googleProtobuf.Message.getField(message, 17));
-  if (f != null) {
-    writer.writeBool(
-      17,
-      f
     );
   }
 };
@@ -4845,42 +4832,6 @@ proto.google.protobuf.FieldDescriptorProto.prototype.clearOptions = function() {
  */
 proto.google.protobuf.FieldDescriptorProto.prototype.hasOptions = function() {
   return googleProtobuf.Message.getField(this, 8) != null;
-};
-
-
-/**
- * optional bool proto3_optional = 17;
- * @return {boolean}
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.getProto3Optional = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 17, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.setProto3Optional = function(value) {
-  return googleProtobuf.Message.setField(this, 17, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.clearProto3Optional = function() {
-  return googleProtobuf.Message.setField(this, 17, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.hasProto3Optional = function() {
-  return googleProtobuf.Message.getField(this, 17) != null;
 };
 
 
@@ -6588,7 +6539,7 @@ proto.google.protobuf.FileOptions.toObject = function(includeInstance, msg) {
     pyGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 18, false),
     phpGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 42, false),
     deprecated: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 23, false),
-    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, true),
+    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, false),
     objcClassPrefix: (f = googleProtobuf.Message.getField(msg, 36)) == null ? undefined : f,
     csharpNamespace: (f = googleProtobuf.Message.getField(msg, 37)) == null ? undefined : f,
     swiftPrefix: (f = googleProtobuf.Message.getField(msg, 39)) == null ? undefined : f,
@@ -7353,7 +7304,7 @@ proto.google.protobuf.FileOptions.prototype.hasDeprecated = function() {
  * @return {boolean}
  */
 proto.google.protobuf.FileOptions.prototype.getCcEnableArenas = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, true));
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, false));
 };
 
 
@@ -27250,28 +27201,14 @@ function ZBCAddressToBytes(address) {
     var buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
     return buffer.slice(0, 32);
 }
-function writeInt64(number, base, endian) {
+function writeInt64(number) {
     number = number.toString();
-    var bn = new BN(number, base, endian);
-    var buffer = bn.toArrayLike(Buffer, 'le', 8);
-    if (number[0] == '-') {
-        var array = buffer.map(function (b, i) {
-            if (i == 0)
-                b = Math.abs(b - 256);
-            else
-                b = Math.abs(b - 255);
-            return b;
-        });
-        buffer = new Buffer(array);
-    }
-    return buffer;
+    var buffer = new Int64LE(number);
+    return buffer.toBuffer();
 }
 function readInt64(buff, offset) {
-    var buff1 = buff.readUInt32LE(offset);
-    var buff2 = buff.readUInt32LE(offset + 4);
-    if (!(buff2 & 0x80000000))
-        return buff1 + 0x100000000 * buff2;
-    return -((~buff2 >>> 0) * 0x100000000 + (~buff1 >>> 0) + 1);
+    var buffer = buff.slice(offset, offset + 8);
+    return new Int64LE(buffer) + '';
 }
 function writeInt32(number) {
     var byte = new Buffer(4);
@@ -40624,16 +40561,8 @@ function registerNodeBuilder(data, poown, seed) {
     var addressLength = writeInt32(ADDRESS_LENGTH);
     var fee = writeInt64(data.fee * 1e8);
     var nodePublicKey = data.nodePublicKey;
-    var nodeAddress = Buffer.from(data.nodeAddress, 'utf-8');
-    var nodeAddressLength = writeInt32(nodeAddress.length);
     var funds = writeInt64(data.funds * 1e8);
-    var bodyLength = writeInt32(nodePublicKey.length +
-        addressLength.length +
-        accountAddress.length +
-        nodeAddressLength.length +
-        nodeAddress.length +
-        funds.length +
-        poown.length);
+    var bodyLength = writeInt32(nodePublicKey.length + addressLength.length + accountAddress.length + funds.length + poown.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE$1,
         VERSION,
@@ -40647,8 +40576,6 @@ function registerNodeBuilder(data, poown, seed) {
         nodePublicKey,
         addressLength,
         accountAddress,
-        nodeAddressLength,
-        nodeAddress,
         funds,
         poown,
     ]);
@@ -40674,10 +40601,8 @@ function updateNodeBuilder(data, poown, seed) {
     var addressLength = writeInt32(ADDRESS_LENGTH);
     var fee = writeInt64(data.fee * 1e8);
     var nodePublicKey = data.nodePublicKey;
-    var nodeAddress = Buffer.from(data.nodeAddress, 'utf-8');
-    var nodeAddressLength = writeInt32(nodeAddress.length);
     var funds = writeInt64(data.funds * 1e8);
-    var bodyLength = writeInt32(nodePublicKey.length + nodeAddressLength.length + nodeAddress.length + funds.length + poown.length);
+    var bodyLength = writeInt32(nodePublicKey.length + funds.length + poown.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE$2,
         VERSION,
@@ -40689,8 +40614,6 @@ function updateNodeBuilder(data, poown, seed) {
         fee,
         bodyLength,
         nodePublicKey,
-        nodeAddressLength,
-        nodeAddress,
         funds,
         poown,
     ]);
@@ -42930,20 +42853,20 @@ AccountDatasetServiceClient.prototype.getAccountDataset = function getAccountDat
 
 var AccountDatasetServiceClient_1 = AccountDatasetServiceClient;
 
-var TRANSACTION_TYPE$7 = new Buffer$1([3, 0, 0, 0]);
+var TRANSACTION_TYPE$7 = new Buffer([3, 0, 0, 0]);
 function setupDatasetBuilder(data, seed) {
     var bytes;
     var timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    var accountAddress = Buffer$1.from(data.setterAccountAddress, 'utf-8');
-    var recipient = Buffer$1.from(data.recipientAccountAddress, 'utf-8');
+    var accountAddress = Buffer.from(data.setterAccountAddress, 'utf-8');
+    var recipient = Buffer.from(data.recipientAccountAddress, 'utf-8');
     var addressLength = writeInt32(ADDRESS_LENGTH);
     var fee = writeInt64(data.fee * 1e8);
-    var property = Buffer$1.from(data.property, 'utf-8');
+    var property = Buffer.from(data.property, 'utf-8');
     var propertyLength = writeInt32(property.length);
-    var value = Buffer$1.from(data.value, 'utf-8');
+    var value = Buffer.from(data.value, 'utf-8');
     var valueLength = writeInt32(value.length);
     var bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
-    bytes = Buffer$1.concat([
+    bytes = Buffer.concat([
         TRANSACTION_TYPE$7,
         VERSION,
         timestamp,
@@ -42963,28 +42886,28 @@ function setupDatasetBuilder(data, seed) {
     var commission = writeInt64(0);
     var timeout = writeInt64(0);
     var instructionLength = writeInt32(0);
-    bytes = Buffer$1.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
     var signatureType = writeInt32(0);
     var signature = seed.sign(bytes);
     var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer$1.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
-var TRANSACTION_TYPE$8 = new Buffer$1([3, 1, 0, 0]);
+var TRANSACTION_TYPE$8 = new Buffer([3, 1, 0, 0]);
 function removeDatasetBuilder(data, seed) {
     var bytes;
     var timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    var setterAccountAddress = Buffer$1.from(data.setterAccountAddress, 'utf-8');
-    var recipient = Buffer$1.from(data.recipientAccountAddress, 'utf-8');
+    var setterAccountAddress = Buffer.from(data.setterAccountAddress, 'utf-8');
+    var recipient = Buffer.from(data.recipientAccountAddress, 'utf-8');
     var addressLength = writeInt32(ADDRESS_LENGTH);
     var fee = writeInt64(data.fee * 1e8);
-    var property = Buffer$1.from(data.property, 'utf-8');
+    var property = Buffer.from(data.property, 'utf-8');
     var propertyLength = writeInt32(property.length);
-    var value = Buffer$1.from(data.value, 'utf-8');
+    var value = Buffer.from(data.value, 'utf-8');
     var valueLength = writeInt32(value.length);
     var bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
-    bytes = Buffer$1.concat([
+    bytes = Buffer.concat([
         TRANSACTION_TYPE$8,
         VERSION,
         timestamp,
@@ -43004,12 +42927,12 @@ function removeDatasetBuilder(data, seed) {
     var commission = writeInt64(0);
     var timeout = writeInt64(0);
     var instructionLength = writeInt32(0);
-    bytes = Buffer$1.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
     var signatureType = writeInt32(0);
     var signature = seed.sign(bytes);
     var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer$1.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
 function getList$4(params) {
@@ -44075,18 +43998,18 @@ function getList$5(params) {
 var AccountLedger = { getList: getList$5 };
 
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
 
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
 
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
 ***************************************************************************** */
 
 var __assign = function() {
@@ -45176,7 +45099,7 @@ function toUnconfirmTransactionNodeWallet(res) {
 function toTransactionListWallet(res, ownAddress) {
     var transactionList = res.transactionsList.map(function (tx) {
         var bytes = Buffer.from(tx.transactionbodybytes.toString(), 'base64');
-        var amount = readInt64(bytes, 0);
+        var amount = parseInt(readInt64(bytes, 0));
         var friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
         var type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
         return {
@@ -45301,5 +45224,5 @@ var zoobc = {
 };
 
 export default zoobc;
-export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, generateTransactionHash, getZBCAdress, isZBCAddressValid, sendMoneyBuilder, signTransactionHash, toGetPendingList, toTransactionListWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet };
+export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, generateTransactionHash, getZBCAdress, isZBCAddressValid, readInt64, sendMoneyBuilder, signTransactionHash, toGetPendingList, toTransactionListWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet, writeInt64 };
 //# sourceMappingURL=zoobc-sdk.mjs.map

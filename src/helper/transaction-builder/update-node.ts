@@ -22,10 +22,8 @@ export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed
   const fee = writeInt64(data.fee * 1e8);
 
   const nodePublicKey = data.nodePublicKey;
-  const nodeAddress = Buffer.from(data.nodeAddress, 'utf-8');
-  const nodeAddressLength = writeInt32(nodeAddress.length);
   const funds = writeInt64(data.funds * 1e8);
-  const bodyLength = writeInt32(nodePublicKey.length + nodeAddressLength.length + nodeAddress.length + funds.length + poown.length);
+  const bodyLength = writeInt32(nodePublicKey.length + funds.length + poown.length);
 
   bytes = Buffer.concat([
     TRANSACTION_TYPE,
@@ -38,8 +36,6 @@ export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed
     fee,
     bodyLength,
     nodePublicKey,
-    nodeAddressLength,
-    nodeAddress,
     funds,
     poown,
   ]);
