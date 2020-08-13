@@ -24,8 +24,6 @@ var model_transaction_pb = require('../model/transaction_pb.js');
 goog.object.extend(proto, model_transaction_pb);
 var model_fileDownload_pb = require('../model/fileDownload_pb.js');
 goog.object.extend(proto, model_fileDownload_pb);
-var model_node_pb = require('../model/node_pb.js');
-goog.object.extend(proto, model_node_pb);
 var model_nodeAddressInfo_pb = require('../model/nodeAddressInfo_pb.js');
 goog.object.extend(proto, model_nodeAddressInfo_pb);
 var model_proofOfOrigin_pb = require('../model/proofOfOrigin_pb.js');

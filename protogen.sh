@@ -57,7 +57,7 @@ function clean_old_proto_dir() {
 function update_schema() {
   clean_old_proto_dir
   clean_schema
-  git clone --branch experimental git@github.com:zoobc/zoobc-schema.git schema
+  git clone --branch develop git@github.com:zoobc/zoobc-schema.git schema
   echo "$(echo_pass) Cloning zoobc-schema Done"
 }
 

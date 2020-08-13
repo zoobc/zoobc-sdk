@@ -281,7 +281,7 @@ proto.model.FileDownloadResponse.prototype.clearFailedList = function() {
  * @private {!Array<number>}
  * @const
  */
-proto.model.FileDownloadRequest.repeatedFields_ = [1];
+proto.model.FileDownloadRequest.repeatedFields_ = [2];
 
 
 
@@ -314,7 +314,8 @@ proto.model.FileDownloadRequest.prototype.toObject = function(opt_includeInstanc
  */
 proto.model.FileDownloadRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    filechunknamesList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
+    snapshothash: msg.getSnapshothash_asB64(),
+    filechunknamesList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -352,6 +353,10 @@ proto.model.FileDownloadRequest.deserializeBinaryFromReader = function(msg, read
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setSnapshothash(value);
+      break;
+    case 2:
       var value = /** @type {string} */ (reader.readString());
       msg.addFilechunknames(value);
       break;
@@ -384,10 +389,17 @@ proto.model.FileDownloadRequest.prototype.serializeBinary = function() {
  */
 proto.model.FileDownloadRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getSnapshothash_asU8();
+  if (f.length > 0) {
+    writer.writeBytes(
+      1,
+      f
+    );
+  }
   f = message.getFilechunknamesList();
   if (f.length > 0) {
     writer.writeRepeatedString(
-      1,
+      2,
       f
     );
   }
@@ -395,17 +407,56 @@ proto.model.FileDownloadRequest.serializeBinaryToWriter = function(message, writ
 
 
 /**
- * repeated string FileChunkNames = 1;
+ * optional bytes SnapshotHash = 1;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.FileDownloadRequest.prototype.getSnapshothash = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * optional bytes SnapshotHash = 1;
+ * This is a type-conversion wrapper around `getSnapshothash()`
+ * @return {string}
+ */
+proto.model.FileDownloadRequest.prototype.getSnapshothash_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getSnapshothash()));
+};
+
+
+/**
+ * optional bytes SnapshotHash = 1;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getSnapshothash()`
+ * @return {!Uint8Array}
+ */
+proto.model.FileDownloadRequest.prototype.getSnapshothash_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getSnapshothash()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.FileDownloadRequest.prototype.setSnapshothash = function(value) {
+  jspb.Message.setProto3BytesField(this, 1, value);
+};
+
+
+/**
+ * repeated string FileChunkNames = 2;
  * @return {!Array<string>}
  */
 proto.model.FileDownloadRequest.prototype.getFilechunknamesList = function() {
-  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 1));
+  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 2));
 };
 
 
 /** @param {!Array<string>} value */
 proto.model.FileDownloadRequest.prototype.setFilechunknamesList = function(value) {
-  jspb.Message.setField(this, 1, value || []);
+  jspb.Message.setField(this, 2, value || []);
 };
 
 
@@ -414,7 +465,7 @@ proto.model.FileDownloadRequest.prototype.setFilechunknamesList = function(value
  * @param {number=} opt_index
  */
 proto.model.FileDownloadRequest.prototype.addFilechunknames = function(value, opt_index) {
-  jspb.Message.addToRepeatedField(this, 1, value, opt_index);
+  jspb.Message.addToRepeatedField(this, 2, value, opt_index);
 };
 
 

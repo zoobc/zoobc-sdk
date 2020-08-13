@@ -75,9 +75,6 @@ export namespace PeerBasicResponse {
 }
 
 export class GetPeerInfoRequest extends jspb.Message {
-  getVersion(): string;
-  setVersion(value: string): void;
-
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetPeerInfoRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetPeerInfoRequest): GetPeerInfoRequest.AsObject;
@@ -90,7 +87,6 @@ export class GetPeerInfoRequest extends jspb.Message {
 
 export namespace GetPeerInfoRequest {
   export type AsObject = {
-    version: string,
   }
 }
 

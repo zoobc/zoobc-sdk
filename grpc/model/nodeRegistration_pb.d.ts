@@ -201,6 +201,62 @@ export namespace NodeAdmissionTimestamp {
   }
 }
 
+export class GetNodeRegistrationsByNodePublicKeysRequest extends jspb.Message {
+  clearNodepublickeysList(): void;
+  getNodepublickeysList(): Array<Uint8Array | string>;
+  getNodepublickeysList_asU8(): Array<Uint8Array>;
+  getNodepublickeysList_asB64(): Array<string>;
+  setNodepublickeysList(value: Array<Uint8Array | string>): void;
+  addNodepublickeys(value: Uint8Array | string, index?: number): Uint8Array | string;
+
+  hasPagination(): boolean;
+  clearPagination(): void;
+  getPagination(): model_pagination_pb.Pagination | undefined;
+  setPagination(value?: model_pagination_pb.Pagination): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetNodeRegistrationsByNodePublicKeysRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetNodeRegistrationsByNodePublicKeysRequest): GetNodeRegistrationsByNodePublicKeysRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetNodeRegistrationsByNodePublicKeysRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetNodeRegistrationsByNodePublicKeysRequest;
+  static deserializeBinaryFromReader(message: GetNodeRegistrationsByNodePublicKeysRequest, reader: jspb.BinaryReader): GetNodeRegistrationsByNodePublicKeysRequest;
+}
+
+export namespace GetNodeRegistrationsByNodePublicKeysRequest {
+  export type AsObject = {
+    nodepublickeysList: Array<Uint8Array | string>,
+    pagination?: model_pagination_pb.Pagination.AsObject,
+  }
+}
+
+export class GetNodeRegistrationsByNodePublicKeysResponse extends jspb.Message {
+  getTotal(): string;
+  setTotal(value: string): void;
+
+  clearNoderegistrationsList(): void;
+  getNoderegistrationsList(): Array<NodeRegistration>;
+  setNoderegistrationsList(value: Array<NodeRegistration>): void;
+  addNoderegistrations(value?: NodeRegistration, index?: number): NodeRegistration;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetNodeRegistrationsByNodePublicKeysResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetNodeRegistrationsByNodePublicKeysResponse): GetNodeRegistrationsByNodePublicKeysResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetNodeRegistrationsByNodePublicKeysResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetNodeRegistrationsByNodePublicKeysResponse;
+  static deserializeBinaryFromReader(message: GetNodeRegistrationsByNodePublicKeysResponse, reader: jspb.BinaryReader): GetNodeRegistrationsByNodePublicKeysResponse;
+}
+
+export namespace GetNodeRegistrationsByNodePublicKeysResponse {
+  export type AsObject = {
+    total: string,
+    noderegistrationsList: Array<NodeRegistration.AsObject>,
+  }
+}
+
 export interface NodeRegistrationStateMap {
   NODEREGISTERED: 0;
   NODEQUEUED: 1;

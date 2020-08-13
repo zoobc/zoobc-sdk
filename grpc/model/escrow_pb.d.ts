@@ -68,6 +68,12 @@ export class GetEscrowTransactionsRequest extends jspb.Message {
   getApproveraddress(): string;
   setApproveraddress(value: string): void;
 
+  getSenderaddress(): string;
+  setSenderaddress(value: string): void;
+
+  getRecipientaddress(): string;
+  setRecipientaddress(value: string): void;
+
   getId(): string;
   setId(value: string): void;
 
@@ -100,6 +106,8 @@ export class GetEscrowTransactionsRequest extends jspb.Message {
 export namespace GetEscrowTransactionsRequest {
   export type AsObject = {
     approveraddress: string,
+    senderaddress: string,
+    recipientaddress: string,
     id: string,
     statusesList: Array<EscrowStatusMap[keyof EscrowStatusMap]>,
     blockheightstart: number,

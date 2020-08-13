@@ -24,8 +24,6 @@ var model_transaction_pb = require('../model/transaction_pb.js')
 
 var model_fileDownload_pb = require('../model/fileDownload_pb.js')
 
-var model_node_pb = require('../model/node_pb.js')
-
 var model_nodeAddressInfo_pb = require('../model/nodeAddressInfo_pb.js')
 
 var model_proofOfOrigin_pb = require('../model/proofOfOrigin_pb.js')

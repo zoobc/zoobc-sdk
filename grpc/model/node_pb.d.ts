@@ -20,6 +20,12 @@ export class Node extends jspb.Message {
   getAddressstatus(): model_nodeAddressInfo_pb.NodeAddressStatusMap[keyof model_nodeAddressInfo_pb.NodeAddressStatusMap];
   setAddressstatus(value: model_nodeAddressInfo_pb.NodeAddressStatusMap[keyof model_nodeAddressInfo_pb.NodeAddressStatusMap]): void;
 
+  getVersion(): string;
+  setVersion(value: string): void;
+
+  getCodename(): string;
+  setCodename(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Node.AsObject;
   static toObject(includeInstance: boolean, msg: Node): Node.AsObject;
@@ -37,6 +43,8 @@ export namespace Node {
     address: string,
     port: number,
     addressstatus: model_nodeAddressInfo_pb.NodeAddressStatusMap[keyof model_nodeAddressInfo_pb.NodeAddressStatusMap],
+    version: string,
+    codename: string,
   }
 }
 

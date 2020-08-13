@@ -29,6 +29,15 @@ NodeRegistrationService.GetNodeRegistration = {
   responseType: model_nodeRegistration_pb.GetNodeRegistrationResponse
 };
 
+NodeRegistrationService.GetNodeRegistrationsByNodePublicKeys = {
+  methodName: "GetNodeRegistrationsByNodePublicKeys",
+  service: NodeRegistrationService,
+  requestStream: false,
+  responseStream: false,
+  requestType: model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysRequest,
+  responseType: model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysResponse
+};
+
 exports.NodeRegistrationService = NodeRegistrationService;
 
 function NodeRegistrationServiceClient(serviceHost, options) {
@@ -72,6 +81,37 @@ NodeRegistrationServiceClient.prototype.getNodeRegistration = function getNodeRe
     callback = arguments[1];
   }
   var client = grpc.unary(NodeRegistrationService.GetNodeRegistration, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+NodeRegistrationServiceClient.prototype.getNodeRegistrationsByNodePublicKeys = function getNodeRegistrationsByNodePublicKeys(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(NodeRegistrationService.GetNodeRegistrationsByNodePublicKeys, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
