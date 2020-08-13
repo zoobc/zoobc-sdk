@@ -143,7 +143,6 @@ describe('MultiSignature Unit Testing: ', () => {
           participants: ['AFiTqqX99kYXjLFJJ2AWuzKK5zxYUT1Pn0p3s6lutkai', 'iSJt3H8wFOzlWKsy_UoEWF_OjF6oymHMqthyUMDKSyxb'],
           nonce: 2,
           minSigs: 2,
-          multisigAddress: 'SEMS5t3u8m95Ua6ff5P8qC8yjB4T6k97hd0tni3fqYS0',
         },
         unisgnedTransactions: Buffer.from([0, 0, 0, 0]),
       };

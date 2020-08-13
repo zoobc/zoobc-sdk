@@ -7,6 +7,8 @@ export declare type EscrowTransactionResponse = Escrow.AsObject;
 export declare type ApprovalEscrowTransactionResponse = PostTransactionResponse.AsObject;
 export interface EscrowListParams {
     approverAddress?: string;
+    sender?: string;
+    recipient?: string;
     blockHeightStart?: number;
     blockHeightEnd?: number;
     id?: string;

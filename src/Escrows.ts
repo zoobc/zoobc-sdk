@@ -13,6 +13,8 @@ export type ApprovalEscrowTransactionResponse = PostTransactionResponse.AsObject
 
 export interface EscrowListParams {
   approverAddress?: string;
+  sender?: string;
+  recipient?: string;
   blockHeightStart?: number;
   blockHeightEnd?: number;
   id?: string;
@@ -31,12 +33,14 @@ function getList(params?: EscrowListParams): Promise<EscrowTransactionsResponse>
     const request = new GetEscrowTransactionsRequest();
 
     if (params) {
-      const { approverAddress, blockHeightStart, blockHeightEnd, id, statusList, pagination } = params;
+      const { approverAddress, blockHeightStart, blockHeightEnd, id, statusList, pagination, sender, recipient } = params;
       if (approverAddress) request.setApproveraddress(approverAddress);
       if (blockHeightStart) request.setBlockheightstart(blockHeightStart);
       if (blockHeightEnd) request.setBlockheightend(blockHeightEnd);
       if (id) request.setId(id);
       if (statusList) request.setStatusesList(statusList);
+      if (sender) request.setSenderaddress(sender);
+      if (recipient) request.setRecipientaddress(recipient);
       if (pagination) {
         const reqPagination = new Pagination();
         reqPagination.setLimit(pagination.limit || 10);
