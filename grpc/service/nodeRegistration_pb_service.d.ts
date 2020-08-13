@@ -23,10 +23,20 @@ type NodeRegistrationServiceGetNodeRegistration = {
   readonly responseType: typeof model_nodeRegistration_pb.GetNodeRegistrationResponse;
 };
 
+type NodeRegistrationServiceGetNodeRegistrationsByNodePublicKeys = {
+  readonly methodName: string;
+  readonly service: typeof NodeRegistrationService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysRequest;
+  readonly responseType: typeof model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysResponse;
+};
+
 export class NodeRegistrationService {
   static readonly serviceName: string;
   static readonly GetNodeRegistrations: NodeRegistrationServiceGetNodeRegistrations;
   static readonly GetNodeRegistration: NodeRegistrationServiceGetNodeRegistration;
+  static readonly GetNodeRegistrationsByNodePublicKeys: NodeRegistrationServiceGetNodeRegistrationsByNodePublicKeys;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -78,6 +88,15 @@ export class NodeRegistrationServiceClient {
   getNodeRegistration(
     requestMessage: model_nodeRegistration_pb.GetNodeRegistrationRequest,
     callback: (error: ServiceError|null, responseMessage: model_nodeRegistration_pb.GetNodeRegistrationResponse|null) => void
+  ): UnaryResponse;
+  getNodeRegistrationsByNodePublicKeys(
+    requestMessage: model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysResponse|null) => void
+  ): UnaryResponse;
+  getNodeRegistrationsByNodePublicKeys(
+    requestMessage: model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysRequest,
+    callback: (error: ServiceError|null, responseMessage: model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysResponse|null) => void
   ): UnaryResponse;
 }
 

@@ -35,3 +35,49 @@ export namespace ParticipationScore {
   }
 }
 
+export class GetParticipationScoresRequest extends jspb.Message {
+  getFromheight(): number;
+  setFromheight(value: number): void;
+
+  getToheight(): number;
+  setToheight(value: number): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetParticipationScoresRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetParticipationScoresRequest): GetParticipationScoresRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetParticipationScoresRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetParticipationScoresRequest;
+  static deserializeBinaryFromReader(message: GetParticipationScoresRequest, reader: jspb.BinaryReader): GetParticipationScoresRequest;
+}
+
+export namespace GetParticipationScoresRequest {
+  export type AsObject = {
+    fromheight: number,
+    toheight: number,
+  }
+}
+
+export class GetParticipationScoresResponse extends jspb.Message {
+  clearParticipationscoresList(): void;
+  getParticipationscoresList(): Array<ParticipationScore>;
+  setParticipationscoresList(value: Array<ParticipationScore>): void;
+  addParticipationscores(value?: ParticipationScore, index?: number): ParticipationScore;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetParticipationScoresResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetParticipationScoresResponse): GetParticipationScoresResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetParticipationScoresResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetParticipationScoresResponse;
+  static deserializeBinaryFromReader(message: GetParticipationScoresResponse, reader: jspb.BinaryReader): GetParticipationScoresResponse;
+}
+
+export namespace GetParticipationScoresResponse {
+  export type AsObject = {
+    participationscoresList: Array<ParticipationScore.AsObject>,
+  }
+}
+

@@ -9,6 +9,9 @@ export class SpinePublicKey extends jspb.Message {
   getNodepublickey_asB64(): string;
   setNodepublickey(value: Uint8Array | string): void;
 
+  getNodeid(): string;
+  setNodeid(value: string): void;
+
   getMainblockheight(): number;
   setMainblockheight(value: number): void;
 
@@ -34,6 +37,7 @@ export class SpinePublicKey extends jspb.Message {
 export namespace SpinePublicKey {
   export type AsObject = {
     nodepublickey: Uint8Array | string,
+    nodeid: string,
     mainblockheight: number,
     publickeyaction: SpinePublicKeyActionMap[keyof SpinePublicKeyActionMap],
     latest: boolean,
