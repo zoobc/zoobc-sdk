@@ -42487,7 +42487,7 @@ function getList$3(params) {
         var networkIP = Network$1.selected();
         var request = new escrow_pb_1();
         if (params) {
-            var approverAddress = params.approverAddress, blockHeightStart = params.blockHeightStart, blockHeightEnd = params.blockHeightEnd, id = params.id, statusList = params.statusList, pagination = params.pagination;
+            var approverAddress = params.approverAddress, blockHeightStart = params.blockHeightStart, blockHeightEnd = params.blockHeightEnd, id = params.id, statusList = params.statusList, pagination = params.pagination, sender = params.sender, recipient = params.recipient;
             if (approverAddress)
                 request.setApproveraddress(approverAddress);
             if (blockHeightStart)
@@ -42498,6 +42498,10 @@ function getList$3(params) {
                 request.setId(id);
             if (statusList)
                 request.setStatusesList(statusList);
+            if (sender)
+                request.setSenderaddress(sender);
+            if (recipient)
+                request.setRecipientaddress(recipient);
             if (pagination) {
                 var reqPagination = new pagination_pb_1();
                 reqPagination.setLimit(pagination.limit || 10);

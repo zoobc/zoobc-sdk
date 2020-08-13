@@ -16,7 +16,6 @@ export interface MultiSigInfo {
     participants: string[];
     nonce: number;
     minSigs: number;
-    multisigAddress: string;
 }
 export interface SignatureInfo {
     txHash: string;
