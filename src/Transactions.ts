@@ -102,24 +102,4 @@ function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<Post
   });
 }
 
-function getTransactionMinimumFee(data: SendMoneyInterface, seed: BIP32Interface): Promise<TransactionMinimumFeeResponse> {
-  const txBytes = sendMoneyBuilder(data, seed);
-
-  return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
-
-    const request = new GetTransactionMinimumFeeRequest();
-    request.setTransactionbytes(txBytes);
-
-    const client = new TransactionServiceClient(networkIP.host);
-    client.getTransactionMinimumFee(request, (err, res) => {
-      if (err) {
-        const { code, message, metadata } = err;
-        reject({ code, message, metadata });
-      }
-      if (res) resolve(res.toObject());
-    });
-  });
-}
-
-export default { sendMoney, get, getList, getTransactionMinimumFee };
+export default { sendMoney, get, getList };

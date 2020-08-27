@@ -32,11 +32,21 @@ type NodeRegistrationServiceGetNodeRegistrationsByNodePublicKeys = {
   readonly responseType: typeof model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysResponse;
 };
 
+type NodeRegistrationServiceGetPendingNodeRegistrations = {
+  readonly methodName: string;
+  readonly service: typeof NodeRegistrationService;
+  readonly requestStream: true;
+  readonly responseStream: true;
+  readonly requestType: typeof model_nodeRegistration_pb.GetPendingNodeRegistrationsRequest;
+  readonly responseType: typeof model_nodeRegistration_pb.GetPendingNodeRegistrationsResponse;
+};
+
 export class NodeRegistrationService {
   static readonly serviceName: string;
   static readonly GetNodeRegistrations: NodeRegistrationServiceGetNodeRegistrations;
   static readonly GetNodeRegistration: NodeRegistrationServiceGetNodeRegistration;
   static readonly GetNodeRegistrationsByNodePublicKeys: NodeRegistrationServiceGetNodeRegistrationsByNodePublicKeys;
+  static readonly GetPendingNodeRegistrations: NodeRegistrationServiceGetPendingNodeRegistrations;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -98,5 +108,6 @@ export class NodeRegistrationServiceClient {
     requestMessage: model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysRequest,
     callback: (error: ServiceError|null, responseMessage: model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysResponse|null) => void
   ): UnaryResponse;
+  getPendingNodeRegistrations(metadata?: grpc.Metadata): BidirectionalStream<model_nodeRegistration_pb.GetPendingNodeRegistrationsRequest, model_nodeRegistration_pb.GetPendingNodeRegistrationsResponse>;
 }
 

@@ -1,21 +1,15 @@
-import { GetBlocksResponse, GetBlocksRequest, GetBlockRequest, BlockExtendedInfo } from '../grpc/model/block_pb';
+import { GetBlocksResponse, GetBlocksRequest, GetBlockRequest, GetBlockResponse } from '../grpc/model/block_pb';
 import { BlockServiceClient } from '../grpc/service/block_pb_service';
 import Network from './Network';
 
 export type BlocksResponse = GetBlocksResponse.AsObject;
-export type BlockResponse = BlockExtendedInfo.AsObject;
+export type BlockResponse = GetBlockResponse.AsObject;
 
-export interface BlockListParams {
-  height: number;
-  limit?: number;
-}
-
-function getBlocks(params: BlockListParams): Promise<BlocksResponse> {
+function getBlocks(height: number, limit?: number): Promise<BlocksResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetBlocksRequest();
 
-    const { height, limit } = params;
     request.setHeight(height);
     request.setLimit(limit || 10);
 

@@ -2,6 +2,7 @@
 export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
+export { Subscription } from 'rxjs';
 export { EscrowListParams, EscrowTransactionsResponse, EscrowTransactionResponse, ApprovalEscrowTransactionResponse } from './Escrows';
 export { NodeListParams, NodeParams, NodeHardwareResponse, GenerateNodeKeyResponses, NodeRegistrationsResponse, NodePostTransactionResponse, } from './Node';
 export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';

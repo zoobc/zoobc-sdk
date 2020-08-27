@@ -31,7 +31,7 @@ export type NodePostTransactionResponse = PostTransactionResponse.AsObject;
 export interface NodeListParams {
   minHeight?: number;
   maxHeight?: number;
-  status?: 0 | 1 | 2;
+  status?: [0 | 1 | 2];
   pagination?: {
     limit?: number;
     page?: number;
@@ -43,10 +43,6 @@ export interface NodeParams {
   owner?: string;
   publicKey?: string;
   height?: number;
-  nodeaddress?: {
-    address?: string;
-    port?: number;
-  };
 }
 
 function getHardwareInfo(networkIP: string, childSeed: BIP32Interface): Observable<NodeHardwareResponse> {
@@ -101,7 +97,7 @@ function getList(params?: NodeListParams): Promise<GetNodeRegistrationsResponse.
 
       if (maxHeight) request.setMaxregistrationheight(maxHeight);
       if (minHeight) request.setMinregistrationheight(minHeight);
-      if (status) request.setRegistrationstatus(status);
+      if (status) request.setRegistrationstatusesList(status);
     }
 
     const client = new NodeRegistrationServiceClient(networkIP.host);
@@ -120,14 +116,7 @@ function get(params: NodeParams): Promise<NodeRegistrationsResponse> {
     const networkIP = Network.selected();
     const request = new GetNodeRegistrationRequest();
     if (params) {
-      const { nodeaddress, height, owner, publicKey } = params;
-
-      // if (nodeaddress) {
-      //   const nodeAddress = new NodeAddress();
-      //   if (nodeaddress.address) nodeAddress.setAddress(nodeaddress.address);
-      //   if (nodeaddress.port) nodeAddress.setPort(nodeaddress.port);
-      //   request.setNodeaddress(nodeAddress);
-      // }
+      const { height, owner, publicKey } = params;
 
       if (owner) request.setAccountaddress(owner);
       if (publicKey) request.setNodepublickey(publicKey);

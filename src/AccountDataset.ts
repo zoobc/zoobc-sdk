@@ -7,7 +7,6 @@ import {
 import { AccountDatasetServiceClient } from '../grpc/service/accountDataset_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import Network from './Network';
-import { grpc } from '@improbable-eng/grpc-web';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { setupDatasetBuilder, SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
@@ -30,11 +29,6 @@ export interface AccountDatasetListParams {
     page?: number;
     orderBy?: 0 | 1;
   };
-}
-
-export interface AccountDatasetParams {
-  property: string;
-  recipientAccountAddress: string;
 }
 
 export function getList(params?: AccountDatasetListParams): Promise<AccountDatasetsResponse> {
@@ -67,12 +61,12 @@ export function getList(params?: AccountDatasetListParams): Promise<AccountDatas
   });
 }
 
-export function get(params: AccountDatasetParams): Promise<AccountDatasetResponse> {
+export function get(property: string, recipient: string): Promise<AccountDatasetResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetAccountDatasetRequest();
-    request.setProperty(params.property);
-    request.setRecipientaccountaddress(params.recipientAccountAddress);
+    request.setProperty(property);
+    request.setRecipientaccountaddress(recipient);
     const client = new AccountDatasetServiceClient(networkIP.host);
     client.getAccountDataset(request, (err, res) => {
       if (err) {

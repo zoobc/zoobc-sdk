@@ -16,6 +16,8 @@ export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
 
+export { Subscription } from 'rxjs';
+
 // EXPORT INTERFACE
 export { EscrowListParams, EscrowTransactionsResponse, EscrowTransactionResponse, ApprovalEscrowTransactionResponse } from './Escrows';
 export {
@@ -34,7 +36,7 @@ export {
   PostTransactionResponses,
   TransactionMinimumFeeResponse,
 } from './Transactions';
-export { BlockListParams, BlocksResponse, BlockResponse } from './Block';
+export { BlocksResponse, BlockResponse } from './Block';
 export {
   MultisigPendingListParams,
   MultisigInfoParams,
@@ -46,7 +48,6 @@ export {
 export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
 export {
   AccountDatasetListParams,
-  AccountDatasetParams,
   AccountDatasetsResponse,
   AccountDatasetResponse,
   SetupDatasetResponse,
