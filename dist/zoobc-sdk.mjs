@@ -28248,24 +28248,7 @@ function sendMoney(data, seed) {
         });
     });
 }
-function getTransactionMinimumFee(data, seed) {
-    var txBytes = sendMoneyBuilder(data, seed);
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new transaction_pb_4();
-        request.setTransactionbytes(txBytes);
-        var client = new TransactionServiceClient_1(networkIP.host);
-        client.getTransactionMinimumFee(request, function (err, res) {
-            if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-var Transactions = { sendMoney: sendMoney, get: get, getList: getList, getTransactionMinimumFee: getTransactionMinimumFee };
+var Transactions = { sendMoney: sendMoney, get: get, getList: getList };
 
 var mempool_pb = createCommonjsModule(function (module, exports) {
 // source: model/mempool.proto
@@ -42783,7 +42766,8 @@ function getList$2(params) {
                 request.setMaxregistrationheight(maxHeight);
             if (minHeight)
                 request.setMinregistrationheight(minHeight);
-            // if (status) request.setRegistrationstatus(status);
+            if (status_1)
+                request.setRegistrationstatusesList(status_1);
         }
         var client = new NodeRegistrationServiceClient_1(networkIP.host);
         client.getNodeRegistrations(request, function (err, res) {
@@ -42801,13 +42785,7 @@ function get$2(params) {
         var networkIP = Network$1.selected();
         var request = new nodeRegistration_pb_1();
         if (params) {
-            var nodeaddress = params.nodeaddress, height = params.height, owner = params.owner, publicKey = params.publicKey;
-            // if (nodeaddress) {
-            //   const nodeAddress = new NodeAddress();
-            //   if (nodeaddress.address) nodeAddress.setAddress(nodeaddress.address);
-            //   if (nodeaddress.port) nodeAddress.setPort(nodeaddress.port);
-            //   request.setNodeaddress(nodeAddress);
-            // }
+            var height = params.height, owner = params.owner, publicKey = params.publicKey;
             if (owner)
                 request.setAccountaddress(owner);
             if (publicKey)
@@ -43268,11 +43246,10 @@ BlockServiceClient.prototype.getBlock = function getBlock(requestMessage, metada
 
 var BlockServiceClient_1 = BlockServiceClient;
 
-function getBlocks(params) {
+function getBlocks(height, limit) {
     return new Promise(function (resolve, reject) {
         var networkIP = Network$1.selected();
         var request = new block_pb_1();
-        var height = params.height, limit = params.limit;
         request.setHeight(height);
         request.setLimit(limit || 10);
         var client = new BlockServiceClient_1(networkIP.host);
@@ -44983,12 +44960,12 @@ function getList$4(params) {
         });
     });
 }
-function get$4(params) {
+function get$4(property, recipient) {
     return new Promise(function (resolve, reject) {
         var networkIP = Network$1.selected();
         var request = new accountDataset_pb_2();
-        request.setProperty(params.property);
-        request.setRecipientaccountaddress(params.recipientAccountAddress);
+        request.setProperty(property);
+        request.setRecipientaccountaddress(recipient);
         var client = new AccountDatasetServiceClient_1(networkIP.host);
         client.getAccountDataset(request, function (err, res) {
             if (err) {
@@ -45977,8 +45954,6 @@ function getList$5(params) {
     return new Promise(function (resolve, reject) {
         var networkIP = Network$1.selected();
         var request = new accountLedger_pb_1();
-        // request.se
-        // EventType
         if (params) {
             var accountAddress = params.accountAddress, eventType = params.eventType, transactionId = params.transactionId, timeStampStart = params.timeStampStart, timeStampEnd = params.timeStampEnd, pagination = params.pagination;
             if (accountAddress)

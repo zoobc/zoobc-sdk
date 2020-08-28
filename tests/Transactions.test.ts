@@ -89,22 +89,4 @@ describe('Transactions Unit Testing :', () => {
       expect(result).to.be.have.property('transaction');
     });
   });
-
-  describe('getTransactionMinimumFee', () => {
-    it('should return object with property fee', async () => {
-      const data = {
-        sender: 'BCZD_VxfO2S9aziIL3cn_cXW7uPDVPOrnXuP98GEAUC7',
-        recipient: '5yOq6mtspHBApow2dPIoUdEliiNwwGsO_OoNXwAz5msy',
-        fee: 0,
-        amount: 1,
-      };
-
-      const transport = mockGetTransactionMinimumFee();
-      grpc.setDefaultTransport(transport);
-
-      const result = await zoobc.Transactions.getTransactionMinimumFee(data, childSeed);
-      expect(result).to.be.an('object');
-      expect(result).to.be.have.property('fee');
-    });
-  });
 });

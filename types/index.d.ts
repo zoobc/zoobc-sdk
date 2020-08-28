@@ -7,10 +7,10 @@ export { EscrowListParams, EscrowTransactionsResponse, EscrowTransactionResponse
 export { NodeListParams, NodeParams, NodeHardwareResponse, GenerateNodeKeyResponses, NodeRegistrationsResponse, NodePostTransactionResponse, } from './Node';
 export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
 export { TransactionListParams, TransactionsResponse, TransactionResponse, PostTransactionResponses, TransactionMinimumFeeResponse, } from './Transactions';
-export { BlockListParams, BlocksResponse, BlockResponse } from './Block';
+export { BlocksResponse, BlockResponse } from './Block';
 export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, MultisigPostTransactionResponse, } from './MultiSignature';
 export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
-export { AccountDatasetListParams, AccountDatasetParams, AccountDatasetsResponse, AccountDatasetResponse, SetupDatasetResponse, RemoveAccountDatasetResponse, } from './AccountDataset';
+export { AccountDatasetListParams, AccountDatasetsResponse, AccountDatasetResponse, SetupDatasetResponse, RemoveAccountDatasetResponse, } from './AccountDataset';
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
@@ -43,7 +43,6 @@ declare const zoobc: {
         sendMoney: (data: import("./helper/transaction-builder/send-money").SendMoneyInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
         get: (id: string) => Promise<import("../grpc/model/transaction_pb").Transaction.AsObject>;
         getList: (params?: import("./Transactions").TransactionListParams | undefined) => Promise<import("../grpc/model/transaction_pb").GetTransactionsResponse.AsObject>;
-        getTransactionMinimumFee: (data: import("./helper/transaction-builder/send-money").SendMoneyInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").GetTransactionMinimumFeeResponse.AsObject>;
     };
     Network: {
         list: (hosts: import("./Network").HostInterface[]) => void;
@@ -86,9 +85,9 @@ declare const zoobc: {
         getList: (params?: import("./Mempool").MempoolListParams | undefined) => Promise<import("../grpc/model/mempool_pb").GetMempoolTransactionsResponse.AsObject>;
     };
     Block: {
-        getBlocks: (params: import("./Block").BlockListParams) => Promise<import("../grpc/model/block_pb").GetBlocksResponse.AsObject>;
-        getBlockById: (id: string) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
-        getBlockByHeight: (height: number) => Promise<import("../grpc/model/block_pb").BlockExtendedInfo.AsObject>;
+        getBlocks: (height: number, limit?: number | undefined) => Promise<import("../grpc/model/block_pb").GetBlocksResponse.AsObject>;
+        getBlockById: (id: string) => Promise<import("../grpc/model/block_pb").GetBlockResponse.AsObject>;
+        getBlockByHeight: (height: number) => Promise<import("../grpc/model/block_pb").GetBlockResponse.AsObject>;
     };
     MultiSignature: {
         getPendingByTxHash: (txHash: string) => Promise<import("../grpc/model/multiSignature_pb").GetPendingTransactionDetailByTransactionHashResponse.AsObject>;

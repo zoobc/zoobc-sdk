@@ -19,12 +19,8 @@ export interface AccountDatasetListParams {
         orderBy?: 0 | 1;
     };
 }
-export interface AccountDatasetParams {
-    property: string;
-    recipientAccountAddress: string;
-}
 export declare function getList(params?: AccountDatasetListParams): Promise<AccountDatasetsResponse>;
-export declare function get(params: AccountDatasetParams): Promise<AccountDatasetResponse>;
+export declare function get(property: string, recipient: string): Promise<AccountDatasetResponse>;
 export declare function setupDataset(data: SetupDatasetInterface, childSeed: BIP32Interface): Promise<SetupDatasetResponse>;
 export declare function removeDataset(data: RemoveDatasetInterface, childseed: BIP32Interface): Promise<RemoveAccountDatasetResponse>;
 declare const _default: {

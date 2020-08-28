@@ -24,10 +24,10 @@ function mockListAccountDataset(height: number) {
   return new FakeTransportBuilder().withMessages([request]).build();
 }
 
-function mockAccountDataset(params: IMockAccountDatasetTransport) {
+function mockAccountDataset(property: string, recipientAccountAddress: string) {
   const request = new GetAccountDatasetRequest();
-  request.setProperty(params.property);
-  request.setRecipientaccountaddress(params.recipientAccountAddress);
+  request.setProperty(property);
+  request.setRecipientaccountaddress(recipientAccountAddress);
   return new FakeTransportBuilder().withMessages([request]).build();
 }
 
@@ -74,14 +74,13 @@ describe('Account Dataset Unit Testing :', () => {
   });
   describe('get', () => {
     it('get should return object', async () => {
-      const params: IMockAccountDatasetTransport = {
-        property: 'AccountDatasetEscrowApproval',
-        recipientAccountAddress: 'BCZEGOb3WNx3fDOVf9ZS4EjvOIv_UeW4TVBQJ_6tHKlE',
-      };
-      const transport = mockAccountDataset(params);
+      const property = 'AccountDatasetEscrowApproval';
+      const recipientAccountAddress = 'BCZEGOb3WNx3fDOVf9ZS4EjvOIv_UeW4TVBQJ_6tHKlE';
+
+      const transport = mockAccountDataset(property, recipientAccountAddress);
       grpc.setDefaultTransport(transport);
 
-      const result = await zoobc.AccountDataset.get(params);
+      const result = await zoobc.AccountDataset.get(property, recipientAccountAddress);
       expect(result).to.be.an('object');
     });
   });
