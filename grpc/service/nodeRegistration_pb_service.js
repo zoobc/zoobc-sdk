@@ -38,6 +38,15 @@ NodeRegistrationService.GetNodeRegistrationsByNodePublicKeys = {
   responseType: model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysResponse
 };
 
+NodeRegistrationService.GetPendingNodeRegistrations = {
+  methodName: "GetPendingNodeRegistrations",
+  service: NodeRegistrationService,
+  requestStream: true,
+  responseStream: true,
+  requestType: model_nodeRegistration_pb.GetPendingNodeRegistrationsRequest,
+  responseType: model_nodeRegistration_pb.GetPendingNodeRegistrationsResponse
+};
+
 exports.NodeRegistrationService = NodeRegistrationService;
 
 function NodeRegistrationServiceClient(serviceHost, options) {
@@ -133,6 +142,51 @@ NodeRegistrationServiceClient.prototype.getNodeRegistrationsByNodePublicKeys = f
   return {
     cancel: function () {
       callback = null;
+      client.close();
+    }
+  };
+};
+
+NodeRegistrationServiceClient.prototype.getPendingNodeRegistrations = function getPendingNodeRegistrations(metadata) {
+  var listeners = {
+    data: [],
+    end: [],
+    status: []
+  };
+  var client = grpc.client(NodeRegistrationService.GetPendingNodeRegistrations, {
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport
+  });
+  client.onEnd(function (status, statusMessage, trailers) {
+    listeners.status.forEach(function (handler) {
+      handler({ code: status, details: statusMessage, metadata: trailers });
+    });
+    listeners.end.forEach(function (handler) {
+      handler({ code: status, details: statusMessage, metadata: trailers });
+    });
+    listeners = null;
+  });
+  client.onMessage(function (message) {
+    listeners.data.forEach(function (handler) {
+      handler(message);
+    })
+  });
+  client.start(metadata);
+  return {
+    on: function (type, handler) {
+      listeners[type].push(handler);
+      return this;
+    },
+    write: function (requestMessage) {
+      client.send(requestMessage);
+      return this;
+    },
+    end: function () {
+      client.finishSend();
+    },
+    cancel: function () {
+      listeners = null;
       client.close();
     }
   };

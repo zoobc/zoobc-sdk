@@ -2,7 +2,7 @@ import 'mocha';
 import { expect } from 'chai';
 import zoobc from '../src';
 import { FakeTransportBuilder } from '@improbable-eng/grpc-web-fake-transport';
-import { GetBlocksResponse, BlockExtendedInfo, Block } from '../grpc/model/block_pb';
+import { GetBlocksResponse, Block, GetBlockResponse } from '../grpc/model/block_pb';
 import { grpc } from '@improbable-eng/grpc-web';
 
 interface IMockBlockTransport {
@@ -18,7 +18,7 @@ function mockBlocksTransport(height: number, limit?: number) {
 }
 
 function mockBlockTransport(params: IMockBlockTransport) {
-  const blockInfoResponse = new BlockExtendedInfo();
+  const blockInfoResponse = new GetBlockResponse();
   const blockResponse = new Block();
 
   if (params) {
@@ -42,7 +42,7 @@ describe('Block Unit Testing :', () => {
       const height = 0;
       const transport = mockBlocksTransport(height);
       grpc.setDefaultTransport(transport);
-      const blocks = await zoobc.Block.getBlocks({ height });
+      const blocks = await zoobc.Block.getBlocks(height);
 
       expect(blocks).to.be.an('object');
       expect(blocks.height).to.be.equal(height);
@@ -54,7 +54,7 @@ describe('Block Unit Testing :', () => {
       const limit = 2;
       const transport = mockBlocksTransport(height, limit);
       grpc.setDefaultTransport(transport);
-      const blocks = await zoobc.Block.getBlocks({ height, limit });
+      const blocks = await zoobc.Block.getBlocks(height, limit);
 
       expect(blocks).to.be.an('object');
       expect(blocks.height).to.be.equal(height);

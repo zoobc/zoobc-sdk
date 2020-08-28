@@ -62,8 +62,10 @@ export namespace NodeRegistration {
 }
 
 export class GetNodeRegistrationsRequest extends jspb.Message {
-  getRegistrationstatus(): number;
-  setRegistrationstatus(value: number): void;
+  clearRegistrationstatusesList(): void;
+  getRegistrationstatusesList(): Array<number>;
+  setRegistrationstatusesList(value: Array<number>): void;
+  addRegistrationstatuses(value: number, index?: number): number;
 
   getMinregistrationheight(): number;
   setMinregistrationheight(value: number): void;
@@ -88,7 +90,7 @@ export class GetNodeRegistrationsRequest extends jspb.Message {
 
 export namespace GetNodeRegistrationsRequest {
   export type AsObject = {
-    registrationstatus: number,
+    registrationstatusesList: Array<number>,
     minregistrationheight: number,
     maxregistrationheight: number,
     pagination?: model_pagination_pb.Pagination.AsObject,
@@ -253,6 +255,48 @@ export class GetNodeRegistrationsByNodePublicKeysResponse extends jspb.Message {
 export namespace GetNodeRegistrationsByNodePublicKeysResponse {
   export type AsObject = {
     total: string,
+    noderegistrationsList: Array<NodeRegistration.AsObject>,
+  }
+}
+
+export class GetPendingNodeRegistrationsRequest extends jspb.Message {
+  getLimit(): number;
+  setLimit(value: number): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPendingNodeRegistrationsRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPendingNodeRegistrationsRequest): GetPendingNodeRegistrationsRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetPendingNodeRegistrationsRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPendingNodeRegistrationsRequest;
+  static deserializeBinaryFromReader(message: GetPendingNodeRegistrationsRequest, reader: jspb.BinaryReader): GetPendingNodeRegistrationsRequest;
+}
+
+export namespace GetPendingNodeRegistrationsRequest {
+  export type AsObject = {
+    limit: number,
+  }
+}
+
+export class GetPendingNodeRegistrationsResponse extends jspb.Message {
+  clearNoderegistrationsList(): void;
+  getNoderegistrationsList(): Array<NodeRegistration>;
+  setNoderegistrationsList(value: Array<NodeRegistration>): void;
+  addNoderegistrations(value?: NodeRegistration, index?: number): NodeRegistration;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPendingNodeRegistrationsResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPendingNodeRegistrationsResponse): GetPendingNodeRegistrationsResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetPendingNodeRegistrationsResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPendingNodeRegistrationsResponse;
+  static deserializeBinaryFromReader(message: GetPendingNodeRegistrationsResponse, reader: jspb.BinaryReader): GetPendingNodeRegistrationsResponse;
+}
+
+export namespace GetPendingNodeRegistrationsResponse {
+  export type AsObject = {
     noderegistrationsList: Array<NodeRegistration.AsObject>,
   }
 }

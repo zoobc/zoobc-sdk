@@ -20,11 +20,9 @@ export interface TransactionListParams {
 declare function getList(params?: TransactionListParams): Promise<TransactionsResponse>;
 declare function get(id: string): Promise<TransactionResponse>;
 declare function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<PostTransactionResponses>;
-declare function getTransactionMinimumFee(data: SendMoneyInterface, seed: BIP32Interface): Promise<TransactionMinimumFeeResponse>;
 declare const _default: {
     sendMoney: typeof sendMoney;
     get: typeof get;
     getList: typeof getList;
-    getTransactionMinimumFee: typeof getTransactionMinimumFee;
 };
 export default _default;

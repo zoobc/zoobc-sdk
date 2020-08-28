@@ -38,7 +38,7 @@ export class ZooKeyring {
   private bip32RootKey!: BIP32Interface;
   private coinName: string = 'ZBC';
 
-  constructor(passphrase: string, password: string, coinName: string = 'ZBC') {
+  constructor(passphrase: string, password: string = '', coinName: string = 'ZBC') {
     const { curveName = 'secp256k1' } = findCoin(coinName);
     passphrase = passphrase
       .replace(/\s\s+/g, ' ') // and then using regex to make sure dont have double space after phrase, case: "stand cheap      entire"

@@ -820,7 +820,7 @@ export const coins: Array<CoinInterface> = [
     name: 'ZBC - ZooBlockchain',
     segwitAvailable: false,
     network: 'bitcoin',
-    coinValue: 148,
+    coinValue: 883,
     purposeValue: 44,
     derivationStandard: 'sep5',
     curveName: 'ed25519',

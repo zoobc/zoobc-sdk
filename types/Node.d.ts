@@ -15,7 +15,7 @@ export declare type NodePostTransactionResponse = PostTransactionResponse.AsObje
 export interface NodeListParams {
     minHeight?: number;
     maxHeight?: number;
-    status?: 0 | 1 | 2;
+    status?: [0 | 1 | 2];
     pagination?: {
         limit?: number;
         page?: number;
@@ -26,10 +26,6 @@ export interface NodeParams {
     owner?: string;
     publicKey?: string;
     height?: number;
-    nodeaddress?: {
-        address?: string;
-        port?: number;
-    };
 }
 declare function getHardwareInfo(networkIP: string, childSeed: BIP32Interface): Observable<NodeHardwareResponse>;
 declare function generateNodeKey(networkIP: string, childSeed: BIP32Interface): Promise<GenerateNodeKeyResponses>;
