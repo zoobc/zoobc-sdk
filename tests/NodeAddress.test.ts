@@ -1,0 +1,28 @@
+import 'mocha';
+import zoobc from '../src';
+import { GetNodeAddressesInfoRequest } from '../grpc/model/nodeAddressInfo_pb';
+import { FakeTransportBuilder } from '@improbable-eng/grpc-web-fake-transport';
+import { grpc } from '@improbable-eng/grpc-web';
+import { expect } from 'chai';
+
+function mockListNodeAddress() {
+  const request = new GetNodeAddressesInfoRequest();
+  return new FakeTransportBuilder().withMessages([request]).build();
+}
+
+describe('Node Address Unit Testing :', () => {
+  before(() => {
+    const hosts = [{ host: 'http://85.90.246.90:8002', name: '168 Testnet' }];
+    zoobc.Network.list(hosts);
+  });
+  describe('getInfo', () => {
+    it('getInfo should return ', async () => {
+      const transport = mockListNodeAddress();
+      grpc.setDefaultTransport(transport);
+      const result = await zoobc.NodeAddress.getInfo();
+      // expect(result).to.be.an('object');
+      // expect(result.accountledgersList).to.be.an('array');
+      // expect(result.total).to.be.an('string');
+    });
+  });
+});

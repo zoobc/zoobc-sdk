@@ -35,6 +35,7 @@ const commonjsPulgin = () => {
       ],
       './grpc/model/accountDataset_pb.js': ['GetAccountDatasetsRequest', 'GetAccountDatasetRequest', 'AccountDatasetProperty'],
       './grpc/model/accountLedger_pb.js': ['GetAccountLedgersRequest'],
+      './grpc/model/nodeAddressInfo_pb.js': ['GetNodeAddressesInfoRequest'],
       './grpc/model/event_pb': ['EventType'],
       './grpc/model/signature_pb.js': ['SignatureType', 'PrivateKeyBytesLength', 'BitcoinPublicKeyFormat'],
       './grpc/model/spine_pb.js': ['SpinePublicKeyAction'],

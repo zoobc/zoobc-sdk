@@ -11,6 +11,7 @@ import Block from './Block';
 import MultiSignature from './MultiSignature';
 import AccountDataset from './AccountDataset';
 import AccountLedger from './AccountLedger';
+import NodeAddress from './NodeAddress';
 
 export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
@@ -46,6 +47,7 @@ export {
   MultisigPostTransactionResponse,
 } from './MultiSignature';
 export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
+export { NodeAddressInfoParam } from './NodeAddress';
 export {
   AccountDatasetListParams,
   AccountDatasetsResponse,
@@ -103,6 +105,7 @@ const zoobc = {
   MultiSignature,
   AccountDataset,
   AccountLedger,
+  NodeAddress,
 };
 
 export default zoobc;

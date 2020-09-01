@@ -10,6 +10,7 @@ export { TransactionListParams, TransactionsResponse, TransactionResponse, PostT
 export { BlocksResponse, BlockResponse } from './Block';
 export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, MultisigPostTransactionResponse, } from './MultiSignature';
 export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
+export { NodeAddressInfoParam } from './NodeAddress';
 export { AccountDatasetListParams, AccountDatasetsResponse, AccountDatasetResponse, SetupDatasetResponse, RemoveAccountDatasetResponse, } from './AccountDataset';
 export { HostInterface } from './Network';
 export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
@@ -105,6 +106,9 @@ declare const zoobc: {
     };
     AccountLedger: {
         getList: typeof import("./AccountLedger").getList;
+    };
+    NodeAddress: {
+        getInfo: typeof import("./NodeAddress").getInfo;
     };
 };
 export default zoobc;
