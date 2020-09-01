@@ -1,5 +1,5 @@
 import 'mocha';
-import zoobc from '../src';
+import zoobc, { NodeAddressInfoParam, NodeListParams } from '../src';
 import { GetNodeAddressesInfoRequest } from '../grpc/model/nodeAddressInfo_pb';
 import { FakeTransportBuilder } from '@improbable-eng/grpc-web-fake-transport';
 import { grpc } from '@improbable-eng/grpc-web';
@@ -19,7 +19,14 @@ describe('Node Address Unit Testing :', () => {
     it('getInfo should return a list of node address info', async () => {
       const transport = mockListNodeAddress();
       grpc.setDefaultTransport(transport);
-      const result = await zoobc.NodeAddress.getInfo();
+
+      const nodeListParam: NodeListParams = {};
+      const listNode = await zoobc.Node.getList(nodeListParam);
+
+      const param: NodeAddressInfoParam = {
+        nodeIdsList: listNode.noderegistrationsList.map(ln => ln.nodeid),
+      };
+      const result = await zoobc.NodeAddress.getInfo(param);
       expect(result).to.be.an('object');
       expect(result.nodeaddressesinfoList).to.be.an('array');
     });

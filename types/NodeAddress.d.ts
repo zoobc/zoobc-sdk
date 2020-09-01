@@ -3,7 +3,7 @@ export declare type NodeAddressInfoResponse = GetNodeAddressesInfoResponse.AsObj
 export interface NodeAddressInfoParam {
     nodeIdsList: string[];
 }
-export declare function getInfo(params?: NodeAddressInfoParam): Promise<NodeAddressInfoResponse>;
+export declare function getInfo(params: NodeAddressInfoParam): Promise<NodeAddressInfoResponse>;
 declare const _default: {
     getInfo: typeof getInfo;
 };
