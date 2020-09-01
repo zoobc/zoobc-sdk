@@ -8,7 +8,7 @@ export interface NodeAddressInfoParam {
   nodeIdsList: string[];
 }
 
-export function getInfo(params?: NodeAddressInfoParam): Promise<GetNodeAddressesInfoResponse> {
+export function getInfo(params?: NodeAddressInfoParam): Promise<NodeAddressInfoResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetNodeAddressesInfoRequest();
@@ -22,7 +22,7 @@ export function getInfo(params?: NodeAddressInfoParam): Promise<GetNodeAddresses
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      if (res) resolve(res);
+      if (res) resolve(res.toObject());
     });
   });
 }

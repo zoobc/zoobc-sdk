@@ -46041,7 +46041,7 @@ function getInfo$1(params) {
                 reject({ code: code, message: message, metadata: metadata });
             }
             if (res)
-                resolve(res);
+                resolve(res.toObject());
         });
     });
 }
