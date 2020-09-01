@@ -16,13 +16,12 @@ describe('Node Address Unit Testing :', () => {
     zoobc.Network.list(hosts);
   });
   describe('getInfo', () => {
-    it('getInfo should return ', async () => {
+    it('getInfo should return a list of node address info', async () => {
       const transport = mockListNodeAddress();
       grpc.setDefaultTransport(transport);
       const result = await zoobc.NodeAddress.getInfo();
-      // expect(result).to.be.an('object');
-      // expect(result.accountledgersList).to.be.an('array');
-      // expect(result.total).to.be.an('string');
+      expect(result).to.be.an('object');
+      expect(result.nodeaddressesinfoList).to.be.an('array');
     });
   });
 });
