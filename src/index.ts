@@ -28,6 +28,7 @@ export {
   GenerateNodeKeyResponses,
   NodeRegistrationsResponse,
   NodePostTransactionResponse,
+  GetPendingNodeRegistrationResponse,
 } from './Node';
 export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
 export {
