@@ -106,5 +106,8 @@ declare const zoobc: {
     AccountLedger: {
         getList: typeof import("./AccountLedger").getList;
     };
+    NodeAddress: {
+        getInfo: typeof import("./NodeAddress").getInfo;
+    };
 };
 export default zoobc;
