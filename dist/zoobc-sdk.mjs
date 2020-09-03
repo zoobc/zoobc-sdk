@@ -46019,11 +46019,11 @@ NodeAddressInfoServiceClient.prototype.getNodeAddressInfo = function getNodeAddr
 
 var NodeAddressInfoServiceClient_1 = NodeAddressInfoServiceClient;
 
-function getInfo$1(params) {
+function getInfo$1(nodeidsList) {
     return new Promise(function (resolve, reject) {
         var networkIP = Network$1.selected();
         var request = new nodeAddressInfo_pb_1();
-        request.setNodeidsList(params);
+        request.setNodeidsList(nodeidsList);
         var client = new NodeAddressInfoServiceClient_1(networkIP.host);
         client.getNodeAddressInfo(request, function (err, res) {
             if (err) {
