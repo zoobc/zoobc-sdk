@@ -13685,6 +13685,7 @@ proto.model.NodeAddressStatus = {
 
 goog.object.extend(exports, proto.model);
 });
+var nodeAddressInfo_pb_1 = nodeAddressInfo_pb.GetNodeAddressesInfoRequest;
 
 var nodeRegistration_pb = createCommonjsModule(function (module, exports) {
 // source: model/nodeRegistration.proto
@@ -45945,6 +45946,103 @@ function getList$5(params) {
 }
 var AccountLedger = { getList: getList$5 };
 
+// source: service/nodeAddressInfo.proto
+/**
+ * @fileoverview
+ * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
+ * @public
+ */
+// GENERATED CODE -- DO NOT EDIT!
+
+
+var goog$d = googleProtobuf;
+var global$d = Function('return this')();
+
+
+goog$d.object.extend(proto, nodeAddressInfo_pb);
+
+goog$d.object.extend(proto, annotations_pb);
+
+// package: service
+// file: service/nodeAddressInfo.proto
+
+
+
+var grpc$d = grpcWeb__default.grpc;
+
+var NodeAddressInfoService = (function () {
+  function NodeAddressInfoService() {}
+  NodeAddressInfoService.serviceName = "service.NodeAddressInfoService";
+  return NodeAddressInfoService;
+}());
+
+NodeAddressInfoService.GetNodeAddressInfo = {
+  methodName: "GetNodeAddressInfo",
+  service: NodeAddressInfoService,
+  requestStream: false,
+  responseStream: false,
+  requestType: nodeAddressInfo_pb.GetNodeAddressesInfoRequest,
+  responseType: nodeAddressInfo_pb.GetNodeAddressesInfoResponse
+};
+
+function NodeAddressInfoServiceClient(serviceHost, options) {
+  this.serviceHost = serviceHost;
+  this.options = options || {};
+}
+
+NodeAddressInfoServiceClient.prototype.getNodeAddressInfo = function getNodeAddressInfo(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc$d.unary(NodeAddressInfoService.GetNodeAddressInfo, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc$d.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+var NodeAddressInfoServiceClient_1 = NodeAddressInfoServiceClient;
+
+function getInfo$1(nodeidsList) {
+    return new Promise(function (resolve, reject) {
+        var networkIP = Network$1.selected();
+        var request = new nodeAddressInfo_pb_1();
+        request.setNodeidsList(nodeidsList);
+        var client = new NodeAddressInfoServiceClient_1(networkIP.host);
+        client.getNodeAddressInfo(request, function (err, res) {
+            if (err) {
+                var code = err.code, message = err.message, metadata = err.metadata;
+                reject({ code: code, message: message, metadata: metadata });
+            }
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+var NodeAddress = { getInfo: getInfo$1 };
+
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
 
@@ -47170,6 +47268,7 @@ var zoobc = {
     MultiSignature: MultiSignature,
     AccountDataset: AccountDataset,
     AccountLedger: AccountLedger,
+    NodeAddress: NodeAddress,
 };
 
 Object.defineProperty(exports, 'Subscription', {
