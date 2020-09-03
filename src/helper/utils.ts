@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js';
 import BN from 'bn.js';
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
-export function getZBCAdress(publicKey: Uint8Array, prefix: string = 'ZBC'): string {
+export function getZBCAddress(publicKey: Uint8Array, prefix: string = 'ZBC'): string {
   const bytes = Buffer.alloc(35);
   for (let i = 0; i < 32; i++) bytes[i] = publicKey[i];
   for (let i = 0; i < 3; i++) bytes[i + 32] = prefix.charCodeAt(i);

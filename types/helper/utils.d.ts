@@ -1,5 +1,5 @@
 /// <reference types="node" />
-export declare function getZBCAdress(publicKey: Uint8Array, prefix?: string): string;
+export declare function getZBCAddress(publicKey: Uint8Array, prefix?: string): string;
 export declare function hash(str: any, format?: string): string | Buffer;
 export declare function encryptPassword(password: string, salt?: string): string;
 export declare function isZBCAddressValid(address: string, stdPrefix?: string): boolean;

@@ -27992,7 +27992,7 @@ TransactionServiceClient.prototype.getTransactionMinimumFee = function getTransa
 var TransactionServiceClient_1 = TransactionServiceClient;
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
-function getZBCAdress(publicKey, prefix) {
+function getZBCAddress(publicKey, prefix) {
     if (prefix === void 0) { prefix = 'ZBC'; }
     var bytes = Buffer.alloc(35);
     for (var i = 0; i < 32; i++)
@@ -43562,7 +43562,7 @@ function generateMultiSigInfo(multiSigAddress) {
 function createMultiSigAddress(multiSigAddress) {
     var buffer = generateMultiSigInfo(multiSigAddress);
     var hashed = Buffer.from(sha3_256(buffer), 'hex');
-    return getZBCAdress(hashed);
+    return getZBCAddress(hashed);
 }
 function getPendingList(params) {
     return new Promise(function (resolve, reject) {
@@ -47266,5 +47266,5 @@ var zoobc = {
 };
 
 export default zoobc;
-export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, bufferToBase64, generateTransactionHash, getZBCAdress, isZBCAddressValid, readInt64, sendMoneyBuilder, signTransactionHash, toGetPendingList, toTransactionListWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet };
+export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, bufferToBase64, generateTransactionHash, getZBCAddress, isZBCAddressValid, readInt64, sendMoneyBuilder, signTransactionHash, toGetPendingList, toTransactionListWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet };
 //# sourceMappingURL=zoobc-sdk.mjs.map

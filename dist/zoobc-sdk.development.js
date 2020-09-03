@@ -27998,7 +27998,7 @@ TransactionServiceClient.prototype.getTransactionMinimumFee = function getTransa
 var TransactionServiceClient_1 = TransactionServiceClient;
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
-function getZBCAdress(publicKey, prefix) {
+function getZBCAddress(publicKey, prefix) {
     if (prefix === void 0) { prefix = 'ZBC'; }
     var bytes = Buffer.alloc(35);
     for (var i = 0; i < 32; i++)
@@ -43568,7 +43568,7 @@ function generateMultiSigInfo(multiSigAddress) {
 function createMultiSigAddress(multiSigAddress) {
     var buffer = generateMultiSigInfo(multiSigAddress);
     var hashed = Buffer.from(jsSha3.sha3_256(buffer), 'hex');
-    return getZBCAdress(hashed);
+    return getZBCAddress(hashed);
 }
 function getPendingList(params) {
     return new Promise(function (resolve, reject) {
@@ -47296,7 +47296,7 @@ exports.ZooKeyring = ZooKeyring;
 exports.bufferToBase64 = bufferToBase64;
 exports.default = zoobc;
 exports.generateTransactionHash = generateTransactionHash;
-exports.getZBCAdress = getZBCAdress;
+exports.getZBCAddress = getZBCAddress;
 exports.isZBCAddressValid = isZBCAddressValid;
 exports.readInt64 = readInt64;
 exports.sendMoneyBuilder = sendMoneyBuilder;

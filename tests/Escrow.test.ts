@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import zoobc, { BIP32Interface, ZooKeyring, getZBCAdress } from '../src';
+import zoobc, { BIP32Interface, ZooKeyring, getZBCAddress } from '../src';
 import { FakeTransportBuilder } from '@improbable-eng/grpc-web-fake-transport';
 import { GetEscrowTransactionsResponse, Escrow, EscrowStatusMap } from '../grpc/model/escrow_pb';
 import { grpc } from '@improbable-eng/grpc-web';
