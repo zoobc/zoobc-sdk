@@ -4,16 +4,11 @@ import Network from './Network';
 
 export type NodeAddressInfoResponse = GetNodeAddressesInfoResponse.AsObject;
 
-export interface NodeAddressInfoParam {
-  nodeIdsList: string[];
-}
-
-export function getInfo(params: NodeAddressInfoParam): Promise<NodeAddressInfoResponse> {
+export function getInfo(params: string[]): Promise<NodeAddressInfoResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetNodeAddressesInfoRequest();
-    const { nodeIdsList } = params;
-    request.setNodeidsList(nodeIdsList);
+    request.setNodeidsList(params);
     const client = new NodeAddressInfoServiceClient(networkIP.host);
     client.getNodeAddressInfo(request, (err, res) => {
       if (err) {

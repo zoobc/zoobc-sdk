@@ -46029,8 +46029,7 @@ function getInfo$1(params) {
     return new Promise(function (resolve, reject) {
         var networkIP = Network$1.selected();
         var request = new nodeAddressInfo_pb_1();
-        var nodeIdsList = params.nodeIdsList;
-        request.setNodeidsList(nodeIdsList);
+        request.setNodeidsList(params);
         var client = new NodeAddressInfoServiceClient_1(networkIP.host);
         client.getNodeAddressInfo(request, function (err, res) {
             if (err) {

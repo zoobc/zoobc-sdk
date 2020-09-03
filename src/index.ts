@@ -47,7 +47,6 @@ export {
   MultisigPostTransactionResponse,
 } from './MultiSignature';
 export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
-export { NodeAddressInfoParam } from './NodeAddress';
 export {
   AccountDatasetListParams,
   AccountDatasetsResponse,

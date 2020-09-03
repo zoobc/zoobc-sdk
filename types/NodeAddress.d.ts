@@ -1,9 +1,6 @@
 import { GetNodeAddressesInfoResponse } from '../grpc/model/nodeAddressInfo_pb';
 export declare type NodeAddressInfoResponse = GetNodeAddressesInfoResponse.AsObject;
-export interface NodeAddressInfoParam {
-    nodeIdsList: string[];
-}
-export declare function getInfo(params: NodeAddressInfoParam): Promise<NodeAddressInfoResponse>;
+export declare function getInfo(params: string[]): Promise<NodeAddressInfoResponse>;
 declare const _default: {
     getInfo: typeof getInfo;
 };
