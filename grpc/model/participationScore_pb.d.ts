@@ -81,3 +81,23 @@ export namespace GetParticipationScoresResponse {
   }
 }
 
+export class GetLatestParticipationScoreByNodeIDRequest extends jspb.Message {
+  getNodeid(): string;
+  setNodeid(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetLatestParticipationScoreByNodeIDRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetLatestParticipationScoreByNodeIDRequest): GetLatestParticipationScoreByNodeIDRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetLatestParticipationScoreByNodeIDRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetLatestParticipationScoreByNodeIDRequest;
+  static deserializeBinaryFromReader(message: GetLatestParticipationScoreByNodeIDRequest, reader: jspb.BinaryReader): GetLatestParticipationScoreByNodeIDRequest;
+}
+
+export namespace GetLatestParticipationScoreByNodeIDRequest {
+  export type AsObject = {
+    nodeid: string,
+  }
+}
+
