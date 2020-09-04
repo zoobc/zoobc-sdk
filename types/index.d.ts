@@ -112,6 +112,7 @@ declare const zoobc: {
     };
     ParticipationScore: {
         getLatest: (nodeId: string) => Promise<import("../grpc/model/participationScore_pb").ParticipationScore.AsObject>;
+        getHistory: (fromHeight: number, toHeight: number) => Promise<import("../grpc/model/participationScore_pb").GetParticipationScoresResponse.AsObject>;
     };
 };
 export default zoobc;
