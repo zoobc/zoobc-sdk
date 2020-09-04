@@ -24,14 +24,14 @@ const commonjsPulgin = () => {
       './grpc/model/auth_pb': ['RequestType'],
       './grpc/model/nodeHardware_pb': ['GetNodeHardwareRequest'],
       './grpc/model/node_pb': ['GenerateNodeKeyRequest'],
-      './grpc/model/nodeRegistration_pb': ['GetNodeRegistrationRequest', 'GetNodeRegistrationsRequest', 'NodeAddress', 'NodeRegistrationState'],
+      './grpc/model/nodeRegistration_pb': ['GetNodeRegistrationRequest', 'GetNodeRegistrationsRequest', 'NodeAddress', 'NodeRegistrationState', 'GetPendingNodeRegistrationsRequest'],
       './grpc/model/escrow_pb.js': ['GetEscrowTransactionsRequest', 'GetEscrowTransactionRequest', 'EscrowStatus', 'EscrowApproval'],
       './grpc/model/block_pb.js': ['GetBlocksRequest', 'GetBlockRequest'],
       './grpc/model/multiSignature_pb.js': [
         'GetPendingTransactionsRequest',
         'GetPendingTransactionDetailByTransactionHashRequest',
         'GetMultisignatureInfoRequest',
-        'PendingTransactionStatus'
+        'PendingTransactionStatus',
       ],
       './grpc/model/accountDataset_pb.js': ['GetAccountDatasetsRequest', 'GetAccountDatasetRequest', 'AccountDatasetProperty'],
       './grpc/model/accountLedger_pb.js': ['GetAccountLedgersRequest'],

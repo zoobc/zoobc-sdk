@@ -2,7 +2,12 @@ import 'mocha';
 import { expect } from 'chai';
 import { grpc } from '@improbable-eng/grpc-web';
 import { FakeTransportBuilder } from '@improbable-eng/grpc-web-fake-transport';
-import { GetNodeRegistrationResponse, GetNodeRegistrationsResponse, NodeRegistration } from '../grpc/model/nodeRegistration_pb';
+import {
+  GetNodeRegistrationResponse,
+  GetNodeRegistrationsResponse,
+  NodeRegistration,
+  GetPendingNodeRegistrationsResponse,
+} from '../grpc/model/nodeRegistration_pb';
 import { Pagination } from '../grpc/model/pagination_pb';
 import { PostTransactionResponse, Transaction } from '../grpc/model/transaction_pb';
 import { NodeKey } from '../grpc/model/node_pb';
@@ -117,6 +122,11 @@ function mockGetHardwareInfo() {
   nodeHardware.setCpuinformationList([new CPUInformation()]);
 
   return new FakeTransportBuilder().withMessages([nodeHardware]).build();
+}
+
+function mockGetNodePendingRegistration() {
+  const response = new GetPendingNodeRegistrationsResponse();
+  return new FakeTransportBuilder().withMessages([response]).build();
 }
 
 describe('Node Unit Testing :', () => {
@@ -253,6 +263,22 @@ describe('Node Unit Testing :', () => {
         data => (receivedNodeHardware = data.nodehardware),
         () => {
           expect(receivedNodeHardware).to.be.an('object');
+        },
+      );
+    });
+  });
+
+  describe('getPendingNodeRegistration', () => {
+    it('getPendingNodeRegistration should stream pending node registration array', async () => {
+      grpc.setDefaultTransport(mockGetNodePendingRegistration());
+
+      let receivedPendingNodeRegistration: NodeRegistration.AsObject[] | undefined;
+      const limit = 1;
+
+      zoobc.Node.getPending(limit, childSeed).subscribe(
+        data => (receivedPendingNodeRegistration = data.noderegistrationsList),
+        () => {
+          expect(receivedPendingNodeRegistration).to.be.an('array');
         },
       );
     });

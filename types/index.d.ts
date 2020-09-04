@@ -4,7 +4,7 @@ export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
 export { Subscription } from 'rxjs';
 export { EscrowListParams, EscrowTransactionsResponse, EscrowTransactionResponse, ApprovalEscrowTransactionResponse } from './Escrows';
-export { NodeListParams, NodeParams, NodeHardwareResponse, GenerateNodeKeyResponses, NodeRegistrationsResponse, NodePostTransactionResponse, } from './Node';
+export { NodeListParams, NodeParams, NodeHardwareResponse, GenerateNodeKeyResponses, NodeRegistrationsResponse, NodePostTransactionResponse, GetPendingNodeRegistrationResponse, } from './Node';
 export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
 export { TransactionListParams, TransactionsResponse, TransactionResponse, PostTransactionResponses, TransactionMinimumFeeResponse, } from './Transactions';
 export { BlocksResponse, BlockResponse } from './Block';
@@ -70,6 +70,7 @@ declare const zoobc: {
         generateNodeKey: (networkIP: string, childSeed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/node_pb").GenerateNodeKeyResponse.AsObject>;
         getList: (params?: import("./Node").NodeListParams | undefined) => Promise<import("../grpc/model/nodeRegistration_pb").GetNodeRegistrationsResponse.AsObject>;
         get: (params: import("./Node").NodeParams) => Promise<import("../grpc/model/nodeRegistration_pb").GetNodeRegistrationResponse.AsObject>;
+        getPending: (limit: number, childSeed: import("bip32").BIP32Interface) => import("rxjs").Observable<import("../grpc/model/nodeRegistration_pb").GetPendingNodeRegistrationsResponse.AsObject>;
     };
     Poown: {
         request: (auth: string, networkIp: string) => Promise<Buffer>;
