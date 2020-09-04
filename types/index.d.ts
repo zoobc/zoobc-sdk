@@ -8,7 +8,7 @@ export { NodeListParams, NodeParams, NodeHardwareResponse, GenerateNodeKeyRespon
 export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
 export { TransactionListParams, TransactionsResponse, TransactionResponse, PostTransactionResponses, TransactionMinimumFeeResponse, } from './Transactions';
 export { BlocksResponse, BlockResponse } from './Block';
-export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, MultisigPostTransactionResponse, } from './MultiSignature';
+export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, MultisigPostTransactionResponse, GetMultisigAddressResponse, } from './MultiSignature';
 export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
 export { AccountDatasetListParams, AccountDatasetsResponse, AccountDatasetResponse, SetupDatasetResponse, RemoveAccountDatasetResponse, } from './AccountDataset';
 export { HostInterface } from './Network';
@@ -97,6 +97,7 @@ declare const zoobc: {
         generateMultiSigInfo: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigAddress) => Buffer;
         getMultisigInfo: (params: import("./MultiSignature").MultisigInfoParams) => Promise<import("../grpc/model/multiSignature_pb").GetMultisignatureInfoResponse.AsObject>;
         postTransaction: (data: import("./helper/transaction-builder/multisignature").MultiSigInterface, childSeed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
+        getMultisigAddress: (participantsAddress: string) => Promise<import("../grpc/model/multiSignature_pb").GetMultisigAddressByParticipantAddressResponse.AsObject>;
     };
     AccountDataset: {
         getList: typeof import("./AccountDataset").getList;

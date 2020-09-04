@@ -32,6 +32,7 @@ const commonjsPulgin = () => {
         'GetPendingTransactionDetailByTransactionHashRequest',
         'GetMultisignatureInfoRequest',
         'PendingTransactionStatus',
+        'GetMultisigAddressByParticipantAddressRequest'
       ],
       './grpc/model/accountDataset_pb.js': ['GetAccountDatasetsRequest', 'GetAccountDatasetRequest', 'AccountDatasetProperty'],
       './grpc/model/accountLedger_pb.js': ['GetAccountLedgersRequest'],

@@ -9,6 +9,8 @@ import {
   GetPendingTransactionDetailByTransactionHashRequest,
   GetMultisignatureInfoResponse,
   GetMultisignatureInfoRequest,
+  GetMultisigAddressByParticipantAddressRequest,
+  GetMultisigAddressByParticipantAddressResponse,
 } from '../grpc/model/multiSignature_pb';
 import { MultisigServiceClient } from '../grpc/service/multiSignature_pb_service';
 import { MultiSigInterface, multisignatureBuilder, MultiSigAddress } from './helper/transaction-builder/multisignature';
@@ -20,6 +22,7 @@ export type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
 export type MultisigInfoResponse = GetMultisignatureInfoResponse.AsObject;
 export type MultisigPostTransactionResponse = PostTransactionResponse.AsObject;
+export type GetMultisigAddressResponse = GetMultisigAddressByParticipantAddressResponse.AsObject;
 
 export interface MultisigPendingListParams {
   address?: string;
@@ -154,4 +157,28 @@ function postTransaction(data: MultiSigInterface, childSeed: BIP32Interface): Pr
   });
 }
 
-export default { getPendingByTxHash, getPendingList, createMultiSigAddress, generateMultiSigInfo, getMultisigInfo, postTransaction };
+function getMultisigAddress(participantsAddress: string): Promise<GetMultisigAddressResponse> {
+  return new Promise((resolve, reject) => {
+    const request = new GetMultisigAddressByParticipantAddressRequest();
+    request.setParticipantaddress(participantsAddress);
+    const networkIP = Network.selected();
+    const client = new MultisigServiceClient(networkIP.host);
+    client.getMultisigAddressByParticipantAddress(request, (err, res) => {
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
+      if (res) resolve(res.toObject());
+    });
+  });
+}
+
+export default {
+  getPendingByTxHash,
+  getPendingList,
+  createMultiSigAddress,
+  generateMultiSigInfo,
+  getMultisigInfo,
+  postTransaction,
+  getMultisigAddress,
+};
