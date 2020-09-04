@@ -16027,6 +16027,7 @@ var nodeRegistration_pb_1 = nodeRegistration_pb.GetNodeRegistrationRequest;
 var nodeRegistration_pb_2 = nodeRegistration_pb.GetNodeRegistrationsRequest;
 var nodeRegistration_pb_3 = nodeRegistration_pb.NodeAddress;
 var nodeRegistration_pb_4 = nodeRegistration_pb.NodeRegistrationState;
+var nodeRegistration_pb_5 = nodeRegistration_pb.GetPendingNodeRegistrationsRequest;
 
 var escrow_pb = createCommonjsModule(function (module, exports) {
 // source: model/escrow.proto
@@ -42889,6 +42890,24 @@ function claim(data, childSeed) {
             .catch(function (err) { return reject(err); });
     });
 }
+function getPending(limit, childSeed) {
+    return new Observable(function (observer) {
+        var auth = Poown.createAuth(auth_pb_1.GETPENDINGNODEREGISTRATIONSSTREAM, childSeed);
+        var request = new nodeRegistration_pb_5();
+        request.setLimit(limit);
+        var networkIP = Network$1.selected();
+        var client = new NodeRegistrationServiceClient_1(networkIP.host)
+            .getPendingNodeRegistrations(new grpc$f.Metadata({ authorization: auth }))
+            .write(request)
+            .on('data', function (message) {
+            observer.next(message.toObject());
+        })
+            .on('end', function (status) {
+            observer.error(status);
+        });
+        client.end();
+    });
+}
 var Node = {
     register: register,
     update: update,
@@ -42898,6 +42917,7 @@ var Node = {
     generateNodeKey: generateNodeKey,
     getList: getList$2,
     get: get$2,
+    getPending: getPending,
 };
 
 var TRANSACTION_TYPE$5 = new Buffer([4, 0, 0, 0]);
