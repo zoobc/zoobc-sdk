@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import GetPublicKey from './GetPublicKey'
 import zoobc from '../../../';
 import './app.css';
+import SignSendMoney from './SignSendMoney';
 
 
 const App = () => {
@@ -49,50 +51,53 @@ const App = () => {
       })
   }
 
-  return (
-    <>
-      {!!error && (
-        <>
-          <div><strong>Error</strong></div>
-          <code>{JSON.stringify(error)}</code>
-        </>
-      )}{!!detail && (
-        <>
-          <div><strong>Detail</strong></div>
-          <code>{JSON.stringify(detail)}</code>
-        </>
-      )}
-        <table>
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>Previous Hash</th>
-              <th>Height</th>
-              <th>Timestamp</th>
-              <th>Version</th>
-            </tr>
-          </thead>
-          <tbody>
-            {blocks.length > 0 &&
-              blocks.map((data, key) => {
-                return (
-                  <tr key={key}>
-                    <td onClick={() => onClickBlockId(data.block.id)}>
-                      {data.block.id}
-                    </td>
-                    <td>{data.block.previousblockhash}</td>
-                    <td onClick={() => onClickBlockHeight(data.block.height)}>
-                      {data.block.height}
-                    </td>
-                    <td>{data.block.timestamp}</td>
-                    <td>{data.block.version}</td>
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
-      </>
-  )
+  return <SignSendMoney/>
+
+  // return (
+  //   <>
+  //   <GetPublicKey/>
+  //     {!!error && (
+  //       <>
+  //         <div><strong>Error</strong></div>
+  //         <code>{JSON.stringify(error)}</code>
+  //       </>
+  //     )}{!!detail && (
+  //       <>
+  //         <div><strong>Detail</strong></div>
+  //         <code>{JSON.stringify(detail)}</code>
+  //       </>
+  //     )}
+  //       {/* <table>
+  //         <thead>
+  //           <tr>
+  //             <th>Id</th>
+  //             <th>Previous Hash</th>
+  //             <th>Height</th>
+  //             <th>Timestamp</th>
+  //             <th>Version</th>
+  //           </tr>
+  //         </thead>
+  //         <tbody>
+  //           {blocks.length > 0 &&
+  //             blocks.map((data, key) => {
+  //               return (
+  //                 <tr key={key}>
+  //                   <td onClick={() => onClickBlockId(data.block.id)}>
+  //                     {data.block.id}
+  //                   </td>
+  //                   <td>{data.block.previousblockhash}</td>
+  //                   <td onClick={() => onClickBlockHeight(data.block.height)}>
+  //                     {data.block.height}
+  //                   </td>
+  //                   <td>{data.block.timestamp}</td>
+  //                   <td>{data.block.version}</td>
+  //                 </tr>
+  //               );
+  //             })}
+  //         </tbody>
+  //       </table> */}
+  //     </>
+  // )
 }
 
 export default App;

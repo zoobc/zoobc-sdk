@@ -47305,4 +47305,5 @@ exports.toGetPendingList = toGetPendingList;
 exports.toTransactionListWallet = toTransactionListWallet;
 exports.toUnconfirmTransactionNodeWallet = toUnconfirmTransactionNodeWallet;
 exports.toUnconfirmedSendMoneyWallet = toUnconfirmedSendMoneyWallet;
+exports.writeInt64 = writeInt64;
 //# sourceMappingURL=zoobc-sdk.development.js.map
