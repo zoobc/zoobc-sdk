@@ -43,12 +43,11 @@ const SignSendMoney = () => {
     const accountIdxBuffer = writeInt64(accountIndex).slice(0,4)
     const totalLength = txBytes.length + accountIdxBuffer.length
     const txByteLengthBuffer = writeInt64(totalLength).slice(0,4)
-    console.log('debug sign transaction:', bytesToHexes([...txByteLengthBuffer, ...accountIdxBuffer, ...txBytes]))
+    const data = [...txByteLengthBuffer, ...accountIdxBuffer, ...txBytes]
+    console.log('debug sign transaction:', bytesToHexes(data))
     const transport = await TransportWebUSB.create();
-    // 0e0000000000000068656c6c6f776f726c64
-    // const response = await transport.send(0x80, 0x04, 0x00, 0x00, new Buffer([0x0e,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x68,0x65,0x6c,0x6c,0x6f,0x77,0x6f,0x72,0x6c,0x64]))
-    // const response = await transport.send(0x80, 0x03, 0x00, 0x00, new Buffer([...txByteLengthBuffer, ...txBytes]))
-    // setSignature(bytesToHexes(response))
+    const response = await transport.exchange(new Buffer([0x80, 0x03, 0x00, 0x00, ...data]))
+    setSignature(bytesToHexes(response))
 
 
   }
