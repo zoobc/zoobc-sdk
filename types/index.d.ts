@@ -28,6 +28,7 @@ export { MultiSigInterface, signTransactionHash, MultiSigAddress, MultiSigInfo, 
 export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
 export { AccountBalanceResponse, AccountBalancesResponse } from './Account';
 export { HostInfoResponse } from './Host';
+export { ParticipationScoreResponse } from './ParticipationScore';
 export { AccountDatasetProperty } from '../grpc/model/accountDataset_pb';
 export { EscrowStatus, EscrowApproval } from '../grpc/model/escrow_pb';
 export { EventType } from '../grpc/model/event_pb';
@@ -110,6 +111,10 @@ declare const zoobc: {
     };
     NodeAddress: {
         getInfo: typeof import("./NodeAddress").getInfo;
+    };
+    ParticipationScore: {
+        getLatest: (nodeId: string) => Promise<import("../grpc/model/participationScore_pb").ParticipationScore.AsObject>;
+        getHistory: (fromHeight: number, toHeight: number) => Promise<import("../grpc/model/participationScore_pb").GetParticipationScoresResponse.AsObject>;
     };
 };
 export default zoobc;
