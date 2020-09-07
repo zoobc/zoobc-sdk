@@ -14,9 +14,19 @@ type ParticipationScoreServiceGetParticipationScores = {
   readonly responseType: typeof model_participationScore_pb.GetParticipationScoresResponse;
 };
 
+type ParticipationScoreServiceGetLatestParticipationScoreByNodeID = {
+  readonly methodName: string;
+  readonly service: typeof ParticipationScoreService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof model_participationScore_pb.GetLatestParticipationScoreByNodeIDRequest;
+  readonly responseType: typeof model_participationScore_pb.ParticipationScore;
+};
+
 export class ParticipationScoreService {
   static readonly serviceName: string;
   static readonly GetParticipationScores: ParticipationScoreServiceGetParticipationScores;
+  static readonly GetLatestParticipationScoreByNodeID: ParticipationScoreServiceGetLatestParticipationScoreByNodeID;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -59,6 +69,15 @@ export class ParticipationScoreServiceClient {
   getParticipationScores(
     requestMessage: model_participationScore_pb.GetParticipationScoresRequest,
     callback: (error: ServiceError|null, responseMessage: model_participationScore_pb.GetParticipationScoresResponse|null) => void
+  ): UnaryResponse;
+  getLatestParticipationScoreByNodeID(
+    requestMessage: model_participationScore_pb.GetLatestParticipationScoreByNodeIDRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: model_participationScore_pb.ParticipationScore|null) => void
+  ): UnaryResponse;
+  getLatestParticipationScoreByNodeID(
+    requestMessage: model_participationScore_pb.GetLatestParticipationScoreByNodeIDRequest,
+    callback: (error: ServiceError|null, responseMessage: model_participationScore_pb.ParticipationScore|null) => void
   ): UnaryResponse;
 }
 

@@ -38,13 +38,13 @@ MultisigService.GetMultisignatureInfo = {
   responseType: model_multiSignature_pb.GetMultisignatureInfoResponse
 };
 
-MultisigService.GetMultisigAddressByParticipantAddresses = {
-  methodName: "GetMultisigAddressByParticipantAddresses",
+MultisigService.GetMultisigAddressByParticipantAddress = {
+  methodName: "GetMultisigAddressByParticipantAddress",
   service: MultisigService,
   requestStream: false,
   responseStream: false,
-  requestType: model_multiSignature_pb.GetMultisigAddressByParticipantAddressesRequest,
-  responseType: model_multiSignature_pb.GetMultisigAddressByParticipantAddressesResponse
+  requestType: model_multiSignature_pb.GetMultisigAddressByParticipantAddressRequest,
+  responseType: model_multiSignature_pb.GetMultisigAddressByParticipantAddressResponse
 };
 
 exports.MultisigService = MultisigService;
@@ -147,11 +147,11 @@ MultisigServiceClient.prototype.getMultisignatureInfo = function getMultisignatu
   };
 };
 
-MultisigServiceClient.prototype.getMultisigAddressByParticipantAddresses = function getMultisigAddressByParticipantAddresses(requestMessage, metadata, callback) {
+MultisigServiceClient.prototype.getMultisigAddressByParticipantAddress = function getMultisigAddressByParticipantAddress(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
     callback = arguments[1];
   }
-  var client = grpc.unary(MultisigService.GetMultisigAddressByParticipantAddresses, {
+  var client = grpc.unary(MultisigService.GetMultisigAddressByParticipantAddress, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,
