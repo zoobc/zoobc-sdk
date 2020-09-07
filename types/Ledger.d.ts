@@ -1,5 +1,5 @@
 /// <reference types="node" />
-import type Transport from "@ledgerhq/hw-transport";
+import Transport from '@ledgerhq/hw-transport';
 export declare class Ledger {
     private transport;
     constructor(transport: Transport<any>);
