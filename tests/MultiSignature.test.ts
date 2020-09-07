@@ -1,3 +1,4 @@
+import 'mocha';
 import zoobc, { MultiSigInterface, ZooKeyring } from '../src';
 import { expect } from 'chai';
 import { MultisigPendingListParams, MultisigInfoParams } from '../src/MultiSignature';
@@ -5,6 +6,8 @@ import {
   GetPendingTransactionsResponse,
   GetPendingTransactionDetailByTransactionHashResponse,
   GetMultisignatureInfoResponse,
+  GetMultisigAddressByParticipantAddressResponse,
+  GetMultisigAddressByParticipantAddressRequest,
 } from '../grpc/model/multiSignature_pb';
 import { FakeTransportBuilder } from '@improbable-eng/grpc-web-fake-transport';
 import { grpc } from '@improbable-eng/grpc-web';
@@ -68,6 +71,15 @@ function mockRegister(data: MultiSigInterface) {
   transaction.setTransactionbodybytes(bytes);
   response.setTransaction(transaction);
 
+  return new FakeTransportBuilder().withMessages([response]).build();
+}
+
+function mockGetMultisignatureAddresses(participantAddresse: string) {
+  const response = new GetMultisigAddressByParticipantAddressResponse();
+  const request = new GetMultisigAddressByParticipantAddressRequest();
+  request.setParticipantaddress(participantAddresse);
+  response.setTotal(1);
+  response.getMultisignaddressesList();
   return new FakeTransportBuilder().withMessages([response]).build();
 }
 
@@ -152,6 +164,20 @@ describe('MultiSignature Unit Testing: ', () => {
 
       const result = await zoobc.MultiSignature.postTransaction(data, childSeed);
       expect(result).to.be.an('object');
+    });
+  });
+
+  describe('Get Multisignature Address', () => {
+    it('should return new multisignature address object', async () => {
+      const addresses = 'ZBC_F5YUYDXD_WFDJSAV5_K3Y72RCM_GLQP32XI_QDVXOGGD_J7CGSSSK_5VKR7YML';
+
+      const transport = mockGetMultisignatureAddresses(addresses);
+      grpc.setDefaultTransport(transport);
+
+      const result = await zoobc.MultiSignature.getMultisigAddress(addresses);
+      expect(result).to.be.an('object');
+      expect(result.multisignaddressesList).to.be.an('array');
+      expect(result.total).to.be.a('number');
     });
   });
 });

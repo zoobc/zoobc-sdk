@@ -32,13 +32,13 @@ type MultisigServiceGetMultisignatureInfo = {
   readonly responseType: typeof model_multiSignature_pb.GetMultisignatureInfoResponse;
 };
 
-type MultisigServiceGetMultisigAddressByParticipantAddresses = {
+type MultisigServiceGetMultisigAddressByParticipantAddress = {
   readonly methodName: string;
   readonly service: typeof MultisigService;
   readonly requestStream: false;
   readonly responseStream: false;
-  readonly requestType: typeof model_multiSignature_pb.GetMultisigAddressByParticipantAddressesRequest;
-  readonly responseType: typeof model_multiSignature_pb.GetMultisigAddressByParticipantAddressesResponse;
+  readonly requestType: typeof model_multiSignature_pb.GetMultisigAddressByParticipantAddressRequest;
+  readonly responseType: typeof model_multiSignature_pb.GetMultisigAddressByParticipantAddressResponse;
 };
 
 export class MultisigService {
@@ -46,7 +46,7 @@ export class MultisigService {
   static readonly GetPendingTransactions: MultisigServiceGetPendingTransactions;
   static readonly GetPendingTransactionDetailByTransactionHash: MultisigServiceGetPendingTransactionDetailByTransactionHash;
   static readonly GetMultisignatureInfo: MultisigServiceGetMultisignatureInfo;
-  static readonly GetMultisigAddressByParticipantAddresses: MultisigServiceGetMultisigAddressByParticipantAddresses;
+  static readonly GetMultisigAddressByParticipantAddress: MultisigServiceGetMultisigAddressByParticipantAddress;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -108,14 +108,14 @@ export class MultisigServiceClient {
     requestMessage: model_multiSignature_pb.GetMultisignatureInfoRequest,
     callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisignatureInfoResponse|null) => void
   ): UnaryResponse;
-  getMultisigAddressByParticipantAddresses(
-    requestMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressesRequest,
+  getMultisigAddressByParticipantAddress(
+    requestMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressRequest,
     metadata: grpc.Metadata,
-    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressesResponse|null) => void
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressResponse|null) => void
   ): UnaryResponse;
-  getMultisigAddressByParticipantAddresses(
-    requestMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressesRequest,
-    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressesResponse|null) => void
+  getMultisigAddressByParticipantAddress(
+    requestMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressRequest,
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressResponse|null) => void
   ): UnaryResponse;
 }
 
