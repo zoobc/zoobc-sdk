@@ -14,6 +14,7 @@ import AccountLedger from './AccountLedger';
 import NodeAddress from './NodeAddress';
 
 export { ZooKeyring } from './Keyring';
+export { Ledger } from './Ledger';
 export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
 

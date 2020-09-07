@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 
-import { getZBCAddress, sendMoneyBuilder, writeInt64, ZooKeyring } from '../../../';
+import { getZBCAddress, sendMoneyBuilder, writeInt32, ZooKeyring, Ledger } from '../../../';
 
 const bytesToHexes = (byteArr) => {
   const a = []
@@ -11,6 +11,7 @@ const bytesToHexes = (byteArr) => {
 
 const SignSendMoney = () => {
   const [accountIndex, setAccountIndex] = useState("")
+  const [walletPublicKey, setWalletPublicKey] = useState("")
   const [publicKey, setPublicKey] = useState("")
   const [recipient, setRecipient] = useState("")
   const [amount, setAmount] = useState("")
@@ -18,67 +19,78 @@ const SignSendMoney = () => {
   const [signature, setSignature] = useState("")
   const [walletSignature, setWalletSignature] = useState("")
 
+  const resetDisplay = (isKeepPublicKey)=>{
+    if (!isKeepPublicKey){
+      setWalletPublicKey('')
+      setPublicKey('')
+    }
+    setSignature('')
+    setWalletSignature('')
+  }
+
   // ======================================================================================================================================
   // Ledger communication
   // ======================================================================================================================================
-  const getPublicKey = async ()=> {
-    if (accountIndex === "" ||  parseInt(accountIndex) === NaN) return
-    const bufferIdx = writeInt64(accountIndex).slice(0,4)
-    console.log('debug account idx', bufferIdx)
-    const transport = await TransportWebUSB.create();
-    const response = await transport.send(0x80, 0x2, 0x00, 0x00, new Buffer([0x4,0x0,0x0,0x0, ...bufferIdx]))
+  const getPublicKeyWithSDK = async ()=> {
+    const accountIdxInt = parseInt(accountIndex)
+    if (accountIndex === "" ||  accountIdxInt == NaN) return
+
+    // get public key with SDK
+    const seed = "very tooth oxygen lucky fat wolf demise arrest video squeeze hybrid sock siege galaxy remain radar panda loyal culture virus goose dolphin learn throw"
+    const zooKeyring = new ZooKeyring(seed, "");
+    const childSeed = zooKeyring.calcDerivationPath(accountIdxInt);
+    const walletPublicKeyBytes = childSeed.publicKey
+    setWalletPublicKey(getZBCAddress(walletPublicKeyBytes))
+
+    // get public key with Ledger
+    const transport = await Ledger.getUSBTransport()
+    const ledgerCommunication = new Ledger(transport)
+    const response = await ledgerCommunication.getPublicKey(accountIdxInt)
     setPublicKey(getZBCAddress(response))
   }
 
   const signTransaction = async (txBytes) => {
-    if (!txBytes || txBytes.length === 0) return
+    const accountIdxInt = parseInt(accountIndex)
+    if (!txBytes || txBytes.length === 0 || accountIdxInt == NaN) return
 
     // signing with keyring
     const seed = "very tooth oxygen lucky fat wolf demise arrest video squeeze hybrid sock siege galaxy remain radar panda loyal culture virus goose dolphin learn throw"
     const zooKeyring = new ZooKeyring(seed, "");
-    const childSeed = zooKeyring.calcDerivationPath(0);
+    const childSeed = zooKeyring.calcDerivationPath(accountIdxInt);
     const walletSignature = childSeed.sign(txBytes)
     setWalletSignature(bytesToHexes(walletSignature))
 
-    const accountIdxBuffer = writeInt64(accountIndex).slice(0,4)
-    const totalLength = txBytes.length + accountIdxBuffer.length
-    const txByteLengthBuffer = writeInt64(totalLength).slice(0,4)
-    const data = [...txByteLengthBuffer, ...accountIdxBuffer, ...txBytes]
-    console.log('debug sign transaction:', bytesToHexes(data))
-    const transport = await TransportWebUSB.create();
-    const response = await transport.exchange(new Buffer([0x80, 0x03, 0x00, 0x00, ...data]))
+    // signing with Ledger
+    setSignature('--Accept the signing in the ledger first--')
+    const transport = await Ledger.getUSBTransport()
+    const ledgerCommunication = new Ledger(transport)
+    const response = await ledgerCommunication.signTransactionBytes(accountIdxInt, txBytes)
     setSignature(bytesToHexes(response))
-
-
   }
   // ======================================================================================================================================
 
-
-  // return <><button onClick={getPublicKey}>Get Public Key</button><div>publicKey: {publicKey &&publicKey.toString('hex').slice(0,-4)}</div></>
-
-
   const handleChangeAccountIndex = ({target: {value} = {}, key} = {}) =>{
     if (key === 'Enter') {
-      getPublicKey()
+      getPublicKeyWithSDK()
+      return
     }
     setAccountIndex(value)
-    setPublicKey('')
-    setSignature('')
+    resetDisplay()
   }
 
   const handleChangeRecipient = ({target: {value} = {}} = {}) =>{
     setRecipient(value)
-    setSignature('')
+    resetDisplay(true)
   }
 
   const handleChangeAmount = ({target: {value} = {}} = {}) =>{
     setAmount(value)
-    setSignature('')
+    resetDisplay(true)
   }
 
   const handleChangeFee = ({target: {value} = {}} = {}) =>{
     setFee(value)
-    setSignature('')
+    resetDisplay(true)
   }
 
   const buildTransaction = () =>{
@@ -102,10 +114,14 @@ const SignSendMoney = () => {
         onKeyDown={handleChangeAccountIndex}
         value={accountIndex}/>
         <br/>
-        <button onClick={getPublicKey}>Get Corresponding Public Key</button>
+        <button onClick={getPublicKeyWithSDK}>Get Corresponding Public Key</button>
       </div>
       <div>
-        <h4>Public Key:</h4>
+        <h4>Wallet/SDK Public Key:</h4>
+        <p>{walletPublicKey || '--'}</p>
+      </div>
+      <div>
+        <h4>Ledger Public Key:</h4>
         <p>{publicKey || '--'}</p>
       </div>
       <div>
@@ -127,7 +143,7 @@ const SignSendMoney = () => {
         </button>
       </div>
       <div>
-        <h4>Wallet Signature:</h4>
+        <h4>Wallet/SDK Signature:</h4>
         <p>{walletSignature || '--'}</p>
       </div>
       <div>

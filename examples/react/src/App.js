@@ -1,103 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import GetPublicKey from './GetPublicKey'
+import React, { useState } from 'react';
 import zoobc from '../../../';
-import './app.css';
+
 import SignSendMoney from './SignSendMoney';
+import BlockList from './BlockList';
+import './app.css';
 
 
 const App = () => {
-  const [blocks, setBlocks] = useState([])
-  const [error, setError] = useState(null)
-  const [detail, setDetail] = useState(null)
+  const [appState, setAppState] = useState(0)
 
-  useEffect(() => {
-    const hosts = [
-      { host: 'http://85.90.246.90:8002', name: '168 Testnet' },
-    ];
-    zoobc.Network.list(hosts)
-    listBlocks();
-  }, [])
-
-  const listBlocks = () => {
-    zoobc.Block
-      .getBlocks({height: 0})
-      .then(res => setBlocks(res.blocksList))
-      .catch(err => setError(err))
-  };
-
-  const onClickBlockId = (id) => {
-    zoobc.Block
-      .getBlockById(id)
-      .then(res => {
-        setDetail(res)
-        setError(null)
-      })
-      .catch(err => {
-        setError(err)
-        setDetail(null)
-      })
+  let appContent = null
+  switch(appState){
+    case 1:
+      appContent =  <BlockList/>
+      break
+    case 2:
+      appContent = <SignSendMoney/>
+      break
+    default:
+      appContent = null
   }
 
-  const onClickBlockHeight = (height) => {
-    zoobc.Block
-      .getBlockByHeight(height)
-      .then(res => {
-        setDetail(res)
-        setError(null)
-      })
-      .catch(err => {
-        setError(err)
-        setDetail(null)
-      })
-  }
-
-  return <SignSendMoney/>
-
-  // return (
-  //   <>
-  //   <GetPublicKey/>
-  //     {!!error && (
-  //       <>
-  //         <div><strong>Error</strong></div>
-  //         <code>{JSON.stringify(error)}</code>
-  //       </>
-  //     )}{!!detail && (
-  //       <>
-  //         <div><strong>Detail</strong></div>
-  //         <code>{JSON.stringify(detail)}</code>
-  //       </>
-  //     )}
-  //       {/* <table>
-  //         <thead>
-  //           <tr>
-  //             <th>Id</th>
-  //             <th>Previous Hash</th>
-  //             <th>Height</th>
-  //             <th>Timestamp</th>
-  //             <th>Version</th>
-  //           </tr>
-  //         </thead>
-  //         <tbody>
-  //           {blocks.length > 0 &&
-  //             blocks.map((data, key) => {
-  //               return (
-  //                 <tr key={key}>
-  //                   <td onClick={() => onClickBlockId(data.block.id)}>
-  //                     {data.block.id}
-  //                   </td>
-  //                   <td>{data.block.previousblockhash}</td>
-  //                   <td onClick={() => onClickBlockHeight(data.block.height)}>
-  //                     {data.block.height}
-  //                   </td>
-  //                   <td>{data.block.timestamp}</td>
-  //                   <td>{data.block.version}</td>
-  //                 </tr>
-  //               );
-  //             })}
-  //         </tbody>
-  //       </table> */}
-  //     </>
-  // )
+  return (
+    <div>
+      <div>Sample Apps:</div>
+      <ul>
+        <li onClick={()=>setAppState(1)}><a href="#BlockList">BlockList</a></li>
+        <li onClick={()=>setAppState(2)}><a href="#SignSendMoney">SignSendMoney</a></li>
+      </ul>
+      {appContent}
+    </div>
+  )
 }
 
 export default App;
