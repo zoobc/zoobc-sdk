@@ -1,5 +1,6 @@
 /// <reference types="node" />
 export { ZooKeyring } from './Keyring';
+export { Ledger } from './Ledger';
 export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
 export { Subscription } from 'rxjs';
