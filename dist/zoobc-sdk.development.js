@@ -45767,7 +45767,7 @@ function getList$5(params) {
                 request.setTimestampend(timeStampEnd);
             if (pagination) {
                 var reqPagination = new pagination_pb_1();
-                reqPagination.setOrderfield(pagination.orderField || '');
+                reqPagination.setOrderfield(pagination.orderField || 'timestamp');
                 reqPagination.setLimit(pagination.limit || 10);
                 reqPagination.setPage(pagination.page || 1);
                 reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);

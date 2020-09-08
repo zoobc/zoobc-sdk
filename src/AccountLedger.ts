@@ -32,7 +32,7 @@ export function getList(params?: AccountLedgerListParams): Promise<AccountLedger
       if (timeStampEnd) request.setTimestampend(timeStampEnd);
       if (pagination) {
         const reqPagination = new Pagination();
-        reqPagination.setOrderfield(pagination.orderField || '');
+        reqPagination.setOrderfield(pagination.orderField || 'timestamp');
         reqPagination.setLimit(pagination.limit || 10);
         reqPagination.setPage(pagination.page || 1);
         reqPagination.setOrderby(pagination.orderBy || OrderBy.DESC);
