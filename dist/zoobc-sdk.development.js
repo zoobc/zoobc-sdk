@@ -27788,19 +27788,25 @@ var TransactionServiceClient_1 = TransactionServiceClient;
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
 function getZBCAddress(publicKey, prefix = 'ZBC') {
-    const bytes = Buffer.alloc(35);
-    for (let i = 0; i < 32; i++)
-        bytes[i] = publicKey[i];
-    for (let i = 0; i < 3; i++)
-        bytes[i + 32] = prefix.charCodeAt(i);
-    const checksum = hash(bytes);
-    for (let i = 0; i < 3; i++)
-        bytes[i + 32] = Number(checksum[i]);
-    const segs = [prefix];
-    const b32 = B32Enc(bytes, 'RFC4648');
-    for (let i = 0; i < 7; i++)
-        segs.push(b32.substr(i * 8, 8));
-    return segs.join('_');
+    const valid = prefix.includes('ZBC'   );
+    if (valid) {
+        const bytes = Buffer.alloc(35);
+        for (let i = 0; i < 32; i++)
+            bytes[i] = publicKey[i];
+        for (let i = 0; i < 3; i++)
+            bytes[i + 32] = prefix.charCodeAt(i);
+        const checksum = hash(bytes);
+        for (let i = 0; i < 3; i++)
+            bytes[i + 32] = Number(checksum[i]);
+        const segs = [prefix];
+        const b32 = B32Enc(bytes, 'RFC4648');
+        for (let i = 0; i < 7; i++)
+            segs.push(b32.substr(i * 8, 8));
+        return segs.join('_');
+    }
+    else {
+        throw new Error('The Prefix not available!');
+    }
 }
 function hash(str, format = 'buffer') {
     const h = new SHA3(256);
