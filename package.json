@@ -60,6 +60,7 @@
     "google-protobuf": "^3.11.4",
     "grpc-web": "^1.0.5",
     "js-sha3": "^0.8.0",
+    "mock-require": "^3.0.3",
     "rxjs": "^6.5.4",
     "sha3": "^2.1.2",
     "stream": "^0.0.2",

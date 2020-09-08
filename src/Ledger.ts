@@ -17,6 +17,10 @@ export class Ledger {
     return TransportWebUSB.create();
   }
 
+  getTransportInstance(): Transport<any> {
+    return this.transport;
+  }
+
   async getPublicKey(accountIndex: number): Promise<Buffer> {
     if (!this.transport) {
       throw Error('transport is not set');
