@@ -4,8 +4,7 @@ import { PBKDF2, AES, enc } from 'crypto-js';
 import SHA3 from 'sha3';
 import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
-import BigNumber from 'bignumber.js';
-import BN from 'bn.js';
+import { Int64LE } from 'int64-buffer';
 import { Observable } from 'rxjs';
 export { Subscription } from 'rxjs';
 import { sha3_256 } from 'js-sha3';
@@ -28109,30 +28108,12 @@ function ZBCAddressToBytes(address) {
 }
 function writeInt64(number, base, endian) {
     number = number.toString();
-    var bn = new BN(number, base, endian);
-    var buffer = bn.toArrayLike(Buffer, 'le', 8);
-    if (number[0] == '-') {
-        var array = buffer.map(function (b, i) {
-            if (i == 0)
-                b = Math.abs(b - 256);
-            else
-                b = Math.abs(b - 255);
-            return b;
-        });
-        buffer = new Buffer(array);
-    }
-    return buffer;
+    var buffer = new Int64LE(number);
+    return buffer.toBuffer();
 }
 function readInt64(buff, offset) {
-    var buff1 = buff.readUInt32LE(offset);
-    var buff2 = buff.readUInt32LE(offset + 4);
-    var plus = new BigNumber(buff1).plus(new BigNumber(buff2).times(0x100000000));
-    var minus = new BigNumber(~buff2 >>> 0).times(0x100000000).plus(new BigNumber((~buff1 >>> 0) + 1));
-    var resPlus = plus.toString();
-    var resMinus = '-' + minus.toString();
-    if (!(buff2 & 0x80000000))
-        return resPlus;
-    return resMinus;
+    var buffer = buff.slice(offset, offset + 8);
+    return new Int64LE(buffer) + '';
 }
 function writeInt32(number) {
     var byte = new Buffer(4);
