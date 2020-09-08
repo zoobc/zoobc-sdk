@@ -13,6 +13,8 @@ import {
   GetNodeRegistrationResponse,
   GetNodeRegistrationsResponse,
   GetNodeRegistrationsRequest,
+  GetPendingNodeRegistrationsRequest,
+  GetPendingNodeRegistrationsResponse,
 } from '../grpc/model/nodeRegistration_pb';
 import { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
 import { UpdateNodeInterface, updateNodeBuilder } from './helper/transaction-builder/update-node';
@@ -27,6 +29,7 @@ export type NodeHardwareResponse = GetNodeHardwareResponse.AsObject;
 export type GenerateNodeKeyResponses = GenerateNodeKeyResponse.AsObject;
 export type NodeRegistrationsResponse = GetNodeRegistrationResponse.AsObject;
 export type NodePostTransactionResponse = PostTransactionResponse.AsObject;
+export type GetPendingNodeRegistrationResponse = GetPendingNodeRegistrationsResponse.AsObject;
 
 export interface NodeListParams {
   minHeight?: number;
@@ -224,6 +227,25 @@ function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<Nod
   });
 }
 
+function getPending(limit: number, childSeed: BIP32Interface): Observable<GetPendingNodeRegistrationResponse> {
+  return new Observable(observer => {
+    const auth = Poown.createAuth(RequestType.GETPENDINGNODEREGISTRATIONSSTREAM, childSeed);
+    const request = new GetPendingNodeRegistrationsRequest();
+    request.setLimit(limit);
+    const networkIP = Network.selected();
+    const client = new NodeRegistrationServiceClient(networkIP.host)
+      .getPendingNodeRegistrations(new grpc.Metadata({ authorization: auth }))
+      .write(request)
+      .on('data', message => {
+        observer.next(message.toObject());
+      })
+      .on('end', status => {
+        observer.error(status);
+      });
+    client.end();
+  });
+}
+
 export default {
   register,
   update,
@@ -233,4 +255,5 @@ export default {
   generateNodeKey,
   getList,
   get,
+  getPending,
 };

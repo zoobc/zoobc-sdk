@@ -164,5 +164,79 @@ proto.service.ParticipationScoreServicePromiseClient.prototype.getParticipationS
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.model.GetLatestParticipationScoreByNodeIDRequest,
+ *   !proto.model.ParticipationScore>}
+ */
+const methodDescriptor_ParticipationScoreService_GetLatestParticipationScoreByNodeID = new grpc.web.MethodDescriptor(
+  '/service.ParticipationScoreService/GetLatestParticipationScoreByNodeID',
+  grpc.web.MethodType.UNARY,
+  model_participationScore_pb.GetLatestParticipationScoreByNodeIDRequest,
+  model_participationScore_pb.ParticipationScore,
+  /** @param {!proto.model.GetLatestParticipationScoreByNodeIDRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_participationScore_pb.ParticipationScore.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.model.GetLatestParticipationScoreByNodeIDRequest,
+ *   !proto.model.ParticipationScore>}
+ */
+const methodInfo_ParticipationScoreService_GetLatestParticipationScoreByNodeID = new grpc.web.AbstractClientBase.MethodInfo(
+  model_participationScore_pb.ParticipationScore,
+  /** @param {!proto.model.GetLatestParticipationScoreByNodeIDRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_participationScore_pb.ParticipationScore.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.model.GetLatestParticipationScoreByNodeIDRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.model.ParticipationScore)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.model.ParticipationScore>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.service.ParticipationScoreServiceClient.prototype.getLatestParticipationScoreByNodeID =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/service.ParticipationScoreService/GetLatestParticipationScoreByNodeID',
+      request,
+      metadata || {},
+      methodDescriptor_ParticipationScoreService_GetLatestParticipationScoreByNodeID,
+      callback);
+};
+
+
+/**
+ * @param {!proto.model.GetLatestParticipationScoreByNodeIDRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.model.ParticipationScore>}
+ *     A native promise that resolves to the response
+ */
+proto.service.ParticipationScoreServicePromiseClient.prototype.getLatestParticipationScoreByNodeID =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/service.ParticipationScoreService/GetLatestParticipationScoreByNodeID',
+      request,
+      metadata || {},
+      methodDescriptor_ParticipationScoreService_GetLatestParticipationScoreByNodeID);
+};
+
+
 module.exports = proto.service;
 

@@ -7,7 +7,7 @@ export type AccountLedgersResponse = GetAccountLedgersResponse.AsObject;
 
 export interface AccountLedgerListParams {
   accountAddress?: string;
-  eventType?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+  eventType?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15;
   transactionId?: string;
   timeStampStart?: number;
   timeStampEnd?: number;

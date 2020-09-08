@@ -12,6 +12,7 @@ import MultiSignature from './MultiSignature';
 import AccountDataset from './AccountDataset';
 import AccountLedger from './AccountLedger';
 import NodeAddress from './NodeAddress';
+import ParticipationScore from './ParticipationScore';
 
 export { ZooKeyring } from './Keyring';
 export { BIP32Interface } from 'bip32';
@@ -28,6 +29,7 @@ export {
   GenerateNodeKeyResponses,
   NodeRegistrationsResponse,
   NodePostTransactionResponse,
+  GetPendingNodeRegistrationResponse,
 } from './Node';
 export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
 export {
@@ -45,6 +47,7 @@ export {
   MultisigPendingTxDetailResponse,
   MultisigInfoResponse,
   MultisigPostTransactionResponse,
+  GetMultisigAddressResponse,
 } from './MultiSignature';
 export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
 export {
@@ -64,7 +67,7 @@ export { EscrowApprovalInterface } from './helper/transaction-builder/escrow-tra
 export { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
 export { RemoveDatasetInterface } from './helper/transaction-builder/remove-account-dataset';
 export { SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
-export { getZBCAdress, isZBCAddressValid, ZBCAddressToBytes, readInt64 } from './helper/utils';
+export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64 } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
 export { bufferToBase64 } from './helper/converters';
@@ -78,6 +81,7 @@ export {
 export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
 export { AccountBalanceResponse, AccountBalancesResponse } from './Account';
 export { HostInfoResponse } from './Host';
+export { ParticipationScoreResponse } from './ParticipationScore';
 // Export type
 export { AccountDatasetProperty } from '../grpc/model/accountDataset_pb';
 export { EscrowStatus, EscrowApproval } from '../grpc/model/escrow_pb';
@@ -105,6 +109,7 @@ const zoobc = {
   AccountDataset,
   AccountLedger,
   NodeAddress,
+  ParticipationScore,
 };
 
 export default zoobc;

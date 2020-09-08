@@ -4,11 +4,11 @@ export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
 export { Subscription } from 'rxjs';
 export { EscrowListParams, EscrowTransactionsResponse, EscrowTransactionResponse, ApprovalEscrowTransactionResponse } from './Escrows';
-export { NodeListParams, NodeParams, NodeHardwareResponse, GenerateNodeKeyResponses, NodeRegistrationsResponse, NodePostTransactionResponse, } from './Node';
+export { NodeListParams, NodeParams, NodeHardwareResponse, GenerateNodeKeyResponses, NodeRegistrationsResponse, NodePostTransactionResponse, GetPendingNodeRegistrationResponse, } from './Node';
 export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
 export { TransactionListParams, TransactionsResponse, TransactionResponse, PostTransactionResponses, TransactionMinimumFeeResponse, } from './Transactions';
 export { BlocksResponse, BlockResponse } from './Block';
-export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, MultisigPostTransactionResponse, } from './MultiSignature';
+export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, MultisigPostTransactionResponse, GetMultisigAddressResponse, } from './MultiSignature';
 export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
 export { AccountDatasetListParams, AccountDatasetsResponse, AccountDatasetResponse, SetupDatasetResponse, RemoveAccountDatasetResponse, } from './AccountDataset';
 export { HostInterface } from './Network';
@@ -20,7 +20,7 @@ export { EscrowApprovalInterface } from './helper/transaction-builder/escrow-tra
 export { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
 export { RemoveDatasetInterface } from './helper/transaction-builder/remove-account-dataset';
 export { SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
-export { getZBCAdress, isZBCAddressValid, ZBCAddressToBytes, readInt64 } from './helper/utils';
+export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64 } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
 export { bufferToBase64 } from './helper/converters';
@@ -28,6 +28,7 @@ export { MultiSigInterface, signTransactionHash, MultiSigAddress, MultiSigInfo, 
 export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
 export { AccountBalanceResponse, AccountBalancesResponse } from './Account';
 export { HostInfoResponse } from './Host';
+export { ParticipationScoreResponse } from './ParticipationScore';
 export { AccountDatasetProperty } from '../grpc/model/accountDataset_pb';
 export { EscrowStatus, EscrowApproval } from '../grpc/model/escrow_pb';
 export { EventType } from '../grpc/model/event_pb';
@@ -70,6 +71,7 @@ declare const zoobc: {
         generateNodeKey: (networkIP: string, childSeed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/node_pb").GenerateNodeKeyResponse.AsObject>;
         getList: (params?: import("./Node").NodeListParams | undefined) => Promise<import("../grpc/model/nodeRegistration_pb").GetNodeRegistrationsResponse.AsObject>;
         get: (params: import("./Node").NodeParams) => Promise<import("../grpc/model/nodeRegistration_pb").GetNodeRegistrationResponse.AsObject>;
+        getPending: (limit: number, childSeed: import("bip32").BIP32Interface) => import("rxjs").Observable<import("../grpc/model/nodeRegistration_pb").GetPendingNodeRegistrationsResponse.AsObject>;
     };
     Poown: {
         request: (auth: string, networkIp: string) => Promise<Buffer>;
@@ -96,6 +98,7 @@ declare const zoobc: {
         generateMultiSigInfo: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigAddress) => Buffer;
         getMultisigInfo: (params: import("./MultiSignature").MultisigInfoParams) => Promise<import("../grpc/model/multiSignature_pb").GetMultisignatureInfoResponse.AsObject>;
         postTransaction: (data: import("./helper/transaction-builder/multisignature").MultiSigInterface, childSeed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
+        getMultisigAddress: (participantsAddress: string) => Promise<import("../grpc/model/multiSignature_pb").GetMultisigAddressByParticipantAddressResponse.AsObject>;
     };
     AccountDataset: {
         getList: typeof import("./AccountDataset").getList;
@@ -108,6 +111,10 @@ declare const zoobc: {
     };
     NodeAddress: {
         getInfo: typeof import("./NodeAddress").getInfo;
+    };
+    ParticipationScore: {
+        getLatest: (nodeId: string) => Promise<import("../grpc/model/participationScore_pb").ParticipationScore.AsObject>;
+        getHistory: (fromHeight: number, toHeight: number) => Promise<import("../grpc/model/participationScore_pb").GetParticipationScoresResponse.AsObject>;
     };
 };
 export default zoobc;

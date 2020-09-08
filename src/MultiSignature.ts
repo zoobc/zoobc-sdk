@@ -1,4 +1,4 @@
-import { writeInt32, getZBCAdress } from './helper/utils';
+import { writeInt32, getZBCAddress } from './helper/utils';
 import { sha3_256 } from 'js-sha3';
 import Network from './Network';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
@@ -9,6 +9,8 @@ import {
   GetPendingTransactionDetailByTransactionHashRequest,
   GetMultisignatureInfoResponse,
   GetMultisignatureInfoRequest,
+  GetMultisigAddressByParticipantAddressRequest,
+  GetMultisigAddressByParticipantAddressResponse,
 } from '../grpc/model/multiSignature_pb';
 import { MultisigServiceClient } from '../grpc/service/multiSignature_pb_service';
 import { MultiSigInterface, multisignatureBuilder, MultiSigAddress } from './helper/transaction-builder/multisignature';
@@ -20,6 +22,7 @@ export type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
 export type MultisigInfoResponse = GetMultisignatureInfoResponse.AsObject;
 export type MultisigPostTransactionResponse = PostTransactionResponse.AsObject;
+export type GetMultisigAddressResponse = GetMultisigAddressByParticipantAddressResponse.AsObject;
 
 export interface MultisigPendingListParams {
   address?: string;
@@ -62,7 +65,7 @@ function generateMultiSigInfo(multiSigAddress: MultiSigAddress): Buffer {
 function createMultiSigAddress(multiSigAddress: MultiSigAddress): string {
   const buffer = generateMultiSigInfo(multiSigAddress);
   const hashed = Buffer.from(sha3_256(buffer), 'hex');
-  return getZBCAdress(hashed);
+  return getZBCAddress(hashed);
 }
 
 function getPendingList(params: MultisigPendingListParams): Promise<MultisigPendingTxResponse> {
@@ -154,4 +157,28 @@ function postTransaction(data: MultiSigInterface, childSeed: BIP32Interface): Pr
   });
 }
 
-export default { getPendingByTxHash, getPendingList, createMultiSigAddress, generateMultiSigInfo, getMultisigInfo, postTransaction };
+function getMultisigAddress(participantsAddress: string): Promise<GetMultisigAddressResponse> {
+  return new Promise((resolve, reject) => {
+    const request = new GetMultisigAddressByParticipantAddressRequest();
+    request.setParticipantaddress(participantsAddress);
+    const networkIP = Network.selected();
+    const client = new MultisigServiceClient(networkIP.host);
+    client.getMultisigAddressByParticipantAddress(request, (err, res) => {
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
+      if (res) resolve(res.toObject());
+    });
+  });
+}
+
+export default {
+  getPendingByTxHash,
+  getPendingList,
+  createMultiSigAddress,
+  generateMultiSigInfo,
+  getMultisigInfo,
+  postTransaction,
+  getMultisigAddress,
+};
