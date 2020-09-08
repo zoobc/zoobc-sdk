@@ -10,6 +10,7 @@ export interface AccountLedgerListParams {
         limit?: number;
         page?: number;
         orderBy?: 0 | 1;
+        orderField?: string;
     };
 }
 export declare function getList(params?: AccountLedgerListParams): Promise<AccountLedgersResponse>;
