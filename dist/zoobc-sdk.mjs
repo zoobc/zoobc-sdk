@@ -11,6 +11,7 @@ import { sha3_256 } from 'js-sha3';
 import { sign } from 'tweetnacl';
 import { mnemonicToSeedSync, setDefaultWordlist, generateMnemonic, validateMnemonic } from 'bip39';
 import { fromSeed } from 'bip32';
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 
 function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
@@ -11416,34 +11417,25 @@ HealthCheckServiceClient.prototype.healthCheck = function healthCheck(requestMes
 
 var HealthCheckServiceClient_1 = HealthCheckServiceClient;
 
-var Network = /** @class */ (function () {
-    function Network() {
+class Network {
+    constructor() {
         this.idx = 0;
         this.hosts = [];
     }
-    Object.defineProperty(Network.prototype, "list", {
-        get: function () {
-            return this.hosts;
-        },
-        set: function (hosts) {
-            this.hosts = hosts;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Network.prototype, "id", {
-        get: function () {
-            return this.idx;
-        },
-        set: function (id) {
-            this.idx = id;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Network;
-}());
-var network = new Network();
+    get list() {
+        return this.hosts;
+    }
+    set list(hosts) {
+        this.hosts = hosts;
+    }
+    get id() {
+        return this.idx;
+    }
+    set id(id) {
+        this.idx = id;
+    }
+}
+const network = new Network();
 function list(hosts) {
     network.list = hosts;
 }
@@ -11454,20 +11446,20 @@ function selected() {
     return network.list[network.id];
 }
 function ping() {
-    return new Promise(function (resolve, reject) {
-        var networkIP = selected();
-        var client = new HealthCheckServiceClient_1(networkIP.host);
-        var request = new empty_pb_1();
-        client.healthCheck(request, function (err) {
+    return new Promise((resolve, reject) => {
+        const networkIP = selected();
+        const client = new HealthCheckServiceClient_1(networkIP.host);
+        const request = new empty_pb_1();
+        client.healthCheck(request, err => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             return resolve('PONG');
         });
     });
 }
-var Network$1 = { list: list, set: set, selected: selected, ping: ping };
+var Network$1 = { list, set, selected, ping };
 
 var proofOfOwnership_pb = createCommonjsModule(function (module, exports) {
 // source: model/proofOfOwnership.proto
@@ -28036,123 +28028,119 @@ TransactionServiceClient.prototype.getTransactionMinimumFee = function getTransa
 var TransactionServiceClient_1 = TransactionServiceClient;
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
-function getZBCAddress(publicKey, prefix) {
-    if (prefix === void 0) { prefix = 'ZBC'; }
-    var bytes = Buffer.alloc(35);
-    for (var i = 0; i < 32; i++)
+function getZBCAddress(publicKey, prefix = 'ZBC') {
+    const bytes = Buffer.alloc(35);
+    for (let i = 0; i < 32; i++)
         bytes[i] = publicKey[i];
-    for (var i = 0; i < 3; i++)
+    for (let i = 0; i < 3; i++)
         bytes[i + 32] = prefix.charCodeAt(i);
-    var checksum = hash(bytes);
-    for (var i = 0; i < 3; i++)
+    const checksum = hash(bytes);
+    for (let i = 0; i < 3; i++)
         bytes[i + 32] = Number(checksum[i]);
-    var segs = [prefix];
-    var b32 = B32Enc(bytes, 'RFC4648');
-    for (var i = 0; i < 7; i++)
+    const segs = [prefix];
+    const b32 = B32Enc(bytes, 'RFC4648');
+    for (let i = 0; i < 7; i++)
         segs.push(b32.substr(i * 8, 8));
     return segs.join('_');
 }
-function hash(str, format) {
-    if (format === void 0) { format = 'buffer'; }
-    var h = new SHA3(256);
+function hash(str, format = 'buffer') {
+    const h = new SHA3(256);
     h.update(str);
-    var b = h.digest();
+    const b = h.digest();
     if (format == 'buffer')
         return b;
     return b.toString(format);
 }
-function encryptPassword(password, salt) {
-    if (salt === void 0) { salt = 'salt'; }
+function encryptPassword(password, salt = 'salt') {
     return PBKDF2(password, salt, {
         keySize: 8,
         iterations: 10000,
     }).toString();
 }
-function isZBCAddressValid(address, stdPrefix) {
-    if (stdPrefix === void 0) { stdPrefix = 'ZBC'; }
+function isZBCAddressValid(address, stdPrefix = 'ZBC') {
     if (address.length != 66)
         return false;
-    var segs = address.split('_');
-    var prefix = segs[0];
+    const segs = address.split('_');
+    const prefix = segs[0];
     if (prefix != stdPrefix)
         return false;
     segs.shift();
     if (segs.length != 7)
         return false;
-    for (var i = 0; i < segs.length; i++)
+    for (let i = 0; i < segs.length; i++)
         if (!/[A-Z2-7]{8}/.test(segs[i]))
             return false;
-    var b32 = segs.join('');
-    var buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
-    var inputChecksum = [];
-    for (var i = 0; i < 3; i++)
+    const b32 = segs.join('');
+    const buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
+    const inputChecksum = [];
+    for (let i = 0; i < 3; i++)
         inputChecksum.push(buffer[i + 32]);
-    for (var i = 0; i < 3; i++)
+    for (let i = 0; i < 3; i++)
         buffer[i + 32] = prefix.charCodeAt(i);
-    var checksum = hash(buffer);
-    for (var i = 0; i < 3; i++)
+    const checksum = hash(buffer);
+    for (let i = 0; i < 3; i++)
         if (checksum[i] != inputChecksum[i])
             return false;
     return true;
 }
 function ZBCAddressToBytes(address) {
-    var segs = address.split('_');
+    const segs = address.split('_');
     segs.shift();
-    var b32 = segs.join('');
-    var buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
+    const b32 = segs.join('');
+    const buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
     return buffer.slice(0, 32);
 }
 function writeInt64(number, base, endian) {
     number = number.toString();
-    var buffer = new Int64LE(number);
+    const buffer = new Int64LE(number);
     return buffer.toBuffer();
 }
 function readInt64(buff, offset) {
-    var buffer = buff.slice(offset, offset + 8);
+    const buffer = buff.slice(offset, offset + 8);
     return new Int64LE(buffer) + '';
 }
 function writeInt32(number) {
-    var byte = new Buffer(4);
+    let byte = new Buffer(4);
     byte.writeUInt32LE(number, 0);
     return byte;
 }
 
-var ADDRESS_LENGTH = 66;
-var VERSION = new Buffer([1]);
+const ADDRESS_LENGTH = 66;
+const VERSION = new Buffer([1]);
 
-var TRANSACTION_TYPE = new Buffer([1, 0, 0, 0]);
+const TRANSACTION_TYPE = new Buffer([1, 0, 0, 0]);
 function sendMoneyBuilder(data, seed) {
-    var bytes;
-    var timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    var sender = Buffer.from(data.sender, 'utf-8');
-    var recipient = Buffer.from(data.recipient, 'utf-8');
-    var addressLength = writeInt32(ADDRESS_LENGTH);
-    var fee = writeInt64(data.fee * 1e8);
-    var amount = writeInt64(data.amount * 1e8);
-    var bodyLength = writeInt32(amount.length);
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const sender = Buffer.from(data.sender, 'utf-8');
+    const recipient = Buffer.from(data.recipient, 'utf-8');
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
+    const amount = writeInt64(data.amount * 1e8);
+    const bodyLength = writeInt32(amount.length);
     bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, addressLength, sender, addressLength, recipient, fee, bodyLength, amount]);
     if (data.approverAddress && data.commission && data.timeout && data.instruction) {
         // escrow bytes
-        var approverAddressLength = writeInt32(ADDRESS_LENGTH);
-        var approverAddress = Buffer.from(data.approverAddress, 'utf-8');
-        var commission = writeInt64(data.commission * 1e8);
-        var timeout = writeInt64(data.timeout);
-        var instruction = Buffer.from(data.instruction, 'utf-8');
-        var instructionLength = writeInt32(instruction.length);
+        const approverAddressLength = writeInt32(ADDRESS_LENGTH);
+        const approverAddress = Buffer.from(data.approverAddress, 'utf-8');
+        const commission = writeInt64(data.commission * 1e8);
+        const timeout = writeInt64(data.timeout);
+        const instruction = Buffer.from(data.instruction, 'utf-8');
+        const instructionLength = writeInt32(instruction.length);
         bytes = Buffer.concat([bytes, approverAddressLength, approverAddress, commission, timeout, instructionLength, instruction]);
     }
     else {
         // escrow bytes default value
-        var approverAddressLength = writeInt32(0);
-        var commission = writeInt64(0);
-        var timeout = writeInt64(0);
-        var instructionLength = writeInt32(0);
+        const approverAddressLength = writeInt32(0);
+        const commission = writeInt64(0);
+        const timeout = writeInt64(0);
+        const instructionLength = writeInt32(0);
         bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     }
     if (seed) {
-        var signatureType = writeInt32(0);
-        var signature = seed.sign(bytes);
-        var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+        const signatureType = writeInt32(0);
+        const signature = seed.sign(bytes);
+        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
         return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
     }
     else
@@ -28160,11 +28148,11 @@ function sendMoneyBuilder(data, seed) {
 }
 
 function getList(params) {
-    return new Promise(function (resolve, reject) {
-        var request = new transaction_pb_1();
-        var networkIP = Network$1.selected();
+    return new Promise((resolve, reject) => {
+        const request = new transaction_pb_1();
+        const networkIP = Network$1.selected();
         if (params) {
-            var address = params.address, height = params.height, transactionType = params.transactionType, timestampStart = params.timestampStart, timestampEnd = params.timestampEnd, pagination = params.pagination;
+            const { address, height, transactionType, timestampStart, timestampEnd, pagination } = params;
             if (address)
                 request.setAccountaddress(address);
             if (height)
@@ -28176,18 +28164,18 @@ function getList(params) {
             if (timestampEnd)
                 request.setTimestampend(timestampEnd);
             if (pagination) {
-                var reqPagination = new pagination_pb_1();
+                const reqPagination = new pagination_pb_1();
                 reqPagination.setLimit(pagination.limit || 10);
                 reqPagination.setPage(pagination.page || 1);
                 reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
                 request.setPagination(reqPagination);
             }
         }
-        var client = new TransactionServiceClient_1(networkIP.host);
-        client.getTransactions(request, function (err, res) {
+        const client = new TransactionServiceClient_1(networkIP.host);
+        client.getTransactions(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -28195,15 +28183,15 @@ function getList(params) {
     });
 }
 function get(id) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new transaction_pb_2();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new transaction_pb_2();
         request.setId(id);
-        var client = new TransactionServiceClient_1(networkIP.host);
-        client.getTransaction(request, function (err, res) {
+        const client = new TransactionServiceClient_1(networkIP.host);
+        client.getTransaction(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -28211,23 +28199,23 @@ function get(id) {
     });
 }
 function sendMoney(data, seed) {
-    var txBytes = sendMoneyBuilder(data, seed);
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new transaction_pb_3();
+    const txBytes = sendMoneyBuilder(data, seed);
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new transaction_pb_3();
         request.setTransactionbytes(txBytes);
-        var client = new TransactionServiceClient_1(networkIP.host);
-        client.postTransaction(request, function (err, res) {
+        const client = new TransactionServiceClient_1(networkIP.host);
+        client.postTransaction(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
         });
     });
 }
-var Transactions = { sendMoney: sendMoney, get: get, getList: getList };
+var Transactions = { sendMoney, get, getList };
 
 var mempool_pb = createCommonjsModule(function (module, exports) {
 // source: model/mempool.proto
@@ -29528,11 +29516,11 @@ MempoolServiceClient.prototype.getMempoolTransaction = function getMempoolTransa
 var MempoolServiceClient_1 = MempoolServiceClient;
 
 function getList$1(params) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new mempool_pb_1();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new mempool_pb_1();
         if (params) {
-            var address = params.address, timestampEnd = params.timestampEnd, timestampStart = params.timestampStart, pagination = params.pagination;
+            const { address, timestampEnd, timestampStart, pagination } = params;
             if (address)
                 request.setAddress(address);
             if (timestampStart)
@@ -29540,18 +29528,18 @@ function getList$1(params) {
             if (timestampEnd)
                 request.setTimestampend(timestampEnd);
             if (pagination) {
-                var reqPagination = new pagination_pb_1();
+                const reqPagination = new pagination_pb_1();
                 reqPagination.setLimit(pagination.limit || 10);
                 reqPagination.setPage(pagination.page || 1);
                 reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
                 request.setPagination(reqPagination);
             }
         }
-        var client = new MempoolServiceClient_1(networkIP.host);
-        client.getMempoolTransactions(request, function (err, res) {
+        const client = new MempoolServiceClient_1(networkIP.host);
+        client.getMempoolTransactions(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -29559,15 +29547,15 @@ function getList$1(params) {
     });
 }
 function get$1(id) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new mempool_pb_2();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new mempool_pb_2();
         request.setId(id);
-        var client = new MempoolServiceClient_1(networkIP.host);
-        client.getMempoolTransaction(request, function (err, res) {
+        const client = new MempoolServiceClient_1(networkIP.host);
+        client.getMempoolTransaction(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject().transaction);
@@ -29576,16 +29564,14 @@ function get$1(id) {
 }
 var Mempool = { get: get$1, getList: getList$1 };
 
-function encryptPassphrase(passphrase, password, salt) {
-    if (salt === void 0) { salt = 'salt'; }
-    var key = encryptPassword(password, salt);
+function encryptPassphrase(passphrase, password, salt = 'salt') {
+    const key = encryptPassword(password, salt);
     return AES.encrypt(passphrase, key).toString();
 }
-function decryptPassphrase(encPassphrase, password, salt) {
-    if (salt === void 0) { salt = 'salt'; }
-    var key = encryptPassword(password, salt);
+function decryptPassphrase(encPassphrase, password, salt = 'salt') {
+    const key = encryptPassword(password, salt);
     try {
-        var seed = AES.decrypt(encPassphrase, key).toString(enc.Utf8);
+        const seed = AES.decrypt(encPassphrase, key).toString(enc.Utf8);
         if (!seed)
             throw 'not match';
         return seed;
@@ -29594,7 +29580,7 @@ function decryptPassphrase(encPassphrase, password, salt) {
         return '';
     }
 }
-var Wallet = { encryptPassphrase: encryptPassphrase, decryptPassphrase: decryptPassphrase };
+var Wallet = { encryptPassphrase, decryptPassphrase };
 
 var accountBalance_pb = createCommonjsModule(function (module, exports) {
 // source: model/accountBalance.proto
@@ -30716,14 +30702,14 @@ AccountBalanceServiceClient.prototype.getAccountBalance = function getAccountBal
 var AccountBalanceServiceClient_1 = AccountBalanceServiceClient;
 
 function getBalance(address) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new accountBalance_pb_1();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new accountBalance_pb_1();
         request.setAccountaddress(address);
-        var client = new AccountBalanceServiceClient_1(networkIP.host);
-        client.getAccountBalance(request, function (err, res) {
+        const client = new AccountBalanceServiceClient_1(networkIP.host);
+        client.getAccountBalance(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
+                const { code, message, metadata } = err;
                 if (code == grpc$f.Code.NotFound) {
                     return resolve({
                         accountbalance: {
@@ -30737,7 +30723,7 @@ function getBalance(address) {
                     });
                 }
                 else if (code != grpc$f.Code.OK)
-                    return reject({ code: code, message: message, metadata: metadata });
+                    return reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -30745,22 +30731,22 @@ function getBalance(address) {
     });
 }
 function getBalances(addresses) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new accountBalance_pb_2();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new accountBalance_pb_2();
         request.setAccountaddressesList(addresses);
-        var client = new AccountBalanceServiceClient_1(networkIP.host);
-        client.getAccountBalances(request, function (err, res) {
+        const client = new AccountBalanceServiceClient_1(networkIP.host);
+        client.getAccountBalances(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
         });
     });
 }
-var Account = { getBalance: getBalance, getBalances: getBalances };
+var Account = { getBalance, getBalances };
 
 var node_pb = createCommonjsModule(function (module, exports) {
 // source: model/node.proto
@@ -40169,21 +40155,21 @@ HostServiceClient.prototype.getHostPeers = function getHostPeers(requestMessage,
 var HostServiceClient_1 = HostServiceClient;
 
 function getInfo() {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new empty_pb_1();
-        var client = new HostServiceClient_1(networkIP.host);
-        client.getHostInfo(request, function (err, res) {
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new empty_pb_1();
+        const client = new HostServiceClient_1(networkIP.host);
+        client.getHostInfo(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
         });
     });
 }
-var Host = { getInfo: getInfo };
+var Host = { getInfo };
 
 var nodeHardware_pb = createCommonjsModule(function (module, exports) {
 // source: model/nodeHardware.proto
@@ -42559,17 +42545,17 @@ goog.object.extend(exports, proto.model);
 });
 var auth_pb_1 = auth_pb.RequestType;
 
-var TRANSACTION_TYPE$1 = new Buffer([2, 0, 0, 0]);
+const TRANSACTION_TYPE$1 = new Buffer([2, 0, 0, 0]);
 function registerNodeBuilder(data, poown, seed) {
-    var bytes;
-    var timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    var accountAddress = Buffer.from(data.accountAddress, 'utf-8');
-    var recipient = new Buffer(ADDRESS_LENGTH);
-    var addressLength = writeInt32(ADDRESS_LENGTH);
-    var fee = writeInt64(data.fee * 1e8);
-    var nodePublicKey = data.nodePublicKey;
-    var funds = writeInt64(data.funds * 1e8);
-    var bodyLength = writeInt32(nodePublicKey.length + addressLength.length + accountAddress.length + funds.length + poown.length);
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
+    const recipient = new Buffer(ADDRESS_LENGTH);
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
+    const nodePublicKey = data.nodePublicKey;
+    const funds = writeInt64(data.funds * 1e8);
+    const bodyLength = writeInt32(nodePublicKey.length + addressLength.length + accountAddress.length + funds.length + poown.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE$1,
         VERSION,
@@ -42587,29 +42573,29 @@ function registerNodeBuilder(data, poown, seed) {
         poown,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    var approverAddressLength = writeInt32(0);
-    var commission = writeInt64(0);
-    var timeout = writeInt64(0);
-    var instructionLength = writeInt32(0);
+    const approverAddressLength = writeInt32(0);
+    const commission = writeInt64(0);
+    const timeout = writeInt64(0);
+    const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    var signatureType = writeInt32(0);
-    var signature = seed.sign(bytes);
-    var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
-var TRANSACTION_TYPE$2 = new Buffer([2, 1, 0, 0]);
+const TRANSACTION_TYPE$2 = new Buffer([2, 1, 0, 0]);
 function updateNodeBuilder(data, poown, seed) {
-    var bytes;
-    var timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    var accountAddress = Buffer.from(data.accountAddress, 'utf-8');
-    var recipient = new Buffer(ADDRESS_LENGTH);
-    var addressLength = writeInt32(ADDRESS_LENGTH);
-    var fee = writeInt64(data.fee * 1e8);
-    var nodePublicKey = data.nodePublicKey;
-    var funds = writeInt64(data.funds * 1e8);
-    var bodyLength = writeInt32(nodePublicKey.length + funds.length + poown.length);
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
+    const recipient = new Buffer(ADDRESS_LENGTH);
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
+    const nodePublicKey = data.nodePublicKey;
+    const funds = writeInt64(data.funds * 1e8);
+    const bodyLength = writeInt32(nodePublicKey.length + funds.length + poown.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE$2,
         VERSION,
@@ -42625,28 +42611,28 @@ function updateNodeBuilder(data, poown, seed) {
         poown,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    var approverAddressLength = writeInt32(0);
-    var commission = writeInt64(0);
-    var timeout = writeInt64(0);
-    var instructionLength = writeInt32(0);
+    const approverAddressLength = writeInt32(0);
+    const commission = writeInt64(0);
+    const timeout = writeInt64(0);
+    const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    var signatureType = writeInt32(0);
-    var signature = seed.sign(bytes);
-    var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
-var TRANSACTION_TYPE$3 = new Buffer([2, 2, 0, 0]);
+const TRANSACTION_TYPE$3 = new Buffer([2, 2, 0, 0]);
 function removeNodeBuilder(data, seed) {
-    var bytes;
-    var timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    var accountAddress = Buffer.from(data.accountAddress, 'utf-8');
-    var recipient = new Buffer(ADDRESS_LENGTH);
-    var addressLength = writeInt32(ADDRESS_LENGTH);
-    var fee = writeInt64(data.fee * 1e8);
-    var nodePublicKey = data.nodePublicKey;
-    var bodyLength = writeInt32(nodePublicKey.length);
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
+    const recipient = new Buffer(ADDRESS_LENGTH);
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
+    const nodePublicKey = data.nodePublicKey;
+    const bodyLength = writeInt32(nodePublicKey.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE$3,
         VERSION,
@@ -42660,28 +42646,28 @@ function removeNodeBuilder(data, seed) {
         nodePublicKey,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    var approverAddressLength = writeInt32(0);
-    var commission = writeInt64(0);
-    var timeout = writeInt64(0);
-    var instructionLength = writeInt32(0);
+    const approverAddressLength = writeInt32(0);
+    const commission = writeInt64(0);
+    const timeout = writeInt64(0);
+    const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    var signatureType = writeInt32(0);
-    var signature = seed.sign(bytes);
-    var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
-var TRANSACTION_TYPE$4 = new Buffer([2, 3, 0, 0]);
+const TRANSACTION_TYPE$4 = new Buffer([2, 3, 0, 0]);
 function claimNodeBuilder(data, poown, seed) {
-    var bytes;
-    var timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    var accountAddress = Buffer.from(data.accountAddress, 'utf-8');
-    var recipient = new Buffer(ADDRESS_LENGTH);
-    var addressLength = writeInt32(ADDRESS_LENGTH);
-    var fee = writeInt64(data.fee * 1e8);
-    var nodePublicKey = data.nodePublicKey;
-    var bodyLength = writeInt32(nodePublicKey.length + poown.length);
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
+    const recipient = new Buffer(ADDRESS_LENGTH);
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
+    const nodePublicKey = data.nodePublicKey;
+    const bodyLength = writeInt32(nodePublicKey.length + poown.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE$4,
         VERSION,
@@ -42696,39 +42682,39 @@ function claimNodeBuilder(data, poown, seed) {
         poown,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    var approverAddressLength = writeInt32(0);
-    var commission = writeInt64(0);
-    var timeout = writeInt64(0);
-    var instructionLength = writeInt32(0);
+    const approverAddressLength = writeInt32(0);
+    const commission = writeInt64(0);
+    const timeout = writeInt64(0);
+    const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    var signatureType = writeInt32(0);
-    var signature = seed.sign(bytes);
-    var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
 function createAuth(requestType, seed) {
-    var bytes;
-    var timestamp = writeInt64(Date.now());
-    var requestTypeBytes = writeInt32(requestType);
+    let bytes;
+    const timestamp = writeInt64(Date.now());
+    const requestTypeBytes = writeInt32(requestType);
     bytes = Buffer.concat([timestamp, requestTypeBytes]);
-    var signatureType = writeInt32(0);
-    var signature = seed.sign(bytes);
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
     return Buffer.concat([bytes, signatureType, signature]).toString('base64');
 }
 function request(auth, networkIp) {
-    return new Promise(function (resolve, reject) {
-        var request = new proofOfOwnership_pb_1();
-        var metadata = new grpc$f.Metadata({ authorization: auth });
-        var client = new NodeAdminServiceClient_1(networkIp);
-        client.getProofOfOwnership(request, metadata, function (err, res) {
+    return new Promise((resolve, reject) => {
+        const request = new proofOfOwnership_pb_1();
+        const metadata = new grpc$f.Metadata({ authorization: auth });
+        const client = new NodeAdminServiceClient_1(networkIp);
+        client.getProofOfOwnership(request, metadata, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata_1 = err.metadata;
-                reject({ code: code, message: message, metadata: metadata_1 });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res) {
-                var bytes = Buffer.concat([
+                const bytes = Buffer.concat([
                     Buffer.from(res.toObject().messagebytes.toString(), 'base64'),
                     Buffer.from(res.toObject().signature.toString(), 'base64'),
                 ]);
@@ -42737,34 +42723,34 @@ function request(auth, networkIp) {
         });
     });
 }
-var Poown = { request: request, createAuth: createAuth };
+var Poown = { request, createAuth };
 
 function getHardwareInfo(networkIP, childSeed) {
-    return new Observable(function (observer) {
-        var auth = Poown.createAuth(auth_pb_1.GETNODEHARDWARE, childSeed);
-        var request = new nodeHardware_pb_1();
-        var client = new NodeHardwareServiceClient_1(networkIP)
+    return new Observable(observer => {
+        const auth = Poown.createAuth(auth_pb_1.GETNODEHARDWARE, childSeed);
+        const request = new nodeHardware_pb_1();
+        const client = new NodeHardwareServiceClient_1(networkIP)
             .getNodeHardware(new grpc$f.Metadata({ authorization: auth }))
             .write(request)
-            .on('data', function (message) {
+            .on('data', message => {
             observer.next(message.toObject());
         })
-            .on('end', function (status) {
+            .on('end', status => {
             observer.error(status);
         });
         client.end();
     });
 }
 function generateNodeKey(networkIP, childSeed) {
-    return new Promise(function (resolve, reject) {
-        var auth = Poown.createAuth(auth_pb_1.GENERATETNODEKEY, childSeed);
-        var metadata = new grpc$f.Metadata({ authorization: auth });
-        var request = new node_pb_1();
-        var client = new NodeAdminServiceClient_1(networkIP);
-        client.generateNodeKey(request, metadata, function (err, res) {
+    return new Promise((resolve, reject) => {
+        const auth = Poown.createAuth(auth_pb_1.GENERATETNODEKEY, childSeed);
+        const metadata = new grpc$f.Metadata({ authorization: auth });
+        const request = new node_pb_1();
+        const client = new NodeAdminServiceClient_1(networkIP);
+        client.generateNodeKey(request, metadata, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata_1 = err.metadata;
-                reject({ code: code, message: message, metadata: metadata_1 });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -42772,13 +42758,13 @@ function generateNodeKey(networkIP, childSeed) {
     });
 }
 function getList$2(params) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new nodeRegistration_pb_2();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new nodeRegistration_pb_2();
         if (params) {
-            var minHeight = params.minHeight, maxHeight = params.maxHeight, status_1 = params.status, pagination = params.pagination;
+            const { minHeight, maxHeight, status, pagination } = params;
             if (pagination) {
-                var reqPagination = new pagination_pb_1();
+                const reqPagination = new pagination_pb_1();
                 reqPagination.setLimit(pagination.limit || 10);
                 reqPagination.setPage(pagination.page || 1);
                 reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
@@ -42788,14 +42774,14 @@ function getList$2(params) {
                 request.setMaxregistrationheight(maxHeight);
             if (minHeight)
                 request.setMinregistrationheight(minHeight);
-            if (status_1)
-                request.setRegistrationstatusesList(status_1);
+            if (status)
+                request.setRegistrationstatusesList(status);
         }
-        var client = new NodeRegistrationServiceClient_1(networkIP.host);
-        client.getNodeRegistrations(request, function (err, res) {
+        const client = new NodeRegistrationServiceClient_1(networkIP.host);
+        client.getNodeRegistrations(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -42803,11 +42789,11 @@ function getList$2(params) {
     });
 }
 function get$2(params) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new nodeRegistration_pb_1();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new nodeRegistration_pb_1();
         if (params) {
-            var height = params.height, owner = params.owner, publicKey = params.publicKey;
+            const { height, owner, publicKey } = params;
             if (owner)
                 request.setAccountaddress(owner);
             if (publicKey)
@@ -42815,14 +42801,14 @@ function get$2(params) {
             if (height)
                 request.setRegistrationheight(height);
         }
-        var client = new NodeRegistrationServiceClient_1(networkIP.host);
-        client.getNodeRegistration(request, function (err, res) {
+        const client = new NodeRegistrationServiceClient_1(networkIP.host);
+        client.getNodeRegistration(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
+                const { code, message, metadata } = err;
                 if (code == grpc$f.Code.NotFound)
                     return resolve(undefined);
                 else if (code != grpc$f.Code.OK)
-                    return reject({ code: code, message: message, metadata: metadata });
+                    return reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -42830,18 +42816,18 @@ function get$2(params) {
     });
 }
 function register(data, childSeed) {
-    return new Promise(function (resolve, reject) {
-        var auth = Poown.createAuth(auth_pb_1.GETPROOFOFOWNERSHIP, childSeed);
-        Poown.request(auth, data.nodeAddress).then(function (poown) {
-            var bytes = registerNodeBuilder(data, poown, childSeed);
-            var request = new transaction_pb_3();
+    return new Promise((resolve, reject) => {
+        const auth = Poown.createAuth(auth_pb_1.GETPROOFOFOWNERSHIP, childSeed);
+        Poown.request(auth, data.nodeAddress).then(poown => {
+            const bytes = registerNodeBuilder(data, poown, childSeed);
+            const request = new transaction_pb_3();
             request.setTransactionbytes(bytes);
-            var networkIP = Network$1.selected();
-            var client = new TransactionServiceClient_1(networkIP.host);
-            client.postTransaction(request, function (err, res) {
+            const networkIP = Network$1.selected();
+            const client = new TransactionServiceClient_1(networkIP.host);
+            client.postTransaction(request, (err, res) => {
                 if (err) {
-                    var code = err.code, message = err.message, metadata = err.metadata;
-                    reject({ code: code, message: message, metadata: metadata });
+                    const { code, message, metadata } = err;
+                    reject({ code, message, metadata });
                 }
                 if (res)
                     resolve(res.toObject());
@@ -42850,38 +42836,38 @@ function register(data, childSeed) {
     });
 }
 function update(data, childSeed) {
-    return new Promise(function (resolve, reject) {
-        var auth = Poown.createAuth(auth_pb_1.GETPROOFOFOWNERSHIP, childSeed);
+    return new Promise((resolve, reject) => {
+        const auth = Poown.createAuth(auth_pb_1.GETPROOFOFOWNERSHIP, childSeed);
         Poown.request(auth, data.nodeAddress)
-            .then(function (poown) {
-            var bytes = updateNodeBuilder(data, poown, childSeed);
-            var request = new transaction_pb_3();
+            .then(poown => {
+            const bytes = updateNodeBuilder(data, poown, childSeed);
+            const request = new transaction_pb_3();
             request.setTransactionbytes(bytes);
-            var networkIP = Network$1.selected();
-            var client = new TransactionServiceClient_1(networkIP.host);
-            client.postTransaction(request, function (err, res) {
+            const networkIP = Network$1.selected();
+            const client = new TransactionServiceClient_1(networkIP.host);
+            client.postTransaction(request, (err, res) => {
                 if (err) {
-                    var code = err.code, message = err.message, metadata = err.metadata;
-                    reject({ code: code, message: message, metadata: metadata });
+                    const { code, message, metadata } = err;
+                    reject({ code, message, metadata });
                 }
                 if (res)
                     resolve(res.toObject());
             });
         })
-            .catch(function (err) { return reject(err); });
+            .catch(err => reject(err));
     });
 }
 function remove(data, childSeed) {
-    return new Promise(function (resolve, reject) {
-        var bytes = removeNodeBuilder(data, childSeed);
-        var request = new transaction_pb_3();
+    return new Promise((resolve, reject) => {
+        const bytes = removeNodeBuilder(data, childSeed);
+        const request = new transaction_pb_3();
         request.setTransactionbytes(bytes);
-        var networkIP = Network$1.selected();
-        var client = new TransactionServiceClient_1(networkIP.host);
-        client.postTransaction(request, function (err, res) {
+        const networkIP = Network$1.selected();
+        const client = new TransactionServiceClient_1(networkIP.host);
+        client.postTransaction(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -42889,68 +42875,68 @@ function remove(data, childSeed) {
     });
 }
 function claim(data, childSeed) {
-    return new Promise(function (resolve, reject) {
-        var auth = Poown.createAuth(auth_pb_1.GETPROOFOFOWNERSHIP, childSeed);
+    return new Promise((resolve, reject) => {
+        const auth = Poown.createAuth(auth_pb_1.GETPROOFOFOWNERSHIP, childSeed);
         Poown.request(auth, data.nodeAddress)
-            .then(function (poown) {
-            var bytes = claimNodeBuilder(data, poown, childSeed);
-            var request = new transaction_pb_3();
+            .then(poown => {
+            const bytes = claimNodeBuilder(data, poown, childSeed);
+            const request = new transaction_pb_3();
             request.setTransactionbytes(bytes);
-            var networkIP = Network$1.selected();
-            var client = new TransactionServiceClient_1(networkIP.host);
-            client.postTransaction(request, function (err, res) {
+            const networkIP = Network$1.selected();
+            const client = new TransactionServiceClient_1(networkIP.host);
+            client.postTransaction(request, (err, res) => {
                 if (err) {
-                    var code = err.code, message = err.message, metadata = err.metadata;
-                    reject({ code: code, message: message, metadata: metadata });
+                    const { code, message, metadata } = err;
+                    reject({ code, message, metadata });
                 }
                 if (res)
                     resolve(res.toObject());
             });
         })
-            .catch(function (err) { return reject(err); });
+            .catch(err => reject(err));
     });
 }
 function getPending(limit, childSeed) {
-    return new Observable(function (observer) {
-        var auth = Poown.createAuth(auth_pb_1.GETPENDINGNODEREGISTRATIONSSTREAM, childSeed);
-        var request = new nodeRegistration_pb_5();
+    return new Observable(observer => {
+        const auth = Poown.createAuth(auth_pb_1.GETPENDINGNODEREGISTRATIONSSTREAM, childSeed);
+        const request = new nodeRegistration_pb_5();
         request.setLimit(limit);
-        var networkIP = Network$1.selected();
-        var client = new NodeRegistrationServiceClient_1(networkIP.host)
+        const networkIP = Network$1.selected();
+        const client = new NodeRegistrationServiceClient_1(networkIP.host)
             .getPendingNodeRegistrations(new grpc$f.Metadata({ authorization: auth }))
             .write(request)
-            .on('data', function (message) {
+            .on('data', message => {
             observer.next(message.toObject());
         })
-            .on('end', function (status) {
+            .on('end', status => {
             observer.error(status);
         });
         client.end();
     });
 }
 var Node = {
-    register: register,
-    update: update,
-    remove: remove,
-    claim: claim,
-    getHardwareInfo: getHardwareInfo,
-    generateNodeKey: generateNodeKey,
+    register,
+    update,
+    remove,
+    claim,
+    getHardwareInfo,
+    generateNodeKey,
     getList: getList$2,
     get: get$2,
-    getPending: getPending,
+    getPending,
 };
 
-var TRANSACTION_TYPE$5 = new Buffer([4, 0, 0, 0]);
+const TRANSACTION_TYPE$5 = new Buffer([4, 0, 0, 0]);
 function escrowBuilder(data, seed) {
-    var bytes;
-    var timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    var approvalAddress = Buffer.from(data.approvalAddress, 'utf-8');
-    var addressLength = writeInt32(ADDRESS_LENGTH);
-    var recepient = new Buffer(ADDRESS_LENGTH);
-    var fee = writeInt64(data.fee * 1e8);
-    var approvalCode = writeInt32(data.approvalCode);
-    var transactionId = writeInt64(data.transactionId);
-    var bodyLength = writeInt32(approvalCode.length + transactionId.length);
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const approvalAddress = Buffer.from(data.approvalAddress, 'utf-8');
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const recepient = new Buffer(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
+    const approvalCode = writeInt32(data.approvalCode);
+    const transactionId = writeInt64(data.transactionId);
+    const bodyLength = writeInt32(approvalCode.length + transactionId.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE$5,
         VERSION,
@@ -42965,15 +42951,15 @@ function escrowBuilder(data, seed) {
         transactionId,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    var approverAddressLength = writeInt32(0);
-    var commission = writeInt64(0);
-    var timeout = writeInt64(0);
-    var instructionLength = writeInt32(0);
+    const approverAddressLength = writeInt32(0);
+    const commission = writeInt64(0);
+    const timeout = writeInt64(0);
+    const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    var signatureType = writeInt32(0);
-    var signature = seed.sign(bytes);
-    var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
@@ -43097,11 +43083,11 @@ EscrowTransactionServiceClient.prototype.getEscrowTransaction = function getEscr
 var EscrowTransactionServiceClient_1 = EscrowTransactionServiceClient;
 
 function getList$3(params) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new escrow_pb_1();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new escrow_pb_1();
         if (params) {
-            var approverAddress = params.approverAddress, blockHeightStart = params.blockHeightStart, blockHeightEnd = params.blockHeightEnd, id = params.id, statusList = params.statusList, pagination = params.pagination, sender = params.sender, recipient = params.recipient;
+            const { approverAddress, blockHeightStart, blockHeightEnd, id, statusList, pagination, sender, recipient } = params;
             if (approverAddress)
                 request.setApproveraddress(approverAddress);
             if (blockHeightStart)
@@ -43117,7 +43103,7 @@ function getList$3(params) {
             if (recipient)
                 request.setRecipientaddress(recipient);
             if (pagination) {
-                var reqPagination = new pagination_pb_1();
+                const reqPagination = new pagination_pb_1();
                 reqPagination.setLimit(pagination.limit || 10);
                 reqPagination.setPage(pagination.page || 1);
                 reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
@@ -43125,48 +43111,48 @@ function getList$3(params) {
                 request.setPagination(reqPagination);
             }
         }
-        var client = new EscrowTransactionServiceClient_1(networkIP.host);
-        client.getEscrowTransactions(request, function (err, res) {
+        const client = new EscrowTransactionServiceClient_1(networkIP.host);
+        client.getEscrowTransactions(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             resolve(res === null || res === void 0 ? void 0 : res.toObject());
         });
     });
 }
 function get$3(id) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new escrow_pb_2();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new escrow_pb_2();
         request.setId(id);
-        var client = new EscrowTransactionServiceClient_1(networkIP.host);
-        client.getEscrowTransaction(request, function (err, res) {
+        const client = new EscrowTransactionServiceClient_1(networkIP.host);
+        client.getEscrowTransaction(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             resolve(res === null || res === void 0 ? void 0 : res.toObject());
         });
     });
 }
 function approval(data, seed) {
-    var txBytes = escrowBuilder(data, seed);
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new transaction_pb_3();
+    const txBytes = escrowBuilder(data, seed);
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new transaction_pb_3();
         request.setTransactionbytes(txBytes);
-        var client = new TransactionServiceClient_1(networkIP.host);
-        client.postTransaction(request, function (err, res) {
+        const client = new TransactionServiceClient_1(networkIP.host);
+        client.postTransaction(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             resolve(res === null || res === void 0 ? void 0 : res.toObject());
         });
     });
 }
-var Escrows = { approval: approval, get: get$3, getList: getList$3 };
+var Escrows = { approval, get: get$3, getList: getList$3 };
 
 // source: service/block.proto
 /**
@@ -43288,16 +43274,16 @@ BlockServiceClient.prototype.getBlock = function getBlock(requestMessage, metada
 var BlockServiceClient_1 = BlockServiceClient;
 
 function getBlocks(height, limit) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new block_pb_1();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new block_pb_1();
         request.setHeight(height);
         request.setLimit(limit || 10);
-        var client = new BlockServiceClient_1(networkIP.host);
-        client.getBlocks(request, function (err, res) {
+        const client = new BlockServiceClient_1(networkIP.host);
+        client.getBlocks(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -43305,15 +43291,15 @@ function getBlocks(height, limit) {
     });
 }
 function getBlockById(id) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new block_pb_2();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new block_pb_2();
         request.setId(id);
-        var client = new BlockServiceClient_1(networkIP.host);
-        client.getBlock(request, function (err, res) {
+        const client = new BlockServiceClient_1(networkIP.host);
+        client.getBlock(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -43321,22 +43307,22 @@ function getBlockById(id) {
     });
 }
 function getBlockByHeight(height) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new block_pb_2();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new block_pb_2();
         request.setHeight(height);
-        var client = new BlockServiceClient_1(networkIP.host);
-        client.getBlock(request, function (err, res) {
+        const client = new BlockServiceClient_1(networkIP.host);
+        client.getBlock(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
         });
     });
 }
-var Block = { getBlocks: getBlocks, getBlockById: getBlockById, getBlockByHeight: getBlockByHeight };
+var Block = { getBlocks, getBlockById, getBlockByHeight };
 
 // source: service/multiSignature.proto
 /**
@@ -43541,7 +43527,7 @@ function base64ToBuffer(base64) {
     return new Buffer(base64, 'base64');
 }
 function bufferToBase64(bytes) {
-    var buf = bytes instanceof ArrayBuffer
+    const buf = bytes instanceof ArrayBuffer
         ? Buffer.from(bytes)
         : ArrayBuffer.isView(bytes)
             ? Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength)
@@ -43555,50 +43541,50 @@ function toBase64Url(base64Str) {
         .replace(/\=/g, '');
 }
 
-var TRANSACTION_TYPE$6 = new Buffer([5, 0, 0, 0]);
+const TRANSACTION_TYPE$6 = new Buffer([5, 0, 0, 0]);
 function multisignatureBuilder(data, seed) {
-    var multisigInfo = data.multisigInfo, unisgnedTransactions = data.unisgnedTransactions, signaturesInfo = data.signaturesInfo;
-    var bytes;
-    var timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    var accountAddress = Buffer.from(data.accountAddress, 'utf-8');
-    var recipient = new Buffer(ADDRESS_LENGTH);
-    var addressLength = writeInt32(ADDRESS_LENGTH);
-    var fee = writeInt64(data.fee * 1e8);
+    const { multisigInfo, unisgnedTransactions, signaturesInfo } = data;
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
+    const recipient = new Buffer(ADDRESS_LENGTH);
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
     // MULTISIG INFO
-    var multisigInfoBytes = writeInt32(0);
+    let multisigInfoBytes = writeInt32(0);
     if (multisigInfo) {
-        var multisigPresent = writeInt32(1);
-        var minSign = writeInt32(multisigInfo.minSigs);
-        var nonce = writeInt64(multisigInfo.nonce);
-        var participants_1 = Buffer.from([]);
-        multisigInfo.participants.forEach(function (participant) {
-            var address = Buffer.from(participant, 'utf-8');
-            participants_1 = Buffer.concat([participants_1, addressLength, address]);
+        const multisigPresent = writeInt32(1);
+        const minSign = writeInt32(multisigInfo.minSigs);
+        const nonce = writeInt64(multisigInfo.nonce);
+        let participants = Buffer.from([]);
+        multisigInfo.participants.forEach(participant => {
+            const address = Buffer.from(participant, 'utf-8');
+            participants = Buffer.concat([participants, addressLength, address]);
         });
-        var totalParticipants = writeInt32(multisigInfo.participants.length);
-        multisigInfoBytes = Buffer.concat([multisigPresent, minSign, nonce, totalParticipants, participants_1]);
+        const totalParticipants = writeInt32(multisigInfo.participants.length);
+        multisigInfoBytes = Buffer.concat([multisigPresent, minSign, nonce, totalParticipants, participants]);
     }
     // UNSIGNED TRANSACTIONS
-    var transactionBytes = writeInt32(0);
+    let transactionBytes = writeInt32(0);
     if (unisgnedTransactions) {
-        var txBytesLen = writeInt32(unisgnedTransactions.length);
+        const txBytesLen = writeInt32(unisgnedTransactions.length);
         transactionBytes = Buffer.concat([txBytesLen, unisgnedTransactions]);
     }
     // SIGNATURES INFO
-    var signaturesInfoBytes = writeInt32(0);
+    let signaturesInfoBytes = writeInt32(0);
     if (signaturesInfo) {
-        var signatureInfoPresent = writeInt32(1);
-        var txHash = base64ToBuffer(signaturesInfo.txHash);
-        var totalParticipants = writeInt32(signaturesInfo.participants.length);
-        var participants_2 = Buffer.from([]);
-        signaturesInfo.participants.forEach(function (participant) {
-            var address = Buffer.from(participant.address, 'utf-8');
-            var signatureLen = writeInt32(participant.signature.length);
-            participants_2 = Buffer.concat([participants_2, addressLength, address, signatureLen, participant.signature]);
+        const signatureInfoPresent = writeInt32(1);
+        const txHash = base64ToBuffer(signaturesInfo.txHash);
+        const totalParticipants = writeInt32(signaturesInfo.participants.length);
+        let participants = Buffer.from([]);
+        signaturesInfo.participants.forEach(participant => {
+            const address = Buffer.from(participant.address, 'utf-8');
+            const signatureLen = writeInt32(participant.signature.length);
+            participants = Buffer.concat([participants, addressLength, address, signatureLen, participant.signature]);
         });
-        signaturesInfoBytes = Buffer.concat([signatureInfoPresent, txHash, totalParticipants, participants_2]);
+        signaturesInfoBytes = Buffer.concat([signatureInfoPresent, txHash, totalParticipants, participants]);
     }
-    var bodyLength = writeInt32(multisigInfoBytes.length + transactionBytes.length + signaturesInfoBytes.length);
+    const bodyLength = writeInt32(multisigInfoBytes.length + transactionBytes.length + signaturesInfoBytes.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE$6,
         VERSION,
@@ -43614,65 +43600,65 @@ function multisignatureBuilder(data, seed) {
         signaturesInfoBytes,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    var approverAddressLength = writeInt32(0);
-    var commission = writeInt64(0);
-    var timeout = writeInt64(0);
-    var instructionLength = writeInt32(0);
+    const approverAddressLength = writeInt32(0);
+    const commission = writeInt64(0);
+    const timeout = writeInt64(0);
+    const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    var signatureType = writeInt32(0);
-    var signature = seed.sign(bytes);
-    var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 function signTransactionHash(txHash, seed) {
-    var signatureType = writeInt32(0);
-    var txHashBytes = base64ToBuffer(txHash);
-    var signature = seed.sign(txHashBytes);
+    const signatureType = writeInt32(0);
+    const txHashBytes = base64ToBuffer(txHash);
+    const signature = seed.sign(txHashBytes);
     return Buffer.concat([signatureType, signature]);
 }
 
 function generateMultiSigInfo(multiSigAddress) {
-    var nonce = multiSigAddress.nonce, minSigs = multiSigAddress.minSigs;
-    var participants = multiSigAddress.participants;
+    const { nonce, minSigs } = multiSigAddress;
+    let { participants } = multiSigAddress;
     participants = participants.sort();
-    var nonceB = writeInt32(nonce);
-    var minSigB = writeInt32(minSigs);
-    var lengthParticipants = writeInt32(participants.length);
-    var participantsB = new Buffer([]);
-    participants.forEach(function (p) {
-        var lengthAddress = writeInt32(p.length);
-        var address = Buffer.from(p, 'utf-8');
+    const nonceB = writeInt32(nonce);
+    const minSigB = writeInt32(minSigs);
+    const lengthParticipants = writeInt32(participants.length);
+    let participantsB = new Buffer([]);
+    participants.forEach((p) => {
+        const lengthAddress = writeInt32(p.length);
+        const address = Buffer.from(p, 'utf-8');
         participantsB = Buffer.concat([participantsB, lengthAddress, address]);
     });
     return Buffer.concat([minSigB, nonceB, lengthParticipants, participantsB]);
 }
 function createMultiSigAddress(multiSigAddress) {
-    var buffer = generateMultiSigInfo(multiSigAddress);
-    var hashed = Buffer.from(sha3_256(buffer), 'hex');
+    const buffer = generateMultiSigInfo(multiSigAddress);
+    const hashed = Buffer.from(sha3_256(buffer), 'hex');
     return getZBCAddress(hashed);
 }
 function getPendingList(params) {
-    return new Promise(function (resolve, reject) {
-        var request = new multiSignature_pb_1();
-        var networkIP = Network$1.selected();
-        var address = params.address, pagination = params.pagination, status = params.status;
+    return new Promise((resolve, reject) => {
+        const request = new multiSignature_pb_1();
+        const networkIP = Network$1.selected();
+        const { address, pagination, status } = params;
         if (address)
             request.setSenderaddress(address);
         if (status)
             request.setStatus(status);
         if (pagination) {
-            var reqPagination = new pagination_pb_1();
+            const reqPagination = new pagination_pb_1();
             reqPagination.setLimit(pagination.limit || 10);
             reqPagination.setPage(pagination.page || 1);
             reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
             request.setPagination(reqPagination);
         }
-        var client = new MultisigServiceClient_1(networkIP.host);
-        client.getPendingTransactions(request, function (err, res) {
+        const client = new MultisigServiceClient_1(networkIP.host);
+        client.getPendingTransactions(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -43680,15 +43666,15 @@ function getPendingList(params) {
     });
 }
 function getPendingByTxHash(txHash) {
-    return new Promise(function (resolve, reject) {
-        var request = new multiSignature_pb_2();
-        var networkIP = Network$1.selected();
+    return new Promise((resolve, reject) => {
+        const request = new multiSignature_pb_2();
+        const networkIP = Network$1.selected();
         request.setTransactionhashhex(txHash);
-        var client = new MultisigServiceClient_1(networkIP.host);
-        client.getPendingTransactionDetailByTransactionHash(request, function (err, res) {
+        const client = new MultisigServiceClient_1(networkIP.host);
+        client.getPendingTransactionDetailByTransactionHash(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -43696,23 +43682,23 @@ function getPendingByTxHash(txHash) {
     });
 }
 function getMultisigInfo(params) {
-    return new Promise(function (resolve, reject) {
-        var request = new multiSignature_pb_3();
-        var networkIP = Network$1.selected();
-        var address = params.address, pagination = params.pagination;
+    return new Promise((resolve, reject) => {
+        const request = new multiSignature_pb_3();
+        const networkIP = Network$1.selected();
+        const { address, pagination } = params;
         request.setMultisigaddress(address);
         if (pagination) {
-            var reqPagination = new pagination_pb_1();
+            const reqPagination = new pagination_pb_1();
             reqPagination.setLimit(pagination.limit || 10);
             reqPagination.setPage(pagination.page || 1);
             reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
             request.setPagination(reqPagination);
         }
-        var client = new MultisigServiceClient_1(networkIP.host);
-        client.getMultisignatureInfo(request, function (err, res) {
+        const client = new MultisigServiceClient_1(networkIP.host);
+        client.getMultisignatureInfo(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -43720,16 +43706,16 @@ function getMultisigInfo(params) {
     });
 }
 function postTransaction(data, childSeed) {
-    return new Promise(function (resolve, reject) {
-        var bytes = multisignatureBuilder(data, childSeed);
-        var request = new transaction_pb_3();
+    return new Promise((resolve, reject) => {
+        const bytes = multisignatureBuilder(data, childSeed);
+        const request = new transaction_pb_3();
         request.setTransactionbytes(bytes);
-        var networkIP = Network$1.selected();
-        var client = new TransactionServiceClient_1(networkIP.host);
-        client.postTransaction(request, function (err, res) {
+        const networkIP = Network$1.selected();
+        const client = new TransactionServiceClient_1(networkIP.host);
+        client.postTransaction(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -43737,15 +43723,15 @@ function postTransaction(data, childSeed) {
     });
 }
 function getMultisigAddress(participantsAddress) {
-    return new Promise(function (resolve, reject) {
-        var request = new multiSignature_pb_5();
+    return new Promise((resolve, reject) => {
+        const request = new multiSignature_pb_5();
         request.setParticipantaddress(participantsAddress);
-        var networkIP = Network$1.selected();
-        var client = new MultisigServiceClient_1(networkIP.host);
-        client.getMultisigAddressByParticipantAddress(request, function (err, res) {
+        const networkIP = Network$1.selected();
+        const client = new MultisigServiceClient_1(networkIP.host);
+        client.getMultisigAddressByParticipantAddress(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -43753,13 +43739,13 @@ function getMultisigAddress(participantsAddress) {
     });
 }
 var MultiSignature = {
-    getPendingByTxHash: getPendingByTxHash,
-    getPendingList: getPendingList,
-    createMultiSigAddress: createMultiSigAddress,
-    generateMultiSigInfo: generateMultiSigInfo,
-    getMultisigInfo: getMultisigInfo,
-    postTransaction: postTransaction,
-    getMultisigAddress: getMultisigAddress,
+    getPendingByTxHash,
+    getPendingList,
+    createMultiSigAddress,
+    generateMultiSigInfo,
+    getMultisigInfo,
+    postTransaction,
+    getMultisigAddress,
 };
 
 var accountDataset_pb = createCommonjsModule(function (module, exports) {
@@ -44908,19 +44894,19 @@ AccountDatasetServiceClient.prototype.getAccountDataset = function getAccountDat
 
 var AccountDatasetServiceClient_1 = AccountDatasetServiceClient;
 
-var TRANSACTION_TYPE$7 = new Buffer([3, 0, 0, 0]);
+const TRANSACTION_TYPE$7 = new Buffer([3, 0, 0, 0]);
 function setupDatasetBuilder(data, seed) {
-    var bytes;
-    var timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    var accountAddress = Buffer.from(data.setterAccountAddress, 'utf-8');
-    var recipient = Buffer.from(data.recipientAccountAddress, 'utf-8');
-    var addressLength = writeInt32(ADDRESS_LENGTH);
-    var fee = writeInt64(data.fee * 1e8);
-    var property = Buffer.from(data.property, 'utf-8');
-    var propertyLength = writeInt32(property.length);
-    var value = Buffer.from(data.value, 'utf-8');
-    var valueLength = writeInt32(value.length);
-    var bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const accountAddress = Buffer.from(data.setterAccountAddress, 'utf-8');
+    const recipient = Buffer.from(data.recipientAccountAddress, 'utf-8');
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
+    const property = Buffer.from(data.property, 'utf-8');
+    const propertyLength = writeInt32(property.length);
+    const value = Buffer.from(data.value, 'utf-8');
+    const valueLength = writeInt32(value.length);
+    const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE$7,
         VERSION,
@@ -44937,31 +44923,31 @@ function setupDatasetBuilder(data, seed) {
         value,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    var approverAddressLength = writeInt32(0);
-    var commission = writeInt64(0);
-    var timeout = writeInt64(0);
-    var instructionLength = writeInt32(0);
+    const approverAddressLength = writeInt32(0);
+    const commission = writeInt64(0);
+    const timeout = writeInt64(0);
+    const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    var signatureType = writeInt32(0);
-    var signature = seed.sign(bytes);
-    var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
-var TRANSACTION_TYPE$8 = new Buffer([3, 1, 0, 0]);
+const TRANSACTION_TYPE$8 = new Buffer([3, 1, 0, 0]);
 function removeDatasetBuilder(data, seed) {
-    var bytes;
-    var timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    var setterAccountAddress = Buffer.from(data.setterAccountAddress, 'utf-8');
-    var recipient = Buffer.from(data.recipientAccountAddress, 'utf-8');
-    var addressLength = writeInt32(ADDRESS_LENGTH);
-    var fee = writeInt64(data.fee * 1e8);
-    var property = Buffer.from(data.property, 'utf-8');
-    var propertyLength = writeInt32(property.length);
-    var value = Buffer.from(data.value, 'utf-8');
-    var valueLength = writeInt32(value.length);
-    var bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const setterAccountAddress = Buffer.from(data.setterAccountAddress, 'utf-8');
+    const recipient = Buffer.from(data.recipientAccountAddress, 'utf-8');
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
+    const property = Buffer.from(data.property, 'utf-8');
+    const propertyLength = writeInt32(property.length);
+    const value = Buffer.from(data.value, 'utf-8');
+    const valueLength = writeInt32(value.length);
+    const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE$8,
         VERSION,
@@ -44978,24 +44964,24 @@ function removeDatasetBuilder(data, seed) {
         value,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    var approverAddressLength = writeInt32(0);
-    var commission = writeInt64(0);
-    var timeout = writeInt64(0);
-    var instructionLength = writeInt32(0);
+    const approverAddressLength = writeInt32(0);
+    const commission = writeInt64(0);
+    const timeout = writeInt64(0);
+    const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    var signatureType = writeInt32(0);
-    var signature = seed.sign(bytes);
-    var bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
 function getList$4(params) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new accountDataset_pb_1();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new accountDataset_pb_1();
         if (params) {
-            var property = params.property, value = params.value, recipientAccountAddress = params.recipientAccountAddress, setterAccountAddress = params.setterAccountAddress, height = params.height, pagination = params.pagination;
+            const { property, value, recipientAccountAddress, setterAccountAddress, height, pagination } = params;
             if (property)
                 request.setProperty(property);
             if (value)
@@ -45007,18 +44993,18 @@ function getList$4(params) {
             if (height)
                 request.setHeight(height);
             if (pagination) {
-                var reqPagination = new pagination_pb_1();
+                const reqPagination = new pagination_pb_1();
                 reqPagination.setLimit(pagination.limit || 10);
                 reqPagination.setPage(pagination.page || 1);
                 reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
                 request.setPagination(reqPagination);
             }
         }
-        var client = new AccountDatasetServiceClient_1(networkIP.host);
-        client.getAccountDatasets(request, function (err, res) {
+        const client = new AccountDatasetServiceClient_1(networkIP.host);
+        client.getAccountDatasets(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -45026,16 +45012,16 @@ function getList$4(params) {
     });
 }
 function get$4(property, recipient) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new accountDataset_pb_2();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new accountDataset_pb_2();
         request.setProperty(property);
         request.setRecipientaccountaddress(recipient);
-        var client = new AccountDatasetServiceClient_1(networkIP.host);
-        client.getAccountDataset(request, function (err, res) {
+        const client = new AccountDatasetServiceClient_1(networkIP.host);
+        client.getAccountDataset(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -45043,16 +45029,16 @@ function get$4(property, recipient) {
     });
 }
 function setupDataset(data, childSeed) {
-    return new Promise(function (resolve, reject) {
-        var bytes = setupDatasetBuilder(data, childSeed);
-        var request = new transaction_pb_3();
+    return new Promise((resolve, reject) => {
+        const bytes = setupDatasetBuilder(data, childSeed);
+        const request = new transaction_pb_3();
         request.setTransactionbytes(bytes);
-        var networkIP = Network$1.selected();
-        var client = new TransactionServiceClient_1(networkIP.host);
-        client.postTransaction(request, function (err, res) {
+        const networkIP = Network$1.selected();
+        const client = new TransactionServiceClient_1(networkIP.host);
+        client.postTransaction(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -45060,23 +45046,23 @@ function setupDataset(data, childSeed) {
     });
 }
 function removeDataset(data, childseed) {
-    return new Promise(function (resolve, reject) {
-        var bytes = removeDatasetBuilder(data, childseed);
-        var request = new transaction_pb_3();
+    return new Promise((resolve, reject) => {
+        const bytes = removeDatasetBuilder(data, childseed);
+        const request = new transaction_pb_3();
         request.setTransactionbytes(bytes);
-        var networkIP = Network$1.selected();
-        var client = new TransactionServiceClient_1(networkIP.host);
-        client.postTransaction(request, function (err, res) {
+        const networkIP = Network$1.selected();
+        const client = new TransactionServiceClient_1(networkIP.host);
+        client.postTransaction(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
         });
     });
 }
-var AccountDataset = { getList: getList$4, get: get$4, setupDataset: setupDataset, removeDataset: removeDataset };
+var AccountDataset = { getList: getList$4, get: get$4, setupDataset, removeDataset };
 
 var event_pb = createCommonjsModule(function (module, exports) {
 // source: model/event.proto
@@ -46016,11 +46002,11 @@ AccountLedgerServiceClient.prototype.getAccountLedgers = function getAccountLedg
 var AccountLedgerServiceClient_1 = AccountLedgerServiceClient;
 
 function getList$5(params) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new accountLedger_pb_1();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new accountLedger_pb_1();
         if (params) {
-            var accountAddress = params.accountAddress, eventType = params.eventType, transactionId = params.transactionId, timeStampStart = params.timeStampStart, timeStampEnd = params.timeStampEnd, pagination = params.pagination;
+            const { accountAddress, eventType, transactionId, timeStampStart, timeStampEnd, pagination } = params;
             if (accountAddress)
                 request.setAccountaddress(accountAddress);
             if (eventType)
@@ -46032,7 +46018,7 @@ function getList$5(params) {
             if (timeStampEnd)
                 request.setTimestampend(timeStampEnd);
             if (pagination) {
-                var reqPagination = new pagination_pb_1();
+                const reqPagination = new pagination_pb_1();
                 reqPagination.setOrderfield(pagination.orderField || 'timestamp');
                 reqPagination.setLimit(pagination.limit || 10);
                 reqPagination.setPage(pagination.page || 1);
@@ -46040,11 +46026,11 @@ function getList$5(params) {
                 request.setPagination(reqPagination);
             }
         }
-        var client = new AccountLedgerServiceClient_1(networkIP.host);
-        client.getAccountLedgers(request, function (err, res) {
+        const client = new AccountLedgerServiceClient_1(networkIP.host);
+        client.getAccountLedgers(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -46133,15 +46119,15 @@ NodeAddressInfoServiceClient.prototype.getNodeAddressInfo = function getNodeAddr
 var NodeAddressInfoServiceClient_1 = NodeAddressInfoServiceClient;
 
 function getInfo$1(nodeidsList) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new nodeAddressInfo_pb_1();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new nodeAddressInfo_pb_1();
         request.setNodeidsList(nodeidsList);
-        var client = new NodeAddressInfoServiceClient_1(networkIP.host);
-        client.getNodeAddressInfo(request, function (err, res) {
+        const client = new NodeAddressInfoServiceClient_1(networkIP.host);
+        client.getNodeAddressInfo(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -47023,15 +47009,15 @@ ParticipationScoreServiceClient.prototype.getLatestParticipationScoreByNodeID = 
 var ParticipationScoreServiceClient_1 = ParticipationScoreServiceClient;
 
 function getLatest(nodeId) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new participationScore_pb_1();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new participationScore_pb_1();
         request.setNodeid(nodeId);
-        var client = new ParticipationScoreServiceClient_1(networkIP.host);
-        client.getLatestParticipationScoreByNodeID(request, function (err, res) {
+        const client = new ParticipationScoreServiceClient_1(networkIP.host);
+        client.getLatestParticipationScoreByNodeID(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
@@ -47039,52 +47025,26 @@ function getLatest(nodeId) {
     });
 }
 function getHistory(fromHeight, toHeight) {
-    return new Promise(function (resolve, reject) {
-        var networkIP = Network$1.selected();
-        var request = new participationScore_pb_2();
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new participationScore_pb_2();
         request.setFromheight(fromHeight);
         request.setToheight(toHeight);
-        var client = new ParticipationScoreServiceClient_1(networkIP.host);
-        client.getParticipationScores(request, function (err, res) {
+        const client = new ParticipationScoreServiceClient_1(networkIP.host);
+        client.getParticipationScores(request, (err, res) => {
             if (err) {
-                var code = err.code, message = err.message, metadata = err.metadata;
-                reject({ code: code, message: message, metadata: metadata });
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
             }
             if (res)
                 resolve(res.toObject());
         });
     });
 }
-var ParticipationScore = { getLatest: getLatest, getHistory: getHistory };
-
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
+var ParticipationScore = { getLatest, getHistory };
 
 function parseIntNoNaN(val, defaultVal) {
-    var v = parseInt(val);
+    const v = parseInt(val);
     if (isNaN(v)) {
         return defaultVal;
     }
@@ -47185,12 +47145,12 @@ function findDerivationPathErrors(path) {
 }
 
 function findCoin(coinName) {
-    var coinConfig = coins.find(function (c) { return c.name.startsWith(coinName); });
+    const coinConfig = coins.find(c => c.name.startsWith(coinName));
     if (!coinConfig)
         throw new Error('coin not found');
     return coinConfig;
 }
-var coins = [
+const coins = [
     {
         name: 'AC - Asiacoin',
         network: 'asiacoin',
@@ -48001,8 +47961,8 @@ var coins = [
     },
 ];
 
-var NOT_IMPLEMENTED = 'Not Implemented';
-var BITCOIN = {
+const NOT_IMPLEMENTED = 'Not Implemented';
+const BITCOIN = {
     messagePrefix: '\x18Bitcoin Signed Message:\n',
     bech32: 'bc',
     bip32: {
@@ -48013,12 +47973,10 @@ var BITCOIN = {
     scriptHash: 0x05,
     wif: 0x80,
 };
-var ZooKeyring = /** @class */ (function () {
-    function ZooKeyring(passphrase, password, coinName) {
-        if (password === void 0) { password = ''; }
-        if (coinName === void 0) { coinName = 'ZBC'; }
+class ZooKeyring {
+    constructor(passphrase, password = '', coinName = 'ZBC') {
         this.coinName = 'ZBC';
-        var _a = findCoin(coinName).curveName, curveName = _a === void 0 ? 'secp256k1' : _a;
+        const { curveName = 'secp256k1' } = findCoin(coinName);
         passphrase = passphrase
             .replace(/\s\s+/g, ' ') // and then using regex to make sure dont have double space after phrase, case: "stand cheap      entire"
             .replace(/(\r\n|\n|\r)/gm, '')
@@ -48028,17 +47986,14 @@ var ZooKeyring = /** @class */ (function () {
         this.coinName = coinName;
         this.bip32RootKey = fromSeed(this.seed, BITCOIN, curveName);
     }
-    ZooKeyring.generateRandomPhrase = function (numWords, lang) {
-        if (numWords === void 0) { numWords = 24; }
-        if (lang === void 0) { lang = 'english'; }
+    static generateRandomPhrase(numWords = 24, lang = 'english') {
         setDefaultWordlist(lang);
-        var strength = (numWords / 3) * 32;
+        const strength = (numWords / 3) * 32;
         if (strength !== 128 && strength !== 256)
             return 'numWords only 12 or 24';
         return generateMnemonic(strength, undefined);
-    };
-    ZooKeyring.isPassphraseValid = function (passphrase, lang) {
-        if (lang === void 0) { lang = 'english'; }
+    }
+    static isPassphraseValid(passphrase, lang = 'english') {
         passphrase = passphrase
             .replace(/\s\s+/g, ' ')
             .replace(/(\r\n|\n|\r)/gm, '')
@@ -48046,25 +48001,21 @@ var ZooKeyring = /** @class */ (function () {
             .trim();
         setDefaultWordlist(lang);
         return validateMnemonic(passphrase);
-    };
-    ZooKeyring.prototype.calcDerivationPath = function (accountValue, changeValue, bip32RootKey) {
-        if (changeValue === void 0) { changeValue = 0; }
-        if (bip32RootKey === void 0) { bip32RootKey = this.bip32RootKey; }
-        var _a = findCoin(this.coinName), _b = _a.curveName, curveName = _b === void 0 ? 'secp256k1' : _b, _c = _a.derivationStandard, derivationStandard = _c === void 0 ? 'bip44' : _c, _d = _a.purposeValue, purposeValue = _d === void 0 ? '44' : _d, coinValue = _a.coinValue;
+    }
+    calcDerivationPath(accountValue, changeValue = 0, bip32RootKey = this.bip32RootKey) {
+        const { curveName = 'secp256k1', derivationStandard = 'bip44', purposeValue = '44', coinValue } = findCoin(this.coinName);
         return this.calcForDerivationPath(curveName, derivationStandard, String(purposeValue), String(coinValue), String(accountValue), String(changeValue), bip32RootKey);
-    };
-    ZooKeyring.prototype.calcForDerivationPath = function (curveName, derivationStandard, purposeValue, coinValue, accountValue, changeValue, bip32RootKey) {
-        if (changeValue === void 0) { changeValue = '0'; }
-        if (bip32RootKey === void 0) { bip32RootKey = this.bip32RootKey; }
+    }
+    calcForDerivationPath(curveName, derivationStandard, purposeValue, coinValue, accountValue, changeValue = '0', bip32RootKey = this.bip32RootKey) {
         var derivationPath = getDerivationPath(derivationStandard, purposeValue, coinValue, accountValue, changeValue);
         var errorText = findDerivationPathErrors(derivationPath);
         if (errorText) {
             // showValidationError(errorText);
             throw new Error(errorText);
         }
-        var bip32ExtendedKey = bip32RootKey.derivePath(derivationPath, curveName);
-        var privKey = bip32ExtendedKey.privateKey;
-        var publicKey;
+        let bip32ExtendedKey = bip32RootKey.derivePath(derivationPath, curveName);
+        const privKey = bip32ExtendedKey.privateKey;
+        let publicKey;
         if (curveName === 'secp256k1') {
             publicKey = bip32ExtendedKey.publicKey;
         }
@@ -48074,20 +48025,19 @@ var ZooKeyring = /** @class */ (function () {
         else {
             throw new Error(NOT_IMPLEMENTED);
         }
-        bip32ExtendedKey = __assign(__assign({}, bip32ExtendedKey), { publicKey: publicKey,
-            sign: function (message, lowR) {
+        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey, sign(message, lowR) {
                 if (curveName === 'secp256k1') {
                     return bip32ExtendedKey.sign(!Buffer.isBuffer(message) ? Buffer.from(message) : message, lowR);
                 }
                 else if (curveName === 'ed25519') {
-                    var secretKey = sign.keyPair.fromSeed(new Uint8Array(privKey.buffer.slice(0, 32))).secretKey;
+                    const { secretKey } = sign.keyPair.fromSeed(new Uint8Array(privKey.buffer.slice(0, 32)));
                     return Buffer.from(sign.detached(message, secretKey));
                 }
                 else {
                     throw new Error(NOT_IMPLEMENTED);
                 }
             },
-            verify: function (message, signature) {
+            verify(message, signature) {
                 if (curveName === 'secp256k1') {
                     return bip32ExtendedKey.verify(!Buffer.isBuffer(message) ? Buffer.from(message) : message, !Buffer.isBuffer(signature) ? Buffer.from(signature) : signature);
                 }
@@ -48099,22 +48049,89 @@ var ZooKeyring = /** @class */ (function () {
                 }
             } });
         return bip32ExtendedKey;
-    };
-    return ZooKeyring;
-}());
+    }
+}
+
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+const CLA = 0x80;
+const INS_GET_PUBLIC_KEY = 0x2;
+const INS_SIGN_TRANSACTION = 0x3;
+class Ledger {
+    constructor(transport) {
+        this.transport = transport;
+    }
+    static getUSBTransport() {
+        return TransportWebUSB.create();
+    }
+    getTransportInstance() {
+        return this.transport;
+    }
+    getPublicKey(accountIndex) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this.transport) {
+                throw Error('transport is not set');
+            }
+            const accountIdxBuffer = writeInt32(accountIndex);
+            const totalLength = writeInt32(accountIdxBuffer.length);
+            const data = Buffer.concat([totalLength, accountIdxBuffer]);
+            const response = yield this.transport.exchange(Buffer.concat([new Buffer([CLA, INS_GET_PUBLIC_KEY, 0x00, 0x00]), data]));
+            return response.slice(0, response.length - 2);
+        });
+    }
+    signTransactionBytes(accountIndex, txBytes) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this.transport) {
+                throw Error('transport is not set');
+            }
+            if (!txBytes || txBytes.length === 0) {
+                throw Error('txBytes value is invalid');
+            }
+            const accountIdxBuffer = writeInt32(accountIndex);
+            const totalLength = txBytes.length + accountIdxBuffer.length;
+            const txByteLengthBuffer = writeInt32(totalLength);
+            const data = Buffer.concat([txByteLengthBuffer, accountIdxBuffer, txBytes]);
+            const response = yield this.transport.exchange(Buffer.concat([new Buffer([CLA, INS_SIGN_TRANSACTION, 0x00, 0x00]), data]));
+            return response.slice(0, response.length - 2);
+        });
+    }
+}
 
 function toUnconfirmedSendMoneyWallet(res, ownAddress) {
-    var transactions = res.mempooltransactionsList.filter(function (tx) {
-        var bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
+    let transactions = res.mempooltransactionsList.filter(tx => {
+        const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
         if (bytes.readInt32LE(0) == transaction_pb_5.SENDMONEYTRANSACTION)
             return tx;
     });
-    transactions = transactions.map(function (tx) {
-        var bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        var amount = readInt64(bytes, 165);
-        var fee = readInt64(bytes, 153);
-        var friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
-        var type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
+    transactions = transactions.map((tx) => {
+        const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
+        const amount = readInt64(bytes, 165);
+        const fee = readInt64(bytes, 153);
+        const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
+        const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
         return {
             address: friendAddress,
             type: type,
@@ -48126,13 +48143,13 @@ function toUnconfirmedSendMoneyWallet(res, ownAddress) {
     return transactions;
 }
 function toUnconfirmTransactionNodeWallet(res) {
-    var mempoolTx = res.mempooltransactionsList;
-    var result = null;
-    for (var i = 0; i < mempoolTx.length; i++) {
-        var tx = mempoolTx[i].transactionbytes;
-        var txBytes = Buffer.from(tx.toString(), 'base64');
-        var type = txBytes.slice(0, 4).readInt32LE(0);
-        var found = false;
+    let mempoolTx = res.mempooltransactionsList;
+    let result = null;
+    for (let i = 0; i < mempoolTx.length; i++) {
+        const tx = mempoolTx[i].transactionbytes;
+        const txBytes = Buffer.from(tx.toString(), 'base64');
+        const type = txBytes.slice(0, 4).readInt32LE(0);
+        let found = false;
         switch (type) {
             case transaction_pb_5.NODEREGISTRATIONTRANSACTION:
                 found = true;
@@ -48158,11 +48175,11 @@ function toUnconfirmTransactionNodeWallet(res) {
 }
 
 function toTransactionListWallet(res, ownAddress) {
-    var transactionList = res.transactionsList.map(function (tx) {
-        var bytes = Buffer.from(tx.transactionbodybytes.toString(), 'base64');
-        var amount = readInt64(bytes, 0);
-        var friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
-        var type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
+    let transactionList = res.transactionsList.map(tx => {
+        const bytes = Buffer.from(tx.transactionbodybytes.toString(), 'base64');
+        const amount = readInt64(bytes, 0);
+        const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
+        const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
         return {
             id: tx.id,
             address: friendAddress,
@@ -48182,12 +48199,12 @@ function toTransactionListWallet(res, ownAddress) {
 }
 
 function toGetPendingList(res) {
-    var list = res.pendingtransactionsList.map(function (tx) {
-        var bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        var amount = readInt64(bytes, 165);
-        var fee = readInt64(bytes, 153);
-        var timestamp = readInt64(bytes, 5);
-        var recipient = bytes.slice(87, 153);
+    const list = res.pendingtransactionsList.map(tx => {
+        const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
+        const amount = readInt64(bytes, 165);
+        const fee = readInt64(bytes, 153);
+        const timestamp = readInt64(bytes, 5);
+        const recipient = bytes.slice(87, 153);
         return {
             amount: amount,
             blockheight: tx.blockheight,
@@ -48207,11 +48224,11 @@ function toGetPendingList(res) {
     };
 }
 function generateTransactionHash(data) {
-    var buffer = sendMoneyBuilder(data);
-    var hashed = Buffer.from(sha3_256(buffer), 'hex');
-    var binary = '';
-    var len = hashed.byteLength;
-    for (var i = 0; i < len; i++) {
+    const buffer = sendMoneyBuilder(data);
+    const hashed = Buffer.from(sha3_256(buffer), 'hex');
+    let binary = '';
+    const len = hashed.byteLength;
+    for (let i = 0; i < len; i++) {
         binary += String.fromCharCode(hashed[i]);
     }
     return toBase64Url(window.btoa(binary));
@@ -48268,24 +48285,24 @@ var signature_pb_1 = signature_pb.SignatureType;
 var signature_pb_2 = signature_pb.PrivateKeyBytesLength;
 var signature_pb_3 = signature_pb.BitcoinPublicKeyFormat;
 
-var zoobc = {
-    Transactions: Transactions,
+const zoobc = {
+    Transactions,
     Network: Network$1,
-    Wallet: Wallet,
-    Account: Account,
-    Host: Host,
-    Node: Node,
-    Poown: Poown,
-    Escrows: Escrows,
-    Mempool: Mempool,
-    Block: Block,
-    MultiSignature: MultiSignature,
-    AccountDataset: AccountDataset,
-    AccountLedger: AccountLedger,
-    NodeAddress: NodeAddress,
-    ParticipationScore: ParticipationScore,
+    Wallet,
+    Account,
+    Host,
+    Node,
+    Poown,
+    Escrows,
+    Mempool,
+    Block,
+    MultiSignature,
+    AccountDataset,
+    AccountLedger,
+    NodeAddress,
+    ParticipationScore,
 };
 
 export default zoobc;
-export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, bufferToBase64, generateTransactionHash, getZBCAddress, isZBCAddressValid, readInt64, sendMoneyBuilder, signTransactionHash, toGetPendingList, toTransactionListWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet };
+export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, Ledger, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, bufferToBase64, generateTransactionHash, getZBCAddress, isZBCAddressValid, readInt64, sendMoneyBuilder, signTransactionHash, toGetPendingList, toTransactionListWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet };
 //# sourceMappingURL=zoobc-sdk.mjs.map

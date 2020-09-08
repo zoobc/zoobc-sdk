@@ -44,6 +44,10 @@
   },
   "dependencies": {
     "@improbable-eng/grpc-web": "^0.9.6",
+    "@ledgerhq/hw-transport": "^5.22.0",
+    "@ledgerhq/hw-transport-webusb": "^5.22.0",
+    "@types/ledgerhq__hw-transport": "^4.21.2",
+    "@types/ledgerhq__hw-transport-webusb": "^4.70.0",
     "base32": "0.0.6",
     "base32-decode": "^1.0.0",
     "base32-encode": "^1.1.1",
@@ -54,6 +58,7 @@
     "grpc-web": "^1.0.5",
     "int64-buffer": "^0.99.1007",
     "js-sha3": "^0.8.0",
+    "mock-require": "^3.0.3",
     "rxjs": "^6.5.4",
     "sha3": "^2.1.2",
     "stream": "^0.0.2",
