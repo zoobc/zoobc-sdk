@@ -60,7 +60,7 @@ const BlockList = () => {
           <code>{JSON.stringify(detail)}</code>
         </>
       )}
-        {/* <table>
+        <table>
           <thead>
             <tr>
               <th>Id</th>
@@ -88,7 +88,7 @@ const BlockList = () => {
                 );
               })}
           </tbody>
-        </table> */}
+        </table>
       </>
   )
 }
