@@ -47,6 +47,7 @@ export {
   MultisigPendingTxDetailResponse,
   MultisigInfoResponse,
   MultisigPostTransactionResponse,
+  GetMultisigAddressResponse,
 } from './MultiSignature';
 export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
 export {
