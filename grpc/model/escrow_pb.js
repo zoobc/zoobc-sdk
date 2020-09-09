@@ -547,6 +547,7 @@ proto.model.GetEscrowTransactionsRequest.toObject = function(includeInstance, ms
     statusesList: (f = jspb.Message.getRepeatedField(msg, 5)) == null ? undefined : f,
     blockheightstart: jspb.Message.getFieldWithDefault(msg, 6, 0),
     blockheightend: jspb.Message.getFieldWithDefault(msg, 7, 0),
+    latest: jspb.Message.getBooleanFieldWithDefault(msg, 8, false),
     pagination: (f = msg.getPagination()) && model_pagination_pb.Pagination.toObject(includeInstance, f)
   };
 
@@ -613,6 +614,10 @@ proto.model.GetEscrowTransactionsRequest.deserializeBinaryFromReader = function(
       msg.setBlockheightend(value);
       break;
     case 8:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setLatest(value);
+      break;
+    case 9:
       var value = new model_pagination_pb.Pagination;
       reader.readMessage(value,model_pagination_pb.Pagination.deserializeBinaryFromReader);
       msg.setPagination(value);
@@ -695,10 +700,17 @@ proto.model.GetEscrowTransactionsRequest.serializeBinaryToWriter = function(mess
       f
     );
   }
+  f = message.getLatest();
+  if (f) {
+    writer.writeBool(
+      8,
+      f
+    );
+  }
   f = message.getPagination();
   if (f != null) {
     writer.writeMessage(
-      8,
+      9,
       f,
       model_pagination_pb.Pagination.serializeBinaryToWriter
     );
@@ -829,18 +841,33 @@ proto.model.GetEscrowTransactionsRequest.prototype.setBlockheightend = function(
 
 
 /**
- * optional Pagination Pagination = 8;
+ * optional bool Latest = 8;
+ * @return {boolean}
+ */
+proto.model.GetEscrowTransactionsRequest.prototype.getLatest = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 8, false));
+};
+
+
+/** @param {boolean} value */
+proto.model.GetEscrowTransactionsRequest.prototype.setLatest = function(value) {
+  jspb.Message.setProto3BooleanField(this, 8, value);
+};
+
+
+/**
+ * optional Pagination Pagination = 9;
  * @return {?proto.model.Pagination}
  */
 proto.model.GetEscrowTransactionsRequest.prototype.getPagination = function() {
   return /** @type{?proto.model.Pagination} */ (
-    jspb.Message.getWrapperField(this, model_pagination_pb.Pagination, 8));
+    jspb.Message.getWrapperField(this, model_pagination_pb.Pagination, 9));
 };
 
 
 /** @param {?proto.model.Pagination|undefined} value */
 proto.model.GetEscrowTransactionsRequest.prototype.setPagination = function(value) {
-  jspb.Message.setWrapperField(this, 8, value);
+  jspb.Message.setWrapperField(this, 9, value);
 };
 
 
@@ -857,7 +884,7 @@ proto.model.GetEscrowTransactionsRequest.prototype.clearPagination = function() 
  * @return {boolean}
  */
 proto.model.GetEscrowTransactionsRequest.prototype.hasPagination = function() {
-  return jspb.Message.getField(this, 8) != null;
+  return jspb.Message.getField(this, 9) != null;
 };
 
 

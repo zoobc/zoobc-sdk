@@ -4,8 +4,7 @@ import { PBKDF2, AES, enc } from 'crypto-js';
 import SHA3 from 'sha3';
 import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
-import BigNumber from 'bignumber.js';
-import BN from 'bn.js';
+import { Int64LE } from 'int64-buffer';
 import { Observable } from 'rxjs';
 export { Subscription } from 'rxjs';
 import { sha3_256 } from 'js-sha3';
@@ -4263,7 +4262,8 @@ proto.google.protobuf.FieldDescriptorProto.toObject = function(includeInstance, 
     defaultValue: (f = googleProtobuf.Message.getField(msg, 7)) == null ? undefined : f,
     oneofIndex: (f = googleProtobuf.Message.getField(msg, 9)) == null ? undefined : f,
     jsonName: (f = googleProtobuf.Message.getField(msg, 10)) == null ? undefined : f,
-    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f)
+    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f),
+    proto3Optional: (f = googleProtobuf.Message.getBooleanField(msg, 17)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -4340,6 +4340,10 @@ proto.google.protobuf.FieldDescriptorProto.deserializeBinaryFromReader = functio
       var value = new proto.google.protobuf.FieldOptions;
       reader.readMessage(value,proto.google.protobuf.FieldOptions.deserializeBinaryFromReader);
       msg.setOptions(value);
+      break;
+    case 17:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setProto3Optional(value);
       break;
     default:
       reader.skipField();
@@ -4439,6 +4443,13 @@ proto.google.protobuf.FieldDescriptorProto.serializeBinaryToWriter = function(me
       8,
       f,
       proto.google.protobuf.FieldOptions.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {boolean} */ (googleProtobuf.Message.getField(message, 17));
+  if (f != null) {
+    writer.writeBool(
+      17,
+      f
     );
   }
 };
@@ -4835,6 +4846,42 @@ proto.google.protobuf.FieldDescriptorProto.prototype.clearOptions = function() {
  */
 proto.google.protobuf.FieldDescriptorProto.prototype.hasOptions = function() {
   return googleProtobuf.Message.getField(this, 8) != null;
+};
+
+
+/**
+ * optional bool proto3_optional = 17;
+ * @return {boolean}
+ */
+proto.google.protobuf.FieldDescriptorProto.prototype.getProto3Optional = function() {
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 17, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
+ */
+proto.google.protobuf.FieldDescriptorProto.prototype.setProto3Optional = function(value) {
+  return googleProtobuf.Message.setField(this, 17, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
+ */
+proto.google.protobuf.FieldDescriptorProto.prototype.clearProto3Optional = function() {
+  return googleProtobuf.Message.setField(this, 17, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.google.protobuf.FieldDescriptorProto.prototype.hasProto3Optional = function() {
+  return googleProtobuf.Message.getField(this, 17) != null;
 };
 
 
@@ -6542,7 +6589,7 @@ proto.google.protobuf.FileOptions.toObject = function(includeInstance, msg) {
     pyGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 18, false),
     phpGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 42, false),
     deprecated: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 23, false),
-    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, false),
+    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, true),
     objcClassPrefix: (f = googleProtobuf.Message.getField(msg, 36)) == null ? undefined : f,
     csharpNamespace: (f = googleProtobuf.Message.getField(msg, 37)) == null ? undefined : f,
     swiftPrefix: (f = googleProtobuf.Message.getField(msg, 39)) == null ? undefined : f,
@@ -7307,7 +7354,7 @@ proto.google.protobuf.FileOptions.prototype.hasDeprecated = function() {
  * @return {boolean}
  */
 proto.google.protobuf.FileOptions.prototype.getCcEnableArenas = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, false));
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, true));
 };
 
 
@@ -13692,6 +13739,7 @@ var global = Function('return this')();
 goog.object.extend(proto, pagination_pb);
 
 goog.object.extend(proto, nodeAddressInfo_pb);
+goog.exportSymbol('proto.model.GetMyNodePublicKeyResponse', null, global);
 goog.exportSymbol('proto.model.GetNodeRegistrationRequest', null, global);
 goog.exportSymbol('proto.model.GetNodeRegistrationResponse', null, global);
 goog.exportSymbol('proto.model.GetNodeRegistrationsByNodePublicKeysRequest', null, global);
@@ -13912,6 +13960,27 @@ if (goog.DEBUG && !COMPILED) {
    * @override
    */
   proto.model.GetPendingNodeRegistrationsResponse.displayName = 'proto.model.GetPendingNodeRegistrationsResponse';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.model.GetMyNodePublicKeyResponse = function(opt_data) {
+  googleProtobuf.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.model.GetMyNodePublicKeyResponse, googleProtobuf.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.model.GetMyNodePublicKeyResponse.displayName = 'proto.model.GetMyNodePublicKeyResponse';
 }
 
 
@@ -15956,6 +16025,157 @@ proto.model.GetPendingNodeRegistrationsResponse.prototype.clearNoderegistrations
 };
 
 
+
+
+
+if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.model.GetMyNodePublicKeyResponse.prototype.toObject = function(opt_includeInstance) {
+  return proto.model.GetMyNodePublicKeyResponse.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.model.GetMyNodePublicKeyResponse} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetMyNodePublicKeyResponse.toObject = function(includeInstance, msg) {
+  var obj = {
+    nodepublickey: msg.getNodepublickey_asB64()
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.model.GetMyNodePublicKeyResponse}
+ */
+proto.model.GetMyNodePublicKeyResponse.deserializeBinary = function(bytes) {
+  var reader = new googleProtobuf.BinaryReader(bytes);
+  var msg = new proto.model.GetMyNodePublicKeyResponse;
+  return proto.model.GetMyNodePublicKeyResponse.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.model.GetMyNodePublicKeyResponse} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.model.GetMyNodePublicKeyResponse}
+ */
+proto.model.GetMyNodePublicKeyResponse.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setNodepublickey(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.model.GetMyNodePublicKeyResponse.prototype.serializeBinary = function() {
+  var writer = new googleProtobuf.BinaryWriter();
+  proto.model.GetMyNodePublicKeyResponse.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.model.GetMyNodePublicKeyResponse} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetMyNodePublicKeyResponse.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getNodepublickey_asU8();
+  if (f.length > 0) {
+    writer.writeBytes(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional bytes NodePublicKey = 1;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.GetMyNodePublicKeyResponse.prototype.getNodepublickey = function() {
+  return /** @type {!(string|Uint8Array)} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * optional bytes NodePublicKey = 1;
+ * This is a type-conversion wrapper around `getNodepublickey()`
+ * @return {string}
+ */
+proto.model.GetMyNodePublicKeyResponse.prototype.getNodepublickey_asB64 = function() {
+  return /** @type {string} */ (googleProtobuf.Message.bytesAsB64(
+      this.getNodepublickey()));
+};
+
+
+/**
+ * optional bytes NodePublicKey = 1;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getNodepublickey()`
+ * @return {!Uint8Array}
+ */
+proto.model.GetMyNodePublicKeyResponse.prototype.getNodepublickey_asU8 = function() {
+  return /** @type {!Uint8Array} */ (googleProtobuf.Message.bytesAsU8(
+      this.getNodepublickey()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.GetMyNodePublicKeyResponse.prototype.setNodepublickey = function(value) {
+  googleProtobuf.Message.setProto3BytesField(this, 1, value);
+};
+
+
 /**
  * @enum {number}
  */
@@ -16523,6 +16743,7 @@ proto.model.GetEscrowTransactionsRequest.toObject = function(includeInstance, ms
     statusesList: (f = googleProtobuf.Message.getRepeatedField(msg, 5)) == null ? undefined : f,
     blockheightstart: googleProtobuf.Message.getFieldWithDefault(msg, 6, 0),
     blockheightend: googleProtobuf.Message.getFieldWithDefault(msg, 7, 0),
+    latest: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 8, false),
     pagination: (f = msg.getPagination()) && pagination_pb.Pagination.toObject(includeInstance, f)
   };
 
@@ -16589,6 +16810,10 @@ proto.model.GetEscrowTransactionsRequest.deserializeBinaryFromReader = function(
       msg.setBlockheightend(value);
       break;
     case 8:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setLatest(value);
+      break;
+    case 9:
       var value = new pagination_pb.Pagination;
       reader.readMessage(value,pagination_pb.Pagination.deserializeBinaryFromReader);
       msg.setPagination(value);
@@ -16671,10 +16896,17 @@ proto.model.GetEscrowTransactionsRequest.serializeBinaryToWriter = function(mess
       f
     );
   }
+  f = message.getLatest();
+  if (f) {
+    writer.writeBool(
+      8,
+      f
+    );
+  }
   f = message.getPagination();
   if (f != null) {
     writer.writeMessage(
-      8,
+      9,
       f,
       pagination_pb.Pagination.serializeBinaryToWriter
     );
@@ -16805,18 +17037,33 @@ proto.model.GetEscrowTransactionsRequest.prototype.setBlockheightend = function(
 
 
 /**
- * optional Pagination Pagination = 8;
+ * optional bool Latest = 8;
+ * @return {boolean}
+ */
+proto.model.GetEscrowTransactionsRequest.prototype.getLatest = function() {
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 8, false));
+};
+
+
+/** @param {boolean} value */
+proto.model.GetEscrowTransactionsRequest.prototype.setLatest = function(value) {
+  googleProtobuf.Message.setProto3BooleanField(this, 8, value);
+};
+
+
+/**
+ * optional Pagination Pagination = 9;
  * @return {?proto.model.Pagination}
  */
 proto.model.GetEscrowTransactionsRequest.prototype.getPagination = function() {
   return /** @type{?proto.model.Pagination} */ (
-    googleProtobuf.Message.getWrapperField(this, pagination_pb.Pagination, 8));
+    googleProtobuf.Message.getWrapperField(this, pagination_pb.Pagination, 9));
 };
 
 
 /** @param {?proto.model.Pagination|undefined} value */
 proto.model.GetEscrowTransactionsRequest.prototype.setPagination = function(value) {
-  googleProtobuf.Message.setWrapperField(this, 8, value);
+  googleProtobuf.Message.setWrapperField(this, 9, value);
 };
 
 
@@ -16833,7 +17080,7 @@ proto.model.GetEscrowTransactionsRequest.prototype.clearPagination = function() 
  * @return {boolean}
  */
 proto.model.GetEscrowTransactionsRequest.prototype.hasPagination = function() {
-  return googleProtobuf.Message.getField(this, 8) != null;
+  return googleProtobuf.Message.getField(this, 9) != null;
 };
 
 
@@ -27845,30 +28092,12 @@ function ZBCAddressToBytes(address) {
 }
 function writeInt64(number, base, endian) {
     number = number.toString();
-    let bn = new BN(number, base, endian);
-    let buffer = bn.toArrayLike(Buffer, 'le', 8);
-    if (number[0] == '-') {
-        let array = buffer.map((b, i) => {
-            if (i == 0)
-                b = Math.abs(b - 256);
-            else
-                b = Math.abs(b - 255);
-            return b;
-        });
-        buffer = new Buffer(array);
-    }
-    return buffer;
+    const buffer = new Int64LE(number);
+    return buffer.toBuffer();
 }
 function readInt64(buff, offset) {
-    var buff1 = buff.readUInt32LE(offset);
-    var buff2 = buff.readUInt32LE(offset + 4);
-    const plus = new BigNumber(buff1).plus(new BigNumber(buff2).times(0x100000000));
-    const minus = new BigNumber(~buff2 >>> 0).times(0x100000000).plus(new BigNumber((~buff1 >>> 0) + 1));
-    const resPlus = plus.toString();
-    const resMinus = '-' + minus.toString();
-    if (!(buff2 & 0x80000000))
-        return resPlus;
-    return resMinus;
+    const buffer = buff.slice(offset, offset + 8);
+    return new Int64LE(buffer) + '';
 }
 function writeInt32(number) {
     let byte = new Buffer(4);
@@ -42045,12 +42274,15 @@ var goog$7 = googleProtobuf;
 var global$7 = Function('return this')();
 
 
+goog$7.object.extend(proto, empty_pb);
+
 goog$7.object.extend(proto, nodeRegistration_pb);
 
 goog$7.object.extend(proto, annotations_pb);
 
 // package: service
 // file: service/nodeRegistration.proto
+
 
 
 
@@ -42096,6 +42328,15 @@ NodeRegistrationService.GetPendingNodeRegistrations = {
   responseStream: true,
   requestType: nodeRegistration_pb.GetPendingNodeRegistrationsRequest,
   responseType: nodeRegistration_pb.GetPendingNodeRegistrationsResponse
+};
+
+NodeRegistrationService.GetMyNodePublicKey = {
+  methodName: "GetMyNodePublicKey",
+  service: NodeRegistrationService,
+  requestStream: false,
+  responseStream: false,
+  requestType: empty_pb.Empty,
+  responseType: nodeRegistration_pb.GetMyNodePublicKeyResponse
 };
 
 function NodeRegistrationServiceClient(serviceHost, options) {
@@ -42236,6 +42477,37 @@ NodeRegistrationServiceClient.prototype.getPendingNodeRegistrations = function g
     },
     cancel: function () {
       listeners = null;
+      client.close();
+    }
+  };
+};
+
+NodeRegistrationServiceClient.prototype.getMyNodePublicKey = function getMyNodePublicKey(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc$7.unary(NodeRegistrationService.GetMyNodePublicKey, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc$7.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
       client.close();
     }
   };
@@ -47753,8 +48025,7 @@ class ZooKeyring {
         else {
             throw new Error(NOT_IMPLEMENTED);
         }
-        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey,
-            sign(message, lowR) {
+        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey, sign(message, lowR) {
                 if (curveName === 'secp256k1') {
                     return bip32ExtendedKey.sign(!Buffer.isBuffer(message) ? Buffer.from(message) : message, lowR);
                 }
@@ -47782,18 +48053,18 @@ class ZooKeyring {
 }
 
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
+Copyright (c) Microsoft Corporation.
 
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
 
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
 function __awaiter(thisArg, _arguments, P, generator) {
