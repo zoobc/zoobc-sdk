@@ -301,6 +301,28 @@ export namespace GetPendingNodeRegistrationsResponse {
   }
 }
 
+export class GetMyNodePublicKeyResponse extends jspb.Message {
+  getNodepublickey(): Uint8Array | string;
+  getNodepublickey_asU8(): Uint8Array;
+  getNodepublickey_asB64(): string;
+  setNodepublickey(value: Uint8Array | string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetMyNodePublicKeyResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMyNodePublicKeyResponse): GetMyNodePublicKeyResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetMyNodePublicKeyResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMyNodePublicKeyResponse;
+  static deserializeBinaryFromReader(message: GetMyNodePublicKeyResponse, reader: jspb.BinaryReader): GetMyNodePublicKeyResponse;
+}
+
+export namespace GetMyNodePublicKeyResponse {
+  export type AsObject = {
+    nodepublickey: Uint8Array | string,
+  }
+}
+
 export interface NodeRegistrationStateMap {
   NODEREGISTERED: 0;
   NODEQUEUED: 1;

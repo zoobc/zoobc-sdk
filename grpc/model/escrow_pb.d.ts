@@ -88,6 +88,9 @@ export class GetEscrowTransactionsRequest extends jspb.Message {
   getBlockheightend(): number;
   setBlockheightend(value: number): void;
 
+  getLatest(): boolean;
+  setLatest(value: boolean): void;
+
   hasPagination(): boolean;
   clearPagination(): void;
   getPagination(): model_pagination_pb.Pagination | undefined;
@@ -112,6 +115,7 @@ export namespace GetEscrowTransactionsRequest {
     statusesList: Array<EscrowStatusMap[keyof EscrowStatusMap]>,
     blockheightstart: number,
     blockheightend: number,
+    latest: boolean,
     pagination?: model_pagination_pb.Pagination.AsObject,
   }
 }

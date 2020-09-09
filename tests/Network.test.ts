@@ -5,7 +5,7 @@ import zoobc from '../src';
 
 const hosts = [
   { host: 'https://n0.alpha.proofofparticipation.network:8443', name: 'Alpha Testnet' },
-  { host: 'http://172.104.47.168:7000', name: '168 Testnet' },
+  { host: 'http://85.90.246.90:7001', name: '168 Testnet' },
   { host: 'https://explorer-nodes.alpha.proofofparticipation.network', name: 'Alpha' },
 ];
 
@@ -25,13 +25,5 @@ describe('Network Unit Testing :', () => {
     zoobc.Network.set(1);
     const resp = await zoobc.Network.selected();
     expect(resp.host).to.equal(hosts[1].host);
-  });
-
-  it('should return string from health check network', done => {
-    zoobc.Network.set(1);
-    zoobc.Network.ping().then(resp => {
-      expect(resp).to.be.an('string');
-    });
-    done();
   });
 });
