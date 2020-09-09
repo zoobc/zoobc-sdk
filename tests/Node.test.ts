@@ -7,6 +7,7 @@ import {
   GetNodeRegistrationsResponse,
   NodeRegistration,
   GetPendingNodeRegistrationsResponse,
+  GetMyNodePublicKeyResponse,
 } from '../grpc/model/nodeRegistration_pb';
 import { Pagination } from '../grpc/model/pagination_pb';
 import { PostTransactionResponse, Transaction } from '../grpc/model/transaction_pb';
@@ -17,6 +18,7 @@ import { UpdateNodeInterface, updateNodeBuilder } from '../src/helper/transactio
 import { RemoveNodeInterface, removeNodeBuilder } from '../src/helper/transaction-builder/remove-node';
 import { ClaimNodeInterface, claimNodeBuilder } from '../src/helper/transaction-builder/claim-node';
 import zoobc, { NodeListParams, NodeParams, ZooKeyring } from '../src';
+import { Empty } from '../grpc/model/empty_pb';
 
 const hosts = [{ host: 'http://85.90.246.90:8002', name: '168 Testnet' }];
 zoobc.Network.list(hosts);
@@ -126,6 +128,11 @@ function mockGetHardwareInfo() {
 
 function mockGetNodePendingRegistration() {
   const response = new GetPendingNodeRegistrationsResponse();
+  return new FakeTransportBuilder().withMessages([response]).build();
+}
+
+function mockGetMyNodePublicKey() {
+  const response = new GetMyNodePublicKeyResponse();
   return new FakeTransportBuilder().withMessages([response]).build();
 }
 
@@ -281,6 +288,16 @@ describe('Node Unit Testing :', () => {
           expect(receivedPendingNodeRegistration).to.be.an('array');
         },
       );
+    });
+  });
+
+  describe('getMyNodePublicKey', () => {
+    it('getMyNodePublicKey should return object of nodepublickey', async () => {
+      const transport = mockGetMyNodePublicKey();
+      grpc.setDefaultTransport(transport);
+
+      const result = await zoobc.Node.getMyNodePublicKey();
+      expect(result).to.be.an('object');
     });
   });
 });

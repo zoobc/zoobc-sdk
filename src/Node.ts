@@ -15,6 +15,7 @@ import {
   GetNodeRegistrationsRequest,
   GetPendingNodeRegistrationsRequest,
   GetPendingNodeRegistrationsResponse,
+  GetMyNodePublicKeyResponse,
 } from '../grpc/model/nodeRegistration_pb';
 import { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
 import { UpdateNodeInterface, updateNodeBuilder } from './helper/transaction-builder/update-node';
@@ -24,12 +25,14 @@ import Poown from './Poown';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
+import { Empty } from '../grpc/model/empty_pb';
 
 export type NodeHardwareResponse = GetNodeHardwareResponse.AsObject;
 export type GenerateNodeKeyResponses = GenerateNodeKeyResponse.AsObject;
 export type NodeRegistrationsResponse = GetNodeRegistrationResponse.AsObject;
 export type NodePostTransactionResponse = PostTransactionResponse.AsObject;
 export type GetPendingNodeRegistrationResponse = GetPendingNodeRegistrationsResponse.AsObject;
+export type GetMyNodePublicKeyResponses = GetMyNodePublicKeyResponse.AsObject;
 
 export interface NodeListParams {
   minHeight?: number;
@@ -246,6 +249,22 @@ function getPending(limit: number, childSeed: BIP32Interface): Observable<GetPen
   });
 }
 
+export function getMyNodePublicKey(): Promise<GetMyNodePublicKeyResponses> {
+  return new Promise((resolve, reject) => {
+    const networkIP = Network.selected();
+    const request = new Empty();
+
+    const client = new NodeRegistrationServiceClient(networkIP.host);
+    client.getMyNodePublicKey(request, (err, res) => {
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
+      if (res) resolve(res.toObject());
+    });
+  });
+}
+
 export default {
   register,
   update,
@@ -256,4 +275,5 @@ export default {
   getList,
   get,
   getPending,
+  getMyNodePublicKey,
 };

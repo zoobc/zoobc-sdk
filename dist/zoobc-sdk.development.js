@@ -27987,7 +27987,8 @@ var TransactionServiceClient_1 = TransactionServiceClient;
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
 function getZBCAddress(publicKey, prefix = 'ZBC') {
-    const valid = prefix.includes('ZBC'   );
+    const prefixDefault = ['ZBC', 'ZNK', 'ZBL', 'ZTX'];
+    const valid = prefixDefault.indexOf(prefix) > -1;
     if (valid) {
         const bytes = Buffer.alloc(35);
         for (let i = 0; i < 32; i++)
@@ -42878,6 +42879,21 @@ function getPending(limit, childSeed) {
         client.end();
     });
 }
+function getMyNodePublicKey() {
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new empty_pb_1();
+        const client = new NodeRegistrationServiceClient_1(networkIP.host);
+        client.getMyNodePublicKey(request, (err, res) => {
+            if (err) {
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
+            }
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
 var Node = {
     register,
     update,
@@ -42888,6 +42904,7 @@ var Node = {
     getList: getList$2,
     get: get$2,
     getPending,
+    getMyNodePublicKey,
 };
 
 const TRANSACTION_TYPE$5 = new Buffer([4, 0, 0, 0]);
