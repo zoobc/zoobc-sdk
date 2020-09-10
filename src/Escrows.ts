@@ -25,6 +25,7 @@ export interface EscrowListParams {
     orderBy?: 0 | 1;
     orderField?: string;
   };
+  latest?: boolean;
 }
 
 function getList(params?: EscrowListParams): Promise<EscrowTransactionsResponse> {
@@ -33,7 +34,7 @@ function getList(params?: EscrowListParams): Promise<EscrowTransactionsResponse>
     const request = new GetEscrowTransactionsRequest();
 
     if (params) {
-      const { approverAddress, blockHeightStart, blockHeightEnd, id, statusList, pagination, sender, recipient } = params;
+      const { approverAddress, blockHeightStart, blockHeightEnd, id, statusList, pagination, sender, recipient, latest } = params;
       if (approverAddress) request.setApproveraddress(approverAddress);
       if (blockHeightStart) request.setBlockheightstart(blockHeightStart);
       if (blockHeightEnd) request.setBlockheightend(blockHeightEnd);
@@ -41,6 +42,7 @@ function getList(params?: EscrowListParams): Promise<EscrowTransactionsResponse>
       if (statusList) request.setStatusesList(statusList);
       if (sender) request.setSenderaddress(sender);
       if (recipient) request.setRecipientaddress(recipient);
+      if (latest) request.setLatest(latest);
       if (pagination) {
         const reqPagination = new Pagination();
         reqPagination.setLimit(pagination.limit || 10);

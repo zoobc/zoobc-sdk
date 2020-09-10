@@ -19,6 +19,7 @@ export interface EscrowListParams {
         orderBy?: 0 | 1;
         orderField?: string;
     };
+    latest?: boolean;
 }
 declare function getList(params?: EscrowListParams): Promise<EscrowTransactionsResponse>;
 declare function get(id: string): Promise<EscrowTransactionResponse>;

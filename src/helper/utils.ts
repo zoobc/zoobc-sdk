@@ -6,7 +6,8 @@ import { Int64LE } from 'int64-buffer';
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
 export function getZBCAddress(publicKey: Uint8Array, prefix: string = 'ZBC'): string {
-  const valid = prefix.includes('ZBC' || 'ZNK' || 'ZBL' || 'ZTX');
+  const prefixDefault = ['ZBC', 'ZNK', 'ZBL', 'ZTX'];
+  const valid = prefixDefault.indexOf(prefix) > -1;
   if (valid) {
     const bytes = Buffer.alloc(35);
     for (let i = 0; i < 32; i++) bytes[i] = publicKey[i];
