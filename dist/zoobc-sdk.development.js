@@ -4268,7 +4268,8 @@ proto.google.protobuf.FieldDescriptorProto.toObject = function(includeInstance, 
     defaultValue: (f = googleProtobuf.Message.getField(msg, 7)) == null ? undefined : f,
     oneofIndex: (f = googleProtobuf.Message.getField(msg, 9)) == null ? undefined : f,
     jsonName: (f = googleProtobuf.Message.getField(msg, 10)) == null ? undefined : f,
-    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f)
+    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f),
+    proto3Optional: (f = googleProtobuf.Message.getBooleanField(msg, 17)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -4345,6 +4346,10 @@ proto.google.protobuf.FieldDescriptorProto.deserializeBinaryFromReader = functio
       var value = new proto.google.protobuf.FieldOptions;
       reader.readMessage(value,proto.google.protobuf.FieldOptions.deserializeBinaryFromReader);
       msg.setOptions(value);
+      break;
+    case 17:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setProto3Optional(value);
       break;
     default:
       reader.skipField();
@@ -4444,6 +4449,13 @@ proto.google.protobuf.FieldDescriptorProto.serializeBinaryToWriter = function(me
       8,
       f,
       proto.google.protobuf.FieldOptions.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {boolean} */ (googleProtobuf.Message.getField(message, 17));
+  if (f != null) {
+    writer.writeBool(
+      17,
+      f
     );
   }
 };
@@ -4840,6 +4852,42 @@ proto.google.protobuf.FieldDescriptorProto.prototype.clearOptions = function() {
  */
 proto.google.protobuf.FieldDescriptorProto.prototype.hasOptions = function() {
   return googleProtobuf.Message.getField(this, 8) != null;
+};
+
+
+/**
+ * optional bool proto3_optional = 17;
+ * @return {boolean}
+ */
+proto.google.protobuf.FieldDescriptorProto.prototype.getProto3Optional = function() {
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 17, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
+ */
+proto.google.protobuf.FieldDescriptorProto.prototype.setProto3Optional = function(value) {
+  return googleProtobuf.Message.setField(this, 17, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
+ */
+proto.google.protobuf.FieldDescriptorProto.prototype.clearProto3Optional = function() {
+  return googleProtobuf.Message.setField(this, 17, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.google.protobuf.FieldDescriptorProto.prototype.hasProto3Optional = function() {
+  return googleProtobuf.Message.getField(this, 17) != null;
 };
 
 
@@ -6547,7 +6595,7 @@ proto.google.protobuf.FileOptions.toObject = function(includeInstance, msg) {
     pyGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 18, false),
     phpGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 42, false),
     deprecated: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 23, false),
-    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, false),
+    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, true),
     objcClassPrefix: (f = googleProtobuf.Message.getField(msg, 36)) == null ? undefined : f,
     csharpNamespace: (f = googleProtobuf.Message.getField(msg, 37)) == null ? undefined : f,
     swiftPrefix: (f = googleProtobuf.Message.getField(msg, 39)) == null ? undefined : f,
@@ -7312,7 +7360,7 @@ proto.google.protobuf.FileOptions.prototype.hasDeprecated = function() {
  * @return {boolean}
  */
 proto.google.protobuf.FileOptions.prototype.getCcEnableArenas = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, false));
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, true));
 };
 
 
@@ -28055,6 +28103,17 @@ function ZBCAddressToBytes(address) {
     const buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
     return buffer.slice(0, 32);
 }
+function shortenHash(text = '') {
+    if (!text)
+        return text;
+    const split = text.split('_');
+    const zoobcPrefix = split[0];
+    const head = split[1];
+    const tail = split[split.length - 1];
+    const truncateHead = head.slice(0, head.length - 4);
+    const truncateTail = tail.slice(tail.length - 4, tail.length);
+    return `${zoobcPrefix}_${truncateHead}...${truncateTail}`;
+}
 function writeInt64(number, base, endian) {
     number = number.toString();
     const buffer = new int64Buffer.Int64LE(number);
@@ -48007,8 +48066,7 @@ class ZooKeyring {
         else {
             throw new Error(NOT_IMPLEMENTED);
         }
-        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey,
-            sign(message, lowR) {
+        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey, sign(message, lowR) {
                 if (curveName === 'secp256k1') {
                     return bip32ExtendedKey.sign(!Buffer.isBuffer(message) ? Buffer.from(message) : message, lowR);
                 }
@@ -48036,18 +48094,18 @@ class ZooKeyring {
 }
 
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
+Copyright (c) Microsoft Corporation.
 
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
 
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
 function __awaiter(thisArg, _arguments, P, generator) {
@@ -48316,6 +48374,7 @@ exports.getZBCAddress = getZBCAddress;
 exports.isZBCAddressValid = isZBCAddressValid;
 exports.readInt64 = readInt64;
 exports.sendMoneyBuilder = sendMoneyBuilder;
+exports.shortenHash = shortenHash;
 exports.signTransactionHash = signTransactionHash;
 exports.toGetPendingList = toGetPendingList;
 exports.toTransactionListWallet = toTransactionListWallet;
