@@ -27981,7 +27981,8 @@ var TransactionServiceClient_1 = TransactionServiceClient;
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
 function getZBCAddress(publicKey, prefix = 'ZBC') {
-    const valid = prefix.includes('ZBC'   );
+    const prefixDefault = ['ZBC', 'ZNK', 'ZBL', 'ZTX'];
+    const valid = prefixDefault.indexOf(prefix) > -1;
     if (valid) {
         const bytes = Buffer.alloc(35);
         for (let i = 0; i < 32; i++)
@@ -42872,6 +42873,20 @@ function getPending(limit, childSeed) {
         client.end();
     });
 }
+function getMyNodePublicKey(networkIP) {
+    return new Promise((resolve, reject) => {
+        const request = new empty_pb_1();
+        const client = new NodeRegistrationServiceClient_1(networkIP);
+        client.getMyNodePublicKey(request, (err, res) => {
+            if (err) {
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
+            }
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
 var Node = {
     register,
     update,
@@ -42882,6 +42897,7 @@ var Node = {
     getList: getList$2,
     get: get$2,
     getPending,
+    getMyNodePublicKey,
 };
 
 const TRANSACTION_TYPE$5 = new Buffer([4, 0, 0, 0]);
@@ -48014,18 +48030,18 @@ class ZooKeyring {
 }
 
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
 
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
 
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
 ***************************************************************************** */
 
 function __awaiter(thisArg, _arguments, P, generator) {
