@@ -249,12 +249,11 @@ function getPending(limit: number, childSeed: BIP32Interface): Observable<GetPen
   });
 }
 
-export function getMyNodePublicKey(): Promise<GetMyNodePublicKeyResponses> {
+export function getMyNodePublicKey(networkIP: string): Promise<GetMyNodePublicKeyResponses> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
     const request = new Empty();
 
-    const client = new NodeRegistrationServiceClient(networkIP.host);
+    const client = new NodeRegistrationServiceClient(networkIP);
     client.getMyNodePublicKey(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;

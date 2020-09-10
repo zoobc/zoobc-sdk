@@ -19,6 +19,7 @@ import { RemoveNodeInterface, removeNodeBuilder } from '../src/helper/transactio
 import { ClaimNodeInterface, claimNodeBuilder } from '../src/helper/transaction-builder/claim-node';
 import zoobc, { NodeListParams, NodeParams, ZooKeyring } from '../src';
 import { Empty } from '../grpc/model/empty_pb';
+import Network from '../src/Network';
 
 const hosts = [{ host: 'http://85.90.246.90:8002', name: '168 Testnet' }];
 zoobc.Network.list(hosts);
@@ -295,8 +296,9 @@ describe('Node Unit Testing :', () => {
     it('getMyNodePublicKey should return object of nodepublickey', async () => {
       const transport = mockGetMyNodePublicKey();
       grpc.setDefaultTransport(transport);
+      const networkIP = Network.selected();
 
-      const result = await zoobc.Node.getMyNodePublicKey();
+      const result = await zoobc.Node.getMyNodePublicKey(networkIP.host);
       expect(result).to.be.an('object');
     });
   });

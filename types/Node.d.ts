@@ -38,7 +38,7 @@ declare function update(data: UpdateNodeInterface, childSeed: BIP32Interface): P
 declare function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<NodePostTransactionResponse>;
 declare function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<NodePostTransactionResponse>;
 declare function getPending(limit: number, childSeed: BIP32Interface): Observable<GetPendingNodeRegistrationResponse>;
-export declare function getMyNodePublicKey(): Promise<GetMyNodePublicKeyResponses>;
+export declare function getMyNodePublicKey(networkIP: string): Promise<GetMyNodePublicKeyResponses>;
 declare const _default: {
     register: typeof register;
     update: typeof update;
