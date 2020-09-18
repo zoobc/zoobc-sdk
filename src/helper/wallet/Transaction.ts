@@ -3,17 +3,7 @@ import { GetTransactionsResponse, Transaction } from '../../../grpc/model/transa
 
 export interface ZooTransactionsInterface {
   total: number;
-  transactions: {
-    id: string;
-    address: string;
-    timestamp: number;
-    fee: number;
-    type: string;
-    amount: number;
-    blockId: string;
-    height: number;
-    transactionIndex: number;
-  }[];
+  transactions: ZooTransactionInterface[];
 }
 
 export interface ZooTransactionInterface {
