@@ -48066,7 +48066,8 @@ class ZooKeyring {
         else {
             throw new Error(NOT_IMPLEMENTED);
         }
-        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey, sign(message, lowR) {
+        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey,
+            sign(message, lowR) {
                 if (curveName === 'secp256k1') {
                     return bip32ExtendedKey.sign(!Buffer.isBuffer(message) ? Buffer.from(message) : message, lowR);
                 }
@@ -48238,6 +48239,23 @@ function toTransactionListWallet(res, ownAddress) {
         transactions: transactionList,
     };
 }
+function toTransactionWallet(tx, ownAddress) {
+    const bytes = Buffer.from(tx.transactionbodybytes.toString(), 'base64');
+    const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
+    const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
+    const amount = readInt64(bytes, 0);
+    return {
+        id: tx.id,
+        address: friendAddress,
+        type: type,
+        timestamp: parseInt(tx.timestamp) * 1000,
+        fee: parseInt(tx.fee),
+        amount: parseInt(amount),
+        blockId: tx.blockid,
+        height: tx.height,
+        transactionIndex: tx.transactionindex,
+    };
+}
 
 function toGetPendingList(res) {
     const list = res.pendingtransactionsList.map(tx => {
@@ -48378,6 +48396,7 @@ exports.shortenHash = shortenHash;
 exports.signTransactionHash = signTransactionHash;
 exports.toGetPendingList = toGetPendingList;
 exports.toTransactionListWallet = toTransactionListWallet;
+exports.toTransactionWallet = toTransactionWallet;
 exports.toUnconfirmTransactionNodeWallet = toUnconfirmTransactionNodeWallet;
 exports.toUnconfirmedSendMoneyWallet = toUnconfirmedSendMoneyWallet;
 //# sourceMappingURL=zoobc-sdk.development.js.map

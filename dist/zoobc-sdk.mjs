@@ -48060,7 +48060,8 @@ class ZooKeyring {
         else {
             throw new Error(NOT_IMPLEMENTED);
         }
-        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey, sign(message, lowR) {
+        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey,
+            sign(message, lowR) {
                 if (curveName === 'secp256k1') {
                     return bip32ExtendedKey.sign(!Buffer.isBuffer(message) ? Buffer.from(message) : message, lowR);
                 }
@@ -48232,6 +48233,23 @@ function toTransactionListWallet(res, ownAddress) {
         transactions: transactionList,
     };
 }
+function toTransactionWallet(tx, ownAddress) {
+    const bytes = Buffer.from(tx.transactionbodybytes.toString(), 'base64');
+    const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
+    const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
+    const amount = readInt64(bytes, 0);
+    return {
+        id: tx.id,
+        address: friendAddress,
+        type: type,
+        timestamp: parseInt(tx.timestamp) * 1000,
+        fee: parseInt(tx.fee),
+        amount: parseInt(amount),
+        blockId: tx.blockid,
+        height: tx.height,
+        transactionIndex: tx.transactionindex,
+    };
+}
 
 function toGetPendingList(res) {
     const list = res.pendingtransactionsList.map(tx => {
@@ -48339,5 +48357,5 @@ const zoobc = {
 };
 
 export default zoobc;
-export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, Ledger, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, bufferToBase64, generateTransactionHash, getZBCAddress, isZBCAddressValid, readInt64, sendMoneyBuilder, shortenHash, signTransactionHash, toGetPendingList, toTransactionListWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet };
+export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, Ledger, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, bufferToBase64, generateTransactionHash, getZBCAddress, isZBCAddressValid, readInt64, sendMoneyBuilder, shortenHash, signTransactionHash, toGetPendingList, toTransactionListWallet, toTransactionWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet };
 //# sourceMappingURL=zoobc-sdk.mjs.map
