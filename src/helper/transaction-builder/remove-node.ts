@@ -50,8 +50,8 @@ export function removeNodeBuilder(data: RemoveNodeInterface, seed: BIP32Interfac
   return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
-export function readRemoveNodeBody(bodyBytes: string): string {
-  const bufferBytes = Buffer.from(bodyBytes, 'base64');
+export function readRemoveNodeBody(txBytes: string): string {
+  const bufferBytes = Buffer.from(txBytes, 'base64');
   const zbcFormat = getZBCAddress(bufferBytes, 'ZNK');
   return zbcFormat;
 }

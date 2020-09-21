@@ -42633,8 +42633,8 @@ function removeNodeBuilder(data, seed) {
     const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
-function readRemoveNodeBody(bodyBytes) {
-    const bufferBytes = Buffer.from(bodyBytes, 'base64');
+function readRemoveNodeBody(txBytes) {
+    const bufferBytes = Buffer.from(txBytes, 'base64');
     const zbcFormat = getZBCAddress(bufferBytes, 'ZNK');
     return zbcFormat;
 }
