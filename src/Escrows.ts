@@ -6,6 +6,7 @@ import { GetEscrowTransactionsRequest, GetEscrowTransactionRequest, Escrow, GetE
 import { EscrowTransactionServiceClient } from '../grpc/service/escrow_pb_service';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
+import { readInt64 } from './helper/utils';
 
 export type EscrowTransactionsResponse = GetEscrowTransactionsResponse.AsObject;
 export type EscrowTransactionResponse = Escrow.AsObject;
@@ -100,4 +101,14 @@ function approval(data: EscrowApprovalInterface, seed: BIP32Interface): Promise<
   });
 }
 
-export default { approval, get, getList };
+function readEscrowBody(transactionbodybytes: string | Uint8Array) {
+  const bodyBytes = Buffer.from(transactionbodybytes.toString(), 'base64');
+  const approvalCode = bodyBytes.readInt32LE(0);
+  const txId = readInt64(bodyBytes, 4);
+  return {
+    approvalCode: approvalCode,
+    txId: txId,
+  };
+}
+
+export default { approval, get, getList, readEscrowBody };

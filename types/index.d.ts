@@ -83,6 +83,10 @@ declare const zoobc: {
         approval: (data: import("./helper/transaction-builder/escrow-transaction").EscrowApprovalInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
         get: (id: string) => Promise<import("../grpc/model/escrow_pb").Escrow.AsObject>;
         getList: (params?: import("./Escrows").EscrowListParams | undefined) => Promise<import("../grpc/model/escrow_pb").GetEscrowTransactionsResponse.AsObject>;
+        readEscrowBody: (transactionbodybytes: string | Uint8Array) => {
+            approvalId: number;
+            txId: string;
+        };
     };
     Mempool: {
         get: (id: string) => Promise<import("../grpc/model/mempool_pb").MempoolTransaction.AsObject>;

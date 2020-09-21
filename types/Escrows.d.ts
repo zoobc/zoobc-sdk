@@ -24,9 +24,14 @@ export interface EscrowListParams {
 declare function getList(params?: EscrowListParams): Promise<EscrowTransactionsResponse>;
 declare function get(id: string): Promise<EscrowTransactionResponse>;
 declare function approval(data: EscrowApprovalInterface, seed: BIP32Interface): Promise<ApprovalEscrowTransactionResponse>;
+declare function readEscrowBody(transactionbodybytes: string | Uint8Array): {
+    approvalCode: number;
+    txId: string;
+};
 declare const _default: {
     approval: typeof approval;
     get: typeof get;
     getList: typeof getList;
+    readEscrowBody: typeof readEscrowBody;
 };
 export default _default;
