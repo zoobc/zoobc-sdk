@@ -1,4 +1,4 @@
-import { writeInt64, writeInt32 } from '../utils';
+import { writeInt64, writeInt32, getZBCAddress } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 
@@ -48,4 +48,10 @@ export function removeNodeBuilder(data: RemoveNodeInterface, seed: BIP32Interfac
   const signature = seed.sign(bytes);
   const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
   return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+}
+
+export function readRemoveNodeBody(bodyBytes: string): string {
+  const bufferBytes = Buffer.from(bodyBytes, 'base64');
+  const zbcFormat = getZBCAddress(bufferBytes, 'ZNK');
+  return zbcFormat;
 }
