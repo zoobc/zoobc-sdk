@@ -77,7 +77,7 @@ export {
   toTransactionWallet,
   ZooTransactionInterface,
 } from './helper/wallet/Transaction';
-export { bufferToBase64 } from './helper/converters';
+export { bufferToBase64, toBase64Url } from './helper/converters';
 export {
   MultiSigInterface,
   signTransactionHash,
