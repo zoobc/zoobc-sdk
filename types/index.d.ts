@@ -30,6 +30,7 @@ export { toGetPendingList, generateTransactionHash } from './helper/wallet/Multi
 export { AccountBalanceResponse, AccountBalancesResponse } from './Account';
 export { HostInfoResponse } from './Host';
 export { ParticipationScoreResponse } from './ParticipationScore';
+export { readRemoveNodeBody } from './helper/transaction-builder/remove-node';
 export { AccountDatasetProperty } from '../grpc/model/accountDataset_pb';
 export { EscrowStatus, EscrowApproval } from '../grpc/model/escrow_pb';
 export { EventType } from '../grpc/model/event_pb';
