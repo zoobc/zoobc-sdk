@@ -72,7 +72,7 @@ export { SetupDatasetInterface } from './helper/transaction-builder/setup-accoun
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
-export { bufferToBase64 } from './helper/converters';
+export { bufferToBase64, toBase64Url } from './helper/converters';
 export {
   MultiSigInterface,
   signTransactionHash,
