@@ -48066,8 +48066,7 @@ class ZooKeyring {
         else {
             throw new Error(NOT_IMPLEMENTED);
         }
-        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey,
-            sign(message, lowR) {
+        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey, sign(message, lowR) {
                 if (curveName === 'secp256k1') {
                     return bip32ExtendedKey.sign(!Buffer.isBuffer(message) ? Buffer.from(message) : message, lowR);
                 }
@@ -48216,15 +48215,36 @@ function toUnconfirmTransactionNodeWallet(res) {
     return result;
 }
 
+function toTransactions(transactions) {
+    let transactionList = transactions.map(tx => {
+        const txBody = getBodyBytes(tx);
+        return {
+            id: tx.id,
+            sender: tx.senderaccountaddress,
+            recipient: tx.recipientaccountaddress,
+            timestamp: parseInt(tx.timestamp) * 1000,
+            fee: parseInt(tx.fee),
+            blockId: tx.blockid,
+            height: tx.height,
+            transactionIndex: tx.transactionindex,
+            transactionHash: getZBCAddress(Buffer.from(tx.transactionhash.toString(), 'base64'), 'ZTX'),
+            transactionType: tx.transactiontype,
+            txBody,
+        };
+    });
+    return transactionList;
+}
 function toTransactionListWallet(res, ownAddress) {
     let transactionList = res.transactionsList.map(tx => {
         const bytes = Buffer.from(tx.transactionbodybytes.toString(), 'base64');
         const amount = readInt64(bytes, 0);
         const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
         const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
+        const txBody = getBodyBytes(tx);
         return {
             id: tx.id,
             address: friendAddress,
+            ownAddress,
             type: type,
             timestamp: parseInt(tx.timestamp) * 1000,
             fee: parseInt(tx.fee),
@@ -48232,12 +48252,24 @@ function toTransactionListWallet(res, ownAddress) {
             blockId: tx.blockid,
             height: tx.height,
             transactionIndex: tx.transactionindex,
+            transactionHash: getZBCAddress(Buffer.from(tx.transactionhash.toString(), 'base64'), 'ZTX'),
+            txBody,
         };
     });
     return {
         total: parseInt(res.total),
         transactions: transactionList,
     };
+}
+function getBodyBytes(tx) {
+    return (tx.approvalescrowtransactionbody ||
+        tx.claimnoderegistrationtransactionbody ||
+        tx.multisignaturetransactionbody ||
+        tx.noderegistrationtransactionbody ||
+        tx.removeaccountdatasettransactionbody ||
+        tx.removenoderegistrationtransactionbody ||
+        tx.sendmoneytransactionbody ||
+        {});
 }
 function toTransactionWallet(tx, ownAddress) {
     const bytes = Buffer.from(tx.transactionbodybytes.toString(), 'base64');
@@ -48398,6 +48430,7 @@ exports.toBase64Url = toBase64Url;
 exports.toGetPendingList = toGetPendingList;
 exports.toTransactionListWallet = toTransactionListWallet;
 exports.toTransactionWallet = toTransactionWallet;
+exports.toTransactions = toTransactions;
 exports.toUnconfirmTransactionNodeWallet = toUnconfirmTransactionNodeWallet;
 exports.toUnconfirmedSendMoneyWallet = toUnconfirmedSendMoneyWallet;
 //# sourceMappingURL=zoobc-sdk.development.js.map
