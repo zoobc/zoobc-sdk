@@ -8,3 +8,4 @@ export declare function shortenHash(text?: string): string;
 export declare function writeInt64(number: number | string, base?: number, endian?: any): Buffer;
 export declare function readInt64(buff: Buffer, offset: number): string;
 export declare function writeInt32(number: number): Buffer;
+export declare function validationTimestamp(txBytes: Buffer): Promise<boolean>;

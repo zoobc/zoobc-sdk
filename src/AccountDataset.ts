@@ -12,6 +12,7 @@ import { TransactionServiceClient } from '../grpc/service/transaction_pb_service
 import { setupDatasetBuilder, SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
 import { BIP32Interface } from 'bip32';
 import { RemoveDatasetInterface, removeDatasetBuilder } from './helper/transaction-builder/remove-account-dataset';
+import { validationTimestamp } from './helper/utils';
 
 export type AccountDatasetsResponse = GetAccountDatasetsResponse.AsObject;
 export type AccountDatasetResponse = AccountDataset.AsObject;
@@ -79,38 +80,53 @@ export function get(property: string, recipient: string): Promise<AccountDataset
 }
 
 export function setupDataset(data: SetupDatasetInterface, childSeed: BIP32Interface): Promise<SetupDatasetResponse> {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
+    const networkIP = Network.selected();
     const bytes = setupDatasetBuilder(data, childSeed);
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
-
-    const networkIP = Network.selected();
-    const client = new TransactionServiceClient(networkIP.host);
-    client.postTransaction(request, (err, res) => {
-      if (err) {
-        const { code, message, metadata } = err;
-        reject({ code, message, metadata });
-      }
-      if (res) resolve(res.toObject());
-    });
+    const validTimestamp = await validationTimestamp(bytes);
+    if (validTimestamp) {
+      const client = new TransactionServiceClient(networkIP.host);
+      client.postTransaction(request, (err, res) => {
+        if (err) {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        }
+        if (res) resolve(res.toObject());
+      });
+    } else {
+      throw {
+        code: 48,
+        message: 'Please Fix Your Date and Time',
+      };
+    }
   });
 }
 
 export function removeDataset(data: RemoveDatasetInterface, childseed: BIP32Interface): Promise<RemoveAccountDatasetResponse> {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const bytes = removeDatasetBuilder(data, childseed);
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
 
     const networkIP = Network.selected();
-    const client = new TransactionServiceClient(networkIP.host);
-    client.postTransaction(request, (err, res) => {
-      if (err) {
-        const { code, message, metadata } = err;
-        reject({ code, message, metadata });
-      }
-      if (res) resolve(res.toObject());
-    });
+    const validTimestamp = await validationTimestamp(bytes);
+    if (validTimestamp) {
+      const client = new TransactionServiceClient(networkIP.host);
+      client.postTransaction(request, (err, res) => {
+        if (err) {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        }
+        if (res) resolve(res.toObject());
+      });
+    } else {
+      throw {
+        code: 48,
+        message: 'Please Fix Your Date and Time',
+      };
+    }
   });
 }
 

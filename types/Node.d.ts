@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { BIP32Interface } from 'bip32';
-import { GetNodeHardwareResponse } from '../grpc/model/nodeHardware_pb';
+import { GetNodeHardwareResponse, GetNodeTimeResponse } from '../grpc/model/nodeHardware_pb';
 import { GenerateNodeKeyResponse } from '../grpc/model/node_pb';
 import { GetNodeRegistrationResponse, GetNodeRegistrationsResponse, GetPendingNodeRegistrationsResponse, GetMyNodePublicKeyResponse } from '../grpc/model/nodeRegistration_pb';
 import { RegisterNodeInterface } from './helper/transaction-builder/register-node';
@@ -14,6 +14,7 @@ export declare type NodeRegistrationsResponse = GetNodeRegistrationResponse.AsOb
 export declare type NodePostTransactionResponse = PostTransactionResponse.AsObject;
 export declare type GetPendingNodeRegistrationResponse = GetPendingNodeRegistrationsResponse.AsObject;
 export declare type GetMyNodePublicKeyResponses = GetMyNodePublicKeyResponse.AsObject;
+export declare type GetNodeTimeResponses = GetNodeTimeResponse.AsObject;
 export interface NodeListParams {
     minHeight?: number;
     maxHeight?: number;
@@ -39,6 +40,7 @@ declare function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): P
 declare function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<NodePostTransactionResponse>;
 declare function getPending(limit: number, childSeed: BIP32Interface): Observable<GetPendingNodeRegistrationResponse>;
 export declare function getMyNodePublicKey(networkIP: string): Promise<GetMyNodePublicKeyResponses>;
+export declare function getNodeTime(): Promise<GetNodeTimeResponses>;
 declare const _default: {
     register: typeof register;
     update: typeof update;
@@ -50,5 +52,6 @@ declare const _default: {
     get: typeof get;
     getPending: typeof getPending;
     getMyNodePublicKey: typeof getMyNodePublicKey;
+    getNodeTime: typeof getNodeTime;
 };
 export default _default;

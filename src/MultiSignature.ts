@@ -1,4 +1,4 @@
-import { writeInt32, getZBCAddress } from './helper/utils';
+import { writeInt32, getZBCAddress, validationTimestamp } from './helper/utils';
 import { sha3_256 } from 'js-sha3';
 import Network from './Network';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
@@ -139,21 +139,27 @@ function getMultisigInfo(params: MultisigInfoParams): Promise<MultisigInfoRespon
 }
 
 function postTransaction(data: MultiSigInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const bytes = multisignatureBuilder(data, childSeed);
-
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
-
     const networkIP = Network.selected();
-    const client = new TransactionServiceClient(networkIP.host);
-    client.postTransaction(request, (err, res) => {
-      if (err) {
-        const { code, message, metadata } = err;
-        reject({ code, message, metadata });
-      }
-      if (res) resolve(res.toObject());
-    });
+    const validTimestamp = await validationTimestamp(bytes);
+    if (validTimestamp) {
+      const client = new TransactionServiceClient(networkIP.host);
+      client.postTransaction(request, (err, res) => {
+        if (err) {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        }
+        if (res) resolve(res.toObject());
+      });
+    } else {
+      throw {
+        code: 48,
+        message: 'Please Fix Your Date and Time',
+      };
+    }
   });
 }
 
