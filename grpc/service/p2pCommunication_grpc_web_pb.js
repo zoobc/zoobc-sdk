@@ -14,8 +14,6 @@ grpc.web = require('grpc-web');
 
 var model_peer_pb = require('../model/peer_pb.js')
 
-var model_node_pb = require('../model/node_pb.js')
-
 var model_empty_pb = require('../model/empty_pb.js')
 
 var model_block_pb = require('../model/block_pb.js')
@@ -25,6 +23,10 @@ var model_blockchain_pb = require('../model/blockchain_pb.js')
 var model_transaction_pb = require('../model/transaction_pb.js')
 
 var model_fileDownload_pb = require('../model/fileDownload_pb.js')
+
+var model_nodeAddressInfo_pb = require('../model/nodeAddressInfo_pb.js')
+
+var model_proofOfOrigin_pb = require('../model/proofOfOrigin_pb.js')
 const proto = {};
 proto.service = require('./p2pCommunication_pb.js');
 
@@ -97,6 +99,228 @@ proto.service.P2PCommunicationPromiseClient =
    * @private @const {?Object} Options for the client
    */
   this.options_ = options;
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.model.GetNodeAddressesInfoRequest,
+ *   !proto.model.GetNodeAddressesInfoResponse>}
+ */
+const methodDescriptor_P2PCommunication_GetNodeAddressesInfo = new grpc.web.MethodDescriptor(
+  '/service.P2PCommunication/GetNodeAddressesInfo',
+  grpc.web.MethodType.UNARY,
+  model_nodeAddressInfo_pb.GetNodeAddressesInfoRequest,
+  model_nodeAddressInfo_pb.GetNodeAddressesInfoResponse,
+  /** @param {!proto.model.GetNodeAddressesInfoRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_nodeAddressInfo_pb.GetNodeAddressesInfoResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.model.GetNodeAddressesInfoRequest,
+ *   !proto.model.GetNodeAddressesInfoResponse>}
+ */
+const methodInfo_P2PCommunication_GetNodeAddressesInfo = new grpc.web.AbstractClientBase.MethodInfo(
+  model_nodeAddressInfo_pb.GetNodeAddressesInfoResponse,
+  /** @param {!proto.model.GetNodeAddressesInfoRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_nodeAddressInfo_pb.GetNodeAddressesInfoResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.model.GetNodeAddressesInfoRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.model.GetNodeAddressesInfoResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.model.GetNodeAddressesInfoResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.service.P2PCommunicationClient.prototype.getNodeAddressesInfo =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/service.P2PCommunication/GetNodeAddressesInfo',
+      request,
+      metadata || {},
+      methodDescriptor_P2PCommunication_GetNodeAddressesInfo,
+      callback);
+};
+
+
+/**
+ * @param {!proto.model.GetNodeAddressesInfoRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.model.GetNodeAddressesInfoResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.service.P2PCommunicationPromiseClient.prototype.getNodeAddressesInfo =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/service.P2PCommunication/GetNodeAddressesInfo',
+      request,
+      metadata || {},
+      methodDescriptor_P2PCommunication_GetNodeAddressesInfo);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.model.SendNodeAddressInfoRequest,
+ *   !proto.model.Empty>}
+ */
+const methodDescriptor_P2PCommunication_SendNodeAddressInfo = new grpc.web.MethodDescriptor(
+  '/service.P2PCommunication/SendNodeAddressInfo',
+  grpc.web.MethodType.UNARY,
+  model_nodeAddressInfo_pb.SendNodeAddressInfoRequest,
+  model_empty_pb.Empty,
+  /** @param {!proto.model.SendNodeAddressInfoRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_empty_pb.Empty.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.model.SendNodeAddressInfoRequest,
+ *   !proto.model.Empty>}
+ */
+const methodInfo_P2PCommunication_SendNodeAddressInfo = new grpc.web.AbstractClientBase.MethodInfo(
+  model_empty_pb.Empty,
+  /** @param {!proto.model.SendNodeAddressInfoRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_empty_pb.Empty.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.model.SendNodeAddressInfoRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.model.Empty)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.model.Empty>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.service.P2PCommunicationClient.prototype.sendNodeAddressInfo =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/service.P2PCommunication/SendNodeAddressInfo',
+      request,
+      metadata || {},
+      methodDescriptor_P2PCommunication_SendNodeAddressInfo,
+      callback);
+};
+
+
+/**
+ * @param {!proto.model.SendNodeAddressInfoRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.model.Empty>}
+ *     A native promise that resolves to the response
+ */
+proto.service.P2PCommunicationPromiseClient.prototype.sendNodeAddressInfo =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/service.P2PCommunication/SendNodeAddressInfo',
+      request,
+      metadata || {},
+      methodDescriptor_P2PCommunication_SendNodeAddressInfo);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.model.GetNodeProofOfOriginRequest,
+ *   !proto.model.ProofOfOrigin>}
+ */
+const methodDescriptor_P2PCommunication_GetNodeProofOfOrigin = new grpc.web.MethodDescriptor(
+  '/service.P2PCommunication/GetNodeProofOfOrigin',
+  grpc.web.MethodType.UNARY,
+  model_proofOfOrigin_pb.GetNodeProofOfOriginRequest,
+  model_proofOfOrigin_pb.ProofOfOrigin,
+  /** @param {!proto.model.GetNodeProofOfOriginRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_proofOfOrigin_pb.ProofOfOrigin.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.model.GetNodeProofOfOriginRequest,
+ *   !proto.model.ProofOfOrigin>}
+ */
+const methodInfo_P2PCommunication_GetNodeProofOfOrigin = new grpc.web.AbstractClientBase.MethodInfo(
+  model_proofOfOrigin_pb.ProofOfOrigin,
+  /** @param {!proto.model.GetNodeProofOfOriginRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_proofOfOrigin_pb.ProofOfOrigin.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.model.GetNodeProofOfOriginRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.model.ProofOfOrigin)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.model.ProofOfOrigin>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.service.P2PCommunicationClient.prototype.getNodeProofOfOrigin =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/service.P2PCommunication/GetNodeProofOfOrigin',
+      request,
+      metadata || {},
+      methodDescriptor_P2PCommunication_GetNodeProofOfOrigin,
+      callback);
+};
+
+
+/**
+ * @param {!proto.model.GetNodeProofOfOriginRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.model.ProofOfOrigin>}
+ *     A native promise that resolves to the response
+ */
+proto.service.P2PCommunicationPromiseClient.prototype.getNodeProofOfOrigin =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/service.P2PCommunication/GetNodeProofOfOrigin',
+      request,
+      metadata || {},
+      methodDescriptor_P2PCommunication_GetNodeProofOfOrigin);
 };
 
 

@@ -14,8 +14,6 @@ var global = Function('return this')();
 
 var model_peer_pb = require('../model/peer_pb.js');
 goog.object.extend(proto, model_peer_pb);
-var model_node_pb = require('../model/node_pb.js');
-goog.object.extend(proto, model_node_pb);
 var model_empty_pb = require('../model/empty_pb.js');
 goog.object.extend(proto, model_empty_pb);
 var model_block_pb = require('../model/block_pb.js');
@@ -26,3 +24,7 @@ var model_transaction_pb = require('../model/transaction_pb.js');
 goog.object.extend(proto, model_transaction_pb);
 var model_fileDownload_pb = require('../model/fileDownload_pb.js');
 goog.object.extend(proto, model_fileDownload_pb);
+var model_nodeAddressInfo_pb = require('../model/nodeAddressInfo_pb.js');
+goog.object.extend(proto, model_nodeAddressInfo_pb);
+var model_proofOfOrigin_pb = require('../model/proofOfOrigin_pb.js');
+goog.object.extend(proto, model_proofOfOrigin_pb);

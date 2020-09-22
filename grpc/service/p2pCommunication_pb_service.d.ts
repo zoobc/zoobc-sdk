@@ -8,7 +8,36 @@ import * as model_block_pb from "../model/block_pb";
 import * as model_blockchain_pb from "../model/blockchain_pb";
 import * as model_transaction_pb from "../model/transaction_pb";
 import * as model_fileDownload_pb from "../model/fileDownload_pb";
+import * as model_nodeAddressInfo_pb from "../model/nodeAddressInfo_pb";
+import * as model_proofOfOrigin_pb from "../model/proofOfOrigin_pb";
 import {grpc} from "@improbable-eng/grpc-web";
+
+type P2PCommunicationGetNodeAddressesInfo = {
+  readonly methodName: string;
+  readonly service: typeof P2PCommunication;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof model_nodeAddressInfo_pb.GetNodeAddressesInfoRequest;
+  readonly responseType: typeof model_nodeAddressInfo_pb.GetNodeAddressesInfoResponse;
+};
+
+type P2PCommunicationSendNodeAddressInfo = {
+  readonly methodName: string;
+  readonly service: typeof P2PCommunication;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof model_nodeAddressInfo_pb.SendNodeAddressInfoRequest;
+  readonly responseType: typeof model_empty_pb.Empty;
+};
+
+type P2PCommunicationGetNodeProofOfOrigin = {
+  readonly methodName: string;
+  readonly service: typeof P2PCommunication;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof model_proofOfOrigin_pb.GetNodeProofOfOriginRequest;
+  readonly responseType: typeof model_proofOfOrigin_pb.ProofOfOrigin;
+};
 
 type P2PCommunicationGetPeerInfo = {
   readonly methodName: string;
@@ -120,6 +149,9 @@ type P2PCommunicationRequestFileDownload = {
 
 export class P2PCommunication {
   static readonly serviceName: string;
+  static readonly GetNodeAddressesInfo: P2PCommunicationGetNodeAddressesInfo;
+  static readonly SendNodeAddressInfo: P2PCommunicationSendNodeAddressInfo;
+  static readonly GetNodeProofOfOrigin: P2PCommunicationGetNodeProofOfOrigin;
   static readonly GetPeerInfo: P2PCommunicationGetPeerInfo;
   static readonly GetMorePeers: P2PCommunicationGetMorePeers;
   static readonly SendPeers: P2PCommunicationSendPeers;
@@ -166,6 +198,33 @@ export class P2PCommunicationClient {
   readonly serviceHost: string;
 
   constructor(serviceHost: string, options?: grpc.RpcOptions);
+  getNodeAddressesInfo(
+    requestMessage: model_nodeAddressInfo_pb.GetNodeAddressesInfoRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: model_nodeAddressInfo_pb.GetNodeAddressesInfoResponse|null) => void
+  ): UnaryResponse;
+  getNodeAddressesInfo(
+    requestMessage: model_nodeAddressInfo_pb.GetNodeAddressesInfoRequest,
+    callback: (error: ServiceError|null, responseMessage: model_nodeAddressInfo_pb.GetNodeAddressesInfoResponse|null) => void
+  ): UnaryResponse;
+  sendNodeAddressInfo(
+    requestMessage: model_nodeAddressInfo_pb.SendNodeAddressInfoRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: model_empty_pb.Empty|null) => void
+  ): UnaryResponse;
+  sendNodeAddressInfo(
+    requestMessage: model_nodeAddressInfo_pb.SendNodeAddressInfoRequest,
+    callback: (error: ServiceError|null, responseMessage: model_empty_pb.Empty|null) => void
+  ): UnaryResponse;
+  getNodeProofOfOrigin(
+    requestMessage: model_proofOfOrigin_pb.GetNodeProofOfOriginRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: model_proofOfOrigin_pb.ProofOfOrigin|null) => void
+  ): UnaryResponse;
+  getNodeProofOfOrigin(
+    requestMessage: model_proofOfOrigin_pb.GetNodeProofOfOriginRequest,
+    callback: (error: ServiceError|null, responseMessage: model_proofOfOrigin_pb.ProofOfOrigin|null) => void
+  ): UnaryResponse;
   getPeerInfo(
     requestMessage: model_peer_pb.GetPeerInfoRequest,
     metadata: grpc.Metadata,

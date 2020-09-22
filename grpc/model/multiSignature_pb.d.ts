@@ -11,11 +11,6 @@ export class MultiSignatureInfo extends jspb.Message {
   getNonce(): string;
   setNonce(value: string): void;
 
-  clearAddressesList(): void;
-  getAddressesList(): Array<string>;
-  setAddressesList(value: Array<string>): void;
-  addAddresses(value: string, index?: number): string;
-
   getMultisigaddress(): string;
   setMultisigaddress(value: string): void;
 
@@ -24,6 +19,11 @@ export class MultiSignatureInfo extends jspb.Message {
 
   getLatest(): boolean;
   setLatest(value: boolean): void;
+
+  clearAddressesList(): void;
+  getAddressesList(): Array<string>;
+  setAddressesList(value: Array<string>): void;
+  addAddresses(value: string, index?: number): string;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): MultiSignatureInfo.AsObject;
@@ -39,10 +39,10 @@ export namespace MultiSignatureInfo {
   export type AsObject = {
     minimumsignatures: number,
     nonce: string,
-    addressesList: Array<string>,
     multisigaddress: string,
     blockheight: number,
     latest: boolean,
+    addressesList: Array<string>,
   }
 }
 
@@ -68,6 +68,42 @@ export namespace SignatureInfo {
   export type AsObject = {
     transactionhash: Uint8Array | string,
     signaturesMap: Array<[string, Uint8Array | string]>,
+  }
+}
+
+export class MultiSignatureParticipant extends jspb.Message {
+  getMultisignatureaddress(): string;
+  setMultisignatureaddress(value: string): void;
+
+  getAccountaddress(): string;
+  setAccountaddress(value: string): void;
+
+  getAccountaddressindex(): number;
+  setAccountaddressindex(value: number): void;
+
+  getLatest(): boolean;
+  setLatest(value: boolean): void;
+
+  getBlockheight(): number;
+  setBlockheight(value: number): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): MultiSignatureParticipant.AsObject;
+  static toObject(includeInstance: boolean, msg: MultiSignatureParticipant): MultiSignatureParticipant.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: MultiSignatureParticipant, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): MultiSignatureParticipant;
+  static deserializeBinaryFromReader(message: MultiSignatureParticipant, reader: jspb.BinaryReader): MultiSignatureParticipant;
+}
+
+export namespace MultiSignatureParticipant {
+  export type AsObject = {
+    multisignatureaddress: string,
+    accountaddress: string,
+    accountaddressindex: number,
+    latest: boolean,
+    blockheight: number,
   }
 }
 
@@ -322,6 +358,58 @@ export namespace GetMultisignatureInfoResponse {
     count: number,
     page: number,
     multisignatureinfoList: Array<MultiSignatureInfo.AsObject>,
+  }
+}
+
+export class GetMultisigAddressByParticipantAddressRequest extends jspb.Message {
+  getParticipantaddress(): string;
+  setParticipantaddress(value: string): void;
+
+  hasPagination(): boolean;
+  clearPagination(): void;
+  getPagination(): model_pagination_pb.Pagination | undefined;
+  setPagination(value?: model_pagination_pb.Pagination): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetMultisigAddressByParticipantAddressRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMultisigAddressByParticipantAddressRequest): GetMultisigAddressByParticipantAddressRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetMultisigAddressByParticipantAddressRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMultisigAddressByParticipantAddressRequest;
+  static deserializeBinaryFromReader(message: GetMultisigAddressByParticipantAddressRequest, reader: jspb.BinaryReader): GetMultisigAddressByParticipantAddressRequest;
+}
+
+export namespace GetMultisigAddressByParticipantAddressRequest {
+  export type AsObject = {
+    participantaddress: string,
+    pagination?: model_pagination_pb.Pagination.AsObject,
+  }
+}
+
+export class GetMultisigAddressByParticipantAddressResponse extends jspb.Message {
+  getTotal(): number;
+  setTotal(value: number): void;
+
+  clearMultisignaddressesList(): void;
+  getMultisignaddressesList(): Array<string>;
+  setMultisignaddressesList(value: Array<string>): void;
+  addMultisignaddresses(value: string, index?: number): string;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetMultisigAddressByParticipantAddressResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMultisigAddressByParticipantAddressResponse): GetMultisigAddressByParticipantAddressResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetMultisigAddressByParticipantAddressResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMultisigAddressByParticipantAddressResponse;
+  static deserializeBinaryFromReader(message: GetMultisigAddressByParticipantAddressResponse, reader: jspb.BinaryReader): GetMultisigAddressByParticipantAddressResponse;
+}
+
+export namespace GetMultisigAddressByParticipantAddressResponse {
+  export type AsObject = {
+    total: number,
+    multisignaddressesList: Array<string>,
   }
 }
 

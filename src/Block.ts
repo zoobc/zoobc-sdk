@@ -1,48 +1,48 @@
-import { GetBlocksResponse, GetBlocksRequest, GetBlockRequest, BlockExtendedInfo } from '../grpc/model/block_pb';
+import { GetBlocksResponse, GetBlocksRequest, GetBlockRequest, GetBlockResponse } from '../grpc/model/block_pb';
 import { BlockServiceClient } from '../grpc/service/block_pb_service';
 import Network from './Network';
-import { RpcOptions } from '@improbable-eng/grpc-web/dist/typings/client';
-import { TransportFactory } from '@improbable-eng/grpc-web/dist/typings/transports/Transport';
 
-export interface BlockListParams {
-  height: number;
-  limit?: number;
-}
+export type BlocksResponse = GetBlocksResponse.AsObject;
+export type BlockResponse = GetBlockResponse.AsObject;
 
-function getBlocks(params: BlockListParams): Promise<GetBlocksResponse.AsObject> {
+function getBlocks(height: number, limit?: number): Promise<BlocksResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetBlocksRequest();
 
-    const { height, limit } = params;
     request.setHeight(height);
     request.setLimit(limit || 10);
 
     const client = new BlockServiceClient(networkIP.host);
     client.getBlocks(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
 }
 
-function getBlockById(id: string): Promise<BlockExtendedInfo.AsObject> {
+function getBlockById(id: string): Promise<BlockResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetBlockRequest();
-    const clientOptions: RpcOptions = {};
 
     request.setId(id);
 
-    const client = new BlockServiceClient(networkIP.host, clientOptions);
+    const client = new BlockServiceClient(networkIP.host);
     client.getBlock(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
 }
 
-function getBlockByHeight(height: number): Promise<BlockExtendedInfo.AsObject> {
+function getBlockByHeight(height: number): Promise<BlockResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetBlockRequest();
@@ -51,7 +51,10 @@ function getBlockByHeight(height: number): Promise<BlockExtendedInfo.AsObject> {
 
     const client = new BlockServiceClient(networkIP.host);
     client.getBlock(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });

@@ -199,6 +199,32 @@ export namespace GetBlockRequest {
   }
 }
 
+export class GetBlockResponse extends jspb.Message {
+  getChaintype(): number;
+  setChaintype(value: number): void;
+
+  hasBlock(): boolean;
+  clearBlock(): void;
+  getBlock(): Block | undefined;
+  setBlock(value?: Block): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetBlockResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetBlockResponse): GetBlockResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetBlockResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetBlockResponse;
+  static deserializeBinaryFromReader(message: GetBlockResponse, reader: jspb.BinaryReader): GetBlockResponse;
+}
+
+export namespace GetBlockResponse {
+  export type AsObject = {
+    chaintype: number,
+    block?: Block.AsObject,
+  }
+}
+
 export class GetBlocksRequest extends jspb.Message {
   getChaintype(): number;
   setChaintype(value: number): void;
@@ -238,9 +264,9 @@ export class GetBlocksResponse extends jspb.Message {
   setHeight(value: number): void;
 
   clearBlocksList(): void;
-  getBlocksList(): Array<BlockExtendedInfo>;
-  setBlocksList(value: Array<BlockExtendedInfo>): void;
-  addBlocks(value?: BlockExtendedInfo, index?: number): BlockExtendedInfo;
+  getBlocksList(): Array<Block>;
+  setBlocksList(value: Array<Block>): void;
+  addBlocks(value?: Block, index?: number): Block;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetBlocksResponse.AsObject;
@@ -257,7 +283,7 @@ export namespace GetBlocksResponse {
     chaintype: number,
     count: number,
     height: number,
-    blocksList: Array<BlockExtendedInfo.AsObject>,
+    blocksList: Array<Block.AsObject>,
   }
 }
 

@@ -34,6 +34,11 @@ export namespace FileDownloadResponse {
 }
 
 export class FileDownloadRequest extends jspb.Message {
+  getSnapshothash(): Uint8Array | string;
+  getSnapshothash_asU8(): Uint8Array;
+  getSnapshothash_asB64(): string;
+  setSnapshothash(value: Uint8Array | string): void;
+
   clearFilechunknamesList(): void;
   getFilechunknamesList(): Array<string>;
   setFilechunknamesList(value: Array<string>): void;
@@ -51,6 +56,7 @@ export class FileDownloadRequest extends jspb.Message {
 
 export namespace FileDownloadRequest {
   export type AsObject = {
+    snapshothash: Uint8Array | string,
     filechunknamesList: Array<string>,
   }
 }

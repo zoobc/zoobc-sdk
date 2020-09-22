@@ -5,9 +5,9 @@ import { FakeTransportBuilder } from '@improbable-eng/grpc-web-fake-transport';
 import { SendMoneyInterface, sendMoneyBuilder } from '../src/helper/transaction-builder/send-money';
 import {
   GetTransactionsRequest,
-  PostTransactionRequest,
   Transaction,
   GetTransactionMinimumFeeResponse,
+  PostTransactionResponse,
 } from '../grpc/model/transaction_pb';
 
 import zoobc, { ZooKeyring } from '../src';
@@ -33,9 +33,13 @@ function mockTransaction(id: string) {
 }
 
 function mockSendMoney(data: SendMoneyInterface) {
-  const txBytes = sendMoneyBuilder(data, childSeed);
-  const transaction = new PostTransactionRequest();
-  transaction.setTransactionbytes(txBytes);
+  const bytes = sendMoneyBuilder(data, childSeed);
+
+  const response = new PostTransactionResponse();
+  const transaction = new Transaction();
+
+  transaction.setTransactionbodybytes(bytes);
+  response.setTransaction(transaction);
   return new FakeTransportBuilder().withMessages([transaction]).build();
 }
 
@@ -82,27 +86,7 @@ describe('Transactions Unit Testing :', () => {
       grpc.setDefaultTransport(transport);
 
       const result = await zoobc.Transactions.sendMoney(data, childSeed);
-      expect(result).to.be.an('object');
-      expect(result && result.transaction && result.transaction.fee).to.be.equal(data.fee.toString());
-    });
-  });
-
-  describe('getTransactionMinimumFee', () => {
-    it('should return object with property fee', async () => {
-      const data = {
-        sender: 'BCZD_VxfO2S9aziIL3cn_cXW7uPDVPOrnXuP98GEAUC7',
-        recipient: '5yOq6mtspHBApow2dPIoUdEliiNwwGsO_OoNXwAz5msy',
-        fee: 0,
-        amount: 1,
-      };
-
-      const transport = mockGetTransactionMinimumFee();
-      grpc.setDefaultTransport(transport);
-
-      const result = await zoobc.Transactions.getTransactionMinimumFee(data, childSeed);
-      console.log(result);
-      expect(result).to.be.an('object');
-      expect(result).to.be.have.property('fee');
+      expect(result).to.be.have.property('transaction');
     });
   });
 });

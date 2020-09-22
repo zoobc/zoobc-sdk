@@ -6,6 +6,7 @@
     "start": "react-scripts start"
   },
   "dependencies": {
+    "@ledgerhq/hw-transport-webusb": "^5.22.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "^3.0.1",

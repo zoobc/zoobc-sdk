@@ -12,6 +12,8 @@ var jspb = require('google-protobuf');
 var goog = jspb;
 var global = Function('return this')();
 
+var model_empty_pb = require('../model/empty_pb.js');
+goog.object.extend(proto, model_empty_pb);
 var model_nodeRegistration_pb = require('../model/nodeRegistration_pb.js');
 goog.object.extend(proto, model_nodeRegistration_pb);
 var google_api_annotations_pb = require('../google/api/annotations_pb.js');

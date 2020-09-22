@@ -1,4 +1,3 @@
-import { base64ToBuffer } from '../converters';
 import { writeInt64, writeInt32 } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
@@ -8,7 +7,7 @@ const TRANSACTION_TYPE = new Buffer([2, 2, 0, 0]);
 export interface RemoveNodeInterface {
   accountAddress: string;
   fee: number;
-  nodePublicKey: string;
+  nodePublicKey: Buffer;
 }
 
 export function removeNodeBuilder(data: RemoveNodeInterface, seed: BIP32Interface): Buffer {
@@ -20,7 +19,7 @@ export function removeNodeBuilder(data: RemoveNodeInterface, seed: BIP32Interfac
   const addressLength = writeInt32(ADDRESS_LENGTH);
   const fee = writeInt64(data.fee * 1e8);
 
-  const nodePublicKey = base64ToBuffer(data.nodePublicKey);
+  const nodePublicKey = data.nodePublicKey;
   const bodyLength = writeInt32(nodePublicKey.length);
 
   bytes = Buffer.concat([

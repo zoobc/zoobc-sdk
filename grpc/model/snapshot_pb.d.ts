@@ -12,6 +12,9 @@ import * as model_escrow_pb from "../model/escrow_pb";
 import * as model_multiSignature_pb from "../model/multiSignature_pb";
 import * as model_block_pb from "../model/block_pb";
 import * as model_skippedBlocksmith_pb from "../model/skippedBlocksmith_pb";
+import * as model_feeScale_pb from "../model/feeScale_pb";
+import * as model_feeVote_pb from "../model/feeVote_pb";
+import * as model_liquidPayment_pb from "../model/liquidPayment_pb";
 
 export class SnapshotFileInfo extends jspb.Message {
   getSnapshotfilehash(): Uint8Array | string;
@@ -115,6 +118,36 @@ export class SnapshotPayload extends jspb.Message {
   setSkippedblocksmithsList(value: Array<model_skippedBlocksmith_pb.SkippedBlocksmith>): void;
   addSkippedblocksmiths(value?: model_skippedBlocksmith_pb.SkippedBlocksmith, index?: number): model_skippedBlocksmith_pb.SkippedBlocksmith;
 
+  clearFeescaleList(): void;
+  getFeescaleList(): Array<model_feeScale_pb.FeeScale>;
+  setFeescaleList(value: Array<model_feeScale_pb.FeeScale>): void;
+  addFeescale(value?: model_feeScale_pb.FeeScale, index?: number): model_feeScale_pb.FeeScale;
+
+  clearFeevotecommitmentvoteList(): void;
+  getFeevotecommitmentvoteList(): Array<model_feeVote_pb.FeeVoteCommitmentVote>;
+  setFeevotecommitmentvoteList(value: Array<model_feeVote_pb.FeeVoteCommitmentVote>): void;
+  addFeevotecommitmentvote(value?: model_feeVote_pb.FeeVoteCommitmentVote, index?: number): model_feeVote_pb.FeeVoteCommitmentVote;
+
+  clearFeevoterevealvoteList(): void;
+  getFeevoterevealvoteList(): Array<model_feeVote_pb.FeeVoteRevealVote>;
+  setFeevoterevealvoteList(value: Array<model_feeVote_pb.FeeVoteRevealVote>): void;
+  addFeevoterevealvote(value?: model_feeVote_pb.FeeVoteRevealVote, index?: number): model_feeVote_pb.FeeVoteRevealVote;
+
+  clearLiquidpaymentList(): void;
+  getLiquidpaymentList(): Array<model_liquidPayment_pb.LiquidPayment>;
+  setLiquidpaymentList(value: Array<model_liquidPayment_pb.LiquidPayment>): void;
+  addLiquidpayment(value?: model_liquidPayment_pb.LiquidPayment, index?: number): model_liquidPayment_pb.LiquidPayment;
+
+  clearNodeadmissiontimestampList(): void;
+  getNodeadmissiontimestampList(): Array<model_nodeRegistration_pb.NodeAdmissionTimestamp>;
+  setNodeadmissiontimestampList(value: Array<model_nodeRegistration_pb.NodeAdmissionTimestamp>): void;
+  addNodeadmissiontimestamp(value?: model_nodeRegistration_pb.NodeAdmissionTimestamp, index?: number): model_nodeRegistration_pb.NodeAdmissionTimestamp;
+
+  clearMultisignatureparticipantsList(): void;
+  getMultisignatureparticipantsList(): Array<model_multiSignature_pb.MultiSignatureParticipant>;
+  setMultisignatureparticipantsList(value: Array<model_multiSignature_pb.MultiSignatureParticipant>): void;
+  addMultisignatureparticipants(value?: model_multiSignature_pb.MultiSignatureParticipant, index?: number): model_multiSignature_pb.MultiSignatureParticipant;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SnapshotPayload.AsObject;
   static toObject(includeInstance: boolean, msg: SnapshotPayload): SnapshotPayload.AsObject;
@@ -138,6 +171,12 @@ export namespace SnapshotPayload {
     pendingsignaturesList: Array<model_multiSignature_pb.PendingSignature.AsObject>,
     multisignatureinfosList: Array<model_multiSignature_pb.MultiSignatureInfo.AsObject>,
     skippedblocksmithsList: Array<model_skippedBlocksmith_pb.SkippedBlocksmith.AsObject>,
+    feescaleList: Array<model_feeScale_pb.FeeScale.AsObject>,
+    feevotecommitmentvoteList: Array<model_feeVote_pb.FeeVoteCommitmentVote.AsObject>,
+    feevoterevealvoteList: Array<model_feeVote_pb.FeeVoteRevealVote.AsObject>,
+    liquidpaymentList: Array<model_liquidPayment_pb.LiquidPayment.AsObject>,
+    nodeadmissiontimestampList: Array<model_nodeRegistration_pb.NodeAdmissionTimestamp.AsObject>,
+    multisignatureparticipantsList: Array<model_multiSignature_pb.MultiSignatureParticipant.AsObject>,
   }
 }
 

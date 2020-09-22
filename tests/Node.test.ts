@@ -6,7 +6,8 @@ import {
   GetNodeRegistrationResponse,
   GetNodeRegistrationsResponse,
   NodeRegistration,
-  NodeAddress,
+  GetPendingNodeRegistrationsResponse,
+  GetMyNodePublicKeyResponse,
 } from '../grpc/model/nodeRegistration_pb';
 import { Pagination } from '../grpc/model/pagination_pb';
 import { PostTransactionResponse, Transaction } from '../grpc/model/transaction_pb';
@@ -16,7 +17,9 @@ import { RegisterNodeInterface, registerNodeBuilder } from '../src//helper/trans
 import { UpdateNodeInterface, updateNodeBuilder } from '../src/helper/transaction-builder/update-node';
 import { RemoveNodeInterface, removeNodeBuilder } from '../src/helper/transaction-builder/remove-node';
 import { ClaimNodeInterface, claimNodeBuilder } from '../src/helper/transaction-builder/claim-node';
-import zoobc, { NodeListParams, NodeParams, ZooKeyring, RequestType } from '../src';
+import zoobc, { NodeListParams, NodeParams, ZooKeyring } from '../src';
+import { Empty } from '../grpc/model/empty_pb';
+import Network from '../src/Network';
 
 const hosts = [{ host: 'http://85.90.246.90:8002', name: '168 Testnet' }];
 zoobc.Network.list(hosts);
@@ -48,14 +51,7 @@ function mockGet(params: NodeParams) {
   const nodeRegistration = new NodeRegistration();
 
   if (params) {
-    const { nodeaddress, height, owner, publicKey } = params;
-
-    if (nodeaddress) {
-      const nodeAddress = new NodeAddress();
-      if (nodeaddress.address) nodeAddress.setAddress(nodeaddress.address);
-      if (nodeaddress.port) nodeAddress.setPort(nodeaddress.port);
-      nodeRegistration.setNodeaddress(nodeAddress);
-    }
+    const { height, owner, publicKey } = params;
 
     if (owner) nodeRegistration.setAccountaddress(owner);
     if (publicKey) nodeRegistration.setNodepublickey(publicKey);
@@ -131,6 +127,16 @@ function mockGetHardwareInfo() {
   return new FakeTransportBuilder().withMessages([nodeHardware]).build();
 }
 
+function mockGetNodePendingRegistration() {
+  const response = new GetPendingNodeRegistrationsResponse();
+  return new FakeTransportBuilder().withMessages([response]).build();
+}
+
+function mockGetMyNodePublicKey() {
+  const response = new GetMyNodePublicKeyResponse();
+  return new FakeTransportBuilder().withMessages([response]).build();
+}
+
 describe('Node Unit Testing :', () => {
   describe('getList', () => {
     it('should return object with noderegistrationsList property as an empty array & total property as an number equal to 10', async () => {
@@ -172,13 +178,12 @@ describe('Node Unit Testing :', () => {
 
   describe('register', () => {
     it('register should return new transaction object', async () => {
-      const data = {
+      const data: RegisterNodeInterface = {
         accountAddress: 'zfMr7NYWL5xfZKEtxck1nISatFTVhUk3fCigN39MecoH',
         fee: 0,
-        nodePublicKey: '5E04hoe4JIYpnvSTMMvFr8+GGO7F7AQ/sSRPySagUxM=',
+        nodePublicKey: Buffer.from([]),
         nodeAddress: '',
         funds: 0,
-        poown: Buffer.alloc(8),
       };
 
       const transport = mockRegister({ ...data });
@@ -192,13 +197,12 @@ describe('Node Unit Testing :', () => {
 
   describe('update', () => {
     it('update should return new transaction object', async () => {
-      const data = {
+      const data: UpdateNodeInterface = {
         accountAddress: 'zfMr7NYWL5xfZKEtxck1nISatFTVhUk3fCigN39MecoH',
         fee: 0,
-        nodePublicKey: '5E04hoe4JIYpnvSTMMvFr8+GGO7F7AQ/sSRPySagUxM=',
+        nodePublicKey: Buffer.from([]),
         nodeAddress: '',
         funds: 0,
-        poown: Buffer.alloc(8),
       };
 
       const transport = mockUpdate({ ...data });
@@ -212,13 +216,10 @@ describe('Node Unit Testing :', () => {
 
   describe('remove', () => {
     it('remove should return new transaction object', async () => {
-      const data = {
+      const data: RemoveNodeInterface = {
         accountAddress: 'zfMr7NYWL5xfZKEtxck1nISatFTVhUk3fCigN39MecoH',
         fee: 0,
-        nodePublicKey: '5E04hoe4JIYpnvSTMMvFr8+GGO7F7AQ/sSRPySagUxM=',
-        nodeAddress: '',
-        funds: 0,
-        poown: Buffer.alloc(8),
+        nodePublicKey: Buffer.from([]),
       };
 
       const transport = mockRemove({ ...data });
@@ -235,7 +236,7 @@ describe('Node Unit Testing :', () => {
       const data: ClaimNodeInterface = {
         accountAddress: 'zfMr7NYWL5xfZKEtxck1nISatFTVhUk3fCigN39MecoH',
         fee: 0,
-        nodePublicKey: '5E04hoe4JIYpnvSTMMvFr8+GGO7F7AQ/sSRPySagUxM=',
+        nodePublicKey: Buffer.from([]),
         nodeAddress: '',
       };
 
@@ -272,6 +273,33 @@ describe('Node Unit Testing :', () => {
           expect(receivedNodeHardware).to.be.an('object');
         },
       );
+    });
+  });
+
+  describe('getPendingNodeRegistration', () => {
+    it('getPendingNodeRegistration should stream pending node registration array', async () => {
+      grpc.setDefaultTransport(mockGetNodePendingRegistration());
+
+      let receivedPendingNodeRegistration: NodeRegistration.AsObject[] | undefined;
+      const limit = 1;
+
+      zoobc.Node.getPending(limit, childSeed).subscribe(
+        data => (receivedPendingNodeRegistration = data.noderegistrationsList),
+        () => {
+          expect(receivedPendingNodeRegistration).to.be.an('array');
+        },
+      );
+    });
+  });
+
+  describe('getMyNodePublicKey', () => {
+    it('getMyNodePublicKey should return object of nodepublickey', async () => {
+      const transport = mockGetMyNodePublicKey();
+      grpc.setDefaultTransport(transport);
+      const networkIP = Network.selected();
+
+      const result = await zoobc.Node.getMyNodePublicKey(networkIP.host);
+      expect(result).to.be.an('object');
     });
   });
 });

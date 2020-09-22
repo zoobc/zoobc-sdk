@@ -13,7 +13,9 @@ import {
   GetNodeRegistrationResponse,
   GetNodeRegistrationsResponse,
   GetNodeRegistrationsRequest,
-  NodeAddress,
+  GetPendingNodeRegistrationsRequest,
+  GetPendingNodeRegistrationsResponse,
+  GetMyNodePublicKeyResponse,
 } from '../grpc/model/nodeRegistration_pb';
 import { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
 import { UpdateNodeInterface, updateNodeBuilder } from './helper/transaction-builder/update-node';
@@ -23,11 +25,19 @@ import Poown from './Poown';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
+import { Empty } from '../grpc/model/empty_pb';
+
+export type NodeHardwareResponse = GetNodeHardwareResponse.AsObject;
+export type GenerateNodeKeyResponses = GenerateNodeKeyResponse.AsObject;
+export type NodeRegistrationsResponse = GetNodeRegistrationResponse.AsObject;
+export type NodePostTransactionResponse = PostTransactionResponse.AsObject;
+export type GetPendingNodeRegistrationResponse = GetPendingNodeRegistrationsResponse.AsObject;
+export type GetMyNodePublicKeyResponses = GetMyNodePublicKeyResponse.AsObject;
 
 export interface NodeListParams {
   minHeight?: number;
   maxHeight?: number;
-  status?: 0 | 1 | 2;
+  status?: [0 | 1 | 2];
   pagination?: {
     limit?: number;
     page?: number;
@@ -39,13 +49,9 @@ export interface NodeParams {
   owner?: string;
   publicKey?: string;
   height?: number;
-  nodeaddress?: {
-    address?: string;
-    port?: number;
-  };
 }
 
-function getHardwareInfo(networkIP: string, childSeed: BIP32Interface): Observable<GetNodeHardwareResponse.AsObject> {
+function getHardwareInfo(networkIP: string, childSeed: BIP32Interface): Observable<NodeHardwareResponse> {
   return new Observable(observer => {
     const auth = Poown.createAuth(RequestType.GETNODEHARDWARE, childSeed);
     const request = new GetNodeHardwareRequest();
@@ -63,14 +69,17 @@ function getHardwareInfo(networkIP: string, childSeed: BIP32Interface): Observab
   });
 }
 
-function generateNodeKey(networkIP: string, childSeed: BIP32Interface): Promise<GenerateNodeKeyResponse.AsObject> {
+function generateNodeKey(networkIP: string, childSeed: BIP32Interface): Promise<GenerateNodeKeyResponses> {
   return new Promise((resolve, reject) => {
     const auth = Poown.createAuth(RequestType.GENERATETNODEKEY, childSeed);
     const metadata = new grpc.Metadata({ authorization: auth });
     const request = new GenerateNodeKeyRequest();
     const client = new NodeAdminServiceClient(networkIP);
     client.generateNodeKey(request, metadata, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
@@ -94,30 +103,26 @@ function getList(params?: NodeListParams): Promise<GetNodeRegistrationsResponse.
 
       if (maxHeight) request.setMaxregistrationheight(maxHeight);
       if (minHeight) request.setMinregistrationheight(minHeight);
-      if (status) request.setRegistrationstatus(status);
+      if (status) request.setRegistrationstatusesList(status);
     }
 
     const client = new NodeRegistrationServiceClient(networkIP.host);
     client.getNodeRegistrations(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
 }
 
-function get(params: NodeParams): Promise<GetNodeRegistrationResponse.AsObject> {
+function get(params: NodeParams): Promise<NodeRegistrationsResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetNodeRegistrationRequest();
     if (params) {
-      const { nodeaddress, height, owner, publicKey } = params;
-
-      if (nodeaddress) {
-        const nodeAddress = new NodeAddress();
-        if (nodeaddress.address) nodeAddress.setAddress(nodeaddress.address);
-        if (nodeaddress.port) nodeAddress.setPort(nodeaddress.port);
-        request.setNodeaddress(nodeAddress);
-      }
+      const { height, owner, publicKey } = params;
 
       if (owner) request.setAccountaddress(owner);
       if (publicKey) request.setNodepublickey(publicKey);
@@ -127,16 +132,16 @@ function get(params: NodeParams): Promise<GetNodeRegistrationResponse.AsObject> 
     const client = new NodeRegistrationServiceClient(networkIP.host);
     client.getNodeRegistration(request, (err, res) => {
       if (err) {
-        const { code, message } = err;
+        const { code, message, metadata } = err;
         if (code == grpc.Code.NotFound) return resolve(undefined);
-        else if (code != grpc.Code.OK) return reject(message);
+        else if (code != grpc.Code.OK) return reject({ code, message, metadata });
       }
       if (res) resolve(res.toObject());
     });
   });
 }
 
-function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
+function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promise<NodePostTransactionResponse> {
   return new Promise((resolve, reject) => {
     const auth = Poown.createAuth(RequestType.GETPROOFOFOWNERSHIP, childSeed);
     Poown.request(auth, data.nodeAddress).then(poown => {
@@ -148,14 +153,17 @@ function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promi
       const networkIP = Network.selected();
       const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
-        if (err) reject(err);
+        if (err) {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        }
         if (res) resolve(res.toObject());
       });
     });
   });
 }
 
-function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
+function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<NodePostTransactionResponse> {
   return new Promise((resolve, reject) => {
     const auth = Poown.createAuth(RequestType.GETPROOFOFOWNERSHIP, childSeed);
     Poown.request(auth, data.nodeAddress)
@@ -168,17 +176,18 @@ function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<P
         const networkIP = Network.selected();
         const client = new TransactionServiceClient(networkIP.host);
         client.postTransaction(request, (err, res) => {
-          if (err) reject(err);
+          if (err) {
+            const { code, message, metadata } = err;
+            reject({ code, message, metadata });
+          }
           if (res) resolve(res.toObject());
         });
       })
-      .catch(err => {
-        reject(err);
-      });
+      .catch(err => reject(err));
   });
 }
 
-function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
+function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<NodePostTransactionResponse> {
   return new Promise((resolve, reject) => {
     const bytes = removeNodeBuilder(data, childSeed);
 
@@ -188,27 +197,69 @@ function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<P
     const networkIP = Network.selected();
     const client = new TransactionServiceClient(networkIP.host);
     client.postTransaction(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
 }
 
-function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
+function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<NodePostTransactionResponse> {
   return new Promise((resolve, reject) => {
     const auth = Poown.createAuth(RequestType.GETPROOFOFOWNERSHIP, childSeed);
-    Poown.request(auth, data.nodeAddress).then(poown => {
-      const bytes = claimNodeBuilder(data, poown, childSeed);
+    Poown.request(auth, data.nodeAddress)
+      .then(poown => {
+        const bytes = claimNodeBuilder(data, poown, childSeed);
 
-      const request = new PostTransactionRequest();
-      request.setTransactionbytes(bytes);
+        const request = new PostTransactionRequest();
+        request.setTransactionbytes(bytes);
 
-      const networkIP = Network.selected();
-      const client = new TransactionServiceClient(networkIP.host);
-      client.postTransaction(request, (err, res) => {
-        if (err) reject(err);
-        if (res) resolve(res.toObject());
+        const networkIP = Network.selected();
+        const client = new TransactionServiceClient(networkIP.host);
+        client.postTransaction(request, (err, res) => {
+          if (err) {
+            const { code, message, metadata } = err;
+            reject({ code, message, metadata });
+          }
+          if (res) resolve(res.toObject());
+        });
+      })
+      .catch(err => reject(err));
+  });
+}
+
+function getPending(limit: number, childSeed: BIP32Interface): Observable<GetPendingNodeRegistrationResponse> {
+  return new Observable(observer => {
+    const auth = Poown.createAuth(RequestType.GETPENDINGNODEREGISTRATIONSSTREAM, childSeed);
+    const request = new GetPendingNodeRegistrationsRequest();
+    request.setLimit(limit);
+    const networkIP = Network.selected();
+    const client = new NodeRegistrationServiceClient(networkIP.host)
+      .getPendingNodeRegistrations(new grpc.Metadata({ authorization: auth }))
+      .write(request)
+      .on('data', message => {
+        observer.next(message.toObject());
+      })
+      .on('end', status => {
+        observer.error(status);
       });
+    client.end();
+  });
+}
+
+export function getMyNodePublicKey(networkIP: string): Promise<GetMyNodePublicKeyResponses> {
+  return new Promise((resolve, reject) => {
+    const request = new Empty();
+
+    const client = new NodeRegistrationServiceClient(networkIP);
+    client.getMyNodePublicKey(request, (err, res) => {
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
+      if (res) resolve(res.toObject());
     });
   });
 }
@@ -222,4 +273,6 @@ export default {
   generateNodeKey,
   getList,
   get,
+  getPending,
+  getMyNodePublicKey,
 };

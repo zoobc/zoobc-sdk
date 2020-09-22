@@ -8,6 +8,8 @@ var model_block_pb = require("../model/block_pb");
 var model_blockchain_pb = require("../model/blockchain_pb");
 var model_transaction_pb = require("../model/transaction_pb");
 var model_fileDownload_pb = require("../model/fileDownload_pb");
+var model_nodeAddressInfo_pb = require("../model/nodeAddressInfo_pb");
+var model_proofOfOrigin_pb = require("../model/proofOfOrigin_pb");
 var grpc = require("@improbable-eng/grpc-web").grpc;
 
 var P2PCommunication = (function () {
@@ -15,6 +17,33 @@ var P2PCommunication = (function () {
   P2PCommunication.serviceName = "service.P2PCommunication";
   return P2PCommunication;
 }());
+
+P2PCommunication.GetNodeAddressesInfo = {
+  methodName: "GetNodeAddressesInfo",
+  service: P2PCommunication,
+  requestStream: false,
+  responseStream: false,
+  requestType: model_nodeAddressInfo_pb.GetNodeAddressesInfoRequest,
+  responseType: model_nodeAddressInfo_pb.GetNodeAddressesInfoResponse
+};
+
+P2PCommunication.SendNodeAddressInfo = {
+  methodName: "SendNodeAddressInfo",
+  service: P2PCommunication,
+  requestStream: false,
+  responseStream: false,
+  requestType: model_nodeAddressInfo_pb.SendNodeAddressInfoRequest,
+  responseType: model_empty_pb.Empty
+};
+
+P2PCommunication.GetNodeProofOfOrigin = {
+  methodName: "GetNodeProofOfOrigin",
+  service: P2PCommunication,
+  requestStream: false,
+  responseStream: false,
+  requestType: model_proofOfOrigin_pb.GetNodeProofOfOriginRequest,
+  responseType: model_proofOfOrigin_pb.ProofOfOrigin
+};
 
 P2PCommunication.GetPeerInfo = {
   methodName: "GetPeerInfo",
@@ -130,6 +159,99 @@ function P2PCommunicationClient(serviceHost, options) {
   this.serviceHost = serviceHost;
   this.options = options || {};
 }
+
+P2PCommunicationClient.prototype.getNodeAddressesInfo = function getNodeAddressesInfo(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(P2PCommunication.GetNodeAddressesInfo, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+P2PCommunicationClient.prototype.sendNodeAddressInfo = function sendNodeAddressInfo(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(P2PCommunication.SendNodeAddressInfo, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+P2PCommunicationClient.prototype.getNodeProofOfOrigin = function getNodeProofOfOrigin(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(P2PCommunication.GetNodeProofOfOrigin, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
 
 P2PCommunicationClient.prototype.getPeerInfo = function getPeerInfo(requestMessage, metadata, callback) {
   if (arguments.length === 2) {

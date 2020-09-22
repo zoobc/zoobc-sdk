@@ -70,10 +70,11 @@ proto.model.SpineBlockManifest.toObject = function(includeInstance, msg) {
     id: jspb.Message.getFieldWithDefault(msg, 1, "0"),
     fullfilehash: msg.getFullfilehash_asB64(),
     filechunkhashes: msg.getFilechunkhashes_asB64(),
-    spineblockmanifestheight: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    chaintype: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    spineblockmanifesttype: jspb.Message.getFieldWithDefault(msg, 6, 0),
-    expirationtimestamp: jspb.Message.getFieldWithDefault(msg, 7, 0)
+    manifestreferenceheight: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    manifestspineblockheight: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    chaintype: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    spineblockmanifesttype: jspb.Message.getFieldWithDefault(msg, 7, 0),
+    expirationtimestamp: jspb.Message.getFieldWithDefault(msg, 8, 0)
   };
 
   if (includeInstance) {
@@ -124,17 +125,21 @@ proto.model.SpineBlockManifest.deserializeBinaryFromReader = function(msg, reade
       break;
     case 4:
       var value = /** @type {number} */ (reader.readUint32());
-      msg.setSpineblockmanifestheight(value);
+      msg.setManifestreferenceheight(value);
       break;
     case 5:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setManifestspineblockheight(value);
+      break;
+    case 6:
       var value = /** @type {number} */ (reader.readInt32());
       msg.setChaintype(value);
       break;
-    case 6:
+    case 7:
       var value = /** @type {!proto.model.SpineBlockManifestType} */ (reader.readEnum());
       msg.setSpineblockmanifesttype(value);
       break;
-    case 7:
+    case 8:
       var value = /** @type {number} */ (reader.readInt64());
       msg.setExpirationtimestamp(value);
       break;
@@ -188,31 +193,38 @@ proto.model.SpineBlockManifest.serializeBinaryToWriter = function(message, write
       f
     );
   }
-  f = message.getSpineblockmanifestheight();
+  f = message.getManifestreferenceheight();
   if (f !== 0) {
     writer.writeUint32(
       4,
       f
     );
   }
+  f = message.getManifestspineblockheight();
+  if (f !== 0) {
+    writer.writeUint32(
+      5,
+      f
+    );
+  }
   f = message.getChaintype();
   if (f !== 0) {
     writer.writeInt32(
-      5,
+      6,
       f
     );
   }
   f = message.getSpineblockmanifesttype();
   if (f !== 0.0) {
     writer.writeEnum(
-      6,
+      7,
       f
     );
   }
   f = message.getExpirationtimestamp();
   if (f !== 0) {
     writer.writeInt64(
-      7,
+      8,
       f
     );
   }
@@ -313,62 +325,77 @@ proto.model.SpineBlockManifest.prototype.setFilechunkhashes = function(value) {
 
 
 /**
- * optional uint32 SpineBlockManifestHeight = 4;
+ * optional uint32 ManifestReferenceHeight = 4;
  * @return {number}
  */
-proto.model.SpineBlockManifest.prototype.getSpineblockmanifestheight = function() {
+proto.model.SpineBlockManifest.prototype.getManifestreferenceheight = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
 
 /** @param {number} value */
-proto.model.SpineBlockManifest.prototype.setSpineblockmanifestheight = function(value) {
+proto.model.SpineBlockManifest.prototype.setManifestreferenceheight = function(value) {
   jspb.Message.setProto3IntField(this, 4, value);
 };
 
 
 /**
- * optional int32 ChainType = 5;
+ * optional uint32 ManifestSpineBlockHeight = 5;
  * @return {number}
  */
-proto.model.SpineBlockManifest.prototype.getChaintype = function() {
+proto.model.SpineBlockManifest.prototype.getManifestspineblockheight = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
 };
 
 
 /** @param {number} value */
-proto.model.SpineBlockManifest.prototype.setChaintype = function(value) {
+proto.model.SpineBlockManifest.prototype.setManifestspineblockheight = function(value) {
   jspb.Message.setProto3IntField(this, 5, value);
 };
 
 
 /**
- * optional SpineBlockManifestType SpineBlockManifestType = 6;
+ * optional int32 ChainType = 6;
+ * @return {number}
+ */
+proto.model.SpineBlockManifest.prototype.getChaintype = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/** @param {number} value */
+proto.model.SpineBlockManifest.prototype.setChaintype = function(value) {
+  jspb.Message.setProto3IntField(this, 6, value);
+};
+
+
+/**
+ * optional SpineBlockManifestType SpineBlockManifestType = 7;
  * @return {!proto.model.SpineBlockManifestType}
  */
 proto.model.SpineBlockManifest.prototype.getSpineblockmanifesttype = function() {
-  return /** @type {!proto.model.SpineBlockManifestType} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+  return /** @type {!proto.model.SpineBlockManifestType} */ (jspb.Message.getFieldWithDefault(this, 7, 0));
 };
 
 
 /** @param {!proto.model.SpineBlockManifestType} value */
 proto.model.SpineBlockManifest.prototype.setSpineblockmanifesttype = function(value) {
-  jspb.Message.setProto3EnumField(this, 6, value);
+  jspb.Message.setProto3EnumField(this, 7, value);
 };
 
 
 /**
- * optional int64 ExpirationTimestamp = 7;
+ * optional int64 ExpirationTimestamp = 8;
  * @return {number}
  */
 proto.model.SpineBlockManifest.prototype.getExpirationtimestamp = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 7, 0));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 8, 0));
 };
 
 
 /** @param {number} value */
 proto.model.SpineBlockManifest.prototype.setExpirationtimestamp = function(value) {
-  jspb.Message.setProto3IntField(this, 7, value);
+  jspb.Message.setProto3IntField(this, 8, value);
 };
 
 

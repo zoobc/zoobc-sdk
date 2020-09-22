@@ -68,6 +68,12 @@ export class GetEscrowTransactionsRequest extends jspb.Message {
   getApproveraddress(): string;
   setApproveraddress(value: string): void;
 
+  getSenderaddress(): string;
+  setSenderaddress(value: string): void;
+
+  getRecipientaddress(): string;
+  setRecipientaddress(value: string): void;
+
   getId(): string;
   setId(value: string): void;
 
@@ -81,6 +87,9 @@ export class GetEscrowTransactionsRequest extends jspb.Message {
 
   getBlockheightend(): number;
   setBlockheightend(value: number): void;
+
+  getLatest(): boolean;
+  setLatest(value: boolean): void;
 
   hasPagination(): boolean;
   clearPagination(): void;
@@ -100,10 +109,13 @@ export class GetEscrowTransactionsRequest extends jspb.Message {
 export namespace GetEscrowTransactionsRequest {
   export type AsObject = {
     approveraddress: string,
+    senderaddress: string,
+    recipientaddress: string,
     id: string,
     statusesList: Array<EscrowStatusMap[keyof EscrowStatusMap]>,
     blockheightstart: number,
     blockheightend: number,
+    latest: boolean,
     pagination?: model_pagination_pb.Pagination.AsObject,
   }
 }
@@ -166,6 +178,7 @@ export const EscrowStatus: EscrowStatusMap;
 export interface EscrowApprovalMap {
   APPROVE: 0;
   REJECT: 1;
+  EXPIRE: 2;
 }
 
 export const EscrowApproval: EscrowApprovalMap;

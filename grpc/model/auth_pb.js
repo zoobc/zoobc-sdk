@@ -19,7 +19,8 @@ goog.exportSymbol('proto.model.RequestType', null, global);
 proto.model.RequestType = {
   GETNODEHARDWARE: 0,
   GETPROOFOFOWNERSHIP: 1,
-  GENERATETNODEKEY: 2
+  GENERATETNODEKEY: 2,
+  GETPENDINGNODEREGISTRATIONSSTREAM: 3
 };
 
 goog.object.extend(exports, proto.model);

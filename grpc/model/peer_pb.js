@@ -641,7 +641,7 @@ proto.model.GetPeerInfoRequest.prototype.toObject = function(opt_includeInstance
  */
 proto.model.GetPeerInfoRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    version: jspb.Message.getFieldWithDefault(msg, 1, "")
+
   };
 
   if (includeInstance) {
@@ -678,10 +678,6 @@ proto.model.GetPeerInfoRequest.deserializeBinaryFromReader = function(msg, reade
     }
     var field = reader.getFieldNumber();
     switch (field) {
-    case 1:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setVersion(value);
-      break;
     default:
       reader.skipField();
       break;
@@ -711,28 +707,6 @@ proto.model.GetPeerInfoRequest.prototype.serializeBinary = function() {
  */
 proto.model.GetPeerInfoRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getVersion();
-  if (f.length > 0) {
-    writer.writeString(
-      1,
-      f
-    );
-  }
-};
-
-
-/**
- * optional string Version = 1;
- * @return {string}
- */
-proto.model.GetPeerInfoRequest.prototype.getVersion = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
-};
-
-
-/** @param {string} value */
-proto.model.GetPeerInfoRequest.prototype.setVersion = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
 };
 
 

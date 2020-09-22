@@ -168,18 +168,18 @@ proto.service.BlockServicePromiseClient.prototype.getBlocks =
  * @const
  * @type {!grpc.web.MethodDescriptor<
  *   !proto.model.GetBlockRequest,
- *   !proto.model.BlockExtendedInfo>}
+ *   !proto.model.GetBlockResponse>}
  */
 const methodDescriptor_BlockService_GetBlock = new grpc.web.MethodDescriptor(
   '/service.BlockService/GetBlock',
   grpc.web.MethodType.UNARY,
   model_block_pb.GetBlockRequest,
-  model_block_pb.BlockExtendedInfo,
+  model_block_pb.GetBlockResponse,
   /** @param {!proto.model.GetBlockRequest} request */
   function(request) {
     return request.serializeBinary();
   },
-  model_block_pb.BlockExtendedInfo.deserializeBinary
+  model_block_pb.GetBlockResponse.deserializeBinary
 );
 
 
@@ -187,15 +187,15 @@ const methodDescriptor_BlockService_GetBlock = new grpc.web.MethodDescriptor(
  * @const
  * @type {!grpc.web.AbstractClientBase.MethodInfo<
  *   !proto.model.GetBlockRequest,
- *   !proto.model.BlockExtendedInfo>}
+ *   !proto.model.GetBlockResponse>}
  */
 const methodInfo_BlockService_GetBlock = new grpc.web.AbstractClientBase.MethodInfo(
-  model_block_pb.BlockExtendedInfo,
+  model_block_pb.GetBlockResponse,
   /** @param {!proto.model.GetBlockRequest} request */
   function(request) {
     return request.serializeBinary();
   },
-  model_block_pb.BlockExtendedInfo.deserializeBinary
+  model_block_pb.GetBlockResponse.deserializeBinary
 );
 
 
@@ -204,9 +204,9 @@ const methodInfo_BlockService_GetBlock = new grpc.web.AbstractClientBase.MethodI
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @param {function(?grpc.web.Error, ?proto.model.BlockExtendedInfo)}
+ * @param {function(?grpc.web.Error, ?proto.model.GetBlockResponse)}
  *     callback The callback function(error, response)
- * @return {!grpc.web.ClientReadableStream<!proto.model.BlockExtendedInfo>|undefined}
+ * @return {!grpc.web.ClientReadableStream<!proto.model.GetBlockResponse>|undefined}
  *     The XHR Node Readable Stream
  */
 proto.service.BlockServiceClient.prototype.getBlock =
@@ -225,7 +225,7 @@ proto.service.BlockServiceClient.prototype.getBlock =
  *     request proto
  * @param {?Object<string, string>} metadata User defined
  *     call metadata
- * @return {!Promise<!proto.model.BlockExtendedInfo>}
+ * @return {!Promise<!proto.model.GetBlockResponse>}
  *     A native promise that resolves to the response
  */
 proto.service.BlockServicePromiseClient.prototype.getBlock =

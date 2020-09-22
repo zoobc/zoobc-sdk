@@ -8,6 +8,9 @@ import {
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { MempoolServiceClient } from '../grpc/service/mempool_pb_service';
 
+export type MempoolTransactionsResponse = GetMempoolTransactionsResponse.AsObject;
+export type MempoolTransactionResponse = MempoolTransaction.AsObject;
+
 export interface MempoolListParams {
   address?: string;
   timestampStart?: string;
@@ -19,7 +22,7 @@ export interface MempoolListParams {
   };
 }
 
-function getList(params?: MempoolListParams): Promise<GetMempoolTransactionsResponse.AsObject> {
+function getList(params?: MempoolListParams): Promise<MempoolTransactionsResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetMempoolTransactionsRequest();
@@ -41,13 +44,16 @@ function getList(params?: MempoolListParams): Promise<GetMempoolTransactionsResp
 
     const client = new MempoolServiceClient(networkIP.host);
     client.getMempoolTransactions(request, (err, res) => {
-      if (err) reject(err);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject());
     });
   });
 }
 
-function get(id: string): Promise<MempoolTransaction.AsObject> {
+function get(id: string): Promise<MempoolTransactionResponse> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetMempoolTransactionRequest();
@@ -56,7 +62,10 @@ function get(id: string): Promise<MempoolTransaction.AsObject> {
 
     const client = new MempoolServiceClient(networkIP.host);
     client.getMempoolTransaction(request, (err, res) => {
-      if (err) reject(err.message);
+      if (err) {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      }
       if (res) resolve(res.toObject().transaction);
     });
   });

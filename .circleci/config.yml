@@ -3,11 +3,12 @@ version: 2
 defaults: &defaults
   working_directory: ~/zoobc-sdk
   docker:
-    - image: circleci/node:6
+    - image: circleci/node:10.14.2
 
 jobs:
   test:
     <<: *defaults
+    working_directory: ~/zoobc-sdk
     steps:
       - checkout
       - run:
@@ -16,7 +17,7 @@ jobs:
             sudo apt update && sudo apt install git
             npm install --no-audit
       - run:
-          name: Unit Testing for NodeJs 6
+          name: Running Unit Testing
           command: npm run test
 
   publish:

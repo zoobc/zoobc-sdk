@@ -68,10 +68,11 @@ proto.model.SpinePublicKey.prototype.toObject = function(opt_includeInstance) {
 proto.model.SpinePublicKey.toObject = function(includeInstance, msg) {
   var f, obj = {
     nodepublickey: msg.getNodepublickey_asB64(),
-    mainblockheight: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    publickeyaction: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    latest: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
-    height: jspb.Message.getFieldWithDefault(msg, 5, 0)
+    nodeid: jspb.Message.getFieldWithDefault(msg, 2, "0"),
+    mainblockheight: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    publickeyaction: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    latest: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
+    height: jspb.Message.getFieldWithDefault(msg, 6, 0)
   };
 
   if (includeInstance) {
@@ -113,18 +114,22 @@ proto.model.SpinePublicKey.deserializeBinaryFromReader = function(msg, reader) {
       msg.setNodepublickey(value);
       break;
     case 2:
+      var value = /** @type {string} */ (reader.readInt64String());
+      msg.setNodeid(value);
+      break;
+    case 3:
       var value = /** @type {number} */ (reader.readUint32());
       msg.setMainblockheight(value);
       break;
-    case 3:
+    case 4:
       var value = /** @type {!proto.model.SpinePublicKeyAction} */ (reader.readEnum());
       msg.setPublickeyaction(value);
       break;
-    case 4:
+    case 5:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setLatest(value);
       break;
-    case 5:
+    case 6:
       var value = /** @type {number} */ (reader.readUint32());
       msg.setHeight(value);
       break;
@@ -164,31 +169,38 @@ proto.model.SpinePublicKey.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
+  f = message.getNodeid();
+  if (parseInt(f, 10) !== 0) {
+    writer.writeInt64String(
+      2,
+      f
+    );
+  }
   f = message.getMainblockheight();
   if (f !== 0) {
     writer.writeUint32(
-      2,
+      3,
       f
     );
   }
   f = message.getPublickeyaction();
   if (f !== 0.0) {
     writer.writeEnum(
-      3,
+      4,
       f
     );
   }
   f = message.getLatest();
   if (f) {
     writer.writeBool(
-      4,
+      5,
       f
     );
   }
   f = message.getHeight();
   if (f !== 0) {
     writer.writeUint32(
-      5,
+      6,
       f
     );
   }
@@ -235,62 +247,77 @@ proto.model.SpinePublicKey.prototype.setNodepublickey = function(value) {
 
 
 /**
- * optional uint32 MainBlockHeight = 2;
+ * optional int64 NodeID = 2;
+ * @return {string}
+ */
+proto.model.SpinePublicKey.prototype.getNodeid = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, "0"));
+};
+
+
+/** @param {string} value */
+proto.model.SpinePublicKey.prototype.setNodeid = function(value) {
+  jspb.Message.setProto3StringIntField(this, 2, value);
+};
+
+
+/**
+ * optional uint32 MainBlockHeight = 3;
  * @return {number}
  */
 proto.model.SpinePublicKey.prototype.getMainblockheight = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
 /** @param {number} value */
 proto.model.SpinePublicKey.prototype.setMainblockheight = function(value) {
-  jspb.Message.setProto3IntField(this, 2, value);
+  jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
 /**
- * optional SpinePublicKeyAction PublicKeyAction = 3;
+ * optional SpinePublicKeyAction PublicKeyAction = 4;
  * @return {!proto.model.SpinePublicKeyAction}
  */
 proto.model.SpinePublicKey.prototype.getPublickeyaction = function() {
-  return /** @type {!proto.model.SpinePublicKeyAction} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+  return /** @type {!proto.model.SpinePublicKeyAction} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
 
 /** @param {!proto.model.SpinePublicKeyAction} value */
 proto.model.SpinePublicKey.prototype.setPublickeyaction = function(value) {
-  jspb.Message.setProto3EnumField(this, 3, value);
+  jspb.Message.setProto3EnumField(this, 4, value);
 };
 
 
 /**
- * optional bool Latest = 4;
+ * optional bool Latest = 5;
  * @return {boolean}
  */
 proto.model.SpinePublicKey.prototype.getLatest = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 4, false));
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 5, false));
 };
 
 
 /** @param {boolean} value */
 proto.model.SpinePublicKey.prototype.setLatest = function(value) {
-  jspb.Message.setProto3BooleanField(this, 4, value);
+  jspb.Message.setProto3BooleanField(this, 5, value);
 };
 
 
 /**
- * optional uint32 Height = 5;
+ * optional uint32 Height = 6;
  * @return {number}
  */
 proto.model.SpinePublicKey.prototype.getHeight = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
 };
 
 
 /** @param {number} value */
 proto.model.SpinePublicKey.prototype.setHeight = function(value) {
-  jspb.Message.setProto3IntField(this, 5, value);
+  jspb.Message.setProto3IntField(this, 6, value);
 };
 
 

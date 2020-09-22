@@ -32,11 +32,21 @@ type MultisigServiceGetMultisignatureInfo = {
   readonly responseType: typeof model_multiSignature_pb.GetMultisignatureInfoResponse;
 };
 
+type MultisigServiceGetMultisigAddressByParticipantAddress = {
+  readonly methodName: string;
+  readonly service: typeof MultisigService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof model_multiSignature_pb.GetMultisigAddressByParticipantAddressRequest;
+  readonly responseType: typeof model_multiSignature_pb.GetMultisigAddressByParticipantAddressResponse;
+};
+
 export class MultisigService {
   static readonly serviceName: string;
   static readonly GetPendingTransactions: MultisigServiceGetPendingTransactions;
   static readonly GetPendingTransactionDetailByTransactionHash: MultisigServiceGetPendingTransactionDetailByTransactionHash;
   static readonly GetMultisignatureInfo: MultisigServiceGetMultisignatureInfo;
+  static readonly GetMultisigAddressByParticipantAddress: MultisigServiceGetMultisigAddressByParticipantAddress;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -97,6 +107,15 @@ export class MultisigServiceClient {
   getMultisignatureInfo(
     requestMessage: model_multiSignature_pb.GetMultisignatureInfoRequest,
     callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisignatureInfoResponse|null) => void
+  ): UnaryResponse;
+  getMultisigAddressByParticipantAddress(
+    requestMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressResponse|null) => void
+  ): UnaryResponse;
+  getMultisigAddressByParticipantAddress(
+    requestMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressRequest,
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressResponse|null) => void
   ): UnaryResponse;
 }
 

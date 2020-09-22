@@ -8,6 +8,7 @@ import * as model_batchReceipt_pb from "../model/batchReceipt_pb";
 import * as model_nodeRegistration_pb from "../model/nodeRegistration_pb";
 import * as model_escrow_pb from "../model/escrow_pb";
 import * as model_multiSignature_pb from "../model/multiSignature_pb";
+import * as model_feeVote_pb from "../model/feeVote_pb";
 
 export class Transaction extends jspb.Message {
   getVersion(): number;
@@ -106,6 +107,26 @@ export class Transaction extends jspb.Message {
   getMultisignaturetransactionbody(): MultiSignatureTransactionBody | undefined;
   setMultisignaturetransactionbody(value?: MultiSignatureTransactionBody): void;
 
+  hasFeevotecommittransactionbody(): boolean;
+  clearFeevotecommittransactionbody(): void;
+  getFeevotecommittransactionbody(): FeeVoteCommitTransactionBody | undefined;
+  setFeevotecommittransactionbody(value?: FeeVoteCommitTransactionBody): void;
+
+  hasFeevoterevealtransactionbody(): boolean;
+  clearFeevoterevealtransactionbody(): void;
+  getFeevoterevealtransactionbody(): FeeVoteRevealTransactionBody | undefined;
+  setFeevoterevealtransactionbody(value?: FeeVoteRevealTransactionBody): void;
+
+  hasLiquidpaymenttransactionbody(): boolean;
+  clearLiquidpaymenttransactionbody(): void;
+  getLiquidpaymenttransactionbody(): LiquidPaymentTransactionBody | undefined;
+  setLiquidpaymenttransactionbody(value?: LiquidPaymentTransactionBody): void;
+
+  hasLiquidpaymentstoptransactionbody(): boolean;
+  clearLiquidpaymentstoptransactionbody(): void;
+  getLiquidpaymentstoptransactionbody(): LiquidPaymentStopTransactionBody | undefined;
+  setLiquidpaymentstoptransactionbody(value?: LiquidPaymentStopTransactionBody): void;
+
   getSignature(): Uint8Array | string;
   getSignature_asU8(): Uint8Array;
   getSignature_asB64(): string;
@@ -153,6 +174,10 @@ export namespace Transaction {
     removeaccountdatasettransactionbody?: RemoveAccountDatasetTransactionBody.AsObject,
     approvalescrowtransactionbody?: ApprovalEscrowTransactionBody.AsObject,
     multisignaturetransactionbody?: MultiSignatureTransactionBody.AsObject,
+    feevotecommittransactionbody?: FeeVoteCommitTransactionBody.AsObject,
+    feevoterevealtransactionbody?: FeeVoteRevealTransactionBody.AsObject,
+    liquidpaymenttransactionbody?: LiquidPaymentTransactionBody.AsObject,
+    liquidpaymentstoptransactionbody?: LiquidPaymentStopTransactionBody.AsObject,
     signature: Uint8Array | string,
     escrow?: model_escrow_pb.Escrow.AsObject,
   }
@@ -169,6 +194,10 @@ export namespace Transaction {
     REMOVEACCOUNTDATASETTRANSACTIONBODY = 22,
     APPROVALESCROWTRANSACTIONBODY = 23,
     MULTISIGNATURETRANSACTIONBODY = 24,
+    FEEVOTECOMMITTRANSACTIONBODY = 25,
+    FEEVOTEREVEALTRANSACTIONBODY = 26,
+    LIQUIDPAYMENTTRANSACTIONBODY = 27,
+    LIQUIDPAYMENTSTOPTRANSACTIONBODY = 28,
   }
 }
 
@@ -217,11 +246,6 @@ export class NodeRegistrationTransactionBody extends jspb.Message {
   getAccountaddress(): string;
   setAccountaddress(value: string): void;
 
-  hasNodeaddress(): boolean;
-  clearNodeaddress(): void;
-  getNodeaddress(): model_nodeRegistration_pb.NodeAddress | undefined;
-  setNodeaddress(value?: model_nodeRegistration_pb.NodeAddress): void;
-
   getLockedbalance(): string;
   setLockedbalance(value: string): void;
 
@@ -244,7 +268,6 @@ export namespace NodeRegistrationTransactionBody {
   export type AsObject = {
     nodepublickey: Uint8Array | string,
     accountaddress: string,
-    nodeaddress?: model_nodeRegistration_pb.NodeAddress.AsObject,
     lockedbalance: string,
     poown?: model_proofOfOwnership_pb.ProofOfOwnership.AsObject,
   }
@@ -255,11 +278,6 @@ export class UpdateNodeRegistrationTransactionBody extends jspb.Message {
   getNodepublickey_asU8(): Uint8Array;
   getNodepublickey_asB64(): string;
   setNodepublickey(value: Uint8Array | string): void;
-
-  hasNodeaddress(): boolean;
-  clearNodeaddress(): void;
-  getNodeaddress(): model_nodeRegistration_pb.NodeAddress | undefined;
-  setNodeaddress(value?: model_nodeRegistration_pb.NodeAddress): void;
 
   getLockedbalance(): string;
   setLockedbalance(value: string): void;
@@ -282,7 +300,6 @@ export class UpdateNodeRegistrationTransactionBody extends jspb.Message {
 export namespace UpdateNodeRegistrationTransactionBody {
   export type AsObject = {
     nodepublickey: Uint8Array | string,
-    nodeaddress?: model_nodeRegistration_pb.NodeAddress.AsObject,
     lockedbalance: string,
     poown?: model_proofOfOwnership_pb.ProofOfOwnership.AsObject,
   }
@@ -339,20 +356,11 @@ export namespace ClaimNodeRegistrationTransactionBody {
 }
 
 export class SetupAccountDatasetTransactionBody extends jspb.Message {
-  getSetteraccountaddress(): string;
-  setSetteraccountaddress(value: string): void;
-
-  getRecipientaccountaddress(): string;
-  setRecipientaccountaddress(value: string): void;
-
   getProperty(): string;
   setProperty(value: string): void;
 
   getValue(): string;
   setValue(value: string): void;
-
-  getMuchtime(): string;
-  setMuchtime(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SetupAccountDatasetTransactionBody.AsObject;
@@ -366,21 +374,12 @@ export class SetupAccountDatasetTransactionBody extends jspb.Message {
 
 export namespace SetupAccountDatasetTransactionBody {
   export type AsObject = {
-    setteraccountaddress: string,
-    recipientaccountaddress: string,
     property: string,
     value: string,
-    muchtime: string,
   }
 }
 
 export class RemoveAccountDatasetTransactionBody extends jspb.Message {
-  getSetteraccountaddress(): string;
-  setSetteraccountaddress(value: string): void;
-
-  getRecipientaccountaddress(): string;
-  setRecipientaccountaddress(value: string): void;
-
   getProperty(): string;
   setProperty(value: string): void;
 
@@ -399,8 +398,6 @@ export class RemoveAccountDatasetTransactionBody extends jspb.Message {
 
 export namespace RemoveAccountDatasetTransactionBody {
   export type AsObject = {
-    setteraccountaddress: string,
-    recipientaccountaddress: string,
     property: string,
     value: string,
   }
@@ -461,6 +458,100 @@ export namespace MultiSignatureTransactionBody {
     multisignatureinfo?: model_multiSignature_pb.MultiSignatureInfo.AsObject,
     unsignedtransactionbytes: Uint8Array | string,
     signatureinfo?: model_multiSignature_pb.SignatureInfo.AsObject,
+  }
+}
+
+export class FeeVoteCommitTransactionBody extends jspb.Message {
+  getVotehash(): Uint8Array | string;
+  getVotehash_asU8(): Uint8Array;
+  getVotehash_asB64(): string;
+  setVotehash(value: Uint8Array | string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): FeeVoteCommitTransactionBody.AsObject;
+  static toObject(includeInstance: boolean, msg: FeeVoteCommitTransactionBody): FeeVoteCommitTransactionBody.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: FeeVoteCommitTransactionBody, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): FeeVoteCommitTransactionBody;
+  static deserializeBinaryFromReader(message: FeeVoteCommitTransactionBody, reader: jspb.BinaryReader): FeeVoteCommitTransactionBody;
+}
+
+export namespace FeeVoteCommitTransactionBody {
+  export type AsObject = {
+    votehash: Uint8Array | string,
+  }
+}
+
+export class FeeVoteRevealTransactionBody extends jspb.Message {
+  hasFeevoteinfo(): boolean;
+  clearFeevoteinfo(): void;
+  getFeevoteinfo(): model_feeVote_pb.FeeVoteInfo | undefined;
+  setFeevoteinfo(value?: model_feeVote_pb.FeeVoteInfo): void;
+
+  getVotersignature(): Uint8Array | string;
+  getVotersignature_asU8(): Uint8Array;
+  getVotersignature_asB64(): string;
+  setVotersignature(value: Uint8Array | string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): FeeVoteRevealTransactionBody.AsObject;
+  static toObject(includeInstance: boolean, msg: FeeVoteRevealTransactionBody): FeeVoteRevealTransactionBody.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: FeeVoteRevealTransactionBody, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): FeeVoteRevealTransactionBody;
+  static deserializeBinaryFromReader(message: FeeVoteRevealTransactionBody, reader: jspb.BinaryReader): FeeVoteRevealTransactionBody;
+}
+
+export namespace FeeVoteRevealTransactionBody {
+  export type AsObject = {
+    feevoteinfo?: model_feeVote_pb.FeeVoteInfo.AsObject,
+    votersignature: Uint8Array | string,
+  }
+}
+
+export class LiquidPaymentTransactionBody extends jspb.Message {
+  getAmount(): string;
+  setAmount(value: string): void;
+
+  getCompleteminutes(): string;
+  setCompleteminutes(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): LiquidPaymentTransactionBody.AsObject;
+  static toObject(includeInstance: boolean, msg: LiquidPaymentTransactionBody): LiquidPaymentTransactionBody.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: LiquidPaymentTransactionBody, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): LiquidPaymentTransactionBody;
+  static deserializeBinaryFromReader(message: LiquidPaymentTransactionBody, reader: jspb.BinaryReader): LiquidPaymentTransactionBody;
+}
+
+export namespace LiquidPaymentTransactionBody {
+  export type AsObject = {
+    amount: string,
+    completeminutes: string,
+  }
+}
+
+export class LiquidPaymentStopTransactionBody extends jspb.Message {
+  getTransactionid(): string;
+  setTransactionid(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): LiquidPaymentStopTransactionBody.AsObject;
+  static toObject(includeInstance: boolean, msg: LiquidPaymentStopTransactionBody): LiquidPaymentStopTransactionBody.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: LiquidPaymentStopTransactionBody, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): LiquidPaymentStopTransactionBody;
+  static deserializeBinaryFromReader(message: LiquidPaymentStopTransactionBody, reader: jspb.BinaryReader): LiquidPaymentStopTransactionBody;
+}
+
+export namespace LiquidPaymentStopTransactionBody {
+  export type AsObject = {
+    transactionid: string,
   }
 }
 
@@ -789,6 +880,8 @@ export interface TransactionTypeMap {
   REMOVEACCOUNTDATASETTRANSACTION: 259;
   APPROVALESCROWTRANSACTION: 4;
   MULTISIGNATURETRANSACTION: 5;
+  FEEVOTECOMMITMENTVOTETRANSACTION: 7;
+  FEEVOTEREVEALVOTETRANSACTION: 263;
 }
 
 export const TransactionType: TransactionTypeMap;

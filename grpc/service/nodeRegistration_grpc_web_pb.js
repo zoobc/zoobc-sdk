@@ -12,6 +12,8 @@ const grpc = {};
 grpc.web = require('grpc-web');
 
 
+var model_empty_pb = require('../model/empty_pb.js')
+
 var model_nodeRegistration_pb = require('../model/nodeRegistration_pb.js')
 
 var google_api_annotations_pb = require('../google/api/annotations_pb.js')
@@ -235,6 +237,154 @@ proto.service.NodeRegistrationServicePromiseClient.prototype.getNodeRegistration
       request,
       metadata || {},
       methodDescriptor_NodeRegistrationService_GetNodeRegistration);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.model.GetNodeRegistrationsByNodePublicKeysRequest,
+ *   !proto.model.GetNodeRegistrationsByNodePublicKeysResponse>}
+ */
+const methodDescriptor_NodeRegistrationService_GetNodeRegistrationsByNodePublicKeys = new grpc.web.MethodDescriptor(
+  '/service.NodeRegistrationService/GetNodeRegistrationsByNodePublicKeys',
+  grpc.web.MethodType.UNARY,
+  model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysRequest,
+  model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysResponse,
+  /** @param {!proto.model.GetNodeRegistrationsByNodePublicKeysRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.model.GetNodeRegistrationsByNodePublicKeysRequest,
+ *   !proto.model.GetNodeRegistrationsByNodePublicKeysResponse>}
+ */
+const methodInfo_NodeRegistrationService_GetNodeRegistrationsByNodePublicKeys = new grpc.web.AbstractClientBase.MethodInfo(
+  model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysResponse,
+  /** @param {!proto.model.GetNodeRegistrationsByNodePublicKeysRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.model.GetNodeRegistrationsByNodePublicKeysRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.model.GetNodeRegistrationsByNodePublicKeysResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.model.GetNodeRegistrationsByNodePublicKeysResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.service.NodeRegistrationServiceClient.prototype.getNodeRegistrationsByNodePublicKeys =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/service.NodeRegistrationService/GetNodeRegistrationsByNodePublicKeys',
+      request,
+      metadata || {},
+      methodDescriptor_NodeRegistrationService_GetNodeRegistrationsByNodePublicKeys,
+      callback);
+};
+
+
+/**
+ * @param {!proto.model.GetNodeRegistrationsByNodePublicKeysRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.model.GetNodeRegistrationsByNodePublicKeysResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.service.NodeRegistrationServicePromiseClient.prototype.getNodeRegistrationsByNodePublicKeys =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/service.NodeRegistrationService/GetNodeRegistrationsByNodePublicKeys',
+      request,
+      metadata || {},
+      methodDescriptor_NodeRegistrationService_GetNodeRegistrationsByNodePublicKeys);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.model.Empty,
+ *   !proto.model.GetMyNodePublicKeyResponse>}
+ */
+const methodDescriptor_NodeRegistrationService_GetMyNodePublicKey = new grpc.web.MethodDescriptor(
+  '/service.NodeRegistrationService/GetMyNodePublicKey',
+  grpc.web.MethodType.UNARY,
+  model_empty_pb.Empty,
+  model_nodeRegistration_pb.GetMyNodePublicKeyResponse,
+  /** @param {!proto.model.Empty} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_nodeRegistration_pb.GetMyNodePublicKeyResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.model.Empty,
+ *   !proto.model.GetMyNodePublicKeyResponse>}
+ */
+const methodInfo_NodeRegistrationService_GetMyNodePublicKey = new grpc.web.AbstractClientBase.MethodInfo(
+  model_nodeRegistration_pb.GetMyNodePublicKeyResponse,
+  /** @param {!proto.model.Empty} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_nodeRegistration_pb.GetMyNodePublicKeyResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.model.Empty} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.model.GetMyNodePublicKeyResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.model.GetMyNodePublicKeyResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.service.NodeRegistrationServiceClient.prototype.getMyNodePublicKey =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/service.NodeRegistrationService/GetMyNodePublicKey',
+      request,
+      metadata || {},
+      methodDescriptor_NodeRegistrationService_GetMyNodePublicKey,
+      callback);
+};
+
+
+/**
+ * @param {!proto.model.Empty} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.model.GetMyNodePublicKeyResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.service.NodeRegistrationServicePromiseClient.prototype.getMyNodePublicKey =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/service.NodeRegistrationService/GetMyNodePublicKey',
+      request,
+      metadata || {},
+      methodDescriptor_NodeRegistrationService_GetMyNodePublicKey);
 };
 
 

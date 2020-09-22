@@ -2,6 +2,7 @@
 // file: model/node.proto
 
 import * as jspb from "google-protobuf";
+import * as model_nodeAddressInfo_pb from "../model/nodeAddressInfo_pb";
 
 export class Node extends jspb.Message {
   getId(): number;
@@ -15,6 +16,15 @@ export class Node extends jspb.Message {
 
   getPort(): number;
   setPort(value: number): void;
+
+  getAddressstatus(): model_nodeAddressInfo_pb.NodeAddressStatusMap[keyof model_nodeAddressInfo_pb.NodeAddressStatusMap];
+  setAddressstatus(value: model_nodeAddressInfo_pb.NodeAddressStatusMap[keyof model_nodeAddressInfo_pb.NodeAddressStatusMap]): void;
+
+  getVersion(): string;
+  setVersion(value: string): void;
+
+  getCodename(): string;
+  setCodename(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Node.AsObject;
@@ -32,6 +42,9 @@ export namespace Node {
     sharedaddress: string,
     address: string,
     port: number,
+    addressstatus: model_nodeAddressInfo_pb.NodeAddressStatusMap[keyof model_nodeAddressInfo_pb.NodeAddressStatusMap],
+    version: string,
+    codename: string,
   }
 }
 
