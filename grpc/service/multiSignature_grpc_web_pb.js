@@ -386,5 +386,153 @@ proto.service.MultisigServicePromiseClient.prototype.getMultisigAddressByPartici
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.model.GetPendingTransactionsByHeightRequest,
+ *   !proto.model.GetPendingTransactionsByHeightResponse>}
+ */
+const methodDescriptor_MultisigService_GetPendingTransactionsByHeight = new grpc.web.MethodDescriptor(
+  '/service.MultisigService/GetPendingTransactionsByHeight',
+  grpc.web.MethodType.UNARY,
+  model_multiSignature_pb.GetPendingTransactionsByHeightRequest,
+  model_multiSignature_pb.GetPendingTransactionsByHeightResponse,
+  /** @param {!proto.model.GetPendingTransactionsByHeightRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_multiSignature_pb.GetPendingTransactionsByHeightResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.model.GetPendingTransactionsByHeightRequest,
+ *   !proto.model.GetPendingTransactionsByHeightResponse>}
+ */
+const methodInfo_MultisigService_GetPendingTransactionsByHeight = new grpc.web.AbstractClientBase.MethodInfo(
+  model_multiSignature_pb.GetPendingTransactionsByHeightResponse,
+  /** @param {!proto.model.GetPendingTransactionsByHeightRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_multiSignature_pb.GetPendingTransactionsByHeightResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.model.GetPendingTransactionsByHeightRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.model.GetPendingTransactionsByHeightResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.model.GetPendingTransactionsByHeightResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.service.MultisigServiceClient.prototype.getPendingTransactionsByHeight =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/service.MultisigService/GetPendingTransactionsByHeight',
+      request,
+      metadata || {},
+      methodDescriptor_MultisigService_GetPendingTransactionsByHeight,
+      callback);
+};
+
+
+/**
+ * @param {!proto.model.GetPendingTransactionsByHeightRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.model.GetPendingTransactionsByHeightResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.service.MultisigServicePromiseClient.prototype.getPendingTransactionsByHeight =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/service.MultisigService/GetPendingTransactionsByHeight',
+      request,
+      metadata || {},
+      methodDescriptor_MultisigService_GetPendingTransactionsByHeight);
+};
+
+
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.model.GetMultisigAddressesByBlockHeightRangeRequest,
+ *   !proto.model.GetMultisigAddressesByBlockHeightRangeResponse>}
+ */
+const methodDescriptor_MultisigService_GetMultisigAddressesByBlockHeightRange = new grpc.web.MethodDescriptor(
+  '/service.MultisigService/GetMultisigAddressesByBlockHeightRange',
+  grpc.web.MethodType.UNARY,
+  model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeRequest,
+  model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeResponse,
+  /** @param {!proto.model.GetMultisigAddressesByBlockHeightRangeRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeResponse.deserializeBinary
+);
+
+
+/**
+ * @const
+ * @type {!grpc.web.AbstractClientBase.MethodInfo<
+ *   !proto.model.GetMultisigAddressesByBlockHeightRangeRequest,
+ *   !proto.model.GetMultisigAddressesByBlockHeightRangeResponse>}
+ */
+const methodInfo_MultisigService_GetMultisigAddressesByBlockHeightRange = new grpc.web.AbstractClientBase.MethodInfo(
+  model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeResponse,
+  /** @param {!proto.model.GetMultisigAddressesByBlockHeightRangeRequest} request */
+  function(request) {
+    return request.serializeBinary();
+  },
+  model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.model.GetMultisigAddressesByBlockHeightRangeRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.Error, ?proto.model.GetMultisigAddressesByBlockHeightRangeResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.model.GetMultisigAddressesByBlockHeightRangeResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.service.MultisigServiceClient.prototype.getMultisigAddressesByBlockHeightRange =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/service.MultisigService/GetMultisigAddressesByBlockHeightRange',
+      request,
+      metadata || {},
+      methodDescriptor_MultisigService_GetMultisigAddressesByBlockHeightRange,
+      callback);
+};
+
+
+/**
+ * @param {!proto.model.GetMultisigAddressesByBlockHeightRangeRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.model.GetMultisigAddressesByBlockHeightRangeResponse>}
+ *     A native promise that resolves to the response
+ */
+proto.service.MultisigServicePromiseClient.prototype.getMultisigAddressesByBlockHeightRange =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/service.MultisigService/GetMultisigAddressesByBlockHeightRange',
+      request,
+      metadata || {},
+      methodDescriptor_MultisigService_GetMultisigAddressesByBlockHeightRange);
+};
+
+
 module.exports = proto.service;
 

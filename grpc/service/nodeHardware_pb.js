@@ -16,3 +16,5 @@ var model_nodeHardware_pb = require('../model/nodeHardware_pb.js');
 goog.object.extend(proto, model_nodeHardware_pb);
 var google_api_annotations_pb = require('../google/api/annotations_pb.js');
 goog.object.extend(proto, google_api_annotations_pb);
+var model_empty_pb = require('../model/empty_pb.js');
+goog.object.extend(proto, model_empty_pb);
