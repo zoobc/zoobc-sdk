@@ -104,6 +104,6 @@ export async function validationTimestamp(txBytes: Buffer) {
     return res.nodetime;
   });
   const deviation = parseInt(timestampPostTransaction) - parseInt(timestampServer);
-  if (deviation < 30) return true;
+  if (deviation < 30 && deviation > -30) return true;
   else return false;
 }

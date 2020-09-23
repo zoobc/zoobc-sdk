@@ -49740,7 +49740,7 @@ function validationTimestamp(txBytes) {
             return res.nodetime;
         });
         const deviation = parseInt(timestampPostTransaction) - parseInt(timestampServer);
-        if (deviation < 30)
+        if (deviation < 30 && deviation > -30)
             return true;
         else
             return false;
