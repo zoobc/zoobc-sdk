@@ -155,10 +155,8 @@ function postTransaction(data: MultiSigInterface, childSeed: BIP32Interface): Pr
         if (res) resolve(res.toObject());
       });
     } else {
-      throw {
-        code: 48,
-        message: 'Please Fix Your Date and Time',
-      };
+      const message = 'Please Fix Your Date and Time';
+      reject(message);
     }
   });
 }

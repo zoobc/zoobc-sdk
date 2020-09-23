@@ -164,10 +164,8 @@ function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promi
           if (res) resolve(res.toObject());
         });
       } else {
-        throw {
-          code: 48,
-          message: 'Please Fix Your Date and Time',
-        };
+        const message = 'Please Fix Your Date and Time';
+        reject(message);
       }
     });
   });
@@ -195,10 +193,8 @@ function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<N
             if (res) resolve(res.toObject());
           });
         } else {
-          throw {
-            code: 48,
-            message: 'Please Fix Your Date and Time',
-          };
+          const message = 'Please Fix Your Date and Time';
+          reject(message);
         }
       })
       .catch(err => reject(err));
@@ -224,10 +220,8 @@ function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<N
         if (res) resolve(res.toObject());
       });
     } else {
-      throw {
-        code: 48,
-        message: 'Please Fix Your Date and Time',
-      };
+      const message = 'Please Fix Your Date and Time';
+      reject(message);
     }
   });
 }
@@ -254,10 +248,8 @@ function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<Nod
             if (res) resolve(res.toObject());
           });
         } else {
-          throw {
-            code: 48,
-            message: 'Please Fix Your Date and Time',
-          };
+          const message = 'Please Fix Your Date and Time';
+          reject(message);
         }
       })
       .catch(err => reject(err));

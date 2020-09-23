@@ -43992,10 +43992,8 @@ function register(data, childSeed) {
                 });
             }
             else {
-                throw {
-                    code: 48,
-                    message: 'Please Fix Your Date and Time',
-                };
+                const message = 'Please Fix Your Date and Time';
+                reject(message);
             }
         }));
     });
@@ -44022,10 +44020,8 @@ function update(data, childSeed) {
                 });
             }
             else {
-                throw {
-                    code: 48,
-                    message: 'Please Fix Your Date and Time',
-                };
+                const message = 'Please Fix Your Date and Time';
+                reject(message);
             }
         }))
             .catch(err => reject(err));
@@ -44050,10 +44046,8 @@ function remove(data, childSeed) {
             });
         }
         else {
-            throw {
-                code: 48,
-                message: 'Please Fix Your Date and Time',
-            };
+            const message = 'Please Fix Your Date and Time';
+            reject(message);
         }
     }));
 }
@@ -44079,10 +44073,8 @@ function claim(data, childSeed) {
                 });
             }
             else {
-                throw {
-                    code: 48,
-                    message: 'Please Fix Your Date and Time',
-                };
+                const message = 'Please Fix Your Date and Time';
+                reject(message);
             }
         }))
             .catch(err => reject(err));
@@ -44379,10 +44371,8 @@ function approval(data, seed) {
             });
         }
         else {
-            throw {
-                code: 48,
-                message: 'Please Fix Your Date and Time',
-            };
+            const message = 'Please Fix Your Date and Time';
+            reject(message);
         }
     }));
 }
@@ -45038,10 +45028,8 @@ function postTransaction(data, childSeed) {
             });
         }
         else {
-            throw {
-                code: 48,
-                message: 'Please Fix Your Date and Time',
-            };
+            const message = 'Please Fix Your Date and Time';
+            reject(message);
         }
     }));
 }
@@ -46370,10 +46358,8 @@ function setupDataset(data, childSeed) {
             });
         }
         else {
-            throw {
-                code: 48,
-                message: 'Please Fix Your Date and Time',
-            };
+            const message = 'Please Fix Your Date and Time';
+            reject(message);
         }
     }));
 }
@@ -46396,10 +46382,8 @@ function removeDataset(data, childseed) {
             });
         }
         else {
-            throw {
-                code: 48,
-                message: 'Please Fix Your Date and Time',
-            };
+            const message = 'Please Fix Your Date and Time';
+            reject(message);
         }
     }));
 }
@@ -49856,10 +49840,8 @@ function sendMoney(data, seed) {
             });
         }
         else {
-            throw {
-                code: 48,
-                message: 'Please Fix Your Date and Time',
-            };
+            const message = 'Please Fix Your Date and Time';
+            reject(message);
         }
     }));
 }

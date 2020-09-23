@@ -101,10 +101,8 @@ function approval(data: EscrowApprovalInterface, seed: BIP32Interface): Promise<
         resolve(res?.toObject());
       });
     } else {
-      throw {
-        code: 48,
-        message: 'Please Fix Your Date and Time',
-      };
+      const message = 'Please Fix Your Date and Time';
+      reject(message);
     }
   });
 }

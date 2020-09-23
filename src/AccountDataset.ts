@@ -96,10 +96,8 @@ export function setupDataset(data: SetupDatasetInterface, childSeed: BIP32Interf
         if (res) resolve(res.toObject());
       });
     } else {
-      throw {
-        code: 48,
-        message: 'Please Fix Your Date and Time',
-      };
+      const message = 'Please Fix Your Date and Time';
+      reject(message);
     }
   });
 }
@@ -122,10 +120,8 @@ export function removeDataset(data: RemoveDatasetInterface, childseed: BIP32Inte
         if (res) resolve(res.toObject());
       });
     } else {
-      throw {
-        code: 48,
-        message: 'Please Fix Your Date and Time',
-      };
+      const message = 'Please Fix Your Date and Time';
+      reject(message);
     }
   });
 }
