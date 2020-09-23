@@ -29,78 +29,17 @@ const SignatureGenerator = ({ accountIndex, walletSignature, signature, buildTra
 
     // signing with Ledger
     setSignature('--Accept the signing in the ledger first--');
-    // const transport = await Ledger.getUSBTransport();
-    // const ledgerCommunication = new Ledger(transport);
-    // const response = await ledgerCommunication.signTransactionBytes(accountIdxInt, txBytes);
-    // setSignature(bytesToHexes(response));
+    const transport = await Ledger.getUSBTransport();
+    const ledgerCommunication = new Ledger(transport);
 
     try {
-      const response = await signTransactionBytes(accountIdxInt, txBytes);
+      const response = await ledgerCommunication.signTransactionBytes(accountIdxInt, txBytes);
       setSignature(bytesToHexes(response));
     } catch (e) {
       alert(e);
     }
   };
   // ======================================================================================================================================
-  const signTransactionBytes = async (accountIndex, txBytes) => {
-    const transport = await Ledger.getUSBTransport();
-    const CLA = 0x80;
-    const INS_SIGN_TRANSACTION = 0x03;
-    // if (!this.transport) {
-    //   throw Error('transport is not set');
-    // }
-    // if (!txBytes || txBytes.length === 0) {
-    //   throw Error('txBytes value is invalid');
-    // }
-    const LEDGER_MAX_INPUT_DATA_BYTES = 150;
-    let P1_FIRST = 0x00;
-    let P1_MORE = 0x80;
-    let P2_LAST = 0x00;
-    let P2_MORE = 0x80;
-
-    const accountIdxBuffer = writeInt32(accountIndex);
-    const data = Buffer.concat([accountIdxBuffer, txBytes]);
-
-    let offset = 0;
-    let response = Buffer.from('');
-    while (offset < data.length) {
-      let chunk = Buffer.from('');
-      let p1 = P1_FIRST;
-      let p2 = P2_LAST;
-
-      if (data.length - offset < LEDGER_MAX_INPUT_DATA_BYTES) {
-        chunk = data.slice(offset, data.length);
-      } else {
-        chunk = data.slice(offset, offset + LEDGER_MAX_INPUT_DATA_BYTES);
-      }
-
-      if (offset === 0) {
-        p1 = P1_FIRST;
-      } else {
-        p1 = P1_MORE;
-      }
-
-      const isLastData = offset + chunk.length === data.length;
-      if (isLastData) {
-        p2 = P2_LAST;
-      } else {
-        p2 = P2_MORE;
-      }
-
-      const chunkLength = writeInt32(chunk.length);
-
-      try {
-        response = await transport.exchange(
-          Buffer.concat([new Buffer([CLA, INS_SIGN_TRANSACTION, p1, p2]), Buffer.concat([chunkLength, chunk])]),
-        );
-      } catch (e) {
-        throw e;
-      }
-      offset += chunk.length
-    }
-
-    return response.slice(0, response.length - 2);
-  };
 
   return (
     <>
