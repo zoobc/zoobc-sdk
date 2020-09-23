@@ -48157,9 +48157,9 @@ class Ledger {
 
 function toUnconfirmedSendMoneyWallet(res, ownAddress) {
     let transactions = res.mempooltransactionsList.filter(tx => {
-        const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        if (bytes.readInt32LE(0) == transaction_pb_5.SENDMONEYTRANSACTION)
-            return tx;
+        // const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
+        // if (bytes.readInt32LE(0) == TransactionType.SENDMONEYTRANSACTION) return tx;
+        return tx;
     });
     transactions = transactions.map((tx) => {
         const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
