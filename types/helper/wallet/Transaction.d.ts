@@ -14,14 +14,16 @@ export interface ZooTransactionInterface {
     height: number;
     transactionIndex: number;
 }
-export interface ZooTransactions {
+export interface ZBCTransactions {
     total: number;
-    transactions: ZooTransaction[];
+    transactions: ZBCTransaction[];
 }
-export interface ZooTransaction {
+export interface ZBCTransaction {
     id: string;
     sender: string;
+    senderAlias?: string;
     recipient: string;
+    recipientAlias?: string;
     timestamp: number;
     fee: number;
     blockId: string;
@@ -30,8 +32,11 @@ export interface ZooTransaction {
     transactionHash: string;
     transactionType: number;
     txBody: object;
+    escrow?: boolean;
+    escrowStatus?: number;
+    multisig?: boolean;
 }
-export declare function toTransactions(transactions: Array<Transaction.AsObject>): ZooTransaction[];
+export declare function toTransactions(transactions: Array<Transaction.AsObject>): ZBCTransaction[];
 export declare function toTransactionListWallet(res: GetTransactionsResponse.AsObject, ownAddress: string): ZooTransactionsInterface;
 export declare function getBodyBytes(tx: Transaction.AsObject): {};
 export declare function toTransactionWallet(tx: Transaction.AsObject, ownAddress: string): ZooTransactionInterface;

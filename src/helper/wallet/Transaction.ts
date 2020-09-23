@@ -1,5 +1,5 @@
 import { readInt64, getZBCAddress } from '../utils';
-import { GetTransactionsResponse, Transaction } from '../../../grpc/model/transaction_pb';
+import { GetTransactionsResponse, Transaction, TransactionType } from '../../../grpc/model/transaction_pb';
 
 export interface ZooTransactionsInterface {
   total: number;
@@ -18,15 +18,17 @@ export interface ZooTransactionInterface {
   transactionIndex: number;
 }
 
-export interface ZooTransactions {
+export interface ZBCTransactions {
   total: number;
-  transactions: ZooTransaction[];
+  transactions: ZBCTransaction[];
 }
 
-export interface ZooTransaction {
+export interface ZBCTransaction {
   id: string;
   sender: string;
+  senderAlias?: string;
   recipient: string;
+  recipientAlias?: string;
   timestamp: number;
   fee: number;
   blockId: string;
@@ -35,10 +37,13 @@ export interface ZooTransaction {
   transactionHash: string;
   transactionType: number;
   txBody: object;
+  escrow?: boolean;
+  escrowStatus?: number;
+  multisig?: boolean;
 }
 
-export function toTransactions(transactions: Array<Transaction.AsObject>): ZooTransaction[] {
-  let transactionList: ZooTransaction[] = transactions.map(tx => {
+export function toTransactions(transactions: Array<Transaction.AsObject>): ZBCTransaction[] {
+  let transactionList: ZBCTransaction[] = transactions.map(tx => {
     const txBody = getBodyBytes(tx);
     return {
       id: tx.id,
