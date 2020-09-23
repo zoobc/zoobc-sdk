@@ -24,7 +24,7 @@ const SignSendMoney = () => {
     setWalletSignature('');
   };
 
-  const handleChangeAccountIndex = ({ target: { value } = {}, key } = {}) => {
+  const handleChangeAccountIndex = (value) => {
     setAccountIndex(value);
     resetDisplay();
   };
