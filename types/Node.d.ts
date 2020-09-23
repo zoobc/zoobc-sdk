@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { BIP32Interface } from 'bip32';
 import { GetNodeHardwareResponse } from '../grpc/model/nodeHardware_pb';
 import { GenerateNodeKeyResponse } from '../grpc/model/node_pb';
-import { GetNodeRegistrationResponse, GetNodeRegistrationsResponse, GetPendingNodeRegistrationsResponse } from '../grpc/model/nodeRegistration_pb';
+import { GetNodeRegistrationResponse, GetNodeRegistrationsResponse, GetPendingNodeRegistrationsResponse, GetMyNodePublicKeyResponse } from '../grpc/model/nodeRegistration_pb';
 import { RegisterNodeInterface } from './helper/transaction-builder/register-node';
 import { UpdateNodeInterface } from './helper/transaction-builder/update-node';
 import { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
@@ -13,6 +13,7 @@ export declare type GenerateNodeKeyResponses = GenerateNodeKeyResponse.AsObject;
 export declare type NodeRegistrationsResponse = GetNodeRegistrationResponse.AsObject;
 export declare type NodePostTransactionResponse = PostTransactionResponse.AsObject;
 export declare type GetPendingNodeRegistrationResponse = GetPendingNodeRegistrationsResponse.AsObject;
+export declare type GetMyNodePublicKeyResponses = GetMyNodePublicKeyResponse.AsObject;
 export interface NodeListParams {
     minHeight?: number;
     maxHeight?: number;
@@ -37,6 +38,7 @@ declare function update(data: UpdateNodeInterface, childSeed: BIP32Interface): P
 declare function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<NodePostTransactionResponse>;
 declare function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<NodePostTransactionResponse>;
 declare function getPending(limit: number, childSeed: BIP32Interface): Observable<GetPendingNodeRegistrationResponse>;
+export declare function getMyNodePublicKey(networkIP: string): Promise<GetMyNodePublicKeyResponses>;
 declare const _default: {
     register: typeof register;
     update: typeof update;
@@ -47,5 +49,6 @@ declare const _default: {
     getList: typeof getList;
     get: typeof get;
     getPending: typeof getPending;
+    getMyNodePublicKey: typeof getMyNodePublicKey;
 };
 export default _default;

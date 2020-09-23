@@ -5,7 +5,7 @@ export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
 export { Subscription } from 'rxjs';
 export { EscrowListParams, EscrowTransactionsResponse, EscrowTransactionResponse, ApprovalEscrowTransactionResponse } from './Escrows';
-export { NodeListParams, NodeParams, NodeHardwareResponse, GenerateNodeKeyResponses, NodeRegistrationsResponse, NodePostTransactionResponse, GetPendingNodeRegistrationResponse, } from './Node';
+export { NodeListParams, NodeParams, NodeHardwareResponse, GenerateNodeKeyResponses, NodeRegistrationsResponse, NodePostTransactionResponse, GetPendingNodeRegistrationResponse, GetMyNodePublicKeyResponses, } from './Node';
 export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
 export { TransactionListParams, TransactionsResponse, TransactionResponse, PostTransactionResponses, TransactionMinimumFeeResponse, } from './Transactions';
 export { BlocksResponse, BlockResponse } from './Block';
@@ -21,10 +21,10 @@ export { EscrowApprovalInterface } from './helper/transaction-builder/escrow-tra
 export { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
 export { RemoveDatasetInterface } from './helper/transaction-builder/remove-account-dataset';
 export { SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
-export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64 } from './helper/utils';
+export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
-export { toTransactionListWallet, ZooTransactionsInterface } from './helper/wallet/Transaction';
-export { bufferToBase64 } from './helper/converters';
+export { toTransactionListWallet, ZooTransactionsInterface, toTransactionWallet, ZooTransactionInterface, } from './helper/wallet/Transaction';
+export { bufferToBase64, toBase64Url } from './helper/converters';
 export { MultiSigInterface, signTransactionHash, MultiSigAddress, MultiSigInfo, SignatureInfo, } from './helper/transaction-builder/multisignature';
 export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
 export { AccountBalanceResponse, AccountBalancesResponse } from './Account';
@@ -73,6 +73,7 @@ declare const zoobc: {
         getList: (params?: import("./Node").NodeListParams | undefined) => Promise<import("../grpc/model/nodeRegistration_pb").GetNodeRegistrationsResponse.AsObject>;
         get: (params: import("./Node").NodeParams) => Promise<import("../grpc/model/nodeRegistration_pb").GetNodeRegistrationResponse.AsObject>;
         getPending: (limit: number, childSeed: import("bip32").BIP32Interface) => import("rxjs").Observable<import("../grpc/model/nodeRegistration_pb").GetPendingNodeRegistrationsResponse.AsObject>;
+        getMyNodePublicKey: typeof import("./Node").getMyNodePublicKey;
     };
     Poown: {
         request: (auth: string, networkIp: string) => Promise<Buffer>;

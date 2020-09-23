@@ -6,7 +6,8 @@ import { Int64LE } from 'int64-buffer';
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
 export function getZBCAddress(publicKey: Uint8Array, prefix: string = 'ZBC'): string {
-  const valid = prefix.includes('ZBC' || 'ZNK' || 'ZBL' || 'ZTX');
+  const prefixDefault = ['ZBC', 'ZNK', 'ZBL', 'ZTX'];
+  const valid = prefixDefault.indexOf(prefix) > -1;
   if (valid) {
     const bytes = Buffer.alloc(35);
     for (let i = 0; i < 32; i++) bytes[i] = publicKey[i];
@@ -62,6 +63,20 @@ export function ZBCAddressToBytes(address: string): Buffer {
   const b32 = segs.join('');
   const buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
   return buffer.slice(0, 32);
+}
+
+export function shortenHash(text = ''): string {
+  if (!text) return text;
+
+  const split = text.split('_');
+  const zoobcPrefix = split[0];
+  const head = split[1];
+  const tail = split[split.length - 1];
+
+  const truncateHead = head.slice(0, head.length - 4);
+  const truncateTail = tail.slice(tail.length - 4, tail.length);
+
+  return `${zoobcPrefix}_${truncateHead}...${truncateTail}`;
 }
 
 export function writeInt64(number: number | string, base?: number, endian?: any): Buffer {
