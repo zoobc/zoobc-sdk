@@ -97,7 +97,9 @@ export function setupDataset(data: SetupDatasetInterface, childSeed: BIP32Interf
       });
     } else {
       const message = 'Please Fix Your Date and Time';
-      reject(message);
+      const code = '';
+      const metadata = '';
+      reject({ code, message, metadata });
     }
   });
 }
@@ -121,7 +123,9 @@ export function removeDataset(data: RemoveDatasetInterface, childseed: BIP32Inte
       });
     } else {
       const message = 'Please Fix Your Date and Time';
-      reject(message);
+      const code = '';
+      const metadata = '';
+      reject({ code, message, metadata });
     }
   });
 }

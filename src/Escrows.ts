@@ -102,7 +102,9 @@ function approval(data: EscrowApprovalInterface, seed: BIP32Interface): Promise<
       });
     } else {
       const message = 'Please Fix Your Date and Time';
-      reject(message);
+      const code = '';
+      const metadata = '';
+      reject({ code, message, metadata });
     }
   });
 }

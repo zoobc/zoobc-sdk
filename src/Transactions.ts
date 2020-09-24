@@ -103,7 +103,9 @@ function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<Post
       });
     } else {
       const message = 'Please Fix Your Date and Time';
-      reject(message);
+      const code = '';
+      const metadata = '';
+      reject({ code, message, metadata });
     }
   });
 }

@@ -156,7 +156,9 @@ function postTransaction(data: MultiSigInterface, childSeed: BIP32Interface): Pr
       });
     } else {
       const message = 'Please Fix Your Date and Time';
-      reject(message);
+      const code = '';
+      const metadata = '';
+      reject({ code, message, metadata });
     }
   });
 }

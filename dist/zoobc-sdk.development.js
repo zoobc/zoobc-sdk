@@ -43999,7 +43999,9 @@ function register(data, childSeed) {
             }
             else {
                 const message = 'Please Fix Your Date and Time';
-                reject(message);
+                const code = '';
+                const metadata = '';
+                reject({ code, message, metadata });
             }
         }));
     });
@@ -44027,7 +44029,9 @@ function update(data, childSeed) {
             }
             else {
                 const message = 'Please Fix Your Date and Time';
-                reject(message);
+                const code = '';
+                const metadata = '';
+                reject({ code, message, metadata });
             }
         }))
             .catch(err => reject(err));
@@ -44053,7 +44057,9 @@ function remove(data, childSeed) {
         }
         else {
             const message = 'Please Fix Your Date and Time';
-            reject(message);
+            const code = '';
+            const metadata = '';
+            reject({ code, message, metadata });
         }
     }));
 }
@@ -44080,7 +44086,9 @@ function claim(data, childSeed) {
             }
             else {
                 const message = 'Please Fix Your Date and Time';
-                reject(message);
+                const code = '';
+                const metadata = '';
+                reject({ code, message, metadata });
             }
         }))
             .catch(err => reject(err));
@@ -44378,7 +44386,9 @@ function approval(data, seed) {
         }
         else {
             const message = 'Please Fix Your Date and Time';
-            reject(message);
+            const code = '';
+            const metadata = '';
+            reject({ code, message, metadata });
         }
     }));
 }
@@ -45035,7 +45045,9 @@ function postTransaction(data, childSeed) {
         }
         else {
             const message = 'Please Fix Your Date and Time';
-            reject(message);
+            const code = '';
+            const metadata = '';
+            reject({ code, message, metadata });
         }
     }));
 }
@@ -46365,7 +46377,9 @@ function setupDataset(data, childSeed) {
         }
         else {
             const message = 'Please Fix Your Date and Time';
-            reject(message);
+            const code = '';
+            const metadata = '';
+            reject({ code, message, metadata });
         }
     }));
 }
@@ -46389,7 +46403,9 @@ function removeDataset(data, childseed) {
         }
         else {
             const message = 'Please Fix Your Date and Time';
-            reject(message);
+            const code = '';
+            const metadata = '';
+            reject({ code, message, metadata });
         }
     }));
 }
@@ -49847,7 +49863,9 @@ function sendMoney(data, seed) {
         }
         else {
             const message = 'Please Fix Your Date and Time';
-            reject(message);
+            const code = '';
+            const metadata = '';
+            reject({ code, message, metadata });
         }
     }));
 }

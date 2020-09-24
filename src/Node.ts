@@ -165,7 +165,9 @@ function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promi
         });
       } else {
         const message = 'Please Fix Your Date and Time';
-        reject(message);
+        const code = '';
+        const metadata = '';
+        reject({ code, message, metadata });
       }
     });
   });
@@ -194,7 +196,9 @@ function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<N
           });
         } else {
           const message = 'Please Fix Your Date and Time';
-          reject(message);
+          const code = '';
+          const metadata = '';
+          reject({ code, message, metadata });
         }
       })
       .catch(err => reject(err));
@@ -221,7 +225,9 @@ function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<N
       });
     } else {
       const message = 'Please Fix Your Date and Time';
-      reject(message);
+      const code = '';
+      const metadata = '';
+      reject({ code, message, metadata });
     }
   });
 }
@@ -249,7 +255,9 @@ function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<Nod
           });
         } else {
           const message = 'Please Fix Your Date and Time';
-          reject(message);
+          const code = '';
+          const metadata = '';
+          reject({ code, message, metadata });
         }
       })
       .catch(err => reject(err));
