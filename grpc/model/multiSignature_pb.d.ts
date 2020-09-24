@@ -413,6 +413,112 @@ export namespace GetMultisigAddressByParticipantAddressResponse {
   }
 }
 
+export class GetPendingTransactionsByHeightRequest extends jspb.Message {
+  getFromheight(): number;
+  setFromheight(value: number): void;
+
+  getToheight(): number;
+  setToheight(value: number): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPendingTransactionsByHeightRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPendingTransactionsByHeightRequest): GetPendingTransactionsByHeightRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetPendingTransactionsByHeightRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPendingTransactionsByHeightRequest;
+  static deserializeBinaryFromReader(message: GetPendingTransactionsByHeightRequest, reader: jspb.BinaryReader): GetPendingTransactionsByHeightRequest;
+}
+
+export namespace GetPendingTransactionsByHeightRequest {
+  export type AsObject = {
+    fromheight: number,
+    toheight: number,
+  }
+}
+
+export class GetPendingTransactionsByHeightResponse extends jspb.Message {
+  clearPendingtransactionsList(): void;
+  getPendingtransactionsList(): Array<PendingTransaction>;
+  setPendingtransactionsList(value: Array<PendingTransaction>): void;
+  addPendingtransactions(value?: PendingTransaction, index?: number): PendingTransaction;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetPendingTransactionsByHeightResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetPendingTransactionsByHeightResponse): GetPendingTransactionsByHeightResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetPendingTransactionsByHeightResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetPendingTransactionsByHeightResponse;
+  static deserializeBinaryFromReader(message: GetPendingTransactionsByHeightResponse, reader: jspb.BinaryReader): GetPendingTransactionsByHeightResponse;
+}
+
+export namespace GetPendingTransactionsByHeightResponse {
+  export type AsObject = {
+    pendingtransactionsList: Array<PendingTransaction.AsObject>,
+  }
+}
+
+export class GetMultisigAddressesByBlockHeightRangeRequest extends jspb.Message {
+  getFromblockheight(): number;
+  setFromblockheight(value: number): void;
+
+  getToblockheight(): number;
+  setToblockheight(value: number): void;
+
+  hasPagination(): boolean;
+  clearPagination(): void;
+  getPagination(): model_pagination_pb.Pagination | undefined;
+  setPagination(value?: model_pagination_pb.Pagination): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetMultisigAddressesByBlockHeightRangeRequest.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMultisigAddressesByBlockHeightRangeRequest): GetMultisigAddressesByBlockHeightRangeRequest.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetMultisigAddressesByBlockHeightRangeRequest, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMultisigAddressesByBlockHeightRangeRequest;
+  static deserializeBinaryFromReader(message: GetMultisigAddressesByBlockHeightRangeRequest, reader: jspb.BinaryReader): GetMultisigAddressesByBlockHeightRangeRequest;
+}
+
+export namespace GetMultisigAddressesByBlockHeightRangeRequest {
+  export type AsObject = {
+    fromblockheight: number,
+    toblockheight: number,
+    pagination?: model_pagination_pb.Pagination.AsObject,
+  }
+}
+
+export class GetMultisigAddressesByBlockHeightRangeResponse extends jspb.Message {
+  getCount(): number;
+  setCount(value: number): void;
+
+  getPage(): number;
+  setPage(value: number): void;
+
+  clearMultisignatureinfoList(): void;
+  getMultisignatureinfoList(): Array<MultiSignatureInfo>;
+  setMultisignatureinfoList(value: Array<MultiSignatureInfo>): void;
+  addMultisignatureinfo(value?: MultiSignatureInfo, index?: number): MultiSignatureInfo;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetMultisigAddressesByBlockHeightRangeResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetMultisigAddressesByBlockHeightRangeResponse): GetMultisigAddressesByBlockHeightRangeResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetMultisigAddressesByBlockHeightRangeResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetMultisigAddressesByBlockHeightRangeResponse;
+  static deserializeBinaryFromReader(message: GetMultisigAddressesByBlockHeightRangeResponse, reader: jspb.BinaryReader): GetMultisigAddressesByBlockHeightRangeResponse;
+}
+
+export namespace GetMultisigAddressesByBlockHeightRangeResponse {
+  export type AsObject = {
+    count: number,
+    page: number,
+    multisignatureinfoList: Array<MultiSignatureInfo.AsObject>,
+  }
+}
+
 export interface PendingTransactionStatusMap {
   PENDINGTRANSACTIONPENDING: 0;
   PENDINGTRANSACTIONEXECUTED: 1;

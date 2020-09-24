@@ -6,6 +6,7 @@ import { GetEscrowTransactionsRequest, GetEscrowTransactionRequest, Escrow, GetE
 import { EscrowTransactionServiceClient } from '../grpc/service/escrow_pb_service';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
+import { errorDateMessage, validationTimestamp } from './helper/utils';
 
 export type EscrowTransactionsResponse = GetEscrowTransactionsResponse.AsObject;
 export type EscrowTransactionResponse = Escrow.AsObject;
@@ -83,20 +84,26 @@ function get(id: string): Promise<EscrowTransactionResponse> {
 
 function approval(data: EscrowApprovalInterface, seed: BIP32Interface): Promise<ApprovalEscrowTransactionResponse> {
   const txBytes = escrowBuilder(data, seed);
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const networkIP = Network.selected();
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(txBytes);
 
-    const client = new TransactionServiceClient(networkIP.host);
-    client.postTransaction(request, (err, res) => {
-      if (err) {
-        const { code, message, metadata } = err;
-        reject({ code, message, metadata });
-      }
-      resolve(res?.toObject());
-    });
+    const validTimestamp = await validationTimestamp(txBytes);
+    if (validTimestamp) {
+      const client = new TransactionServiceClient(networkIP.host);
+      client.postTransaction(request, (err, res) => {
+        if (err) {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        }
+        resolve(res?.toObject());
+      });
+    } else {
+      const { code, message, metadata } = errorDateMessage;
+      reject({ code, message, metadata });
+    }
   });
 }
 

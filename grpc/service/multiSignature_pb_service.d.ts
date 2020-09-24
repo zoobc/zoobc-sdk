@@ -41,12 +41,32 @@ type MultisigServiceGetMultisigAddressByParticipantAddress = {
   readonly responseType: typeof model_multiSignature_pb.GetMultisigAddressByParticipantAddressResponse;
 };
 
+type MultisigServiceGetPendingTransactionsByHeight = {
+  readonly methodName: string;
+  readonly service: typeof MultisigService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof model_multiSignature_pb.GetPendingTransactionsByHeightRequest;
+  readonly responseType: typeof model_multiSignature_pb.GetPendingTransactionsByHeightResponse;
+};
+
+type MultisigServiceGetMultisigAddressesByBlockHeightRange = {
+  readonly methodName: string;
+  readonly service: typeof MultisigService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeRequest;
+  readonly responseType: typeof model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeResponse;
+};
+
 export class MultisigService {
   static readonly serviceName: string;
   static readonly GetPendingTransactions: MultisigServiceGetPendingTransactions;
   static readonly GetPendingTransactionDetailByTransactionHash: MultisigServiceGetPendingTransactionDetailByTransactionHash;
   static readonly GetMultisignatureInfo: MultisigServiceGetMultisignatureInfo;
   static readonly GetMultisigAddressByParticipantAddress: MultisigServiceGetMultisigAddressByParticipantAddress;
+  static readonly GetPendingTransactionsByHeight: MultisigServiceGetPendingTransactionsByHeight;
+  static readonly GetMultisigAddressesByBlockHeightRange: MultisigServiceGetMultisigAddressesByBlockHeightRange;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -116,6 +136,24 @@ export class MultisigServiceClient {
   getMultisigAddressByParticipantAddress(
     requestMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressRequest,
     callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisigAddressByParticipantAddressResponse|null) => void
+  ): UnaryResponse;
+  getPendingTransactionsByHeight(
+    requestMessage: model_multiSignature_pb.GetPendingTransactionsByHeightRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetPendingTransactionsByHeightResponse|null) => void
+  ): UnaryResponse;
+  getPendingTransactionsByHeight(
+    requestMessage: model_multiSignature_pb.GetPendingTransactionsByHeightRequest,
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetPendingTransactionsByHeightResponse|null) => void
+  ): UnaryResponse;
+  getMultisigAddressesByBlockHeightRange(
+    requestMessage: model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeResponse|null) => void
+  ): UnaryResponse;
+  getMultisigAddressesByBlockHeightRange(
+    requestMessage: model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeRequest,
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeResponse|null) => void
   ): UnaryResponse;
 }
 

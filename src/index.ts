@@ -32,6 +32,7 @@ export {
   NodePostTransactionResponse,
   GetPendingNodeRegistrationResponse,
   GetMyNodePublicKeyResponses,
+  GetNodeTimeResponses,
 } from './Node';
 export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
 export {
