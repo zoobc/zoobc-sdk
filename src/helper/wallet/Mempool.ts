@@ -4,8 +4,8 @@ import { TransactionType } from '../../../grpc/model/transaction_pb';
 
 export function toUnconfirmedSendMoneyWallet(res: GetMempoolTransactionsResponse.AsObject, ownAddress: string) {
   let transactions: any = res.mempooltransactionsList.filter(tx => {
-    // const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-    // if (bytes.readInt32LE(0) == TransactionType.SENDMONEYTRANSACTION) return tx;
+    const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
+    if (bytes.readInt32LE(0) == TransactionType.SENDMONEYTRANSACTION) return tx;
     return tx;
   });
   transactions = transactions.map((tx: any) => {

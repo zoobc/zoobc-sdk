@@ -42,7 +42,7 @@ export interface ZBCTransaction {
   multisig?: boolean;
 }
 
-export function toTransactions(transactions: Array<Transaction.AsObject>): ZBCTransaction[] {
+export function toZBCTransactions(transactions: Array<Transaction.AsObject>): ZBCTransaction[] {
   let transactionList: ZBCTransaction[] = transactions.map(tx => {
     const txBody = getBodyBytes(tx);
     return {
@@ -68,11 +68,9 @@ export function toTransactionListWallet(res: GetTransactionsResponse.AsObject, o
     const amount = readInt64(bytes, 0);
     const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
     const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
-    const txBody = getBodyBytes(tx);
     return {
       id: tx.id,
       address: friendAddress,
-      ownAddress,
       type: type,
       timestamp: parseInt(tx.timestamp) * 1000,
       fee: parseInt(tx.fee),
@@ -80,8 +78,6 @@ export function toTransactionListWallet(res: GetTransactionsResponse.AsObject, o
       blockId: tx.blockid,
       height: tx.height,
       transactionIndex: tx.transactionindex,
-      transactionHash: getZBCAddress(Buffer.from(tx.transactionhash.toString(), 'base64'), 'ZTX'),
-      txBody,
     };
   });
   return {
@@ -90,7 +86,7 @@ export function toTransactionListWallet(res: GetTransactionsResponse.AsObject, o
   };
 }
 
-export function getBodyBytes(tx: Transaction.AsObject) {
+function getBodyBytes(tx: Transaction.AsObject) {
   return (
     tx.approvalescrowtransactionbody ||
     tx.claimnoderegistrationtransactionbody ||

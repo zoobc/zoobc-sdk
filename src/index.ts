@@ -73,7 +73,7 @@ export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shorten
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export {
   toTransactionListWallet,
-  toTransactions,
+  toZBCTransactions,
   ZooTransactionsInterface,
   toTransactionWallet,
   ZooTransactionInterface,

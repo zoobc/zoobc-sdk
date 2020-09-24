@@ -36,7 +36,6 @@ export interface ZBCTransaction {
     escrowStatus?: number;
     multisig?: boolean;
 }
-export declare function toTransactions(transactions: Array<Transaction.AsObject>): ZBCTransaction[];
+export declare function toZBCTransactions(transactions: Array<Transaction.AsObject>): ZBCTransaction[];
 export declare function toTransactionListWallet(res: GetTransactionsResponse.AsObject, ownAddress: string): ZooTransactionsInterface;
-export declare function getBodyBytes(tx: Transaction.AsObject): {};
 export declare function toTransactionWallet(tx: Transaction.AsObject, ownAddress: string): ZooTransactionInterface;
