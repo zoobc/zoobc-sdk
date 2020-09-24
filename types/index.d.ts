@@ -5,7 +5,7 @@ export { BIP32Interface } from 'bip32';
 export { RequestType } from '../grpc/model/auth_pb';
 export { Subscription } from 'rxjs';
 export { EscrowListParams, EscrowTransactionsResponse, EscrowTransactionResponse, ApprovalEscrowTransactionResponse } from './Escrows';
-export { NodeListParams, NodeParams, NodeHardwareResponse, GenerateNodeKeyResponses, NodeRegistrationsResponse, NodePostTransactionResponse, GetPendingNodeRegistrationResponse, GetMyNodePublicKeyResponses, } from './Node';
+export { NodeListParams, NodeParams, NodeHardwareResponse, GenerateNodeKeyResponses, NodeRegistrationsResponse, NodePostTransactionResponse, GetPendingNodeRegistrationResponse, GetMyNodePublicKeyResponses, GetNodeTimeResponses, } from './Node';
 export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
 export { TransactionListParams, TransactionsResponse, TransactionResponse, PostTransactionResponses, TransactionMinimumFeeResponse, } from './Transactions';
 export { BlocksResponse, BlockResponse } from './Block';
@@ -13,7 +13,7 @@ export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxRespons
 export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
 export { AccountDatasetListParams, AccountDatasetsResponse, AccountDatasetResponse, SetupDatasetResponse, RemoveAccountDatasetResponse, } from './AccountDataset';
 export { HostInterface } from './Network';
-export { RegisterNodeInterface } from './helper/transaction-builder/register-node';
+export { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
@@ -74,6 +74,7 @@ declare const zoobc: {
         get: (params: import("./Node").NodeParams) => Promise<import("../grpc/model/nodeRegistration_pb").GetNodeRegistrationResponse.AsObject>;
         getPending: (limit: number, childSeed: import("bip32").BIP32Interface) => import("rxjs").Observable<import("../grpc/model/nodeRegistration_pb").GetPendingNodeRegistrationsResponse.AsObject>;
         getMyNodePublicKey: typeof import("./Node").getMyNodePublicKey;
+        getNodeTime: typeof import("./Node").getNodeTime;
     };
     Poown: {
         request: (auth: string, networkIp: string) => Promise<Buffer>;

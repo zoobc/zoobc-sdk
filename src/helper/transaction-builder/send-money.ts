@@ -1,4 +1,4 @@
-import { writeInt32, writeInt64 } from '../utils';
+import { readInt64, writeInt32, writeInt64 } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 

@@ -3,6 +3,13 @@ import SHA3 from 'sha3';
 import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
 import { Int64LE } from 'int64-buffer';
+import zoobc from '..';
+
+export const errorDateMessage = {
+  code: '',
+  message: 'please fix your date and time',
+  metadata: '',
+};
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
 export function getZBCAddress(publicKey: Uint8Array, prefix: string = 'ZBC'): string {
@@ -94,4 +101,15 @@ export function writeInt32(number: number): Buffer {
   let byte = new Buffer(4);
   byte.writeUInt32LE(number, 0);
   return byte;
+}
+
+export async function validationTimestamp(txBytes: Buffer) {
+  let timestampPostTransactionBytes = txBytes.slice(5, 13);
+  let timestampPostTransaction = readInt64(timestampPostTransactionBytes, 0);
+  let timestampServer = await zoobc.Node.getNodeTime().then(res => {
+    return res.nodetime;
+  });
+  const deviation = parseInt(timestampPostTransaction) - parseInt(timestampServer);
+  if (deviation < 30 && deviation > -30) return true;
+  else return false;
 }

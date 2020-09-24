@@ -23,3 +23,55 @@ export namespace HealthCheckResponse {
   }
 }
 
+export class GetNodeStatusResponse extends jspb.Message {
+  getLastmainblockheight(): number;
+  setLastmainblockheight(value: number): void;
+
+  getLastmainblockhash(): string;
+  setLastmainblockhash(value: string): void;
+
+  getLastspineblockheight(): number;
+  setLastspineblockheight(value: number): void;
+
+  getLastspineblockhash(): string;
+  setLastspineblockhash(value: string): void;
+
+  getVersion(): string;
+  setVersion(value: string): void;
+
+  getNodepublickey(): string;
+  setNodepublickey(value: string): void;
+
+  getUnresolvedpeers(): number;
+  setUnresolvedpeers(value: number): void;
+
+  getResolvedpeers(): number;
+  setResolvedpeers(value: number): void;
+
+  getBlocksmithindex(): number;
+  setBlocksmithindex(value: number): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetNodeStatusResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetNodeStatusResponse): GetNodeStatusResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetNodeStatusResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetNodeStatusResponse;
+  static deserializeBinaryFromReader(message: GetNodeStatusResponse, reader: jspb.BinaryReader): GetNodeStatusResponse;
+}
+
+export namespace GetNodeStatusResponse {
+  export type AsObject = {
+    lastmainblockheight: number,
+    lastmainblockhash: string,
+    lastspineblockheight: number,
+    lastspineblockhash: string,
+    version: string,
+    nodepublickey: string,
+    unresolvedpeers: number,
+    resolvedpeers: number,
+    blocksmithindex: number,
+  }
+}
+

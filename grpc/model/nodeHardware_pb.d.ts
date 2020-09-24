@@ -41,6 +41,26 @@ export namespace GetNodeHardwareRequest {
   }
 }
 
+export class GetNodeTimeResponse extends jspb.Message {
+  getNodetime(): string;
+  setNodetime(value: string): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetNodeTimeResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetNodeTimeResponse): GetNodeTimeResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetNodeTimeResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetNodeTimeResponse;
+  static deserializeBinaryFromReader(message: GetNodeTimeResponse, reader: jspb.BinaryReader): GetNodeTimeResponse;
+}
+
+export namespace GetNodeTimeResponse {
+  export type AsObject = {
+    nodetime: string,
+  }
+}
+
 export class NodeHardware extends jspb.Message {
   clearCpuinformationList(): void;
   getCpuinformationList(): Array<CPUInformation>;
