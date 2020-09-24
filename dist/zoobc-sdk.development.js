@@ -29150,7 +29150,6 @@ TransactionServiceClient.prototype.postTransaction = function postTransaction(re
     }
   };
 };
-<<<<<<< HEAD
 
 TransactionServiceClient.prototype.getTransactionMinimumFee = function getTransactionMinimumFee(requestMessage, metadata, callback) {
   if (arguments.length === 2) {
@@ -29184,249 +29183,6 @@ TransactionServiceClient.prototype.getTransactionMinimumFee = function getTransa
 };
 
 var TransactionServiceClient_1 = TransactionServiceClient;
-=======
-
-TransactionServiceClient.prototype.getTransactionMinimumFee = function getTransactionMinimumFee(requestMessage, metadata, callback) {
-  if (arguments.length === 2) {
-    callback = arguments[1];
-  }
-  var client = grpc$1.unary(TransactionService.GetTransactionMinimumFee, {
-    request: requestMessage,
-    host: this.serviceHost,
-    metadata: metadata,
-    transport: this.options.transport,
-    debug: this.options.debug,
-    onEnd: function (response) {
-      if (callback) {
-        if (response.status !== grpc$1.Code.OK) {
-          var err = new Error(response.statusMessage);
-          err.code = response.status;
-          err.metadata = response.trailers;
-          callback(err, null);
-        } else {
-          callback(null, response.message);
-        }
-      }
-    }
-  });
-  return {
-    cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
-};
-
-var TransactionServiceClient_1 = TransactionServiceClient;
-
-// getAddressFromPublicKey Get the formatted address from a raw public key
-function getZBCAddress(publicKey, prefix = 'ZBC') {
-    const prefixDefault = ['ZBC', 'ZNK', 'ZBL', 'ZTX'];
-    const valid = prefixDefault.indexOf(prefix) > -1;
-    if (valid) {
-        const bytes = Buffer.alloc(35);
-        for (let i = 0; i < 32; i++)
-            bytes[i] = publicKey[i];
-        for (let i = 0; i < 3; i++)
-            bytes[i + 32] = prefix.charCodeAt(i);
-        const checksum = hash(bytes);
-        for (let i = 0; i < 3; i++)
-            bytes[i + 32] = Number(checksum[i]);
-        const segs = [prefix];
-        const b32 = B32Enc(bytes, 'RFC4648');
-        for (let i = 0; i < 7; i++)
-            segs.push(b32.substr(i * 8, 8));
-        return segs.join('_');
-    }
-    else {
-        throw new Error('The Prefix not available!');
-    }
-}
-function hash(str, format = 'buffer') {
-    const h = new SHA3(256);
-    h.update(str);
-    const b = h.digest();
-    if (format == 'buffer')
-        return b;
-    return b.toString(format);
-}
-function encryptPassword(password, salt = 'salt') {
-    return CryptoJS.PBKDF2(password, salt, {
-        keySize: 8,
-        iterations: 10000,
-    }).toString();
-}
-function isZBCAddressValid(address, stdPrefix = 'ZBC') {
-    if (address.length != 66)
-        return false;
-    const segs = address.split('_');
-    const prefix = segs[0];
-    if (prefix != stdPrefix)
-        return false;
-    segs.shift();
-    if (segs.length != 7)
-        return false;
-    for (let i = 0; i < segs.length; i++)
-        if (!/[A-Z2-7]{8}/.test(segs[i]))
-            return false;
-    const b32 = segs.join('');
-    const buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
-    const inputChecksum = [];
-    for (let i = 0; i < 3; i++)
-        inputChecksum.push(buffer[i + 32]);
-    for (let i = 0; i < 3; i++)
-        buffer[i + 32] = prefix.charCodeAt(i);
-    const checksum = hash(buffer);
-    for (let i = 0; i < 3; i++)
-        if (checksum[i] != inputChecksum[i])
-            return false;
-    return true;
-}
-function ZBCAddressToBytes(address) {
-    const segs = address.split('_');
-    segs.shift();
-    const b32 = segs.join('');
-    const buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
-    return buffer.slice(0, 32);
-}
-function shortenHash(text = '') {
-    if (!text)
-        return text;
-    const split = text.split('_');
-    const zoobcPrefix = split[0];
-    const head = split[1];
-    const tail = split[split.length - 1];
-    const truncateHead = head.slice(0, head.length - 4);
-    const truncateTail = tail.slice(tail.length - 4, tail.length);
-    return `${zoobcPrefix}_${truncateHead}...${truncateTail}`;
-}
-function writeInt64(number, base, endian) {
-    number = number.toString();
-    const buffer = new int64Buffer.Int64LE(number);
-    return buffer.toBuffer();
-}
-function readInt64(buff, offset) {
-    const buffer = buff.slice(offset, offset + 8);
-    return new int64Buffer.Int64LE(buffer) + '';
-}
-function writeInt32(number) {
-    let byte = new Buffer(4);
-    byte.writeUInt32LE(number, 0);
-    return byte;
-}
-
-const ADDRESS_LENGTH = 66;
-const VERSION = new Buffer([1]);
-
-const TRANSACTION_TYPE = new Buffer([1, 0, 0, 0]);
-function sendMoneyBuilder(data, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = Buffer.from(data.sender, 'utf-8');
-    const recipient = Buffer.from(data.recipient, 'utf-8');
-    const addressLength = writeInt32(ADDRESS_LENGTH);
-    const fee = writeInt64(data.fee * 1e8);
-    const amount = writeInt64(data.amount * 1e8);
-    const bodyLength = writeInt32(amount.length);
-    bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, addressLength, sender, addressLength, recipient, fee, bodyLength, amount]);
-    if (data.approverAddress && data.commission && data.timeout && data.instruction) {
-        // escrow bytes
-        const approverAddressLength = writeInt32(ADDRESS_LENGTH);
-        const approverAddress = Buffer.from(data.approverAddress, 'utf-8');
-        const commission = writeInt64(data.commission * 1e8);
-        const timeout = writeInt64(data.timeout);
-        const instruction = Buffer.from(data.instruction, 'utf-8');
-        const instructionLength = writeInt32(instruction.length);
-        bytes = Buffer.concat([bytes, approverAddressLength, approverAddress, commission, timeout, instructionLength, instruction]);
-    }
-    else {
-        // escrow bytes default value
-        const approverAddressLength = writeInt32(0);
-        const commission = writeInt64(0);
-        const timeout = writeInt64(0);
-        const instructionLength = writeInt32(0);
-        bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
-    }
-    if (seed) {
-        const signatureType = writeInt32(0);
-        const signature = seed.sign(bytes);
-        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
-    }
-    else
-        return bytes;
-}
-
-function getList(params) {
-    return new Promise((resolve, reject) => {
-        const request = new transaction_pb_1();
-        const networkIP = Network$1.selected();
-        if (params) {
-            const { address, height, transactionType, timestampStart, timestampEnd, pagination } = params;
-            if (address)
-                request.setAccountaddress(address);
-            if (height)
-                request.setHeight(height);
-            if (transactionType)
-                request.setTransactiontype(transactionType);
-            if (timestampStart)
-                request.setTimestampstart(timestampStart);
-            if (timestampEnd)
-                request.setTimestampend(timestampEnd);
-            if (pagination) {
-                const reqPagination = new pagination_pb_1();
-                reqPagination.setLimit(pagination.limit || 10);
-                reqPagination.setPage(pagination.page || 1);
-                reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
-                request.setPagination(reqPagination);
-            }
-        }
-        const client = new TransactionServiceClient_1(networkIP.host);
-        client.getTransactions(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function get(id) {
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new transaction_pb_2();
-        request.setId(id);
-        const client = new TransactionServiceClient_1(networkIP.host);
-        client.getTransaction(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function sendMoney(data, seed) {
-    const txBytes = sendMoneyBuilder(data, seed);
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new transaction_pb_3();
-        request.setTransactionbytes(txBytes);
-        const client = new TransactionServiceClient_1(networkIP.host);
-        client.postTransaction(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-var Transactions = { sendMoney, get, getList };
->>>>>>> 629f32032936bededdc296f14a814459d19bbd77
 
 var mempool_pb = createCommonjsModule(function (module, exports) {
 // source: model/mempool.proto
@@ -30726,7 +30482,6 @@ MempoolServiceClient.prototype.getMempoolTransaction = function getMempoolTransa
 
 var MempoolServiceClient_1 = MempoolServiceClient;
 
-<<<<<<< HEAD
 function getList(params) {
     return new Promise((resolve, reject) => {
         const networkIP = Network$1.selected();
@@ -30775,56 +30530,6 @@ function get(id) {
     });
 }
 var Mempool = { get, getList };
-=======
-function getList$1(params) {
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new mempool_pb_1();
-        if (params) {
-            const { address, timestampEnd, timestampStart, pagination } = params;
-            if (address)
-                request.setAddress(address);
-            if (timestampStart)
-                request.setTimestampstart(timestampStart);
-            if (timestampEnd)
-                request.setTimestampend(timestampEnd);
-            if (pagination) {
-                const reqPagination = new pagination_pb_1();
-                reqPagination.setLimit(pagination.limit || 10);
-                reqPagination.setPage(pagination.page || 1);
-                reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
-                request.setPagination(reqPagination);
-            }
-        }
-        const client = new MempoolServiceClient_1(networkIP.host);
-        client.getMempoolTransactions(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function get$1(id) {
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new mempool_pb_2();
-        request.setId(id);
-        const client = new MempoolServiceClient_1(networkIP.host);
-        client.getMempoolTransaction(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject().transaction);
-        });
-    });
-}
-var Mempool = { get: get$1, getList: getList$1 };
->>>>>>> 629f32032936bededdc296f14a814459d19bbd77
 
 function encryptPassphrase(passphrase, password, salt = 'salt') {
     const key = encryptPassword(password, salt);
@@ -43999,7 +43704,6 @@ goog.object.extend(exports, proto.model);
 });
 var auth_pb_1 = auth_pb.RequestType;
 
-<<<<<<< HEAD
 const ADDRESS_LENGTH = 66;
 const VERSION = new Buffer([1]);
 
@@ -44037,10 +43741,14 @@ function registerNodeBuilder(data, poown, seed) {
     const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    if (seed) {
+        const signatureType = writeInt32(0);
+        const signature = seed.sign(bytes);
+        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    }
+    else
+        return bytes;
 }
 
 const TRANSACTION_TYPE$1 = new Buffer([2, 1, 0, 0]);
@@ -44294,9 +44002,7 @@ function register(data, childSeed) {
                 });
             }
             else {
-                const message = 'Please Fix Your Date and Time';
-                const code = '';
-                const metadata = '';
+                const { code, message, metadata } = errorDateMessage;
                 reject({ code, message, metadata });
             }
         }));
@@ -44324,9 +44030,7 @@ function update(data, childSeed) {
                 });
             }
             else {
-                const message = 'Please Fix Your Date and Time';
-                const code = '';
-                const metadata = '';
+                const { code, message, metadata } = errorDateMessage;
                 reject({ code, message, metadata });
             }
         }))
@@ -44352,9 +44056,7 @@ function remove(data, childSeed) {
             });
         }
         else {
-            const message = 'Please Fix Your Date and Time';
-            const code = '';
-            const metadata = '';
+            const { code, message, metadata } = errorDateMessage;
             reject({ code, message, metadata });
         }
     }));
@@ -44381,9 +44083,7 @@ function claim(data, childSeed) {
                 });
             }
             else {
-                const message = 'Please Fix Your Date and Time';
-                const code = '';
-                const metadata = '';
+                const { code, message, metadata } = errorDateMessage;
                 reject({ code, message, metadata });
             }
         }))
@@ -44486,443 +44186,6 @@ function escrowBuilder(data, seed) {
     const signature = seed.sign(bytes);
     const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
-=======
-const TRANSACTION_TYPE$1 = new Buffer([2, 0, 0, 0]);
-function registerNodeBuilder(data, poown, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
-    const recipient = new Buffer(ADDRESS_LENGTH);
-    const addressLength = writeInt32(ADDRESS_LENGTH);
-    const fee = writeInt64(data.fee * 1e8);
-    const nodePublicKey = data.nodePublicKey;
-    const funds = writeInt64(data.funds * 1e8);
-    const bodyLength = writeInt32(nodePublicKey.length + addressLength.length + accountAddress.length + funds.length + poown.length);
-    bytes = Buffer.concat([
-        TRANSACTION_TYPE$1,
-        VERSION,
-        timestamp,
-        addressLength,
-        accountAddress,
-        addressLength,
-        recipient,
-        fee,
-        bodyLength,
-        nodePublicKey,
-        addressLength,
-        accountAddress,
-        funds,
-        poown,
-    ]);
-    // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
-    const commission = writeInt64(0);
-    const timeout = writeInt64(0);
-    const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
-    // ========== END NULLIFYING THE ESCROW =========
-    if (seed) {
-        const signatureType = writeInt32(0);
-        const signature = seed.sign(bytes);
-        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
-    }
-    else
-        return bytes;
-}
-
-const TRANSACTION_TYPE$2 = new Buffer([2, 1, 0, 0]);
-function updateNodeBuilder(data, poown, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
-    const recipient = new Buffer(ADDRESS_LENGTH);
-    const addressLength = writeInt32(ADDRESS_LENGTH);
-    const fee = writeInt64(data.fee * 1e8);
-    const nodePublicKey = data.nodePublicKey;
-    const funds = writeInt64(data.funds * 1e8);
-    const bodyLength = writeInt32(nodePublicKey.length + funds.length + poown.length);
-    bytes = Buffer.concat([
-        TRANSACTION_TYPE$2,
-        VERSION,
-        timestamp,
-        addressLength,
-        accountAddress,
-        addressLength,
-        recipient,
-        fee,
-        bodyLength,
-        nodePublicKey,
-        funds,
-        poown,
-    ]);
-    // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
-    const commission = writeInt64(0);
-    const timeout = writeInt64(0);
-    const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
-    // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
-}
-
-const TRANSACTION_TYPE$3 = new Buffer([2, 2, 0, 0]);
-function removeNodeBuilder(data, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
-    const recipient = new Buffer(ADDRESS_LENGTH);
-    const addressLength = writeInt32(ADDRESS_LENGTH);
-    const fee = writeInt64(data.fee * 1e8);
-    const nodePublicKey = data.nodePublicKey;
-    const bodyLength = writeInt32(nodePublicKey.length);
-    bytes = Buffer.concat([
-        TRANSACTION_TYPE$3,
-        VERSION,
-        timestamp,
-        addressLength,
-        accountAddress,
-        addressLength,
-        recipient,
-        fee,
-        bodyLength,
-        nodePublicKey,
-    ]);
-    // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
-    const commission = writeInt64(0);
-    const timeout = writeInt64(0);
-    const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
-    // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
-}
-
-const TRANSACTION_TYPE$4 = new Buffer([2, 3, 0, 0]);
-function claimNodeBuilder(data, poown, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
-    const recipient = new Buffer(ADDRESS_LENGTH);
-    const addressLength = writeInt32(ADDRESS_LENGTH);
-    const fee = writeInt64(data.fee * 1e8);
-    const nodePublicKey = data.nodePublicKey;
-    const bodyLength = writeInt32(nodePublicKey.length + poown.length);
-    bytes = Buffer.concat([
-        TRANSACTION_TYPE$4,
-        VERSION,
-        timestamp,
-        addressLength,
-        accountAddress,
-        addressLength,
-        recipient,
-        fee,
-        bodyLength,
-        nodePublicKey,
-        poown,
-    ]);
-    // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
-    const commission = writeInt64(0);
-    const timeout = writeInt64(0);
-    const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
-    // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
-}
-
-function createAuth(requestType, seed) {
-    let bytes;
-    const timestamp = writeInt64(Date.now());
-    const requestTypeBytes = writeInt32(requestType);
-    bytes = Buffer.concat([timestamp, requestTypeBytes]);
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    return Buffer.concat([bytes, signatureType, signature]).toString('base64');
-}
-function request(auth, networkIp) {
-    return new Promise((resolve, reject) => {
-        const request = new proofOfOwnership_pb_1();
-        const metadata = new grpcWeb.grpc.Metadata({ authorization: auth });
-        const client = new NodeAdminServiceClient_1(networkIp);
-        client.getProofOfOwnership(request, metadata, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res) {
-                const bytes = Buffer.concat([
-                    Buffer.from(res.toObject().messagebytes.toString(), 'base64'),
-                    Buffer.from(res.toObject().signature.toString(), 'base64'),
-                ]);
-                resolve(bytes);
-            }
-        });
-    });
-}
-var Poown = { request, createAuth };
-
-function getHardwareInfo(networkIP, childSeed) {
-    return new rxjs.Observable(observer => {
-        const auth = Poown.createAuth(auth_pb_1.GETNODEHARDWARE, childSeed);
-        const request = new nodeHardware_pb_1();
-        const client = new NodeHardwareServiceClient_1(networkIP)
-            .getNodeHardware(new grpcWeb.grpc.Metadata({ authorization: auth }))
-            .write(request)
-            .on('data', message => {
-            observer.next(message.toObject());
-        })
-            .on('end', status => {
-            observer.error(status);
-        });
-        client.end();
-    });
-}
-function generateNodeKey(networkIP, childSeed) {
-    return new Promise((resolve, reject) => {
-        const auth = Poown.createAuth(auth_pb_1.GENERATETNODEKEY, childSeed);
-        const metadata = new grpcWeb.grpc.Metadata({ authorization: auth });
-        const request = new node_pb_1();
-        const client = new NodeAdminServiceClient_1(networkIP);
-        client.generateNodeKey(request, metadata, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function getList$2(params) {
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new nodeRegistration_pb_2();
-        if (params) {
-            const { minHeight, maxHeight, status, pagination } = params;
-            if (pagination) {
-                const reqPagination = new pagination_pb_1();
-                reqPagination.setLimit(pagination.limit || 10);
-                reqPagination.setPage(pagination.page || 1);
-                reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
-                request.setPagination(reqPagination);
-            }
-            if (maxHeight)
-                request.setMaxregistrationheight(maxHeight);
-            if (minHeight)
-                request.setMinregistrationheight(minHeight);
-            if (status)
-                request.setRegistrationstatusesList(status);
-        }
-        const client = new NodeRegistrationServiceClient_1(networkIP.host);
-        client.getNodeRegistrations(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function get$2(params) {
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new nodeRegistration_pb_1();
-        if (params) {
-            const { height, owner, publicKey } = params;
-            if (owner)
-                request.setAccountaddress(owner);
-            if (publicKey)
-                request.setNodepublickey(publicKey);
-            if (height)
-                request.setRegistrationheight(height);
-        }
-        const client = new NodeRegistrationServiceClient_1(networkIP.host);
-        client.getNodeRegistration(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                if (code == grpcWeb.grpc.Code.NotFound)
-                    return resolve(undefined);
-                else if (code != grpcWeb.grpc.Code.OK)
-                    return reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function register(data, childSeed) {
-    return new Promise((resolve, reject) => {
-        const auth = Poown.createAuth(auth_pb_1.GETPROOFOFOWNERSHIP, childSeed);
-        Poown.request(auth, data.nodeAddress).then(poown => {
-            const bytes = registerNodeBuilder(data, poown, childSeed);
-            const request = new transaction_pb_3();
-            request.setTransactionbytes(bytes);
-            const networkIP = Network$1.selected();
-            const client = new TransactionServiceClient_1(networkIP.host);
-            client.postTransaction(request, (err, res) => {
-                if (err) {
-                    const { code, message, metadata } = err;
-                    reject({ code, message, metadata });
-                }
-                if (res)
-                    resolve(res.toObject());
-            });
-        });
-    });
-}
-function update(data, childSeed) {
-    return new Promise((resolve, reject) => {
-        const auth = Poown.createAuth(auth_pb_1.GETPROOFOFOWNERSHIP, childSeed);
-        Poown.request(auth, data.nodeAddress)
-            .then(poown => {
-            const bytes = updateNodeBuilder(data, poown, childSeed);
-            const request = new transaction_pb_3();
-            request.setTransactionbytes(bytes);
-            const networkIP = Network$1.selected();
-            const client = new TransactionServiceClient_1(networkIP.host);
-            client.postTransaction(request, (err, res) => {
-                if (err) {
-                    const { code, message, metadata } = err;
-                    reject({ code, message, metadata });
-                }
-                if (res)
-                    resolve(res.toObject());
-            });
-        })
-            .catch(err => reject(err));
-    });
-}
-function remove(data, childSeed) {
-    return new Promise((resolve, reject) => {
-        const bytes = removeNodeBuilder(data, childSeed);
-        const request = new transaction_pb_3();
-        request.setTransactionbytes(bytes);
-        const networkIP = Network$1.selected();
-        const client = new TransactionServiceClient_1(networkIP.host);
-        client.postTransaction(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function claim(data, childSeed) {
-    return new Promise((resolve, reject) => {
-        const auth = Poown.createAuth(auth_pb_1.GETPROOFOFOWNERSHIP, childSeed);
-        Poown.request(auth, data.nodeAddress)
-            .then(poown => {
-            const bytes = claimNodeBuilder(data, poown, childSeed);
-            const request = new transaction_pb_3();
-            request.setTransactionbytes(bytes);
-            const networkIP = Network$1.selected();
-            const client = new TransactionServiceClient_1(networkIP.host);
-            client.postTransaction(request, (err, res) => {
-                if (err) {
-                    const { code, message, metadata } = err;
-                    reject({ code, message, metadata });
-                }
-                if (res)
-                    resolve(res.toObject());
-            });
-        })
-            .catch(err => reject(err));
-    });
-}
-function getPending(limit, childSeed) {
-    return new rxjs.Observable(observer => {
-        const auth = Poown.createAuth(auth_pb_1.GETPENDINGNODEREGISTRATIONSSTREAM, childSeed);
-        const request = new nodeRegistration_pb_5();
-        request.setLimit(limit);
-        const networkIP = Network$1.selected();
-        const client = new NodeRegistrationServiceClient_1(networkIP.host)
-            .getPendingNodeRegistrations(new grpcWeb.grpc.Metadata({ authorization: auth }))
-            .write(request)
-            .on('data', message => {
-            observer.next(message.toObject());
-        })
-            .on('end', status => {
-            observer.error(status);
-        });
-        client.end();
-    });
-}
-function getMyNodePublicKey(networkIP) {
-    return new Promise((resolve, reject) => {
-        const request = new empty_pb_1();
-        const client = new NodeRegistrationServiceClient_1(networkIP);
-        client.getMyNodePublicKey(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-var Node = {
-    register,
-    update,
-    remove,
-    claim,
-    getHardwareInfo,
-    generateNodeKey,
-    getList: getList$2,
-    get: get$2,
-    getPending,
-    getMyNodePublicKey,
-};
-
-const TRANSACTION_TYPE$5 = new Buffer([4, 0, 0, 0]);
-function escrowBuilder(data, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const approvalAddress = Buffer.from(data.approvalAddress, 'utf-8');
-    const addressLength = writeInt32(ADDRESS_LENGTH);
-    const recepient = new Buffer(ADDRESS_LENGTH);
-    const fee = writeInt64(data.fee * 1e8);
-    const approvalCode = writeInt32(data.approvalCode);
-    const transactionId = writeInt64(data.transactionId);
-    const bodyLength = writeInt32(approvalCode.length + transactionId.length);
-    bytes = Buffer.concat([
-        TRANSACTION_TYPE$5,
-        VERSION,
-        timestamp,
-        addressLength,
-        approvalAddress,
-        addressLength,
-        recepient,
-        fee,
-        bodyLength,
-        approvalCode,
-        transactionId,
-    ]);
-    // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
-    const commission = writeInt64(0);
-    const timeout = writeInt64(0);
-    const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
-    // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
->>>>>>> 629f32032936bededdc296f14a814459d19bbd77
 }
 
 // source: service/escrow.proto
@@ -45044,7 +44307,6 @@ EscrowTransactionServiceClient.prototype.getEscrowTransaction = function getEscr
 
 var EscrowTransactionServiceClient_1 = EscrowTransactionServiceClient;
 
-<<<<<<< HEAD
 function getList$2(params) {
     return new Promise((resolve, reject) => {
         const networkIP = Network$1.selected();
@@ -45119,89 +44381,12 @@ function approval(data, seed) {
             });
         }
         else {
-            const message = 'Please Fix Your Date and Time';
-            const code = '';
-            const metadata = '';
+            const { code, message, metadata } = errorDateMessage;
             reject({ code, message, metadata });
         }
     }));
 }
 var Escrows = { approval, get: get$2, getList: getList$2 };
-=======
-function getList$3(params) {
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new escrow_pb_1();
-        if (params) {
-            const { approverAddress, blockHeightStart, blockHeightEnd, id, statusList, pagination, sender, recipient, latest } = params;
-            if (approverAddress)
-                request.setApproveraddress(approverAddress);
-            if (blockHeightStart)
-                request.setBlockheightstart(blockHeightStart);
-            if (blockHeightEnd)
-                request.setBlockheightend(blockHeightEnd);
-            if (id)
-                request.setId(id);
-            if (statusList)
-                request.setStatusesList(statusList);
-            if (sender)
-                request.setSenderaddress(sender);
-            if (recipient)
-                request.setRecipientaddress(recipient);
-            if (latest)
-                request.setLatest(latest);
-            if (pagination) {
-                const reqPagination = new pagination_pb_1();
-                reqPagination.setLimit(pagination.limit || 10);
-                reqPagination.setPage(pagination.page || 1);
-                reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
-                reqPagination.setOrderfield(pagination.orderField || 'id');
-                request.setPagination(reqPagination);
-            }
-        }
-        const client = new EscrowTransactionServiceClient_1(networkIP.host);
-        client.getEscrowTransactions(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            resolve(res === null || res === void 0 ? void 0 : res.toObject());
-        });
-    });
-}
-function get$3(id) {
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new escrow_pb_2();
-        request.setId(id);
-        const client = new EscrowTransactionServiceClient_1(networkIP.host);
-        client.getEscrowTransaction(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            resolve(res === null || res === void 0 ? void 0 : res.toObject());
-        });
-    });
-}
-function approval(data, seed) {
-    const txBytes = escrowBuilder(data, seed);
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new transaction_pb_3();
-        request.setTransactionbytes(txBytes);
-        const client = new TransactionServiceClient_1(networkIP.host);
-        client.postTransaction(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            resolve(res === null || res === void 0 ? void 0 : res.toObject());
-        });
-    });
-}
-var Escrows = { approval, get: get$3, getList: getList$3 };
->>>>>>> 629f32032936bededdc296f14a814459d19bbd77
 
 // source: service/block.proto
 /**
@@ -45652,7 +44837,6 @@ MultisigServiceClient.prototype.getMultisigAddressesByBlockHeightRange = functio
 
 var MultisigServiceClient_1 = MultisigServiceClient;
 
-<<<<<<< HEAD
 function base64ToBuffer(base64) {
     return new Buffer(base64, 'base64');
 }
@@ -45854,9 +45038,7 @@ function postTransaction(data, childSeed) {
             });
         }
         else {
-            const message = 'Please Fix Your Date and Time';
-            const code = '';
-            const metadata = '';
+            const { code, message, metadata } = errorDateMessage;
             reject({ code, message, metadata });
         }
     }));
@@ -45885,231 +45067,6 @@ var MultiSignature = {
     getMultisigInfo,
     postTransaction,
     getMultisigAddress,
-=======
-function base64ToBuffer(base64) {
-    return new Buffer(base64, 'base64');
-}
-function bufferToBase64(bytes) {
-    const buf = bytes instanceof ArrayBuffer
-        ? Buffer.from(bytes)
-        : ArrayBuffer.isView(bytes)
-            ? Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength)
-            : Buffer.from(bytes);
-    return buf.toString('base64');
-}
-function toBase64Url(base64Str) {
-    return base64Str
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/\=/g, '');
-}
-
-const TRANSACTION_TYPE$6 = new Buffer([5, 0, 0, 0]);
-function multisignatureBuilder(data, seed) {
-    const { multisigInfo, unisgnedTransactions, signaturesInfo } = data;
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
-    const recipient = new Buffer(ADDRESS_LENGTH);
-    const addressLength = writeInt32(ADDRESS_LENGTH);
-    const fee = writeInt64(data.fee * 1e8);
-    // MULTISIG INFO
-    let multisigInfoBytes = writeInt32(0);
-    if (multisigInfo) {
-        const multisigPresent = writeInt32(1);
-        const minSign = writeInt32(multisigInfo.minSigs);
-        const nonce = writeInt64(multisigInfo.nonce);
-        let participants = Buffer.from([]);
-        multisigInfo.participants.forEach(participant => {
-            const address = Buffer.from(participant, 'utf-8');
-            participants = Buffer.concat([participants, addressLength, address]);
-        });
-        const totalParticipants = writeInt32(multisigInfo.participants.length);
-        multisigInfoBytes = Buffer.concat([multisigPresent, minSign, nonce, totalParticipants, participants]);
-    }
-    // UNSIGNED TRANSACTIONS
-    let transactionBytes = writeInt32(0);
-    if (unisgnedTransactions) {
-        const txBytesLen = writeInt32(unisgnedTransactions.length);
-        transactionBytes = Buffer.concat([txBytesLen, unisgnedTransactions]);
-    }
-    // SIGNATURES INFO
-    let signaturesInfoBytes = writeInt32(0);
-    if (signaturesInfo) {
-        const signatureInfoPresent = writeInt32(1);
-        const txHash = base64ToBuffer(signaturesInfo.txHash);
-        const totalParticipants = writeInt32(signaturesInfo.participants.length);
-        let participants = Buffer.from([]);
-        signaturesInfo.participants.forEach(participant => {
-            const address = Buffer.from(participant.address, 'utf-8');
-            const signatureLen = writeInt32(participant.signature.length);
-            participants = Buffer.concat([participants, addressLength, address, signatureLen, participant.signature]);
-        });
-        signaturesInfoBytes = Buffer.concat([signatureInfoPresent, txHash, totalParticipants, participants]);
-    }
-    const bodyLength = writeInt32(multisigInfoBytes.length + transactionBytes.length + signaturesInfoBytes.length);
-    bytes = Buffer.concat([
-        TRANSACTION_TYPE$6,
-        VERSION,
-        timestamp,
-        addressLength,
-        accountAddress,
-        addressLength,
-        recipient,
-        fee,
-        bodyLength,
-        multisigInfoBytes,
-        transactionBytes,
-        signaturesInfoBytes,
-    ]);
-    // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
-    const commission = writeInt64(0);
-    const timeout = writeInt64(0);
-    const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
-    // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
-}
-function signTransactionHash(txHash, seed) {
-    const signatureType = writeInt32(0);
-    const txHashBytes = base64ToBuffer(txHash);
-    const signature = seed.sign(txHashBytes);
-    return Buffer.concat([signatureType, signature]);
-}
-
-function generateMultiSigInfo(multiSigAddress) {
-    const { nonce, minSigs } = multiSigAddress;
-    let { participants } = multiSigAddress;
-    participants = participants.sort();
-    const nonceB = writeInt32(nonce);
-    const minSigB = writeInt32(minSigs);
-    const lengthParticipants = writeInt32(participants.length);
-    let participantsB = new Buffer([]);
-    participants.forEach((p) => {
-        const lengthAddress = writeInt32(p.length);
-        const address = Buffer.from(p, 'utf-8');
-        participantsB = Buffer.concat([participantsB, lengthAddress, address]);
-    });
-    return Buffer.concat([minSigB, nonceB, lengthParticipants, participantsB]);
-}
-function createMultiSigAddress(multiSigAddress) {
-    const buffer = generateMultiSigInfo(multiSigAddress);
-    const hashed = Buffer.from(jsSha3.sha3_256(buffer), 'hex');
-    return getZBCAddress(hashed);
-}
-function getPendingList(params) {
-    return new Promise((resolve, reject) => {
-        const request = new multiSignature_pb_1();
-        const networkIP = Network$1.selected();
-        const { address, pagination, status } = params;
-        if (address)
-            request.setSenderaddress(address);
-        if (status)
-            request.setStatus(status);
-        if (pagination) {
-            const reqPagination = new pagination_pb_1();
-            reqPagination.setLimit(pagination.limit || 10);
-            reqPagination.setPage(pagination.page || 1);
-            reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
-            request.setPagination(reqPagination);
-        }
-        const client = new MultisigServiceClient_1(networkIP.host);
-        client.getPendingTransactions(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function getPendingByTxHash(txHash) {
-    return new Promise((resolve, reject) => {
-        const request = new multiSignature_pb_2();
-        const networkIP = Network$1.selected();
-        request.setTransactionhashhex(txHash);
-        const client = new MultisigServiceClient_1(networkIP.host);
-        client.getPendingTransactionDetailByTransactionHash(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function getMultisigInfo(params) {
-    return new Promise((resolve, reject) => {
-        const request = new multiSignature_pb_3();
-        const networkIP = Network$1.selected();
-        const { address, pagination } = params;
-        request.setMultisigaddress(address);
-        if (pagination) {
-            const reqPagination = new pagination_pb_1();
-            reqPagination.setLimit(pagination.limit || 10);
-            reqPagination.setPage(pagination.page || 1);
-            reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
-            request.setPagination(reqPagination);
-        }
-        const client = new MultisigServiceClient_1(networkIP.host);
-        client.getMultisignatureInfo(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function postTransaction(data, childSeed) {
-    return new Promise((resolve, reject) => {
-        const bytes = multisignatureBuilder(data, childSeed);
-        const request = new transaction_pb_3();
-        request.setTransactionbytes(bytes);
-        const networkIP = Network$1.selected();
-        const client = new TransactionServiceClient_1(networkIP.host);
-        client.postTransaction(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function getMultisigAddress(participantsAddress) {
-    return new Promise((resolve, reject) => {
-        const request = new multiSignature_pb_5();
-        request.setParticipantaddress(participantsAddress);
-        const networkIP = Network$1.selected();
-        const client = new MultisigServiceClient_1(networkIP.host);
-        client.getMultisigAddressByParticipantAddress(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-var MultiSignature = {
-    getPendingByTxHash,
-    getPendingList,
-    createMultiSigAddress,
-    generateMultiSigInfo,
-    getMultisigInfo,
-    postTransaction,
-    getMultisigAddress,
->>>>>>> 629f32032936bededdc296f14a814459d19bbd77
 };
 
 var accountDataset_pb = createCommonjsModule(function (module, exports) {
@@ -47258,7 +46215,6 @@ AccountDatasetServiceClient.prototype.getAccountDataset = function getAccountDat
 
 var AccountDatasetServiceClient_1 = AccountDatasetServiceClient;
 
-<<<<<<< HEAD
 const TRANSACTION_TYPE$6 = new Buffer([3, 0, 0, 0]);
 function setupDatasetBuilder(data, seed) {
     let bytes;
@@ -47412,9 +46368,7 @@ function setupDataset(data, childSeed) {
             });
         }
         else {
-            const message = 'Please Fix Your Date and Time';
-            const code = '';
-            const metadata = '';
+            const { code, message, metadata } = errorDateMessage;
             reject({ code, message, metadata });
         }
     }));
@@ -47438,185 +46392,12 @@ function removeDataset(data, childseed) {
             });
         }
         else {
-            const message = 'Please Fix Your Date and Time';
-            const code = '';
-            const metadata = '';
+            const { code, message, metadata } = errorDateMessage;
             reject({ code, message, metadata });
         }
     }));
 }
 var AccountDataset = { getList: getList$3, get: get$3, setupDataset, removeDataset };
-=======
-const TRANSACTION_TYPE$7 = new Buffer([3, 0, 0, 0]);
-function setupDatasetBuilder(data, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const accountAddress = Buffer.from(data.setterAccountAddress, 'utf-8');
-    const recipient = Buffer.from(data.recipientAccountAddress, 'utf-8');
-    const addressLength = writeInt32(ADDRESS_LENGTH);
-    const fee = writeInt64(data.fee * 1e8);
-    const property = Buffer.from(data.property, 'utf-8');
-    const propertyLength = writeInt32(property.length);
-    const value = Buffer.from(data.value, 'utf-8');
-    const valueLength = writeInt32(value.length);
-    const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
-    bytes = Buffer.concat([
-        TRANSACTION_TYPE$7,
-        VERSION,
-        timestamp,
-        addressLength,
-        accountAddress,
-        addressLength,
-        recipient,
-        fee,
-        bodyLength,
-        propertyLength,
-        property,
-        valueLength,
-        value,
-    ]);
-    // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
-    const commission = writeInt64(0);
-    const timeout = writeInt64(0);
-    const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
-    // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
-}
-
-const TRANSACTION_TYPE$8 = new Buffer([3, 1, 0, 0]);
-function removeDatasetBuilder(data, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const setterAccountAddress = Buffer.from(data.setterAccountAddress, 'utf-8');
-    const recipient = Buffer.from(data.recipientAccountAddress, 'utf-8');
-    const addressLength = writeInt32(ADDRESS_LENGTH);
-    const fee = writeInt64(data.fee * 1e8);
-    const property = Buffer.from(data.property, 'utf-8');
-    const propertyLength = writeInt32(property.length);
-    const value = Buffer.from(data.value, 'utf-8');
-    const valueLength = writeInt32(value.length);
-    const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
-    bytes = Buffer.concat([
-        TRANSACTION_TYPE$8,
-        VERSION,
-        timestamp,
-        addressLength,
-        setterAccountAddress,
-        addressLength,
-        recipient,
-        fee,
-        bodyLength,
-        propertyLength,
-        property,
-        valueLength,
-        value,
-    ]);
-    // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
-    const commission = writeInt64(0);
-    const timeout = writeInt64(0);
-    const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
-    // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
-}
-
-function getList$4(params) {
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new accountDataset_pb_1();
-        if (params) {
-            const { property, value, recipientAccountAddress, setterAccountAddress, height, pagination } = params;
-            if (property)
-                request.setProperty(property);
-            if (value)
-                request.setValue(value);
-            if (setterAccountAddress)
-                request.setSetteraccountaddress(setterAccountAddress);
-            if (recipientAccountAddress)
-                request.setRecipientaccountaddress(recipientAccountAddress);
-            if (height)
-                request.setHeight(height);
-            if (pagination) {
-                const reqPagination = new pagination_pb_1();
-                reqPagination.setLimit(pagination.limit || 10);
-                reqPagination.setPage(pagination.page || 1);
-                reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
-                request.setPagination(reqPagination);
-            }
-        }
-        const client = new AccountDatasetServiceClient_1(networkIP.host);
-        client.getAccountDatasets(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function get$4(property, recipient) {
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new accountDataset_pb_2();
-        request.setProperty(property);
-        request.setRecipientaccountaddress(recipient);
-        const client = new AccountDatasetServiceClient_1(networkIP.host);
-        client.getAccountDataset(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function setupDataset(data, childSeed) {
-    return new Promise((resolve, reject) => {
-        const bytes = setupDatasetBuilder(data, childSeed);
-        const request = new transaction_pb_3();
-        request.setTransactionbytes(bytes);
-        const networkIP = Network$1.selected();
-        const client = new TransactionServiceClient_1(networkIP.host);
-        client.postTransaction(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function removeDataset(data, childseed) {
-    return new Promise((resolve, reject) => {
-        const bytes = removeDatasetBuilder(data, childseed);
-        const request = new transaction_pb_3();
-        request.setTransactionbytes(bytes);
-        const networkIP = Network$1.selected();
-        const client = new TransactionServiceClient_1(networkIP.host);
-        client.postTransaction(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-var AccountDataset = { getList: getList$4, get: get$4, setupDataset, removeDataset };
->>>>>>> 629f32032936bededdc296f14a814459d19bbd77
 
 var event_pb = createCommonjsModule(function (module, exports) {
 // source: model/event.proto
@@ -48555,7 +47336,6 @@ AccountLedgerServiceClient.prototype.getAccountLedgers = function getAccountLedg
 
 var AccountLedgerServiceClient_1 = AccountLedgerServiceClient;
 
-<<<<<<< HEAD
 function getList$4(params) {
     return new Promise((resolve, reject) => {
         const networkIP = Network$1.selected();
@@ -48593,45 +47373,6 @@ function getList$4(params) {
     });
 }
 var AccountLedger = { getList: getList$4 };
-=======
-function getList$5(params) {
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new accountLedger_pb_1();
-        if (params) {
-            const { accountAddress, eventType, transactionId, timeStampStart, timeStampEnd, pagination } = params;
-            if (accountAddress)
-                request.setAccountaddress(accountAddress);
-            if (eventType)
-                request.setEventtype(eventType);
-            if (transactionId)
-                request.setTransactionid(transactionId);
-            if (timeStampStart)
-                request.setTimestampstart(timeStampStart);
-            if (timeStampEnd)
-                request.setTimestampend(timeStampEnd);
-            if (pagination) {
-                const reqPagination = new pagination_pb_1();
-                reqPagination.setOrderfield(pagination.orderField || 'timestamp');
-                reqPagination.setLimit(pagination.limit || 10);
-                reqPagination.setPage(pagination.page || 1);
-                reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
-                request.setPagination(reqPagination);
-            }
-        }
-        const client = new AccountLedgerServiceClient_1(networkIP.host);
-        client.getAccountLedgers(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-var AccountLedger = { getList: getList$5 };
->>>>>>> 629f32032936bededdc296f14a814459d19bbd77
 
 // source: service/nodeAddressInfo.proto
 /**
@@ -50555,7 +49296,6 @@ const coins = [
     },
 ];
 
-<<<<<<< HEAD
 const NOT_IMPLEMENTED = 'Not Implemented';
 const BITCOIN = {
     messagePrefix: '\x18Bitcoin Signed Message:\n',
@@ -50646,296 +49386,6 @@ class ZooKeyring {
             } });
         return bip32ExtendedKey;
     }
-}
-
-const CLA = 0x80;
-const INS_GET_PUBLIC_KEY = 0x2;
-const INS_SIGN_TRANSACTION = 0x3;
-class Ledger {
-    constructor(transport) {
-        this.transport = transport;
-    }
-    static getUSBTransport() {
-        return TransportWebUSB.create();
-    }
-    getTransportInstance() {
-        return this.transport;
-    }
-    getPublicKey(accountIndex) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!this.transport) {
-                throw Error('transport is not set');
-            }
-            const accountIdxBuffer = writeInt32(accountIndex);
-            const totalLength = writeInt32(accountIdxBuffer.length);
-            const data = Buffer.concat([totalLength, accountIdxBuffer]);
-            const response = yield this.transport.exchange(Buffer.concat([new Buffer([CLA, INS_GET_PUBLIC_KEY, 0x00, 0x00]), data]));
-            return response.slice(0, response.length - 2);
-        });
-    }
-    signTransactionBytes(accountIndex, txBytes) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!this.transport) {
-                throw Error('transport is not set');
-            }
-            if (!txBytes || txBytes.length === 0) {
-                throw Error('txBytes value is invalid');
-            }
-            const accountIdxBuffer = writeInt32(accountIndex);
-            const totalLength = txBytes.length + accountIdxBuffer.length;
-            const txByteLengthBuffer = writeInt32(totalLength);
-            const data = Buffer.concat([txByteLengthBuffer, accountIdxBuffer, txBytes]);
-            const response = yield this.transport.exchange(Buffer.concat([new Buffer([CLA, INS_SIGN_TRANSACTION, 0x00, 0x00]), data]));
-            return response.slice(0, response.length - 2);
-        });
-    }
-}
-
-function toUnconfirmedSendMoneyWallet(res, ownAddress) {
-    let transactions = res.mempooltransactionsList.filter(tx => {
-        const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        if (bytes.readInt32LE(0) == transaction_pb_5.SENDMONEYTRANSACTION)
-            return tx;
-    });
-    transactions = transactions.map((tx) => {
-        const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        const amount = readInt64(bytes, 165);
-        const fee = readInt64(bytes, 153);
-        const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
-        const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
-        return {
-            address: friendAddress,
-            type: type,
-            timestamp: parseInt(tx.arrivaltimestamp) * 1000,
-            fee: fee,
-            amount: amount,
-        };
-    });
-    return transactions;
-}
-function toUnconfirmTransactionNodeWallet(res) {
-    let mempoolTx = res.mempooltransactionsList;
-    let result = null;
-    for (let i = 0; i < mempoolTx.length; i++) {
-        const tx = mempoolTx[i].transactionbytes;
-        const txBytes = Buffer.from(tx.toString(), 'base64');
-        const type = txBytes.slice(0, 4).readInt32LE(0);
-        let found = false;
-        switch (type) {
-            case transaction_pb_5.NODEREGISTRATIONTRANSACTION:
-                found = true;
-                result = { type: 'Register Node', tx: mempoolTx };
-                break;
-            case transaction_pb_5.UPDATENODEREGISTRATIONTRANSACTION:
-                found = true;
-                result = { type: 'Update Node', tx: mempoolTx };
-                break;
-            case transaction_pb_5.REMOVENODEREGISTRATIONTRANSACTION:
-                found = true;
-                result = { type: 'Remove Node', tx: mempoolTx };
-                break;
-            case transaction_pb_5.CLAIMNODEREGISTRATIONTRANSACTION:
-                found = true;
-                result = { type: 'Claim Node', tx: mempoolTx };
-                break;
-        }
-        if (found)
-            break;
-    }
-    return result;
-}
-
-function toTransactionListWallet(res, ownAddress) {
-    let transactionList = res.transactionsList.map(tx => {
-        const bytes = Buffer.from(tx.transactionbodybytes.toString(), 'base64');
-        const amount = readInt64(bytes, 0);
-        const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
-        const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
-        return {
-            id: tx.id,
-            address: friendAddress,
-            type: type,
-            timestamp: parseInt(tx.timestamp) * 1000,
-            fee: parseInt(tx.fee),
-            amount: parseInt(amount),
-            blockId: tx.blockid,
-            height: tx.height,
-            transactionIndex: tx.transactionindex,
-        };
-    });
-    return {
-        total: parseInt(res.total),
-        transactions: transactionList,
-    };
-}
-function toTransactionWallet(tx, ownAddress) {
-    const bytes = Buffer.from(tx.transactionbodybytes.toString(), 'base64');
-    const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
-    const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
-    const amount = readInt64(bytes, 0);
-    return {
-        id: tx.id,
-        address: friendAddress,
-        type: type,
-        timestamp: parseInt(tx.timestamp) * 1000,
-        fee: parseInt(tx.fee),
-        amount: parseInt(amount),
-        blockId: tx.blockid,
-        height: tx.height,
-        transactionIndex: tx.transactionindex,
-    };
-}
-
-function toGetPendingList(res) {
-    const list = res.pendingtransactionsList.map(tx => {
-        const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        const amount = readInt64(bytes, 165);
-        const fee = readInt64(bytes, 153);
-        const timestamp = readInt64(bytes, 5);
-        const recipient = bytes.slice(87, 153);
-        return {
-            amount: amount,
-            blockheight: tx.blockheight,
-            fee: fee,
-            latest: tx.latest,
-            senderaddress: tx.senderaddress,
-            recipientaddress: recipient.toString(),
-            status: tx.status,
-            timestamp: timestamp,
-            transactionhash: tx.transactionhash,
-        };
-    });
-    return {
-        count: res.count,
-        page: res.page,
-        pendingtransactionsList: list,
-    };
-}
-function generateTransactionHash(data) {
-    const buffer = sendMoneyBuilder(data);
-    const hashed = Buffer.from(jsSha3.sha3_256(buffer), 'hex');
-    let binary = '';
-    const len = hashed.byteLength;
-    for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode(hashed[i]);
-    }
-    return toBase64Url(window.btoa(binary));
-=======
-const NOT_IMPLEMENTED = 'Not Implemented';
-const BITCOIN = {
-    messagePrefix: '\x18Bitcoin Signed Message:\n',
-    bech32: 'bc',
-    bip32: {
-        public: 0x0488b21e,
-        private: 0x0488ade4,
-    },
-    pubKeyHash: 0x00,
-    scriptHash: 0x05,
-    wif: 0x80,
-};
-class ZooKeyring {
-    constructor(passphrase, password = '', coinName = 'ZBC') {
-        this.coinName = 'ZBC';
-        const { curveName = 'secp256k1' } = findCoin(coinName);
-        passphrase = passphrase
-            .replace(/\s\s+/g, ' ') // and then using regex to make sure dont have double space after phrase, case: "stand cheap      entire"
-            .replace(/(\r\n|\n|\r)/gm, '')
-            .toLowerCase()
-            .trim(); // first we need remove space using trim, case: "     stand cheap     "
-        this.seed = bip39.mnemonicToSeedSync(passphrase, password);
-        this.coinName = coinName;
-        this.bip32RootKey = bip32.fromSeed(this.seed, BITCOIN, curveName);
-    }
-    static generateRandomPhrase(numWords = 24, lang = 'english') {
-        bip39.setDefaultWordlist(lang);
-        const strength = (numWords / 3) * 32;
-        if (strength !== 128 && strength !== 256)
-            return 'numWords only 12 or 24';
-        return bip39.generateMnemonic(strength, undefined);
-    }
-    static isPassphraseValid(passphrase, lang = 'english') {
-        passphrase = passphrase
-            .replace(/\s\s+/g, ' ')
-            .replace(/(\r\n|\n|\r)/gm, '')
-            .toLowerCase()
-            .trim();
-        bip39.setDefaultWordlist(lang);
-        return bip39.validateMnemonic(passphrase);
-    }
-    calcDerivationPath(accountValue, changeValue = 0, bip32RootKey = this.bip32RootKey) {
-        const { curveName = 'secp256k1', derivationStandard = 'bip44', purposeValue = '44', coinValue } = findCoin(this.coinName);
-        return this.calcForDerivationPath(curveName, derivationStandard, String(purposeValue), String(coinValue), String(accountValue), String(changeValue), bip32RootKey);
-    }
-    calcForDerivationPath(curveName, derivationStandard, purposeValue, coinValue, accountValue, changeValue = '0', bip32RootKey = this.bip32RootKey) {
-        var derivationPath = getDerivationPath(derivationStandard, purposeValue, coinValue, accountValue, changeValue);
-        var errorText = findDerivationPathErrors(derivationPath);
-        if (errorText) {
-            // showValidationError(errorText);
-            throw new Error(errorText);
-        }
-        let bip32ExtendedKey = bip32RootKey.derivePath(derivationPath, curveName);
-        const privKey = bip32ExtendedKey.privateKey;
-        let publicKey;
-        if (curveName === 'secp256k1') {
-            publicKey = bip32ExtendedKey.publicKey;
-        }
-        else if (curveName === 'ed25519') {
-            publicKey = Buffer.from(tweetnacl.sign.keyPair.fromSeed(bip32ExtendedKey.privateKey).publicKey);
-        }
-        else {
-            throw new Error(NOT_IMPLEMENTED);
-        }
-        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey,
-            sign(message, lowR) {
-                if (curveName === 'secp256k1') {
-                    return bip32ExtendedKey.sign(!Buffer.isBuffer(message) ? Buffer.from(message) : message, lowR);
-                }
-                else if (curveName === 'ed25519') {
-                    const { secretKey } = tweetnacl.sign.keyPair.fromSeed(new Uint8Array(privKey.buffer.slice(0, 32)));
-                    return Buffer.from(tweetnacl.sign.detached(message, secretKey));
-                }
-                else {
-                    throw new Error(NOT_IMPLEMENTED);
-                }
-            },
-            verify(message, signature) {
-                if (curveName === 'secp256k1') {
-                    return bip32ExtendedKey.verify(!Buffer.isBuffer(message) ? Buffer.from(message) : message, !Buffer.isBuffer(signature) ? Buffer.from(signature) : signature);
-                }
-                else if (curveName === 'ed25519') {
-                    return tweetnacl.sign.detached.verify(message, signature, this.publicKey);
-                }
-                else {
-                    throw new Error(NOT_IMPLEMENTED);
-                }
-            } });
-        return bip32ExtendedKey;
-    }
-}
-
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
-
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
-
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
-***************************************************************************** */
-
-function __awaiter(thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
 }
 
 const CLA = 0x80;
@@ -51146,7 +49596,6 @@ function generateTransactionHash(data) {
         binary += String.fromCharCode(hashed[i]);
     }
     return toBase64Url(window.btoa(binary));
->>>>>>> 629f32032936bededdc296f14a814459d19bbd77
 }
 
 var signature_pb = createCommonjsModule(function (module, exports) {
@@ -51218,6 +49667,11 @@ const zoobc = {
     ParticipationScore,
 };
 
+const errorDateMessage = {
+    code: '',
+    message: 'please fix your date and time',
+    metadata: '',
+};
 // getAddressFromPublicKey Get the formatted address from a raw public key
 function getZBCAddress(publicKey, prefix = 'ZBC') {
     const prefixDefault = ['ZBC', 'ZNK', 'ZBL', 'ZTX'];
@@ -51437,9 +49891,7 @@ function sendMoney(data, seed) {
             });
         }
         else {
-            const message = 'Please Fix Your Date and Time';
-            const code = '';
-            const metadata = '';
+            const { code, message, metadata } = errorDateMessage;
             reject({ code, message, metadata });
         }
     }));

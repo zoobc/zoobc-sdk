@@ -6,7 +6,7 @@ import { GetEscrowTransactionsRequest, GetEscrowTransactionRequest, Escrow, GetE
 import { EscrowTransactionServiceClient } from '../grpc/service/escrow_pb_service';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
-import { validationTimestamp } from './helper/utils';
+import { errorDateMessage, validationTimestamp } from './helper/utils';
 
 export type EscrowTransactionsResponse = GetEscrowTransactionsResponse.AsObject;
 export type EscrowTransactionResponse = Escrow.AsObject;
@@ -101,9 +101,7 @@ function approval(data: EscrowApprovalInterface, seed: BIP32Interface): Promise<
         resolve(res?.toObject());
       });
     } else {
-      const message = 'Please Fix Your Date and Time';
-      const code = '';
-      const metadata = '';
+      const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });
     }
   });

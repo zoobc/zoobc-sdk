@@ -5,6 +5,12 @@ import B32Dec from 'base32-decode';
 import { Int64LE } from 'int64-buffer';
 import zoobc from '..';
 
+export const errorDateMessage = {
+  code: '',
+  message: 'please fix your date and time',
+  metadata: '',
+};
+
 // getAddressFromPublicKey Get the formatted address from a raw public key
 export function getZBCAddress(publicKey: Uint8Array, prefix: string = 'ZBC'): string {
   const prefixDefault = ['ZBC', 'ZNK', 'ZBL', 'ZTX'];

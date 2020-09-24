@@ -13,7 +13,7 @@ import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
 import { BIP32Interface } from 'bip32';
-import { validationTimestamp } from './helper/utils';
+import { errorDateMessage, validationTimestamp } from './helper/utils';
 
 export type TransactionsResponse = GetTransactionsResponse.AsObject;
 export type TransactionResponse = Transaction.AsObject;
@@ -102,9 +102,7 @@ function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<Post
         if (res) resolve(res.toObject());
       });
     } else {
-      const message = 'Please Fix Your Date and Time';
-      const code = '';
-      const metadata = '';
+      const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });
     }
   });

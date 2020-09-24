@@ -1,4 +1,9 @@
 /// <reference types="node" />
+export declare const errorDateMessage: {
+    code: string;
+    message: string;
+    metadata: string;
+};
 export declare function getZBCAddress(publicKey: Uint8Array, prefix?: string): string;
 export declare function hash(str: any, format?: string): string | Buffer;
 export declare function encryptPassword(password: string, salt?: string): string;

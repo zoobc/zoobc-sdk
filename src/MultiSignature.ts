@@ -1,4 +1,4 @@
-import { writeInt32, getZBCAddress, validationTimestamp } from './helper/utils';
+import { writeInt32, getZBCAddress, validationTimestamp, errorDateMessage } from './helper/utils';
 import { sha3_256 } from 'js-sha3';
 import Network from './Network';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
@@ -155,9 +155,7 @@ function postTransaction(data: MultiSigInterface, childSeed: BIP32Interface): Pr
         if (res) resolve(res.toObject());
       });
     } else {
-      const message = 'Please Fix Your Date and Time';
-      const code = '';
-      const metadata = '';
+      const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });
     }
   });

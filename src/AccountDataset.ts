@@ -12,7 +12,7 @@ import { TransactionServiceClient } from '../grpc/service/transaction_pb_service
 import { setupDatasetBuilder, SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
 import { BIP32Interface } from 'bip32';
 import { RemoveDatasetInterface, removeDatasetBuilder } from './helper/transaction-builder/remove-account-dataset';
-import { validationTimestamp } from './helper/utils';
+import { errorDateMessage, validationTimestamp } from './helper/utils';
 
 export type AccountDatasetsResponse = GetAccountDatasetsResponse.AsObject;
 export type AccountDatasetResponse = AccountDataset.AsObject;
@@ -96,9 +96,7 @@ export function setupDataset(data: SetupDatasetInterface, childSeed: BIP32Interf
         if (res) resolve(res.toObject());
       });
     } else {
-      const message = 'Please Fix Your Date and Time';
-      const code = '';
-      const metadata = '';
+      const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });
     }
   });
@@ -122,9 +120,7 @@ export function removeDataset(data: RemoveDatasetInterface, childseed: BIP32Inte
         if (res) resolve(res.toObject());
       });
     } else {
-      const message = 'Please Fix Your Date and Time';
-      const code = '';
-      const metadata = '';
+      const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });
     }
   });

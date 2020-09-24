@@ -26,7 +26,7 @@ import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/t
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { Empty } from '../grpc/model/empty_pb';
-import { validationTimestamp } from './helper/utils';
+import { errorDateMessage, validationTimestamp } from './helper/utils';
 
 export type NodeHardwareResponse = GetNodeHardwareResponse.AsObject;
 export type GenerateNodeKeyResponses = GenerateNodeKeyResponse.AsObject;
@@ -164,9 +164,7 @@ function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promi
           if (res) resolve(res.toObject());
         });
       } else {
-        const message = 'Please Fix Your Date and Time';
-        const code = '';
-        const metadata = '';
+        const { code, message, metadata } = errorDateMessage;
         reject({ code, message, metadata });
       }
     });
@@ -195,9 +193,7 @@ function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<N
             if (res) resolve(res.toObject());
           });
         } else {
-          const message = 'Please Fix Your Date and Time';
-          const code = '';
-          const metadata = '';
+          const { code, message, metadata } = errorDateMessage;
           reject({ code, message, metadata });
         }
       })
@@ -224,9 +220,7 @@ function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<N
         if (res) resolve(res.toObject());
       });
     } else {
-      const message = 'Please Fix Your Date and Time';
-      const code = '';
-      const metadata = '';
+      const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });
     }
   });
@@ -254,9 +248,7 @@ function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<Nod
             if (res) resolve(res.toObject());
           });
         } else {
-          const message = 'Please Fix Your Date and Time';
-          const code = '';
-          const metadata = '';
+          const { code, message, metadata } = errorDateMessage;
           reject({ code, message, metadata });
         }
       })
