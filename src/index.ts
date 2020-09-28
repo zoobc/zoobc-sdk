@@ -74,9 +74,12 @@ export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shorten
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
 export {
   toTransactionListWallet,
+  toZBCTransactions,
   ZooTransactionsInterface,
   toTransactionWallet,
   ZooTransactionInterface,
+  ZBCTransaction,
+  ZBCTransactions,
 } from './helper/wallet/Transaction';
 export { bufferToBase64, toBase64Url } from './helper/converters';
 export {

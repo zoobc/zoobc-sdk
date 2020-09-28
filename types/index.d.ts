@@ -23,7 +23,7 @@ export { RemoveDatasetInterface } from './helper/transaction-builder/remove-acco
 export { SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
-export { toTransactionListWallet, ZooTransactionsInterface, toTransactionWallet, ZooTransactionInterface, } from './helper/wallet/Transaction';
+export { toTransactionListWallet, toZBCTransactions, ZooTransactionsInterface, toTransactionWallet, ZooTransactionInterface, ZBCTransaction, ZBCTransactions, } from './helper/wallet/Transaction';
 export { bufferToBase64, toBase64Url } from './helper/converters';
 export { MultiSigInterface, signTransactionHash, MultiSigAddress, MultiSigInfo, SignatureInfo, } from './helper/transaction-builder/multisignature';
 export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';

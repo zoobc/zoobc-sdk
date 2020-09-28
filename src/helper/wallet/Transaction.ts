@@ -1,5 +1,5 @@
-import { readInt64 } from '../utils';
-import { GetTransactionsResponse, Transaction } from '../../../grpc/model/transaction_pb';
+import { readInt64, getZBCAddress } from '../utils';
+import { GetTransactionsResponse, Transaction, TransactionType } from '../../../grpc/model/transaction_pb';
 
 export interface ZooTransactionsInterface {
   total: number;
@@ -16,6 +16,50 @@ export interface ZooTransactionInterface {
   blockId: string;
   height: number;
   transactionIndex: number;
+}
+
+export interface ZBCTransactions {
+  total: number;
+  transactions: ZBCTransaction[];
+}
+
+export interface ZBCTransaction {
+  id: string;
+  sender: string;
+  senderAlias?: string;
+  recipient: string;
+  recipientAlias?: string;
+  timestamp: number;
+  fee: number;
+  blockId: string;
+  height: number;
+  transactionIndex: number;
+  transactionHash: string;
+  transactionType: number;
+  txBody: object;
+  escrow?: boolean;
+  escrowStatus?: number;
+  multisig?: boolean;
+}
+
+export function toZBCTransactions(transactions: Array<Transaction.AsObject>): ZBCTransaction[] {
+  let transactionList: ZBCTransaction[] = transactions.map(tx => {
+    const txBody = getBodyBytes(tx);
+    return {
+      id: tx.id,
+      sender: tx.senderaccountaddress,
+      recipient: tx.recipientaccountaddress,
+      timestamp: parseInt(tx.timestamp) * 1000,
+      fee: parseInt(tx.fee),
+      blockId: tx.blockid,
+      height: tx.height,
+      transactionIndex: tx.transactionindex,
+      transactionHash: getZBCAddress(Buffer.from(tx.transactionhash.toString(), 'base64'), 'ZTX'),
+      transactionType: tx.transactiontype,
+      txBody,
+    };
+  });
+  return transactionList;
 }
 
 export function toTransactionListWallet(res: GetTransactionsResponse.AsObject, ownAddress: string): ZooTransactionsInterface {
@@ -40,6 +84,19 @@ export function toTransactionListWallet(res: GetTransactionsResponse.AsObject, o
     total: parseInt(res.total),
     transactions: transactionList,
   };
+}
+
+function getBodyBytes(tx: Transaction.AsObject) {
+  return (
+    tx.approvalescrowtransactionbody ||
+    tx.claimnoderegistrationtransactionbody ||
+    tx.multisignaturetransactionbody ||
+    tx.noderegistrationtransactionbody ||
+    tx.removeaccountdatasettransactionbody ||
+    tx.removenoderegistrationtransactionbody ||
+    tx.sendmoneytransactionbody ||
+    {}
+  );
 }
 
 export function toTransactionWallet(tx: Transaction.AsObject, ownAddress: string): ZooTransactionInterface {
