@@ -1,4 +1,17 @@
-import { readInt64 } from '../utils';
+import {
+  readApprovalEscrowBytes,
+  readClaimNodeBytes,
+  readInt64,
+  readMultisignatureTransactionBytes,
+  readNodeRegistrationBytes,
+  readPostTransactionBytes,
+  readRemoveDatasetBytes,
+  readRemoveNodeRegistrationBytes,
+  readSendMoneyBytes,
+  readSendMoneyEscrowBytes,
+  readSetupAccountDatasetBytes,
+  readUpdateNodeBytes,
+} from '../utils';
 import { GetMempoolTransactionsResponse } from '../../../grpc/model/mempool_pb';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 
@@ -57,4 +70,64 @@ export function toUnconfirmTransactionNodeWallet(res: GetMempoolTransactionsResp
     if (found) break;
   }
   return result;
+}
+
+export function toZBCPendingTransactions(res: GetMempoolTransactionsResponse.AsObject) {
+  let mempoolTx = res.mempooltransactionsList;
+  let result: any = [];
+  let bytesConverted: any = [];
+  for (let i = 0; i < mempoolTx.length; i++) {
+    const tx = mempoolTx[i].transactionbytes;
+    const txBytes = Buffer.from(tx.toString(), 'base64');
+    const type = txBytes.slice(0, 4).readInt32LE(0);
+    bytesConverted = readPostTransactionBytes(txBytes);
+    switch (type) {
+      case TransactionType.UPDATENODEREGISTRATIONTRANSACTION:
+        bytesConverted = readUpdateNodeBytes(txBytes, bytesConverted);
+        result.push({ type: 'Update Node', tx: bytesConverted });
+        break;
+      case TransactionType.SENDMONEYTRANSACTION:
+        bytesConverted = readSendMoneyBytes(txBytes, bytesConverted);
+        if (txBytes.length > 269) {
+          bytesConverted = readSendMoneyEscrowBytes(txBytes, bytesConverted);
+          result.push({ type: 'Send Money', tx: bytesConverted });
+          break;
+        } else {
+          result.push({ type: 'Send Money', tx: bytesConverted });
+          break;
+        }
+      case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
+        bytesConverted = readRemoveNodeRegistrationBytes(txBytes, bytesConverted);
+        result.push({ type: 'Remove Node', tx: bytesConverted });
+        break;
+      case TransactionType.NODEREGISTRATIONTRANSACTION:
+        bytesConverted = readNodeRegistrationBytes(txBytes, bytesConverted);
+        result.push({ type: 'Node Registration', tx: bytesConverted });
+        break;
+      case TransactionType.CLAIMNODEREGISTRATIONTRANSACTION:
+        bytesConverted = readClaimNodeBytes(txBytes, bytesConverted);
+        result.push({ type: 'Claim Node', tx: bytesConverted });
+        break;
+      case TransactionType.SETUPACCOUNTDATASETTRANSACTION:
+        bytesConverted = readSetupAccountDatasetBytes(txBytes, bytesConverted);
+        result.push({ type: 'Setup Account Dataset', tx: bytesConverted });
+        break;
+      case TransactionType.REMOVEACCOUNTDATASETTRANSACTION:
+        bytesConverted = readRemoveDatasetBytes(txBytes, bytesConverted);
+        result.push({ type: 'Remove Account Dataset', tx: bytesConverted });
+        break;
+      case TransactionType.APPROVALESCROWTRANSACTION:
+        bytesConverted = readApprovalEscrowBytes(txBytes, bytesConverted);
+        result.push({ type: 'Approval Escrow Transaction', tx: bytesConverted });
+        break;
+      case TransactionType.MULTISIGNATURETRANSACTION:
+        bytesConverted = readMultisignatureTransactionBytes(txBytes, bytesConverted);
+        result.push({ type: 'Multisignature Transaction', tx: bytesConverted });
+        break;
+    }
+  }
+  return {
+    total: res.total,
+    mempoolTx: result,
+  };
 }
