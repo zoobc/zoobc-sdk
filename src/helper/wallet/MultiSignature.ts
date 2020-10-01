@@ -31,6 +31,7 @@ export function toGetPendingList(res: MultisigPendingTxResponse) {
 }
 
 export function generateTransactionHash(buffer: Buffer) {
+  // sads;
   const hashed = Buffer.from(sha3_256(buffer), 'hex');
   let binary = '';
   const len = hashed.byteLength;

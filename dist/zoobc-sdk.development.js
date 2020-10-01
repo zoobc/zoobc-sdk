@@ -49675,6 +49675,7 @@ function toGetPendingList(res) {
     };
 }
 function generateTransactionHash(buffer) {
+    // sads;
     const hashed = Buffer.from(jsSha3.sha3_256(buffer), 'hex');
     let binary = '';
     const len = hashed.byteLength;
