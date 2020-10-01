@@ -20,18 +20,18 @@ var bip32 = require('bip32');
 var TransportWebUSB = _interopDefault(require('@ledgerhq/hw-transport-webusb'));
 
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
 
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
 
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
 ***************************************************************************** */
 
 function __awaiter(thisArg, _arguments, P, generator) {
@@ -4658,8 +4658,7 @@ proto.google.protobuf.FieldDescriptorProto.toObject = function(includeInstance, 
     defaultValue: (f = googleProtobuf.Message.getField(msg, 7)) == null ? undefined : f,
     oneofIndex: (f = googleProtobuf.Message.getField(msg, 9)) == null ? undefined : f,
     jsonName: (f = googleProtobuf.Message.getField(msg, 10)) == null ? undefined : f,
-    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f),
-    proto3Optional: (f = googleProtobuf.Message.getBooleanField(msg, 17)) == null ? undefined : f
+    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -4736,10 +4735,6 @@ proto.google.protobuf.FieldDescriptorProto.deserializeBinaryFromReader = functio
       var value = new proto.google.protobuf.FieldOptions;
       reader.readMessage(value,proto.google.protobuf.FieldOptions.deserializeBinaryFromReader);
       msg.setOptions(value);
-      break;
-    case 17:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setProto3Optional(value);
       break;
     default:
       reader.skipField();
@@ -4839,13 +4834,6 @@ proto.google.protobuf.FieldDescriptorProto.serializeBinaryToWriter = function(me
       8,
       f,
       proto.google.protobuf.FieldOptions.serializeBinaryToWriter
-    );
-  }
-  f = /** @type {boolean} */ (googleProtobuf.Message.getField(message, 17));
-  if (f != null) {
-    writer.writeBool(
-      17,
-      f
     );
   }
 };
@@ -5242,42 +5230,6 @@ proto.google.protobuf.FieldDescriptorProto.prototype.clearOptions = function() {
  */
 proto.google.protobuf.FieldDescriptorProto.prototype.hasOptions = function() {
   return googleProtobuf.Message.getField(this, 8) != null;
-};
-
-
-/**
- * optional bool proto3_optional = 17;
- * @return {boolean}
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.getProto3Optional = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 17, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.setProto3Optional = function(value) {
-  return googleProtobuf.Message.setField(this, 17, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.clearProto3Optional = function() {
-  return googleProtobuf.Message.setField(this, 17, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.hasProto3Optional = function() {
-  return googleProtobuf.Message.getField(this, 17) != null;
 };
 
 
@@ -6985,7 +6937,7 @@ proto.google.protobuf.FileOptions.toObject = function(includeInstance, msg) {
     pyGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 18, false),
     phpGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 42, false),
     deprecated: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 23, false),
-    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, true),
+    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, false),
     objcClassPrefix: (f = googleProtobuf.Message.getField(msg, 36)) == null ? undefined : f,
     csharpNamespace: (f = googleProtobuf.Message.getField(msg, 37)) == null ? undefined : f,
     swiftPrefix: (f = googleProtobuf.Message.getField(msg, 39)) == null ? undefined : f,
@@ -7750,7 +7702,7 @@ proto.google.protobuf.FileOptions.prototype.hasDeprecated = function() {
  * @return {boolean}
  */
 proto.google.protobuf.FileOptions.prototype.getCcEnableArenas = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, true));
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, false));
 };
 
 
@@ -17839,6 +17791,8 @@ goog.exportSymbol('proto.model.GetMultisigAddressesByBlockHeightRangeRequest', n
 goog.exportSymbol('proto.model.GetMultisigAddressesByBlockHeightRangeResponse', null, global);
 goog.exportSymbol('proto.model.GetMultisignatureInfoRequest', null, global);
 goog.exportSymbol('proto.model.GetMultisignatureInfoResponse', null, global);
+goog.exportSymbol('proto.model.GetParticipantsByMultisigAddressesRequest', null, global);
+goog.exportSymbol('proto.model.GetParticipantsByMultisigAddressesResponse', null, global);
 goog.exportSymbol('proto.model.GetPendingTransactionDetailByTransactionHashRequest', null, global);
 goog.exportSymbol('proto.model.GetPendingTransactionDetailByTransactionHashResponse', null, global);
 goog.exportSymbol('proto.model.GetPendingTransactionsByHeightRequest', null, global);
@@ -17847,6 +17801,7 @@ goog.exportSymbol('proto.model.GetPendingTransactionsRequest', null, global);
 goog.exportSymbol('proto.model.GetPendingTransactionsResponse', null, global);
 goog.exportSymbol('proto.model.MultiSignatureInfo', null, global);
 goog.exportSymbol('proto.model.MultiSignatureParticipant', null, global);
+goog.exportSymbol('proto.model.MultiSignatureParticipants', null, global);
 goog.exportSymbol('proto.model.PendingSignature', null, global);
 goog.exportSymbol('proto.model.PendingTransaction', null, global);
 goog.exportSymbol('proto.model.PendingTransactionStatus', null, global);
@@ -18207,6 +18162,69 @@ if (goog.DEBUG && !COMPILED) {
    * @override
    */
   proto.model.GetMultisigAddressesByBlockHeightRangeResponse.displayName = 'proto.model.GetMultisigAddressesByBlockHeightRangeResponse';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.model.GetParticipantsByMultisigAddressesRequest = function(opt_data) {
+  googleProtobuf.Message.initialize(this, opt_data, 0, -1, proto.model.GetParticipantsByMultisigAddressesRequest.repeatedFields_, null);
+};
+goog.inherits(proto.model.GetParticipantsByMultisigAddressesRequest, googleProtobuf.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.model.GetParticipantsByMultisigAddressesRequest.displayName = 'proto.model.GetParticipantsByMultisigAddressesRequest';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.model.MultiSignatureParticipants = function(opt_data) {
+  googleProtobuf.Message.initialize(this, opt_data, 0, -1, proto.model.MultiSignatureParticipants.repeatedFields_, null);
+};
+goog.inherits(proto.model.MultiSignatureParticipants, googleProtobuf.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.model.MultiSignatureParticipants.displayName = 'proto.model.MultiSignatureParticipants';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.model.GetParticipantsByMultisigAddressesResponse = function(opt_data) {
+  googleProtobuf.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.model.GetParticipantsByMultisigAddressesResponse, googleProtobuf.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.model.GetParticipantsByMultisigAddressesResponse.displayName = 'proto.model.GetParticipantsByMultisigAddressesResponse';
 }
 
 /**
@@ -21747,6 +21765,519 @@ proto.model.GetMultisigAddressesByBlockHeightRangeResponse.prototype.addMultisig
  */
 proto.model.GetMultisigAddressesByBlockHeightRangeResponse.prototype.clearMultisignatureinfoList = function() {
   this.setMultisignatureinfoList([]);
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.model.GetParticipantsByMultisigAddressesRequest.repeatedFields_ = [1];
+
+
+
+if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.model.GetParticipantsByMultisigAddressesRequest.prototype.toObject = function(opt_includeInstance) {
+  return proto.model.GetParticipantsByMultisigAddressesRequest.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.model.GetParticipantsByMultisigAddressesRequest} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetParticipantsByMultisigAddressesRequest.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    multisigaddressesList: (f = googleProtobuf.Message.getRepeatedField(msg, 1)) == null ? undefined : f,
+    pagination: (f = msg.getPagination()) && pagination_pb.Pagination.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.model.GetParticipantsByMultisigAddressesRequest}
+ */
+proto.model.GetParticipantsByMultisigAddressesRequest.deserializeBinary = function(bytes) {
+  var reader = new googleProtobuf.BinaryReader(bytes);
+  var msg = new proto.model.GetParticipantsByMultisigAddressesRequest;
+  return proto.model.GetParticipantsByMultisigAddressesRequest.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.model.GetParticipantsByMultisigAddressesRequest} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.model.GetParticipantsByMultisigAddressesRequest}
+ */
+proto.model.GetParticipantsByMultisigAddressesRequest.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.addMultisigaddresses(value);
+      break;
+    case 2:
+      var value = new pagination_pb.Pagination;
+      reader.readMessage(value,pagination_pb.Pagination.deserializeBinaryFromReader);
+      msg.setPagination(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.model.GetParticipantsByMultisigAddressesRequest.prototype.serializeBinary = function() {
+  var writer = new googleProtobuf.BinaryWriter();
+  proto.model.GetParticipantsByMultisigAddressesRequest.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.model.GetParticipantsByMultisigAddressesRequest} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetParticipantsByMultisigAddressesRequest.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getMultisigaddressesList();
+  if (f.length > 0) {
+    writer.writeRepeatedString(
+      1,
+      f
+    );
+  }
+  f = message.getPagination();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      pagination_pb.Pagination.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * repeated string MultisigAddresses = 1;
+ * @return {!Array<string>}
+ */
+proto.model.GetParticipantsByMultisigAddressesRequest.prototype.getMultisigaddressesList = function() {
+  return /** @type {!Array<string>} */ (googleProtobuf.Message.getRepeatedField(this, 1));
+};
+
+
+/** @param {!Array<string>} value */
+proto.model.GetParticipantsByMultisigAddressesRequest.prototype.setMultisigaddressesList = function(value) {
+  googleProtobuf.Message.setField(this, 1, value || []);
+};
+
+
+/**
+ * @param {string} value
+ * @param {number=} opt_index
+ */
+proto.model.GetParticipantsByMultisigAddressesRequest.prototype.addMultisigaddresses = function(value, opt_index) {
+  googleProtobuf.Message.addToRepeatedField(this, 1, value, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.GetParticipantsByMultisigAddressesRequest.prototype.clearMultisigaddressesList = function() {
+  this.setMultisigaddressesList([]);
+};
+
+
+/**
+ * optional Pagination Pagination = 2;
+ * @return {?proto.model.Pagination}
+ */
+proto.model.GetParticipantsByMultisigAddressesRequest.prototype.getPagination = function() {
+  return /** @type{?proto.model.Pagination} */ (
+    googleProtobuf.Message.getWrapperField(this, pagination_pb.Pagination, 2));
+};
+
+
+/** @param {?proto.model.Pagination|undefined} value */
+proto.model.GetParticipantsByMultisigAddressesRequest.prototype.setPagination = function(value) {
+  googleProtobuf.Message.setWrapperField(this, 2, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ */
+proto.model.GetParticipantsByMultisigAddressesRequest.prototype.clearPagination = function() {
+  this.setPagination(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.model.GetParticipantsByMultisigAddressesRequest.prototype.hasPagination = function() {
+  return googleProtobuf.Message.getField(this, 2) != null;
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.model.MultiSignatureParticipants.repeatedFields_ = [1];
+
+
+
+if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.model.MultiSignatureParticipants.prototype.toObject = function(opt_includeInstance) {
+  return proto.model.MultiSignatureParticipants.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.model.MultiSignatureParticipants} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.MultiSignatureParticipants.toObject = function(includeInstance, msg) {
+  var obj = {
+    multisignatureparticipantsList: googleProtobuf.Message.toObjectList(msg.getMultisignatureparticipantsList(),
+    proto.model.MultiSignatureParticipant.toObject, includeInstance)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.model.MultiSignatureParticipants}
+ */
+proto.model.MultiSignatureParticipants.deserializeBinary = function(bytes) {
+  var reader = new googleProtobuf.BinaryReader(bytes);
+  var msg = new proto.model.MultiSignatureParticipants;
+  return proto.model.MultiSignatureParticipants.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.model.MultiSignatureParticipants} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.model.MultiSignatureParticipants}
+ */
+proto.model.MultiSignatureParticipants.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.model.MultiSignatureParticipant;
+      reader.readMessage(value,proto.model.MultiSignatureParticipant.deserializeBinaryFromReader);
+      msg.addMultisignatureparticipants(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.model.MultiSignatureParticipants.prototype.serializeBinary = function() {
+  var writer = new googleProtobuf.BinaryWriter();
+  proto.model.MultiSignatureParticipants.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.model.MultiSignatureParticipants} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.MultiSignatureParticipants.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getMultisignatureparticipantsList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      1,
+      f,
+      proto.model.MultiSignatureParticipant.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * repeated MultiSignatureParticipant MultiSignatureParticipants = 1;
+ * @return {!Array<!proto.model.MultiSignatureParticipant>}
+ */
+proto.model.MultiSignatureParticipants.prototype.getMultisignatureparticipantsList = function() {
+  return /** @type{!Array<!proto.model.MultiSignatureParticipant>} */ (
+    googleProtobuf.Message.getRepeatedWrapperField(this, proto.model.MultiSignatureParticipant, 1));
+};
+
+
+/** @param {!Array<!proto.model.MultiSignatureParticipant>} value */
+proto.model.MultiSignatureParticipants.prototype.setMultisignatureparticipantsList = function(value) {
+  googleProtobuf.Message.setRepeatedWrapperField(this, 1, value);
+};
+
+
+/**
+ * @param {!proto.model.MultiSignatureParticipant=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.MultiSignatureParticipant}
+ */
+proto.model.MultiSignatureParticipants.prototype.addMultisignatureparticipants = function(opt_value, opt_index) {
+  return googleProtobuf.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.model.MultiSignatureParticipant, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.MultiSignatureParticipants.prototype.clearMultisignatureparticipantsList = function() {
+  this.setMultisignatureparticipantsList([]);
+};
+
+
+
+
+
+if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.model.GetParticipantsByMultisigAddressesResponse.prototype.toObject = function(opt_includeInstance) {
+  return proto.model.GetParticipantsByMultisigAddressesResponse.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.model.GetParticipantsByMultisigAddressesResponse} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetParticipantsByMultisigAddressesResponse.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    total: googleProtobuf.Message.getFieldWithDefault(msg, 1, 0),
+    multisignatureparticipantsMap: (f = msg.getMultisignatureparticipantsMap()) ? f.toObject(includeInstance, proto.model.MultiSignatureParticipants.toObject) : []
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.model.GetParticipantsByMultisigAddressesResponse}
+ */
+proto.model.GetParticipantsByMultisigAddressesResponse.deserializeBinary = function(bytes) {
+  var reader = new googleProtobuf.BinaryReader(bytes);
+  var msg = new proto.model.GetParticipantsByMultisigAddressesResponse;
+  return proto.model.GetParticipantsByMultisigAddressesResponse.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.model.GetParticipantsByMultisigAddressesResponse} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.model.GetParticipantsByMultisigAddressesResponse}
+ */
+proto.model.GetParticipantsByMultisigAddressesResponse.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setTotal(value);
+      break;
+    case 2:
+      var value = msg.getMultisignatureparticipantsMap();
+      reader.readMessage(value, function(message, reader) {
+        googleProtobuf.Map.deserializeBinary(message, reader, googleProtobuf.BinaryReader.prototype.readString, googleProtobuf.BinaryReader.prototype.readMessage, proto.model.MultiSignatureParticipants.deserializeBinaryFromReader, "");
+         });
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.model.GetParticipantsByMultisigAddressesResponse.prototype.serializeBinary = function() {
+  var writer = new googleProtobuf.BinaryWriter();
+  proto.model.GetParticipantsByMultisigAddressesResponse.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.model.GetParticipantsByMultisigAddressesResponse} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.GetParticipantsByMultisigAddressesResponse.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getTotal();
+  if (f !== 0) {
+    writer.writeUint32(
+      1,
+      f
+    );
+  }
+  f = message.getMultisignatureparticipantsMap(true);
+  if (f && f.getLength() > 0) {
+    f.serializeBinary(2, writer, googleProtobuf.BinaryWriter.prototype.writeString, googleProtobuf.BinaryWriter.prototype.writeMessage, proto.model.MultiSignatureParticipants.serializeBinaryToWriter);
+  }
+};
+
+
+/**
+ * optional uint32 Total = 1;
+ * @return {number}
+ */
+proto.model.GetParticipantsByMultisigAddressesResponse.prototype.getTotal = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/** @param {number} value */
+proto.model.GetParticipantsByMultisigAddressesResponse.prototype.setTotal = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 1, value);
+};
+
+
+/**
+ * map<string, MultiSignatureParticipants> MultiSignatureParticipants = 2;
+ * @param {boolean=} opt_noLazyCreate Do not create the map if
+ * empty, instead returning `undefined`
+ * @return {!jspb.Map<string,!proto.model.MultiSignatureParticipants>}
+ */
+proto.model.GetParticipantsByMultisigAddressesResponse.prototype.getMultisignatureparticipantsMap = function(opt_noLazyCreate) {
+  return /** @type {!jspb.Map<string,!proto.model.MultiSignatureParticipants>} */ (
+      googleProtobuf.Message.getMapField(this, 2, opt_noLazyCreate,
+      proto.model.MultiSignatureParticipants));
+};
+
+
+/**
+ * Clears values from the map. The map will be non-null.
+ */
+proto.model.GetParticipantsByMultisigAddressesResponse.prototype.clearMultisignatureparticipantsMap = function() {
+  this.getMultisignatureparticipantsMap().clear();
 };
 
 
@@ -29232,240 +29763,6 @@ TransactionServiceClient.prototype.getTransactionMinimumFee = function getTransa
 
 var TransactionServiceClient_1 = TransactionServiceClient;
 
-const errorDateMessage = {
-    code: '',
-    message: 'please fix your date and time',
-    metadata: '',
-};
-// getAddressFromPublicKey Get the formatted address from a raw public key
-function getZBCAddress(publicKey, prefix = 'ZBC') {
-    const prefixDefault = ['ZBC', 'ZNK', 'ZBL', 'ZTX'];
-    const valid = prefixDefault.indexOf(prefix) > -1;
-    if (valid) {
-        const bytes = Buffer.alloc(35);
-        for (let i = 0; i < 32; i++)
-            bytes[i] = publicKey[i];
-        for (let i = 0; i < 3; i++)
-            bytes[i + 32] = prefix.charCodeAt(i);
-        const checksum = hash(bytes);
-        for (let i = 0; i < 3; i++)
-            bytes[i + 32] = Number(checksum[i]);
-        const segs = [prefix];
-        const b32 = B32Enc(bytes, 'RFC4648');
-        for (let i = 0; i < 7; i++)
-            segs.push(b32.substr(i * 8, 8));
-        return segs.join('_');
-    }
-    else {
-        throw new Error('The Prefix not available!');
-    }
-}
-function hash(str, format = 'buffer') {
-    const h = new SHA3(256);
-    h.update(str);
-    const b = h.digest();
-    if (format == 'buffer')
-        return b;
-    return b.toString(format);
-}
-function encryptPassword(password, salt = 'salt') {
-    return CryptoJS.PBKDF2(password, salt, {
-        keySize: 8,
-        iterations: 10000,
-    }).toString();
-}
-function isZBCAddressValid(address, stdPrefix = 'ZBC') {
-    if (address.length != 66)
-        return false;
-    const segs = address.split('_');
-    const prefix = segs[0];
-    if (prefix != stdPrefix)
-        return false;
-    segs.shift();
-    if (segs.length != 7)
-        return false;
-    for (let i = 0; i < segs.length; i++)
-        if (!/[A-Z2-7]{8}/.test(segs[i]))
-            return false;
-    const b32 = segs.join('');
-    const buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
-    const inputChecksum = [];
-    for (let i = 0; i < 3; i++)
-        inputChecksum.push(buffer[i + 32]);
-    for (let i = 0; i < 3; i++)
-        buffer[i + 32] = prefix.charCodeAt(i);
-    const checksum = hash(buffer);
-    for (let i = 0; i < 3; i++)
-        if (checksum[i] != inputChecksum[i])
-            return false;
-    return true;
-}
-function ZBCAddressToBytes(address) {
-    const segs = address.split('_');
-    segs.shift();
-    const b32 = segs.join('');
-    const buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
-    return buffer.slice(0, 32);
-}
-function shortenHash(text = '') {
-    if (!text)
-        return text;
-    const split = text.split('_');
-    const zoobcPrefix = split[0];
-    const head = split[1];
-    const tail = split[split.length - 1];
-    const truncateHead = head.slice(0, head.length - 4);
-    const truncateTail = tail.slice(tail.length - 4, tail.length);
-    return `${zoobcPrefix}_${truncateHead}...${truncateTail}`;
-}
-function writeInt64(number, base, endian) {
-    number = number.toString();
-    const buffer = new int64Buffer.Int64LE(number);
-    return buffer.toBuffer();
-}
-function readInt64(buff, offset) {
-    const buffer = buff.slice(offset, offset + 8);
-    return new int64Buffer.Int64LE(buffer) + '';
-}
-function writeInt32(number) {
-    let byte = new Buffer(4);
-    byte.writeUInt32LE(number, 0);
-    return byte;
-}
-function validationTimestamp(txBytes) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let timestampPostTransactionBytes = txBytes.slice(5, 13);
-        let timestampPostTransaction = readInt64(timestampPostTransactionBytes, 0);
-        let timestampServer = yield zoobc.Node.getNodeTime().then(res => {
-            return res.nodetime;
-        });
-        const deviation = parseInt(timestampPostTransaction) - parseInt(timestampServer);
-        if (deviation < 30 && deviation > -30)
-            return true;
-        else
-            return false;
-    });
-}
-
-const ADDRESS_LENGTH = 66;
-const VERSION = new Buffer([1]);
-
-const TRANSACTION_TYPE = new Buffer([1, 0, 0, 0]);
-function sendMoneyBuilder(data, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = Buffer.from(data.sender, 'utf-8');
-    const recipient = Buffer.from(data.recipient, 'utf-8');
-    const addressLength = writeInt32(ADDRESS_LENGTH);
-    const fee = writeInt64(data.fee * 1e8);
-    const amount = writeInt64(data.amount * 1e8);
-    const bodyLength = writeInt32(amount.length);
-    bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, addressLength, sender, addressLength, recipient, fee, bodyLength, amount]);
-    if (data.approverAddress && data.commission && data.timeout && data.instruction) {
-        // escrow bytes
-        const approverAddressLength = writeInt32(ADDRESS_LENGTH);
-        const approverAddress = Buffer.from(data.approverAddress, 'utf-8');
-        const commission = writeInt64(data.commission * 1e8);
-        const timeout = writeInt64(data.timeout);
-        const instruction = Buffer.from(data.instruction, 'utf-8');
-        const instructionLength = writeInt32(instruction.length);
-        bytes = Buffer.concat([bytes, approverAddressLength, approverAddress, commission, timeout, instructionLength, instruction]);
-    }
-    else {
-        // escrow bytes default value
-        const approverAddressLength = writeInt32(0);
-        const commission = writeInt64(0);
-        const timeout = writeInt64(0);
-        const instructionLength = writeInt32(0);
-        bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
-    }
-    if (seed) {
-        const signatureType = writeInt32(0);
-        const signature = seed.sign(bytes);
-        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
-    }
-    else
-        return bytes;
-}
-
-function getList(params) {
-    return new Promise((resolve, reject) => {
-        const request = new transaction_pb_1();
-        const networkIP = Network$1.selected();
-        if (params) {
-            const { address, height, transactionType, timestampStart, timestampEnd, pagination } = params;
-            if (address)
-                request.setAccountaddress(address);
-            if (height)
-                request.setHeight(height);
-            if (transactionType)
-                request.setTransactiontype(transactionType);
-            if (timestampStart)
-                request.setTimestampstart(timestampStart);
-            if (timestampEnd)
-                request.setTimestampend(timestampEnd);
-            if (pagination) {
-                const reqPagination = new pagination_pb_1();
-                reqPagination.setLimit(pagination.limit || 10);
-                reqPagination.setPage(pagination.page || 1);
-                reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
-                request.setPagination(reqPagination);
-            }
-        }
-        const client = new TransactionServiceClient_1(networkIP.host);
-        client.getTransactions(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function get(id) {
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new transaction_pb_2();
-        request.setId(id);
-        const client = new TransactionServiceClient_1(networkIP.host);
-        client.getTransaction(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(res.toObject());
-        });
-    });
-}
-function sendMoney(data, seed) {
-    const txBytes = sendMoneyBuilder(data, seed);
-    return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-        const networkIP = Network$1.selected();
-        const request = new transaction_pb_3();
-        request.setTransactionbytes(txBytes);
-        const validTimestamp = yield validationTimestamp(txBytes);
-        if (validTimestamp) {
-            const client = new TransactionServiceClient_1(networkIP.host);
-            client.postTransaction(request, (err, res) => {
-                if (err) {
-                    const { code, message, metadata } = err;
-                    reject({ code, message, metadata });
-                }
-                if (res)
-                    resolve(res.toObject());
-            });
-        }
-        else {
-            const { code, message, metadata } = errorDateMessage;
-            reject({ code, message, metadata });
-        }
-    }));
-}
-var Transactions = { sendMoney, get, getList };
-
 var mempool_pb = createCommonjsModule(function (module, exports) {
 // source: model/mempool.proto
 /**
@@ -30764,7 +31061,7 @@ MempoolServiceClient.prototype.getMempoolTransaction = function getMempoolTransa
 
 var MempoolServiceClient_1 = MempoolServiceClient;
 
-function getList$1(params) {
+function getList(params) {
     return new Promise((resolve, reject) => {
         const networkIP = Network$1.selected();
         const request = new mempool_pb_1();
@@ -30795,7 +31092,7 @@ function getList$1(params) {
         });
     });
 }
-function get$1(id) {
+function get(id) {
     return new Promise((resolve, reject) => {
         const networkIP = Network$1.selected();
         const request = new mempool_pb_2();
@@ -30811,7 +31108,7 @@ function get$1(id) {
         });
     });
 }
-var Mempool = { get: get$1, getList: getList$1 };
+var Mempool = { get, getList };
 
 function encryptPassphrase(passphrase, password, salt = 'salt') {
     const key = encryptPassword(password, salt);
@@ -32135,12 +32432,13 @@ proto.model.Node.prototype.toObject = function(opt_includeInstance) {
 proto.model.Node.toObject = function(includeInstance, msg) {
   var obj = {
     id: googleProtobuf.Message.getFieldWithDefault(msg, 1, 0),
-    sharedaddress: googleProtobuf.Message.getFieldWithDefault(msg, 2, ""),
-    address: googleProtobuf.Message.getFieldWithDefault(msg, 3, ""),
-    port: googleProtobuf.Message.getFieldWithDefault(msg, 4, 0),
-    addressstatus: googleProtobuf.Message.getFieldWithDefault(msg, 5, 0),
-    version: googleProtobuf.Message.getFieldWithDefault(msg, 6, ""),
-    codename: googleProtobuf.Message.getFieldWithDefault(msg, 7, "")
+    publickey: msg.getPublickey_asB64(),
+    sharedaddress: googleProtobuf.Message.getFieldWithDefault(msg, 3, ""),
+    address: googleProtobuf.Message.getFieldWithDefault(msg, 4, ""),
+    port: googleProtobuf.Message.getFieldWithDefault(msg, 5, 0),
+    addressstatus: googleProtobuf.Message.getFieldWithDefault(msg, 6, 0),
+    version: googleProtobuf.Message.getFieldWithDefault(msg, 7, ""),
+    codename: googleProtobuf.Message.getFieldWithDefault(msg, 8, "")
   };
 
   if (includeInstance) {
@@ -32182,26 +32480,30 @@ proto.model.Node.deserializeBinaryFromReader = function(msg, reader) {
       msg.setId(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setSharedaddress(value);
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setPublickey(value);
       break;
     case 3:
       var value = /** @type {string} */ (reader.readString());
-      msg.setAddress(value);
+      msg.setSharedaddress(value);
       break;
     case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setAddress(value);
+      break;
+    case 5:
       var value = /** @type {number} */ (reader.readUint32());
       msg.setPort(value);
       break;
-    case 5:
+    case 6:
       var value = /** @type {!proto.model.NodeAddressStatus} */ (reader.readEnum());
       msg.setAddressstatus(value);
       break;
-    case 6:
+    case 7:
       var value = /** @type {string} */ (reader.readString());
       msg.setVersion(value);
       break;
-    case 7:
+    case 8:
       var value = /** @type {string} */ (reader.readString());
       msg.setCodename(value);
       break;
@@ -32241,45 +32543,52 @@ proto.model.Node.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getSharedaddress();
+  f = message.getPublickey_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       2,
       f
     );
   }
-  f = message.getAddress();
+  f = message.getSharedaddress();
   if (f.length > 0) {
     writer.writeString(
       3,
       f
     );
   }
+  f = message.getAddress();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
   f = message.getPort();
   if (f !== 0) {
     writer.writeUint32(
-      4,
+      5,
       f
     );
   }
   f = message.getAddressstatus();
   if (f !== 0.0) {
     writer.writeEnum(
-      5,
+      6,
       f
     );
   }
   f = message.getVersion();
   if (f.length > 0) {
     writer.writeString(
-      6,
+      7,
       f
     );
   }
   f = message.getCodename();
   if (f.length > 0) {
     writer.writeString(
-      7,
+      8,
       f
     );
   }
@@ -32302,92 +32611,131 @@ proto.model.Node.prototype.setId = function(value) {
 
 
 /**
- * optional string SharedAddress = 2;
- * @return {string}
+ * optional bytes PublicKey = 2;
+ * @return {!(string|Uint8Array)}
  */
-proto.model.Node.prototype.getSharedaddress = function() {
-  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 2, ""));
-};
-
-
-/** @param {string} value */
-proto.model.Node.prototype.setSharedaddress = function(value) {
-  googleProtobuf.Message.setProto3StringField(this, 2, value);
+proto.model.Node.prototype.getPublickey = function() {
+  return /** @type {!(string|Uint8Array)} */ (googleProtobuf.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /**
- * optional string Address = 3;
+ * optional bytes PublicKey = 2;
+ * This is a type-conversion wrapper around `getPublickey()`
  * @return {string}
  */
-proto.model.Node.prototype.getAddress = function() {
+proto.model.Node.prototype.getPublickey_asB64 = function() {
+  return /** @type {string} */ (googleProtobuf.Message.bytesAsB64(
+      this.getPublickey()));
+};
+
+
+/**
+ * optional bytes PublicKey = 2;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getPublickey()`
+ * @return {!Uint8Array}
+ */
+proto.model.Node.prototype.getPublickey_asU8 = function() {
+  return /** @type {!Uint8Array} */ (googleProtobuf.Message.bytesAsU8(
+      this.getPublickey()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.Node.prototype.setPublickey = function(value) {
+  googleProtobuf.Message.setProto3BytesField(this, 2, value);
+};
+
+
+/**
+ * optional string SharedAddress = 3;
+ * @return {string}
+ */
+proto.model.Node.prototype.getSharedaddress = function() {
   return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
 /** @param {string} value */
-proto.model.Node.prototype.setAddress = function(value) {
+proto.model.Node.prototype.setSharedaddress = function(value) {
   googleProtobuf.Message.setProto3StringField(this, 3, value);
 };
 
 
 /**
- * optional uint32 Port = 4;
+ * optional string Address = 4;
+ * @return {string}
+ */
+proto.model.Node.prototype.getAddress = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/** @param {string} value */
+proto.model.Node.prototype.setAddress = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 4, value);
+};
+
+
+/**
+ * optional uint32 Port = 5;
  * @return {number}
  */
 proto.model.Node.prototype.getPort = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, 0));
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 5, 0));
 };
 
 
 /** @param {number} value */
 proto.model.Node.prototype.setPort = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 4, value);
+  googleProtobuf.Message.setProto3IntField(this, 5, value);
 };
 
 
 /**
- * optional NodeAddressStatus AddressStatus = 5;
+ * optional NodeAddressStatus AddressStatus = 6;
  * @return {!proto.model.NodeAddressStatus}
  */
 proto.model.Node.prototype.getAddressstatus = function() {
-  return /** @type {!proto.model.NodeAddressStatus} */ (googleProtobuf.Message.getFieldWithDefault(this, 5, 0));
+  return /** @type {!proto.model.NodeAddressStatus} */ (googleProtobuf.Message.getFieldWithDefault(this, 6, 0));
 };
 
 
 /** @param {!proto.model.NodeAddressStatus} value */
 proto.model.Node.prototype.setAddressstatus = function(value) {
-  googleProtobuf.Message.setProto3EnumField(this, 5, value);
+  googleProtobuf.Message.setProto3EnumField(this, 6, value);
 };
 
 
 /**
- * optional string Version = 6;
+ * optional string Version = 7;
  * @return {string}
  */
 proto.model.Node.prototype.getVersion = function() {
-  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 6, ""));
-};
-
-
-/** @param {string} value */
-proto.model.Node.prototype.setVersion = function(value) {
-  googleProtobuf.Message.setProto3StringField(this, 6, value);
-};
-
-
-/**
- * optional string CodeName = 7;
- * @return {string}
- */
-proto.model.Node.prototype.getCodename = function() {
   return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 7, ""));
 };
 
 
 /** @param {string} value */
-proto.model.Node.prototype.setCodename = function(value) {
+proto.model.Node.prototype.setVersion = function(value) {
   googleProtobuf.Message.setProto3StringField(this, 7, value);
+};
+
+
+/**
+ * optional string CodeName = 8;
+ * @return {string}
+ */
+proto.model.Node.prototype.getCodename = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 8, ""));
+};
+
+
+/** @param {string} value */
+proto.model.Node.prototype.setCodename = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 8, value);
 };
 
 
@@ -36399,7 +36747,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<number>}
  * @const
  */
-proto.model.Block.repeatedFields_ = [16,17,18,19,20];
+proto.model.Block.repeatedFields_ = [19,20,21,22,23];
 
 
 
@@ -36447,6 +36795,9 @@ proto.model.Block.toObject = function(includeInstance, msg) {
     version: googleProtobuf.Message.getFieldWithDefault(msg, 13, 0),
     payloadlength: googleProtobuf.Message.getFieldWithDefault(msg, 14, 0),
     payloadhash: msg.getPayloadhash_asB64(),
+    merkleroot: msg.getMerkleroot_asB64(),
+    merkletree: msg.getMerkletree_asB64(),
+    referenceblockheight: googleProtobuf.Message.getFieldWithDefault(msg, 18, 0),
     transactionsList: googleProtobuf.Message.toObjectList(msg.getTransactionsList(),
     transaction_pb.Transaction.toObject, includeInstance),
     publishedreceiptsList: googleProtobuf.Message.toObjectList(msg.getPublishedreceiptsList(),
@@ -36455,7 +36806,7 @@ proto.model.Block.toObject = function(includeInstance, msg) {
     spine_pb.SpinePublicKey.toObject, includeInstance),
     spineblockmanifestsList: googleProtobuf.Message.toObjectList(msg.getSpineblockmanifestsList(),
     spineBlockManifest_pb.SpineBlockManifest.toObject, includeInstance),
-    transactionidsList: (f = googleProtobuf.Message.getRepeatedField(msg, 20)) == null ? undefined : f
+    transactionidsList: (f = googleProtobuf.Message.getRepeatedField(msg, 23)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -36553,26 +36904,38 @@ proto.model.Block.deserializeBinaryFromReader = function(msg, reader) {
       msg.setPayloadhash(value);
       break;
     case 16:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setMerkleroot(value);
+      break;
+    case 17:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setMerkletree(value);
+      break;
+    case 18:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setReferenceblockheight(value);
+      break;
+    case 19:
       var value = new transaction_pb.Transaction;
       reader.readMessage(value,transaction_pb.Transaction.deserializeBinaryFromReader);
       msg.addTransactions(value);
       break;
-    case 17:
+    case 20:
       var value = new publishedReceipt_pb.PublishedReceipt;
       reader.readMessage(value,publishedReceipt_pb.PublishedReceipt.deserializeBinaryFromReader);
       msg.addPublishedreceipts(value);
       break;
-    case 18:
+    case 21:
       var value = new spine_pb.SpinePublicKey;
       reader.readMessage(value,spine_pb.SpinePublicKey.deserializeBinaryFromReader);
       msg.addSpinepublickeys(value);
       break;
-    case 19:
+    case 22:
       var value = new spineBlockManifest_pb.SpineBlockManifest;
       reader.readMessage(value,spineBlockManifest_pb.SpineBlockManifest.deserializeBinaryFromReader);
       msg.addSpineblockmanifests(value);
       break;
-    case 20:
+    case 23:
       var value = /** @type {!Array<number>} */ (reader.readPackedInt64());
       msg.setTransactionidsList(value);
       break;
@@ -36710,10 +37073,31 @@ proto.model.Block.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
+  f = message.getMerkleroot_asU8();
+  if (f.length > 0) {
+    writer.writeBytes(
+      16,
+      f
+    );
+  }
+  f = message.getMerkletree_asU8();
+  if (f.length > 0) {
+    writer.writeBytes(
+      17,
+      f
+    );
+  }
+  f = message.getReferenceblockheight();
+  if (f !== 0) {
+    writer.writeUint32(
+      18,
+      f
+    );
+  }
   f = message.getTransactionsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      16,
+      19,
       f,
       transaction_pb.Transaction.serializeBinaryToWriter
     );
@@ -36721,7 +37105,7 @@ proto.model.Block.serializeBinaryToWriter = function(message, writer) {
   f = message.getPublishedreceiptsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      17,
+      20,
       f,
       publishedReceipt_pb.PublishedReceipt.serializeBinaryToWriter
     );
@@ -36729,7 +37113,7 @@ proto.model.Block.serializeBinaryToWriter = function(message, writer) {
   f = message.getSpinepublickeysList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      18,
+      21,
       f,
       spine_pb.SpinePublicKey.serializeBinaryToWriter
     );
@@ -36737,7 +37121,7 @@ proto.model.Block.serializeBinaryToWriter = function(message, writer) {
   f = message.getSpineblockmanifestsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      19,
+      22,
       f,
       spineBlockManifest_pb.SpineBlockManifest.serializeBinaryToWriter
     );
@@ -36745,7 +37129,7 @@ proto.model.Block.serializeBinaryToWriter = function(message, writer) {
   f = message.getTransactionidsList();
   if (f.length > 0) {
     writer.writePackedInt64(
-      20,
+      23,
       f
     );
   }
@@ -37122,18 +37506,111 @@ proto.model.Block.prototype.setPayloadhash = function(value) {
 
 
 /**
- * repeated Transaction Transactions = 16;
+ * optional bytes MerkleRoot = 16;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.Block.prototype.getMerkleroot = function() {
+  return /** @type {!(string|Uint8Array)} */ (googleProtobuf.Message.getFieldWithDefault(this, 16, ""));
+};
+
+
+/**
+ * optional bytes MerkleRoot = 16;
+ * This is a type-conversion wrapper around `getMerkleroot()`
+ * @return {string}
+ */
+proto.model.Block.prototype.getMerkleroot_asB64 = function() {
+  return /** @type {string} */ (googleProtobuf.Message.bytesAsB64(
+      this.getMerkleroot()));
+};
+
+
+/**
+ * optional bytes MerkleRoot = 16;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getMerkleroot()`
+ * @return {!Uint8Array}
+ */
+proto.model.Block.prototype.getMerkleroot_asU8 = function() {
+  return /** @type {!Uint8Array} */ (googleProtobuf.Message.bytesAsU8(
+      this.getMerkleroot()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.Block.prototype.setMerkleroot = function(value) {
+  googleProtobuf.Message.setProto3BytesField(this, 16, value);
+};
+
+
+/**
+ * optional bytes MerkleTree = 17;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.Block.prototype.getMerkletree = function() {
+  return /** @type {!(string|Uint8Array)} */ (googleProtobuf.Message.getFieldWithDefault(this, 17, ""));
+};
+
+
+/**
+ * optional bytes MerkleTree = 17;
+ * This is a type-conversion wrapper around `getMerkletree()`
+ * @return {string}
+ */
+proto.model.Block.prototype.getMerkletree_asB64 = function() {
+  return /** @type {string} */ (googleProtobuf.Message.bytesAsB64(
+      this.getMerkletree()));
+};
+
+
+/**
+ * optional bytes MerkleTree = 17;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getMerkletree()`
+ * @return {!Uint8Array}
+ */
+proto.model.Block.prototype.getMerkletree_asU8 = function() {
+  return /** @type {!Uint8Array} */ (googleProtobuf.Message.bytesAsU8(
+      this.getMerkletree()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.Block.prototype.setMerkletree = function(value) {
+  googleProtobuf.Message.setProto3BytesField(this, 17, value);
+};
+
+
+/**
+ * optional uint32 ReferenceBlockHeight = 18;
+ * @return {number}
+ */
+proto.model.Block.prototype.getReferenceblockheight = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 18, 0));
+};
+
+
+/** @param {number} value */
+proto.model.Block.prototype.setReferenceblockheight = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 18, value);
+};
+
+
+/**
+ * repeated Transaction Transactions = 19;
  * @return {!Array<!proto.model.Transaction>}
  */
 proto.model.Block.prototype.getTransactionsList = function() {
   return /** @type{!Array<!proto.model.Transaction>} */ (
-    googleProtobuf.Message.getRepeatedWrapperField(this, transaction_pb.Transaction, 16));
+    googleProtobuf.Message.getRepeatedWrapperField(this, transaction_pb.Transaction, 19));
 };
 
 
 /** @param {!Array<!proto.model.Transaction>} value */
 proto.model.Block.prototype.setTransactionsList = function(value) {
-  googleProtobuf.Message.setRepeatedWrapperField(this, 16, value);
+  googleProtobuf.Message.setRepeatedWrapperField(this, 19, value);
 };
 
 
@@ -37143,7 +37620,7 @@ proto.model.Block.prototype.setTransactionsList = function(value) {
  * @return {!proto.model.Transaction}
  */
 proto.model.Block.prototype.addTransactions = function(opt_value, opt_index) {
-  return googleProtobuf.Message.addToRepeatedWrapperField(this, 16, opt_value, proto.model.Transaction, opt_index);
+  return googleProtobuf.Message.addToRepeatedWrapperField(this, 19, opt_value, proto.model.Transaction, opt_index);
 };
 
 
@@ -37156,18 +37633,18 @@ proto.model.Block.prototype.clearTransactionsList = function() {
 
 
 /**
- * repeated PublishedReceipt PublishedReceipts = 17;
+ * repeated PublishedReceipt PublishedReceipts = 20;
  * @return {!Array<!proto.model.PublishedReceipt>}
  */
 proto.model.Block.prototype.getPublishedreceiptsList = function() {
   return /** @type{!Array<!proto.model.PublishedReceipt>} */ (
-    googleProtobuf.Message.getRepeatedWrapperField(this, publishedReceipt_pb.PublishedReceipt, 17));
+    googleProtobuf.Message.getRepeatedWrapperField(this, publishedReceipt_pb.PublishedReceipt, 20));
 };
 
 
 /** @param {!Array<!proto.model.PublishedReceipt>} value */
 proto.model.Block.prototype.setPublishedreceiptsList = function(value) {
-  googleProtobuf.Message.setRepeatedWrapperField(this, 17, value);
+  googleProtobuf.Message.setRepeatedWrapperField(this, 20, value);
 };
 
 
@@ -37177,7 +37654,7 @@ proto.model.Block.prototype.setPublishedreceiptsList = function(value) {
  * @return {!proto.model.PublishedReceipt}
  */
 proto.model.Block.prototype.addPublishedreceipts = function(opt_value, opt_index) {
-  return googleProtobuf.Message.addToRepeatedWrapperField(this, 17, opt_value, proto.model.PublishedReceipt, opt_index);
+  return googleProtobuf.Message.addToRepeatedWrapperField(this, 20, opt_value, proto.model.PublishedReceipt, opt_index);
 };
 
 
@@ -37190,18 +37667,18 @@ proto.model.Block.prototype.clearPublishedreceiptsList = function() {
 
 
 /**
- * repeated SpinePublicKey SpinePublicKeys = 18;
+ * repeated SpinePublicKey SpinePublicKeys = 21;
  * @return {!Array<!proto.model.SpinePublicKey>}
  */
 proto.model.Block.prototype.getSpinepublickeysList = function() {
   return /** @type{!Array<!proto.model.SpinePublicKey>} */ (
-    googleProtobuf.Message.getRepeatedWrapperField(this, spine_pb.SpinePublicKey, 18));
+    googleProtobuf.Message.getRepeatedWrapperField(this, spine_pb.SpinePublicKey, 21));
 };
 
 
 /** @param {!Array<!proto.model.SpinePublicKey>} value */
 proto.model.Block.prototype.setSpinepublickeysList = function(value) {
-  googleProtobuf.Message.setRepeatedWrapperField(this, 18, value);
+  googleProtobuf.Message.setRepeatedWrapperField(this, 21, value);
 };
 
 
@@ -37211,7 +37688,7 @@ proto.model.Block.prototype.setSpinepublickeysList = function(value) {
  * @return {!proto.model.SpinePublicKey}
  */
 proto.model.Block.prototype.addSpinepublickeys = function(opt_value, opt_index) {
-  return googleProtobuf.Message.addToRepeatedWrapperField(this, 18, opt_value, proto.model.SpinePublicKey, opt_index);
+  return googleProtobuf.Message.addToRepeatedWrapperField(this, 21, opt_value, proto.model.SpinePublicKey, opt_index);
 };
 
 
@@ -37224,18 +37701,18 @@ proto.model.Block.prototype.clearSpinepublickeysList = function() {
 
 
 /**
- * repeated SpineBlockManifest SpineBlockManifests = 19;
+ * repeated SpineBlockManifest SpineBlockManifests = 22;
  * @return {!Array<!proto.model.SpineBlockManifest>}
  */
 proto.model.Block.prototype.getSpineblockmanifestsList = function() {
   return /** @type{!Array<!proto.model.SpineBlockManifest>} */ (
-    googleProtobuf.Message.getRepeatedWrapperField(this, spineBlockManifest_pb.SpineBlockManifest, 19));
+    googleProtobuf.Message.getRepeatedWrapperField(this, spineBlockManifest_pb.SpineBlockManifest, 22));
 };
 
 
 /** @param {!Array<!proto.model.SpineBlockManifest>} value */
 proto.model.Block.prototype.setSpineblockmanifestsList = function(value) {
-  googleProtobuf.Message.setRepeatedWrapperField(this, 19, value);
+  googleProtobuf.Message.setRepeatedWrapperField(this, 22, value);
 };
 
 
@@ -37245,7 +37722,7 @@ proto.model.Block.prototype.setSpineblockmanifestsList = function(value) {
  * @return {!proto.model.SpineBlockManifest}
  */
 proto.model.Block.prototype.addSpineblockmanifests = function(opt_value, opt_index) {
-  return googleProtobuf.Message.addToRepeatedWrapperField(this, 19, opt_value, proto.model.SpineBlockManifest, opt_index);
+  return googleProtobuf.Message.addToRepeatedWrapperField(this, 22, opt_value, proto.model.SpineBlockManifest, opt_index);
 };
 
 
@@ -37258,17 +37735,17 @@ proto.model.Block.prototype.clearSpineblockmanifestsList = function() {
 
 
 /**
- * repeated int64 TransactionIDs = 20;
+ * repeated int64 TransactionIDs = 23;
  * @return {!Array<number>}
  */
 proto.model.Block.prototype.getTransactionidsList = function() {
-  return /** @type {!Array<number>} */ (googleProtobuf.Message.getRepeatedField(this, 20));
+  return /** @type {!Array<number>} */ (googleProtobuf.Message.getRepeatedField(this, 23));
 };
 
 
 /** @param {!Array<number>} value */
 proto.model.Block.prototype.setTransactionidsList = function(value) {
-  googleProtobuf.Message.setField(this, 20, value || []);
+  googleProtobuf.Message.setField(this, 23, value || []);
 };
 
 
@@ -37277,7 +37754,7 @@ proto.model.Block.prototype.setTransactionidsList = function(value) {
  * @param {number=} opt_index
  */
 proto.model.Block.prototype.addTransactionids = function(value, opt_index) {
-  googleProtobuf.Message.addToRepeatedField(this, 20, value, opt_index);
+  googleProtobuf.Message.addToRepeatedField(this, 23, value, opt_index);
 };
 
 
@@ -43986,7 +44463,10 @@ goog.object.extend(exports, proto.model);
 });
 var auth_pb_1 = auth_pb.RequestType;
 
-const TRANSACTION_TYPE$1 = new Buffer([2, 0, 0, 0]);
+const ADDRESS_LENGTH = 66;
+const VERSION = new Buffer([1]);
+
+const TRANSACTION_TYPE = new Buffer([2, 0, 0, 0]);
 function registerNodeBuilder(data, poown, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
@@ -43998,7 +44478,7 @@ function registerNodeBuilder(data, poown, seed) {
     const funds = writeInt64(data.funds * 1e8);
     const bodyLength = writeInt32(nodePublicKey.length + addressLength.length + accountAddress.length + funds.length + poown.length);
     bytes = Buffer.concat([
-        TRANSACTION_TYPE$1,
+        TRANSACTION_TYPE,
         VERSION,
         timestamp,
         addressLength,
@@ -44030,7 +44510,7 @@ function registerNodeBuilder(data, poown, seed) {
         return bytes;
 }
 
-const TRANSACTION_TYPE$2 = new Buffer([2, 1, 0, 0]);
+const TRANSACTION_TYPE$1 = new Buffer([2, 1, 0, 0]);
 function updateNodeBuilder(data, poown, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
@@ -44042,7 +44522,7 @@ function updateNodeBuilder(data, poown, seed) {
     const funds = writeInt64(data.funds * 1e8);
     const bodyLength = writeInt32(nodePublicKey.length + funds.length + poown.length);
     bytes = Buffer.concat([
-        TRANSACTION_TYPE$2,
+        TRANSACTION_TYPE$1,
         VERSION,
         timestamp,
         addressLength,
@@ -44068,7 +44548,7 @@ function updateNodeBuilder(data, poown, seed) {
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
-const TRANSACTION_TYPE$3 = new Buffer([2, 2, 0, 0]);
+const TRANSACTION_TYPE$2 = new Buffer([2, 2, 0, 0]);
 function removeNodeBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
@@ -44079,7 +44559,7 @@ function removeNodeBuilder(data, seed) {
     const nodePublicKey = data.nodePublicKey;
     const bodyLength = writeInt32(nodePublicKey.length);
     bytes = Buffer.concat([
-        TRANSACTION_TYPE$3,
+        TRANSACTION_TYPE$2,
         VERSION,
         timestamp,
         addressLength,
@@ -44103,7 +44583,7 @@ function removeNodeBuilder(data, seed) {
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
-const TRANSACTION_TYPE$4 = new Buffer([2, 3, 0, 0]);
+const TRANSACTION_TYPE$3 = new Buffer([2, 3, 0, 0]);
 function claimNodeBuilder(data, poown, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
@@ -44114,7 +44594,7 @@ function claimNodeBuilder(data, poown, seed) {
     const nodePublicKey = data.nodePublicKey;
     const bodyLength = writeInt32(nodePublicKey.length + poown.length);
     bytes = Buffer.concat([
-        TRANSACTION_TYPE$4,
+        TRANSACTION_TYPE$3,
         VERSION,
         timestamp,
         addressLength,
@@ -44202,7 +44682,7 @@ function generateNodeKey(networkIP, childSeed) {
         });
     });
 }
-function getList$2(params) {
+function getList$1(params) {
     return new Promise((resolve, reject) => {
         const networkIP = Network$1.selected();
         const request = new nodeRegistration_pb_2();
@@ -44233,7 +44713,7 @@ function getList$2(params) {
         });
     });
 }
-function get$2(params) {
+function get$1(params) {
     return new Promise((resolve, reject) => {
         const networkIP = Network$1.selected();
         const request = new nodeRegistration_pb_1();
@@ -44423,14 +44903,14 @@ var Node = {
     claim,
     getHardwareInfo,
     generateNodeKey,
-    getList: getList$2,
-    get: get$2,
+    getList: getList$1,
+    get: get$1,
     getPending,
     getMyNodePublicKey,
     getNodeTime,
 };
 
-const TRANSACTION_TYPE$5 = new Buffer([4, 0, 0, 0]);
+const TRANSACTION_TYPE$4 = new Buffer([4, 0, 0, 0]);
 function escrowBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
@@ -44442,7 +44922,7 @@ function escrowBuilder(data, seed) {
     const transactionId = writeInt64(data.transactionId);
     const bodyLength = writeInt32(approvalCode.length + transactionId.length);
     bytes = Buffer.concat([
-        TRANSACTION_TYPE$5,
+        TRANSACTION_TYPE$4,
         VERSION,
         timestamp,
         addressLength,
@@ -44586,7 +45066,7 @@ EscrowTransactionServiceClient.prototype.getEscrowTransaction = function getEscr
 
 var EscrowTransactionServiceClient_1 = EscrowTransactionServiceClient;
 
-function getList$3(params) {
+function getList$2(params) {
     return new Promise((resolve, reject) => {
         const networkIP = Network$1.selected();
         const request = new escrow_pb_1();
@@ -44627,7 +45107,7 @@ function getList$3(params) {
         });
     });
 }
-function get$3(id) {
+function get$2(id) {
     return new Promise((resolve, reject) => {
         const networkIP = Network$1.selected();
         const request = new escrow_pb_2();
@@ -44665,7 +45145,7 @@ function approval(data, seed) {
         }
     }));
 }
-var Escrows = { approval, get: get$3, getList: getList$3 };
+var Escrows = { approval, get: get$2, getList: getList$2 };
 
 // source: service/block.proto
 /**
@@ -44923,6 +45403,15 @@ MultisigService.GetMultisigAddressesByBlockHeightRange = {
   responseType: multiSignature_pb.GetMultisigAddressesByBlockHeightRangeResponse
 };
 
+MultisigService.GetParticipantsByMultisigAddresses = {
+  methodName: "GetParticipantsByMultisigAddresses",
+  service: MultisigService,
+  requestStream: false,
+  responseStream: false,
+  requestType: multiSignature_pb.GetParticipantsByMultisigAddressesRequest,
+  responseType: multiSignature_pb.GetParticipantsByMultisigAddressesResponse
+};
+
 function MultisigServiceClient(serviceHost, options) {
   this.serviceHost = serviceHost;
   this.options = options || {};
@@ -45114,6 +45603,37 @@ MultisigServiceClient.prototype.getMultisigAddressesByBlockHeightRange = functio
   };
 };
 
+MultisigServiceClient.prototype.getParticipantsByMultisigAddresses = function getParticipantsByMultisigAddresses(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc$a.unary(MultisigService.GetParticipantsByMultisigAddresses, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc$a.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
 var MultisigServiceClient_1 = MultisigServiceClient;
 
 function base64ToBuffer(base64) {
@@ -45134,7 +45654,7 @@ function toBase64Url(base64Str) {
         .replace(/\=/g, '');
 }
 
-const TRANSACTION_TYPE$6 = new Buffer([5, 0, 0, 0]);
+const TRANSACTION_TYPE$5 = new Buffer([5, 0, 0, 0]);
 function multisignatureBuilder(data, seed) {
     const { multisigInfo, unisgnedTransactions, signaturesInfo } = data;
     let bytes;
@@ -45179,7 +45699,7 @@ function multisignatureBuilder(data, seed) {
     }
     const bodyLength = writeInt32(multisigInfoBytes.length + transactionBytes.length + signaturesInfoBytes.length);
     bytes = Buffer.concat([
-        TRANSACTION_TYPE$6,
+        TRANSACTION_TYPE$5,
         VERSION,
         timestamp,
         addressLength,
@@ -46494,7 +47014,7 @@ AccountDatasetServiceClient.prototype.getAccountDataset = function getAccountDat
 
 var AccountDatasetServiceClient_1 = AccountDatasetServiceClient;
 
-const TRANSACTION_TYPE$7 = new Buffer([3, 0, 0, 0]);
+const TRANSACTION_TYPE$6 = new Buffer([3, 0, 0, 0]);
 function setupDatasetBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
@@ -46508,7 +47028,7 @@ function setupDatasetBuilder(data, seed) {
     const valueLength = writeInt32(value.length);
     const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
     bytes = Buffer.concat([
-        TRANSACTION_TYPE$7,
+        TRANSACTION_TYPE$6,
         VERSION,
         timestamp,
         addressLength,
@@ -46535,7 +47055,7 @@ function setupDatasetBuilder(data, seed) {
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
-const TRANSACTION_TYPE$8 = new Buffer([3, 1, 0, 0]);
+const TRANSACTION_TYPE$7 = new Buffer([3, 1, 0, 0]);
 function removeDatasetBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
@@ -46549,7 +47069,7 @@ function removeDatasetBuilder(data, seed) {
     const valueLength = writeInt32(value.length);
     const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
     bytes = Buffer.concat([
-        TRANSACTION_TYPE$8,
+        TRANSACTION_TYPE$7,
         VERSION,
         timestamp,
         addressLength,
@@ -46576,7 +47096,7 @@ function removeDatasetBuilder(data, seed) {
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
-function getList$4(params) {
+function getList$3(params) {
     return new Promise((resolve, reject) => {
         const networkIP = Network$1.selected();
         const request = new accountDataset_pb_1();
@@ -46611,7 +47131,7 @@ function getList$4(params) {
         });
     });
 }
-function get$4(property, recipient) {
+function get$3(property, recipient) {
     return new Promise((resolve, reject) => {
         const networkIP = Network$1.selected();
         const request = new accountDataset_pb_2();
@@ -46676,7 +47196,7 @@ function removeDataset(data, childseed) {
         }
     }));
 }
-var AccountDataset = { getList: getList$4, get: get$4, setupDataset, removeDataset };
+var AccountDataset = { getList: getList$3, get: get$3, setupDataset, removeDataset };
 
 var event_pb = createCommonjsModule(function (module, exports) {
 // source: model/event.proto
@@ -47615,7 +48135,7 @@ AccountLedgerServiceClient.prototype.getAccountLedgers = function getAccountLedg
 
 var AccountLedgerServiceClient_1 = AccountLedgerServiceClient;
 
-function getList$5(params) {
+function getList$4(params) {
     return new Promise((resolve, reject) => {
         const networkIP = Network$1.selected();
         const request = new accountLedger_pb_1();
@@ -47651,7 +48171,7 @@ function getList$5(params) {
         });
     });
 }
-var AccountLedger = { getList: getList$5 };
+var AccountLedger = { getList: getList$4 };
 
 // source: service/nodeAddressInfo.proto
 /**
@@ -49639,7 +50159,8 @@ class ZooKeyring {
         else {
             throw new Error(NOT_IMPLEMENTED);
         }
-        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey, sign(message, lowR) {
+        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey,
+            sign(message, lowR) {
                 if (curveName === 'secp256k1') {
                     return bip32ExtendedKey.sign(!Buffer.isBuffer(message) ? Buffer.from(message) : message, lowR);
                 }
@@ -49975,6 +50496,257 @@ const zoobc = {
     ParticipationScore,
 };
 
+const errorDateMessage = {
+    code: '',
+    message: 'please fix your date and time',
+    metadata: '',
+};
+// getAddressFromPublicKey Get the formatted address from a raw public key
+function getZBCAddress(publicKey, prefix = 'ZBC') {
+    const prefixDefault = ['ZBC', 'ZNK', 'ZBL', 'ZTX'];
+    const valid = prefixDefault.indexOf(prefix) > -1;
+    if (valid) {
+        const bytes = Buffer.alloc(35);
+        for (let i = 0; i < 32; i++)
+            bytes[i] = publicKey[i];
+        for (let i = 0; i < 3; i++)
+            bytes[i + 32] = prefix.charCodeAt(i);
+        const checksum = hash(bytes);
+        for (let i = 0; i < 3; i++)
+            bytes[i + 32] = Number(checksum[i]);
+        const segs = [prefix];
+        const b32 = B32Enc(bytes, 'RFC4648');
+        for (let i = 0; i < 7; i++)
+            segs.push(b32.substr(i * 8, 8));
+        return segs.join('_');
+    }
+    else {
+        throw new Error('The Prefix not available!');
+    }
+}
+function hash(str, format = 'buffer') {
+    const h = new SHA3(256);
+    h.update(str);
+    const b = h.digest();
+    if (format == 'buffer')
+        return b;
+    return b.toString(format);
+}
+function encryptPassword(password, salt = 'salt') {
+    return CryptoJS.PBKDF2(password, salt, {
+        keySize: 8,
+        iterations: 10000,
+    }).toString();
+}
+function isZBCAddressValid(address, stdPrefix = 'ZBC') {
+    if (address.length != 66)
+        return false;
+    const segs = address.split('_');
+    const prefix = segs[0];
+    if (prefix != stdPrefix)
+        return false;
+    segs.shift();
+    if (segs.length != 7)
+        return false;
+    for (let i = 0; i < segs.length; i++)
+        if (!/[A-Z2-7]{8}/.test(segs[i]))
+            return false;
+    const b32 = segs.join('');
+    const buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
+    const inputChecksum = [];
+    for (let i = 0; i < 3; i++)
+        inputChecksum.push(buffer[i + 32]);
+    for (let i = 0; i < 3; i++)
+        buffer[i + 32] = prefix.charCodeAt(i);
+    const checksum = hash(buffer);
+    for (let i = 0; i < 3; i++)
+        if (checksum[i] != inputChecksum[i])
+            return false;
+    return true;
+}
+function ZBCAddressToBytes(address) {
+    const segs = address.split('_');
+    segs.shift();
+    const b32 = segs.join('');
+    const buffer = Buffer.from(B32Dec(b32, 'RFC4648'));
+    return buffer.slice(0, 32);
+}
+function shortenHash(text = '') {
+    if (!text)
+        return text;
+    const split = text.split('_');
+    const zoobcPrefix = split[0];
+    const head = split[1];
+    const tail = split[split.length - 1];
+    const truncateHead = head.slice(0, head.length - 4);
+    const truncateTail = tail.slice(tail.length - 4, tail.length);
+    return `${zoobcPrefix}_${truncateHead}...${truncateTail}`;
+}
+function writeInt64(number, base, endian) {
+    number = number.toString();
+    const buffer = new int64Buffer.Int64LE(number);
+    return buffer.toBuffer();
+}
+function readInt64(buff, offset) {
+    const buffer = buff.slice(offset, offset + 8);
+    return new int64Buffer.Int64LE(buffer) + '';
+}
+function writeInt32(number) {
+    let byte = new Buffer(4);
+    byte.writeUInt32LE(number, 0);
+    return byte;
+}
+function validationTimestamp(txBytes) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let timestampPostTransactionBytes = txBytes.slice(5, 13);
+        let timestampPostTransaction = readInt64(timestampPostTransactionBytes, 0);
+        let timestampServer = yield zoobc.Node.getNodeTime().then(res => {
+            return res.nodetime;
+        });
+        const deviation = parseInt(timestampPostTransaction) - parseInt(timestampServer);
+        if (deviation < 30 && deviation > -30)
+            return true;
+        else
+            return false;
+    });
+}
+
+const TRANSACTION_TYPE$8 = new Buffer([1, 0, 0, 0]);
+function sendMoneyBuilder(data, seed) {
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const sender = Buffer.from(data.sender, 'utf-8');
+    const recipient = Buffer.from(data.recipient, 'utf-8');
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
+    const amount = writeInt64(data.amount * 1e8);
+    const bodyLength = writeInt32(amount.length);
+    bytes = Buffer.concat([TRANSACTION_TYPE$8, VERSION, timestamp, addressLength, sender, addressLength, recipient, fee, bodyLength, amount]);
+    if (data.approverAddress && data.commission && data.timeout && data.instruction) {
+        // escrow bytes
+        const approverAddressLength = writeInt32(ADDRESS_LENGTH);
+        const approverAddress = Buffer.from(data.approverAddress, 'utf-8');
+        const commission = writeInt64(data.commission * 1e8);
+        const timeout = writeInt64(data.timeout);
+        const instruction = Buffer.from(data.instruction, 'utf-8');
+        const instructionLength = writeInt32(instruction.length);
+        bytes = Buffer.concat([bytes, approverAddressLength, approverAddress, commission, timeout, instructionLength, instruction]);
+    }
+    else {
+        // escrow bytes default value
+        const approverAddressLength = writeInt32(0);
+        const commission = writeInt64(0);
+        const timeout = writeInt64(0);
+        const instructionLength = writeInt32(0);
+        bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    }
+    if (seed) {
+        const signatureType = writeInt32(0);
+        const txHash = generateTransactionHash(data);
+        const txHashBytes = Buffer.from(txHash, 'base64');
+        const signature = seed.sign(txHashBytes);
+        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    }
+    else
+        return bytes;
+}
+
+function getList$5(params) {
+    return new Promise((resolve, reject) => {
+        const request = new transaction_pb_1();
+        const networkIP = Network$1.selected();
+        if (params) {
+            const { address, height, transactionType, timestampStart, timestampEnd, pagination } = params;
+            if (address)
+                request.setAccountaddress(address);
+            if (height)
+                request.setHeight(height);
+            if (transactionType)
+                request.setTransactiontype(transactionType);
+            if (timestampStart)
+                request.setTimestampstart(timestampStart);
+            if (timestampEnd)
+                request.setTimestampend(timestampEnd);
+            if (pagination) {
+                const reqPagination = new pagination_pb_1();
+                reqPagination.setLimit(pagination.limit || 10);
+                reqPagination.setPage(pagination.page || 1);
+                reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
+                request.setPagination(reqPagination);
+            }
+        }
+        const client = new TransactionServiceClient_1(networkIP.host);
+        client.getTransactions(request, (err, res) => {
+            if (err) {
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
+            }
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+function get$4(id) {
+    return new Promise((resolve, reject) => {
+        const networkIP = Network$1.selected();
+        const request = new transaction_pb_2();
+        request.setId(id);
+        const client = new TransactionServiceClient_1(networkIP.host);
+        client.getTransaction(request, (err, res) => {
+            if (err) {
+                const { code, message, metadata } = err;
+                reject({ code, message, metadata });
+            }
+            if (res)
+                resolve(res.toObject());
+        });
+    });
+}
+function sendMoney(data, seed) {
+    const txBytes = sendMoneyBuilder(data, seed);
+    return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+        const networkIP = Network$1.selected();
+        const request = new transaction_pb_3();
+        request.setTransactionbytes(txBytes);
+        const validTimestamp = yield validationTimestamp(txBytes);
+        if (validTimestamp) {
+            const client = new TransactionServiceClient_1(networkIP.host);
+            client.postTransaction(request, (err, res) => {
+                if (err) {
+                    const { code, message, metadata } = err;
+                    reject({ code, message, metadata });
+                }
+                if (res)
+                    resolve(res.toObject());
+            });
+        }
+        else {
+            const { code, message, metadata } = errorDateMessage;
+            reject({ code, message, metadata });
+        }
+    }));
+}
+var Transactions = { sendMoney, get: get$4, getList: getList$5 };
+
+const zoobc$1 = {
+    Transactions,
+    Network: Network$1,
+    Wallet,
+    Account,
+    Host,
+    Node,
+    Poown,
+    Escrows,
+    Mempool,
+    Block,
+    MultiSignature,
+    AccountDataset,
+    AccountLedger,
+    NodeAddress,
+    ParticipationScore,
+};
+
 Object.defineProperty(exports, 'Subscription', {
     enumerable: true,
     get: function () {
@@ -49999,7 +50771,7 @@ exports.TransactionType = transaction_pb_5;
 exports.ZBCAddressToBytes = ZBCAddressToBytes;
 exports.ZooKeyring = ZooKeyring;
 exports.bufferToBase64 = bufferToBase64;
-exports.default = zoobc;
+exports.default = zoobc$1;
 exports.generateTransactionHash = generateTransactionHash;
 exports.getZBCAddress = getZBCAddress;
 exports.isZBCAddressValid = isZBCAddressValid;

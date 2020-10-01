@@ -294,7 +294,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<number>}
  * @const
  */
-proto.model.Block.repeatedFields_ = [16,17,18,19,20];
+proto.model.Block.repeatedFields_ = [19,20,21,22,23];
 
 
 
@@ -342,6 +342,9 @@ proto.model.Block.toObject = function(includeInstance, msg) {
     version: jspb.Message.getFieldWithDefault(msg, 13, 0),
     payloadlength: jspb.Message.getFieldWithDefault(msg, 14, 0),
     payloadhash: msg.getPayloadhash_asB64(),
+    merkleroot: msg.getMerkleroot_asB64(),
+    merkletree: msg.getMerkletree_asB64(),
+    referenceblockheight: jspb.Message.getFieldWithDefault(msg, 18, 0),
     transactionsList: jspb.Message.toObjectList(msg.getTransactionsList(),
     model_transaction_pb.Transaction.toObject, includeInstance),
     publishedreceiptsList: jspb.Message.toObjectList(msg.getPublishedreceiptsList(),
@@ -350,7 +353,7 @@ proto.model.Block.toObject = function(includeInstance, msg) {
     model_spine_pb.SpinePublicKey.toObject, includeInstance),
     spineblockmanifestsList: jspb.Message.toObjectList(msg.getSpineblockmanifestsList(),
     model_spineBlockManifest_pb.SpineBlockManifest.toObject, includeInstance),
-    transactionidsList: (f = jspb.Message.getRepeatedField(msg, 20)) == null ? undefined : f
+    transactionidsList: (f = jspb.Message.getRepeatedField(msg, 23)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -448,26 +451,38 @@ proto.model.Block.deserializeBinaryFromReader = function(msg, reader) {
       msg.setPayloadhash(value);
       break;
     case 16:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setMerkleroot(value);
+      break;
+    case 17:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setMerkletree(value);
+      break;
+    case 18:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setReferenceblockheight(value);
+      break;
+    case 19:
       var value = new model_transaction_pb.Transaction;
       reader.readMessage(value,model_transaction_pb.Transaction.deserializeBinaryFromReader);
       msg.addTransactions(value);
       break;
-    case 17:
+    case 20:
       var value = new model_publishedReceipt_pb.PublishedReceipt;
       reader.readMessage(value,model_publishedReceipt_pb.PublishedReceipt.deserializeBinaryFromReader);
       msg.addPublishedreceipts(value);
       break;
-    case 18:
+    case 21:
       var value = new model_spine_pb.SpinePublicKey;
       reader.readMessage(value,model_spine_pb.SpinePublicKey.deserializeBinaryFromReader);
       msg.addSpinepublickeys(value);
       break;
-    case 19:
+    case 22:
       var value = new model_spineBlockManifest_pb.SpineBlockManifest;
       reader.readMessage(value,model_spineBlockManifest_pb.SpineBlockManifest.deserializeBinaryFromReader);
       msg.addSpineblockmanifests(value);
       break;
-    case 20:
+    case 23:
       var value = /** @type {!Array<number>} */ (reader.readPackedInt64());
       msg.setTransactionidsList(value);
       break;
@@ -605,10 +620,31 @@ proto.model.Block.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
+  f = message.getMerkleroot_asU8();
+  if (f.length > 0) {
+    writer.writeBytes(
+      16,
+      f
+    );
+  }
+  f = message.getMerkletree_asU8();
+  if (f.length > 0) {
+    writer.writeBytes(
+      17,
+      f
+    );
+  }
+  f = message.getReferenceblockheight();
+  if (f !== 0) {
+    writer.writeUint32(
+      18,
+      f
+    );
+  }
   f = message.getTransactionsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      16,
+      19,
       f,
       model_transaction_pb.Transaction.serializeBinaryToWriter
     );
@@ -616,7 +652,7 @@ proto.model.Block.serializeBinaryToWriter = function(message, writer) {
   f = message.getPublishedreceiptsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      17,
+      20,
       f,
       model_publishedReceipt_pb.PublishedReceipt.serializeBinaryToWriter
     );
@@ -624,7 +660,7 @@ proto.model.Block.serializeBinaryToWriter = function(message, writer) {
   f = message.getSpinepublickeysList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      18,
+      21,
       f,
       model_spine_pb.SpinePublicKey.serializeBinaryToWriter
     );
@@ -632,7 +668,7 @@ proto.model.Block.serializeBinaryToWriter = function(message, writer) {
   f = message.getSpineblockmanifestsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
-      19,
+      22,
       f,
       model_spineBlockManifest_pb.SpineBlockManifest.serializeBinaryToWriter
     );
@@ -640,7 +676,7 @@ proto.model.Block.serializeBinaryToWriter = function(message, writer) {
   f = message.getTransactionidsList();
   if (f.length > 0) {
     writer.writePackedInt64(
-      20,
+      23,
       f
     );
   }
@@ -1017,18 +1053,111 @@ proto.model.Block.prototype.setPayloadhash = function(value) {
 
 
 /**
- * repeated Transaction Transactions = 16;
+ * optional bytes MerkleRoot = 16;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.Block.prototype.getMerkleroot = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 16, ""));
+};
+
+
+/**
+ * optional bytes MerkleRoot = 16;
+ * This is a type-conversion wrapper around `getMerkleroot()`
+ * @return {string}
+ */
+proto.model.Block.prototype.getMerkleroot_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getMerkleroot()));
+};
+
+
+/**
+ * optional bytes MerkleRoot = 16;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getMerkleroot()`
+ * @return {!Uint8Array}
+ */
+proto.model.Block.prototype.getMerkleroot_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getMerkleroot()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.Block.prototype.setMerkleroot = function(value) {
+  jspb.Message.setProto3BytesField(this, 16, value);
+};
+
+
+/**
+ * optional bytes MerkleTree = 17;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.Block.prototype.getMerkletree = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 17, ""));
+};
+
+
+/**
+ * optional bytes MerkleTree = 17;
+ * This is a type-conversion wrapper around `getMerkletree()`
+ * @return {string}
+ */
+proto.model.Block.prototype.getMerkletree_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getMerkletree()));
+};
+
+
+/**
+ * optional bytes MerkleTree = 17;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getMerkletree()`
+ * @return {!Uint8Array}
+ */
+proto.model.Block.prototype.getMerkletree_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getMerkletree()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.Block.prototype.setMerkletree = function(value) {
+  jspb.Message.setProto3BytesField(this, 17, value);
+};
+
+
+/**
+ * optional uint32 ReferenceBlockHeight = 18;
+ * @return {number}
+ */
+proto.model.Block.prototype.getReferenceblockheight = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 18, 0));
+};
+
+
+/** @param {number} value */
+proto.model.Block.prototype.setReferenceblockheight = function(value) {
+  jspb.Message.setProto3IntField(this, 18, value);
+};
+
+
+/**
+ * repeated Transaction Transactions = 19;
  * @return {!Array<!proto.model.Transaction>}
  */
 proto.model.Block.prototype.getTransactionsList = function() {
   return /** @type{!Array<!proto.model.Transaction>} */ (
-    jspb.Message.getRepeatedWrapperField(this, model_transaction_pb.Transaction, 16));
+    jspb.Message.getRepeatedWrapperField(this, model_transaction_pb.Transaction, 19));
 };
 
 
 /** @param {!Array<!proto.model.Transaction>} value */
 proto.model.Block.prototype.setTransactionsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 16, value);
+  jspb.Message.setRepeatedWrapperField(this, 19, value);
 };
 
 
@@ -1038,7 +1167,7 @@ proto.model.Block.prototype.setTransactionsList = function(value) {
  * @return {!proto.model.Transaction}
  */
 proto.model.Block.prototype.addTransactions = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 16, opt_value, proto.model.Transaction, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 19, opt_value, proto.model.Transaction, opt_index);
 };
 
 
@@ -1051,18 +1180,18 @@ proto.model.Block.prototype.clearTransactionsList = function() {
 
 
 /**
- * repeated PublishedReceipt PublishedReceipts = 17;
+ * repeated PublishedReceipt PublishedReceipts = 20;
  * @return {!Array<!proto.model.PublishedReceipt>}
  */
 proto.model.Block.prototype.getPublishedreceiptsList = function() {
   return /** @type{!Array<!proto.model.PublishedReceipt>} */ (
-    jspb.Message.getRepeatedWrapperField(this, model_publishedReceipt_pb.PublishedReceipt, 17));
+    jspb.Message.getRepeatedWrapperField(this, model_publishedReceipt_pb.PublishedReceipt, 20));
 };
 
 
 /** @param {!Array<!proto.model.PublishedReceipt>} value */
 proto.model.Block.prototype.setPublishedreceiptsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 17, value);
+  jspb.Message.setRepeatedWrapperField(this, 20, value);
 };
 
 
@@ -1072,7 +1201,7 @@ proto.model.Block.prototype.setPublishedreceiptsList = function(value) {
  * @return {!proto.model.PublishedReceipt}
  */
 proto.model.Block.prototype.addPublishedreceipts = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 17, opt_value, proto.model.PublishedReceipt, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 20, opt_value, proto.model.PublishedReceipt, opt_index);
 };
 
 
@@ -1085,18 +1214,18 @@ proto.model.Block.prototype.clearPublishedreceiptsList = function() {
 
 
 /**
- * repeated SpinePublicKey SpinePublicKeys = 18;
+ * repeated SpinePublicKey SpinePublicKeys = 21;
  * @return {!Array<!proto.model.SpinePublicKey>}
  */
 proto.model.Block.prototype.getSpinepublickeysList = function() {
   return /** @type{!Array<!proto.model.SpinePublicKey>} */ (
-    jspb.Message.getRepeatedWrapperField(this, model_spine_pb.SpinePublicKey, 18));
+    jspb.Message.getRepeatedWrapperField(this, model_spine_pb.SpinePublicKey, 21));
 };
 
 
 /** @param {!Array<!proto.model.SpinePublicKey>} value */
 proto.model.Block.prototype.setSpinepublickeysList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 18, value);
+  jspb.Message.setRepeatedWrapperField(this, 21, value);
 };
 
 
@@ -1106,7 +1235,7 @@ proto.model.Block.prototype.setSpinepublickeysList = function(value) {
  * @return {!proto.model.SpinePublicKey}
  */
 proto.model.Block.prototype.addSpinepublickeys = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 18, opt_value, proto.model.SpinePublicKey, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 21, opt_value, proto.model.SpinePublicKey, opt_index);
 };
 
 
@@ -1119,18 +1248,18 @@ proto.model.Block.prototype.clearSpinepublickeysList = function() {
 
 
 /**
- * repeated SpineBlockManifest SpineBlockManifests = 19;
+ * repeated SpineBlockManifest SpineBlockManifests = 22;
  * @return {!Array<!proto.model.SpineBlockManifest>}
  */
 proto.model.Block.prototype.getSpineblockmanifestsList = function() {
   return /** @type{!Array<!proto.model.SpineBlockManifest>} */ (
-    jspb.Message.getRepeatedWrapperField(this, model_spineBlockManifest_pb.SpineBlockManifest, 19));
+    jspb.Message.getRepeatedWrapperField(this, model_spineBlockManifest_pb.SpineBlockManifest, 22));
 };
 
 
 /** @param {!Array<!proto.model.SpineBlockManifest>} value */
 proto.model.Block.prototype.setSpineblockmanifestsList = function(value) {
-  jspb.Message.setRepeatedWrapperField(this, 19, value);
+  jspb.Message.setRepeatedWrapperField(this, 22, value);
 };
 
 
@@ -1140,7 +1269,7 @@ proto.model.Block.prototype.setSpineblockmanifestsList = function(value) {
  * @return {!proto.model.SpineBlockManifest}
  */
 proto.model.Block.prototype.addSpineblockmanifests = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 19, opt_value, proto.model.SpineBlockManifest, opt_index);
+  return jspb.Message.addToRepeatedWrapperField(this, 22, opt_value, proto.model.SpineBlockManifest, opt_index);
 };
 
 
@@ -1153,17 +1282,17 @@ proto.model.Block.prototype.clearSpineblockmanifestsList = function() {
 
 
 /**
- * repeated int64 TransactionIDs = 20;
+ * repeated int64 TransactionIDs = 23;
  * @return {!Array<number>}
  */
 proto.model.Block.prototype.getTransactionidsList = function() {
-  return /** @type {!Array<number>} */ (jspb.Message.getRepeatedField(this, 20));
+  return /** @type {!Array<number>} */ (jspb.Message.getRepeatedField(this, 23));
 };
 
 
 /** @param {!Array<number>} value */
 proto.model.Block.prototype.setTransactionidsList = function(value) {
-  jspb.Message.setField(this, 20, value || []);
+  jspb.Message.setField(this, 23, value || []);
 };
 
 
@@ -1172,7 +1301,7 @@ proto.model.Block.prototype.setTransactionidsList = function(value) {
  * @param {number=} opt_index
  */
 proto.model.Block.prototype.addTransactionids = function(value, opt_index) {
-  jspb.Message.addToRepeatedField(this, 20, value, opt_index);
+  jspb.Message.addToRepeatedField(this, 23, value, opt_index);
 };
 
 

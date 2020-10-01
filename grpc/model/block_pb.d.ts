@@ -67,6 +67,19 @@ export class Block extends jspb.Message {
   getPayloadhash_asB64(): string;
   setPayloadhash(value: Uint8Array | string): void;
 
+  getMerkleroot(): Uint8Array | string;
+  getMerkleroot_asU8(): Uint8Array;
+  getMerkleroot_asB64(): string;
+  setMerkleroot(value: Uint8Array | string): void;
+
+  getMerkletree(): Uint8Array | string;
+  getMerkletree_asU8(): Uint8Array;
+  getMerkletree_asB64(): string;
+  setMerkletree(value: Uint8Array | string): void;
+
+  getReferenceblockheight(): number;
+  setReferenceblockheight(value: number): void;
+
   clearTransactionsList(): void;
   getTransactionsList(): Array<model_transaction_pb.Transaction>;
   setTransactionsList(value: Array<model_transaction_pb.Transaction>): void;
@@ -119,6 +132,9 @@ export namespace Block {
     version: number,
     payloadlength: number,
     payloadhash: Uint8Array | string,
+    merkleroot: Uint8Array | string,
+    merkletree: Uint8Array | string,
+    referenceblockheight: number,
     transactionsList: Array<model_transaction_pb.Transaction.AsObject>,
     publishedreceiptsList: Array<model_publishedReceipt_pb.PublishedReceipt.AsObject>,
     spinepublickeysList: Array<model_spine_pb.SpinePublicKey.AsObject>,
