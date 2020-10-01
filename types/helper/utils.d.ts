@@ -14,25 +14,3 @@ export declare function writeInt64(number: number | string, base?: number, endia
 export declare function readInt64(buff: Buffer, offset: number): string;
 export declare function writeInt32(number: number): Buffer;
 export declare function validationTimestamp(txBytes: Buffer): Promise<boolean>;
-export declare function readPostTransactionBytes(txBytes: Buffer): {
-    timestamp: string;
-    senderAddress: string;
-    recipientAddress: string;
-    txFee: string;
-    bodyBytes: string;
-    approverAddress: string;
-    commission: string;
-    timeout: string;
-    instruction: string;
-    multisigTxType: string;
-};
-export declare function readUpdateNodeBytes(txBytes: Buffer, bytesConverted: any): any;
-export declare function readSendMoneyBytes(txBytes: Buffer, bytesConverted: any): any;
-export declare function readSendMoneyEscrowBytes(txBytes: Buffer, bytesConverted: any): any;
-export declare function readRemoveNodeRegistrationBytes(txBytes: Buffer, bytesConverted: any): any;
-export declare function readNodeRegistrationBytes(txBytes: Buffer, bytesConverted: any): any;
-export declare function readClaimNodeBytes(txBytes: Buffer, bytesConverted: any): any;
-export declare function readSetupAccountDatasetBytes(txBytes: Buffer, bytesConverted: any): any;
-export declare function readRemoveDatasetBytes(txBytes: Buffer, bytesConverted: any): any;
-export declare function readApprovalEscrowBytes(txBytes: Buffer, bytesConverted: any): any;
-export declare function readMultisignatureTransactionBytes(txBytes: Buffer, bytesConverted: any): any;

@@ -1,4 +1,4 @@
-import { writeInt64, writeInt32 } from '../utils';
+import { writeInt64, writeInt32, getZBCAddress } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 
@@ -50,4 +50,17 @@ export function claimNodeBuilder(data: ClaimNodeInterface, poown: Buffer, seed: 
   const signature = seed.sign(bytes);
   const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
   return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+}
+
+export function readClaimNodeBytes(txBytes: Buffer, bytesConverted: any) {
+  const bodyBytesClaimNodeLength = txBytes.slice(161, 165).readInt32LE(0);
+  const bodyBytesClaim = txBytes.slice(165, 165 + bodyBytesClaimNodeLength);
+  const pubkeyClaim = bodyBytesClaim.slice(0, 32);
+  const pownClaim = bodyBytesClaim.slice(32, 198);
+  bytesConverted.bodyBytes = {
+    pubkey: getZBCAddress(pubkeyClaim, 'ZNK'),
+    pown: pownClaim,
+  };
+  bytesConverted.recipientAddress = '';
+  return bytesConverted;
 }

@@ -7,3 +7,4 @@ export interface ClaimNodeInterface {
     nodeAddress: string;
 }
 export declare function claimNodeBuilder(data: ClaimNodeInterface, poown: Buffer, seed: BIP32Interface): Buffer;
+export declare function readClaimNodeBytes(txBytes: Buffer, bytesConverted: any): any;

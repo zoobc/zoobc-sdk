@@ -62,14 +62,20 @@ export {
 } from './AccountDataset';
 // EXPORT HELPER INTERFACE
 export { HostInterface } from './Network';
-export { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
-export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
-export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
-export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
-export { EscrowApprovalInterface } from './helper/transaction-builder/escrow-transaction';
-export { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
-export { RemoveDatasetInterface } from './helper/transaction-builder/remove-account-dataset';
-export { SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
+export { RegisterNodeInterface, registerNodeBuilder, readNodeRegistrationBytes } from './helper/transaction-builder/register-node';
+export { UpdateNodeInterface, readUpdateNodeBytes } from './helper/transaction-builder/update-node';
+export { ClaimNodeInterface, readClaimNodeBytes } from './helper/transaction-builder/claim-node';
+export { RemoveNodeInterface, readRemoveNodeRegistrationBytes } from './helper/transaction-builder/remove-node';
+export { EscrowApprovalInterface, readApprovalEscrowBytes } from './helper/transaction-builder/escrow-transaction';
+export {
+  SendMoneyInterface,
+  sendMoneyBuilder,
+  readPostTransactionBytes,
+  readSendMoneyBytes,
+  readSendMoneyEscrowBytes,
+} from './helper/transaction-builder/send-money';
+export { RemoveDatasetInterface, readRemoveDatasetBytes } from './helper/transaction-builder/remove-account-dataset';
+export { SetupDatasetInterface, readSetupAccountDatasetBytes } from './helper/transaction-builder/setup-account-dataset';
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
 export {

@@ -1,19 +1,15 @@
-import {
-  readApprovalEscrowBytes,
-  readClaimNodeBytes,
-  readInt64,
-  readMultisignatureTransactionBytes,
-  readNodeRegistrationBytes,
-  readPostTransactionBytes,
-  readRemoveDatasetBytes,
-  readRemoveNodeRegistrationBytes,
-  readSendMoneyBytes,
-  readSendMoneyEscrowBytes,
-  readSetupAccountDatasetBytes,
-  readUpdateNodeBytes,
-} from '../utils';
+import { readInt64 } from '../..';
 import { GetMempoolTransactionsResponse } from '../../../grpc/model/mempool_pb';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
+import { readClaimNodeBytes } from '../transaction-builder/claim-node';
+import { readApprovalEscrowBytes } from '../transaction-builder/escrow-transaction';
+import { readMultisignatureTransactionBytes } from '../transaction-builder/multisignature';
+import { readNodeRegistrationBytes } from '../transaction-builder/register-node';
+import { readRemoveDatasetBytes } from '../transaction-builder/remove-account-dataset';
+import { readRemoveNodeRegistrationBytes } from '../transaction-builder/remove-node';
+import { readPostTransactionBytes, readSendMoneyBytes, readSendMoneyEscrowBytes } from '../transaction-builder/send-money';
+import { readSetupAccountDatasetBytes } from '../transaction-builder/setup-account-dataset';
+import { readUpdateNodeBytes } from '../transaction-builder/update-node';
 
 export function toUnconfirmedSendMoneyWallet(res: GetMempoolTransactionsResponse.AsObject, ownAddress: string) {
   let transactions: any = res.mempooltransactionsList.filter(tx => {

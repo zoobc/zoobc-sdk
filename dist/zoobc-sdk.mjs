@@ -43744,6 +43744,20 @@ function registerNodeBuilder(data, poown, seed) {
     else
         return bytes;
 }
+function readNodeRegistrationBytes(txBytes, bytesConverted) {
+    const bodyBytesRegisterNodeLength = txBytes.slice(161, 165).readInt32LE(0);
+    const bodyBytesRegister = txBytes.slice(165, 165 + bodyBytesRegisterNodeLength);
+    const pubkeyRegister = bodyBytesRegister.slice(0, 32);
+    const accountaddress = bodyBytesRegister.slice(36, 102);
+    const lockedBalance = bodyBytesRegister.slice(102, 110);
+    bytesConverted.bodyBytes = {
+        pubkey: getZBCAddress(pubkeyRegister, 'ZNK'),
+        accountAddress: accountaddress.toString(),
+        lockedBalance: readInt64(lockedBalance, 0),
+    };
+    bytesConverted.recipientAddress = '';
+    return bytesConverted;
+}
 
 const TRANSACTION_TYPE$1 = new Buffer([2, 1, 0, 0]);
 function updateNodeBuilder(data, poown, seed) {
@@ -43782,6 +43796,20 @@ function updateNodeBuilder(data, poown, seed) {
     const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
+function readUpdateNodeBytes(txBytes, bytesConverted) {
+    const bodyBytesUpdateNodeLength = txBytes.slice(161, 165).readInt32LE(0);
+    const bodyBytes = txBytes.slice(165, 165 + bodyBytesUpdateNodeLength);
+    const pubkey = bodyBytes.slice(0, 32);
+    const lockAmount = bodyBytes.slice(32, 40);
+    const pown = bodyBytes.slice(40, 206);
+    bytesConverted.recipientAddress = '';
+    bytesConverted.bodyBytes = {
+        pubkey: getZBCAddress(pubkey, 'ZNK'),
+        lockedAmount: readInt64(lockAmount, 0),
+        pown: pown,
+    };
+    return bytesConverted;
+}
 
 const TRANSACTION_TYPE$2 = new Buffer([2, 2, 0, 0]);
 function removeNodeBuilder(data, seed) {
@@ -43816,6 +43844,15 @@ function removeNodeBuilder(data, seed) {
     const signature = seed.sign(bytes);
     const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+}
+function readRemoveNodeRegistrationBytes(txBytes, bytesConverted) {
+    const bodyBytesRemoveNodeLength = txBytes.slice(161, 165).readInt32LE(0);
+    const bodyBytesRemove = txBytes.slice(165, 165 + bodyBytesRemoveNodeLength);
+    bytesConverted.bodyBytes = {
+        pubkey: getZBCAddress(bodyBytesRemove, 'ZNK'),
+    };
+    bytesConverted.recipientAddress = '';
+    return bytesConverted;
 }
 
 const TRANSACTION_TYPE$3 = new Buffer([2, 3, 0, 0]);
@@ -43852,6 +43889,18 @@ function claimNodeBuilder(data, poown, seed) {
     const signature = seed.sign(bytes);
     const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+}
+function readClaimNodeBytes(txBytes, bytesConverted) {
+    const bodyBytesClaimNodeLength = txBytes.slice(161, 165).readInt32LE(0);
+    const bodyBytesClaim = txBytes.slice(165, 165 + bodyBytesClaimNodeLength);
+    const pubkeyClaim = bodyBytesClaim.slice(0, 32);
+    const pownClaim = bodyBytesClaim.slice(32, 198);
+    bytesConverted.bodyBytes = {
+        pubkey: getZBCAddress(pubkeyClaim, 'ZNK'),
+        pown: pownClaim,
+    };
+    bytesConverted.recipientAddress = '';
+    return bytesConverted;
 }
 
 function createAuth(requestType, seed) {
@@ -44180,6 +44229,17 @@ function escrowBuilder(data, seed) {
     const signature = seed.sign(bytes);
     const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+}
+function readApprovalEscrowBytes(txBytes, bytesConverted) {
+    const bodyApprovalEscrowLength = txBytes.slice(161, 165).readInt32LE(0);
+    const bodyApprovalEscrow = txBytes.slice(165, 165 + bodyApprovalEscrowLength);
+    const approvalCode = bodyApprovalEscrow.slice(0, 4).readInt32LE(0);
+    const txId = readInt64(bodyApprovalEscrow.slice(4, 12), 0);
+    bytesConverted.bodyBytes = {
+        approvalCode: approvalCode,
+        txId: txId,
+    };
+    return bytesConverted;
 }
 
 // source: service/escrow.proto
@@ -44849,7 +44909,66 @@ function toBase64Url(base64Str) {
         .replace(/\=/g, '');
 }
 
-const TRANSACTION_TYPE$5 = new Buffer([5, 0, 0, 0]);
+const TRANSACTION_TYPE$5 = new Buffer([3, 0, 0, 0]);
+function setupDatasetBuilder(data, seed) {
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const accountAddress = Buffer.from(data.setterAccountAddress, 'utf-8');
+    const recipient = Buffer.from(data.recipientAccountAddress, 'utf-8');
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
+    const property = Buffer.from(data.property, 'utf-8');
+    const propertyLength = writeInt32(property.length);
+    const value = Buffer.from(data.value, 'utf-8');
+    const valueLength = writeInt32(value.length);
+    const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
+    bytes = Buffer.concat([
+        TRANSACTION_TYPE$5,
+        VERSION,
+        timestamp,
+        addressLength,
+        accountAddress,
+        addressLength,
+        recipient,
+        fee,
+        bodyLength,
+        propertyLength,
+        property,
+        valueLength,
+        value,
+    ]);
+    // ========== NULLIFYING THE ESCROW ===========
+    const approverAddressLength = writeInt32(0);
+    const commission = writeInt64(0);
+    const timeout = writeInt64(0);
+    const instructionLength = writeInt32(0);
+    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    // ========== END NULLIFYING THE ESCROW =========
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+}
+function readSetupAccountDatasetBytes(txBytes, bytesConverted) {
+    const bodyBytesSetupDatasetLength = txBytes.slice(161, 165).readInt32LE(0);
+    const bodyBytesSetup = txBytes.slice(165, 165 + bodyBytesSetupDatasetLength);
+    const propertyLength = bodyBytesSetup.slice(0, 4).readInt32LE(0);
+    const porpertyValueLength = 4 + propertyLength;
+    const propertyValue = bodyBytesSetup.slice(4, porpertyValueLength);
+    const startLengthValue = 4 + propertyLength;
+    const endLengthValue = startLengthValue + 4;
+    const valueLength = bodyBytesSetup.slice(startLengthValue, endLengthValue).readInt32LE(0);
+    const value = bodyBytesSetup.slice(endLengthValue, endLengthValue + valueLength);
+    bytesConverted.bodyBytes = {
+        propertyLength: propertyLength,
+        propertyValue: propertyValue.toString(),
+        valueLength: valueLength,
+        value: value.toString(),
+    };
+    return bytesConverted;
+}
+
+const TRANSACTION_TYPE$6 = new Buffer([5, 0, 0, 0]);
 function multisignatureBuilder(data, seed) {
     const { multisigInfo, unisgnedTransactions, signaturesInfo } = data;
     let bytes;
@@ -44894,7 +45013,7 @@ function multisignatureBuilder(data, seed) {
     }
     const bodyLength = writeInt32(multisigInfoBytes.length + transactionBytes.length + signaturesInfoBytes.length);
     bytes = Buffer.concat([
-        TRANSACTION_TYPE$5,
+        TRANSACTION_TYPE$6,
         VERSION,
         timestamp,
         addressLength,
@@ -44924,6 +45043,104 @@ function signTransactionHash(txHash, seed) {
     const txHashBytes = base64ToBuffer(txHash);
     const signature = seed.sign(txHashBytes);
     return Buffer.concat([signatureType, signature]);
+}
+function readMultisignatureTransactionBytes(txBytes, bytesConverted) {
+    const length32 = 4;
+    const length64 = 8;
+    const lengthHash = 32;
+    const bodyMultisignatureTransactionLength = txBytes.slice(161, 165).readInt32LE(0);
+    const bodyMultisignatureTransaction = txBytes.slice(165, 165 + bodyMultisignatureTransactionLength);
+    const MultisigInfoFieldPresent = bodyMultisignatureTransaction.slice(0, length32).readInt32LE(0);
+    const minsign = bodyMultisignatureTransaction.slice(length32, length64).readInt32LE(0);
+    const endNonceLength = length64 + length64;
+    const nonce = bodyMultisignatureTransaction.slice(length64, endNonceLength);
+    const endTotParticipant = length64 + length64 + length32;
+    const totParticipant = bodyMultisignatureTransaction.slice(endNonceLength, endTotParticipant).readInt32LE(0);
+    const lengthBytesParticipant = totParticipant * 70;
+    const endParticipant = endTotParticipant + lengthBytesParticipant;
+    const participant = bodyMultisignatureTransaction.slice(endTotParticipant, endParticipant);
+    let eachParticipant = [];
+    for (let i = 0; i < participant.length; i += 70) {
+        const sliceParticipant = participant.slice(i, i + 70);
+        const address = sliceParticipant.slice(4, 70);
+        eachParticipant.push(address.toString());
+    }
+    const endTxBytesLength = endParticipant + length32;
+    const txByteslength = bodyMultisignatureTransaction.slice(endParticipant, endTxBytesLength).readInt32LE(0);
+    const endTxBytesUnsign = endTxBytesLength + txByteslength;
+    bytesConverted.bodyBytes = {
+        multisiginfo: {
+            minimumSignatures: minsign,
+            nonce: readInt64(nonce, 0),
+            participantCount: totParticipant,
+            participants: eachParticipant,
+        },
+    };
+    if (txByteslength > 0) {
+        const txBytesUnsign = bodyMultisignatureTransaction.slice(endTxBytesLength, endTxBytesUnsign);
+        const transactionType = txBytesUnsign.slice(0, 4).readInt32LE(0);
+        let multisigTx;
+        multisigTx = readPostTransactionBytes(txBytesUnsign);
+        switch (transactionType) {
+            case transaction_pb_5.UPDATENODEREGISTRATIONTRANSACTION:
+                multisigTx.multisigTxType = 'Update Node';
+                multisigTx = readUpdateNodeBytes(txBytesUnsign, multisigTx);
+                break;
+            case transaction_pb_5.SENDMONEYTRANSACTION:
+                multisigTx.multisigTxType = 'Send Money';
+                multisigTx = readSendMoneyBytes(txBytesUnsign, multisigTx);
+                if (txBytesUnsign.length > 269) {
+                    multisigTx = readSendMoneyEscrowBytes(txBytesUnsign, multisigTx);
+                    break;
+                }
+                break;
+            case transaction_pb_5.REMOVENODEREGISTRATIONTRANSACTION:
+                multisigTx.multisigTxType = 'Remove Node';
+                multisigTx = readRemoveNodeRegistrationBytes(txBytesUnsign, multisigTx);
+                break;
+            case transaction_pb_5.NODEREGISTRATIONTRANSACTION:
+                multisigTx.multisigTxType = 'Node Registration';
+                multisigTx = readNodeRegistrationBytes(txBytesUnsign, multisigTx);
+                break;
+            case transaction_pb_5.CLAIMNODEREGISTRATIONTRANSACTION:
+                multisigTx.multisigTxType = 'Claim Node';
+                multisigTx = readClaimNodeBytes(txBytesUnsign, multisigTx);
+                break;
+            case transaction_pb_5.SETUPACCOUNTDATASETTRANSACTION:
+                multisigTx.multisigTxType = 'Setup Account Dataset';
+                multisigTx = readSetupAccountDatasetBytes(txBytesUnsign, multisigTx);
+                break;
+            case transaction_pb_5.REMOVEACCOUNTDATASETTRANSACTION:
+                multisigTx.multisigTxType = 'Remove Account Dataset';
+                multisigTx = readRemoveNodeRegistrationBytes(txBytesUnsign, multisigTx);
+                break;
+        }
+        bytesConverted.bodyBytes.transactionbytes = multisigTx;
+    }
+    const endSignPresentLength = endTxBytesUnsign + length32;
+    const signPresent = bodyMultisignatureTransaction.slice(endTxBytesUnsign, endSignPresentLength).readInt32LE(0);
+    if (signPresent) {
+        const endTxHashLength = endSignPresentLength + lengthHash;
+        const txHash = bodyMultisignatureTransaction.slice(endSignPresentLength, endTxHashLength);
+        const endPartSignLength = endTxHashLength + length32;
+        const totalPartSign = bodyMultisignatureTransaction.slice(endTxHashLength, endPartSignLength).readInt32LE(0);
+        const lengthBytesParticipantSign = totalPartSign * 142;
+        const endpartSignBytesLength = endPartSignLength + lengthBytesParticipantSign;
+        const partSign = bodyMultisignatureTransaction.slice(endPartSignLength, endpartSignBytesLength);
+        let eachParticipantSigned = [];
+        for (let i = 0; i < partSign.length; i += 142) {
+            const sliceParticipant = partSign.slice(i, i + 142);
+            const address = sliceParticipant.slice(4, 70);
+            const signByte = sliceParticipant.slice(74, 142);
+            eachParticipantSigned.push({ address: address.toString(), signBytes: signByte });
+        }
+        bytesConverted.bodyBytes.signatureInfo = {
+            txHash: getZBCAddress(txHash, 'ZTX'),
+            signatureCount: totalPartSign,
+            signatures: eachParticipantSigned,
+        };
+    }
+    return bytesConverted;
 }
 
 function generateMultiSigInfo(multiSigAddress) {
@@ -46209,47 +46426,6 @@ AccountDatasetServiceClient.prototype.getAccountDataset = function getAccountDat
 
 var AccountDatasetServiceClient_1 = AccountDatasetServiceClient;
 
-const TRANSACTION_TYPE$6 = new Buffer([3, 0, 0, 0]);
-function setupDatasetBuilder(data, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const accountAddress = Buffer.from(data.setterAccountAddress, 'utf-8');
-    const recipient = Buffer.from(data.recipientAccountAddress, 'utf-8');
-    const addressLength = writeInt32(ADDRESS_LENGTH);
-    const fee = writeInt64(data.fee * 1e8);
-    const property = Buffer.from(data.property, 'utf-8');
-    const propertyLength = writeInt32(property.length);
-    const value = Buffer.from(data.value, 'utf-8');
-    const valueLength = writeInt32(value.length);
-    const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
-    bytes = Buffer.concat([
-        TRANSACTION_TYPE$6,
-        VERSION,
-        timestamp,
-        addressLength,
-        accountAddress,
-        addressLength,
-        recipient,
-        fee,
-        bodyLength,
-        propertyLength,
-        property,
-        valueLength,
-        value,
-    ]);
-    // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
-    const commission = writeInt64(0);
-    const timeout = writeInt64(0);
-    const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
-    // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
-}
-
 const TRANSACTION_TYPE$7 = new Buffer([3, 1, 0, 0]);
 function removeDatasetBuilder(data, seed) {
     let bytes;
@@ -46289,6 +46465,24 @@ function removeDatasetBuilder(data, seed) {
     const signature = seed.sign(bytes);
     const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+}
+function readRemoveDatasetBytes(txBytes, bytesConverted) {
+    const bodyBytesRemoveDatasetLength = txBytes.slice(161, 165).readInt32LE(0);
+    const bodyBytesRemoveDataSet = txBytes.slice(165, 165 + bodyBytesRemoveDatasetLength);
+    const propertyLengthRemove = bodyBytesRemoveDataSet.slice(0, 4).readInt32LE(0);
+    const porpertyValueLengthRemove = 4 + propertyLengthRemove;
+    const propertyValueRemove = bodyBytesRemoveDataSet.slice(4, porpertyValueLengthRemove);
+    const startLengthValueRemove = 4 + propertyLengthRemove;
+    const endLengthValueRemove = startLengthValueRemove + 4;
+    const valueLengthRemove = bodyBytesRemoveDataSet.slice(startLengthValueRemove, endLengthValueRemove).readInt32LE(0);
+    const valueRemove = bodyBytesRemoveDataSet.slice(endLengthValueRemove, endLengthValueRemove + valueLengthRemove);
+    bytesConverted.bodyBytes = {
+        propertyLength: porpertyValueLengthRemove,
+        propertyValue: propertyValueRemove.toString(),
+        valueLength: valueLengthRemove,
+        value: valueRemove.toString(),
+    };
+    return bytesConverted;
 }
 
 function getList$3(params) {
@@ -49865,243 +50059,6 @@ function validationTimestamp(txBytes) {
             return false;
     });
 }
-function readPostTransactionBytes(txBytes) {
-    const timestamp = readInt64(txBytes.slice(5, 13), 0);
-    const senderAddressLength = txBytes.slice(13, 17).readInt32LE(0);
-    const senderAddress = txBytes.slice(17, 17 + senderAddressLength).toString();
-    const recipientAddressLength = txBytes.slice(83, 87).readInt32LE(0);
-    const recipientAddress = txBytes.slice(87, 87 + recipientAddressLength).toString();
-    const txFee = readInt64(txBytes.slice(153, 161), 0);
-    let bytesConverted = {
-        timestamp: timestamp,
-        senderAddress: senderAddress,
-        recipientAddress: recipientAddress,
-        txFee: txFee,
-        bodyBytes: '',
-        approverAddress: '',
-        commission: '',
-        timeout: '',
-        instruction: '',
-        multisigTxType: '',
-    };
-    return bytesConverted;
-}
-function readUpdateNodeBytes(txBytes, bytesConverted) {
-    const bodyBytesUpdateNodeLength = txBytes.slice(161, 165).readInt32LE(0);
-    const bodyBytes = txBytes.slice(165, 165 + bodyBytesUpdateNodeLength);
-    const pubkey = bodyBytes.slice(0, 32);
-    const lockAmount = bodyBytes.slice(32, 40);
-    const pown = bodyBytes.slice(40, 206);
-    bytesConverted.recipientAddress = '';
-    bytesConverted.bodyBytes = {
-        pubkey: getZBCAddress(pubkey, 'ZNK'),
-        lockedAmount: readInt64(lockAmount, 0),
-        pown: pown,
-    };
-    return bytesConverted;
-}
-function readSendMoneyBytes(txBytes, bytesConverted) {
-    const bodyBytesSendMoneyLength = txBytes.slice(161, 165).readInt32LE(0);
-    const bodyBytesSendMoney = txBytes.slice(165, 165 + bodyBytesSendMoneyLength);
-    bytesConverted.bodyBytes = {
-        amount: readInt64(bodyBytesSendMoney, 0),
-    };
-    return bytesConverted;
-}
-function readSendMoneyEscrowBytes(txBytes, bytesConverted) {
-    const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
-    const approverAddress = txBytes.slice(177, 177 + approverAddressLength);
-    const int64Length = 8;
-    const commission = readInt64(txBytes.slice(243, 243 + int64Length), 0);
-    const timeout = readInt64(txBytes.slice(251, 251 + int64Length), 0);
-    const instructionLength = txBytes.slice(259, 263).readInt32LE(0);
-    const instruction = txBytes.slice(263, 263 + instructionLength);
-    bytesConverted.approverAddress = getZBCAddress(approverAddress);
-    bytesConverted.commission = commission;
-    bytesConverted.timeout = timeout;
-    bytesConverted.instruction = instruction.toString();
-    return bytesConverted;
-}
-function readRemoveNodeRegistrationBytes(txBytes, bytesConverted) {
-    const bodyBytesRemoveNodeLength = txBytes.slice(161, 165).readInt32LE(0);
-    const bodyBytesRemove = txBytes.slice(165, 165 + bodyBytesRemoveNodeLength);
-    bytesConverted.bodyBytes = {
-        pubkey: getZBCAddress(bodyBytesRemove, 'ZNK'),
-    };
-    bytesConverted.recipientAddress = '';
-    return bytesConverted;
-}
-function readNodeRegistrationBytes(txBytes, bytesConverted) {
-    const bodyBytesRegisterNodeLength = txBytes.slice(161, 165).readInt32LE(0);
-    const bodyBytesRegister = txBytes.slice(165, 165 + bodyBytesRegisterNodeLength);
-    const pubkeyRegister = bodyBytesRegister.slice(0, 32);
-    const accountaddress = bodyBytesRegister.slice(36, 102);
-    const lockedBalance = bodyBytesRegister.slice(102, 110);
-    bytesConverted.bodyBytes = {
-        pubkey: getZBCAddress(pubkeyRegister, 'ZNK'),
-        accountAddress: accountaddress.toString(),
-        lockedBalance: readInt64(lockedBalance, 0),
-    };
-    bytesConverted.recipientAddress = '';
-    return bytesConverted;
-}
-function readClaimNodeBytes(txBytes, bytesConverted) {
-    const bodyBytesClaimNodeLength = txBytes.slice(161, 165).readInt32LE(0);
-    const bodyBytesClaim = txBytes.slice(165, 165 + bodyBytesClaimNodeLength);
-    const pubkeyClaim = bodyBytesClaim.slice(0, 32);
-    const pownClaim = bodyBytesClaim.slice(32, 198);
-    bytesConverted.bodyBytes = {
-        pubkey: getZBCAddress(pubkeyClaim, 'ZNK'),
-        pown: pownClaim,
-    };
-    bytesConverted.recipientAddress = '';
-    return bytesConverted;
-}
-function readSetupAccountDatasetBytes(txBytes, bytesConverted) {
-    const bodyBytesSetupDatasetLength = txBytes.slice(161, 165).readInt32LE(0);
-    const bodyBytesSetup = txBytes.slice(165, 165 + bodyBytesSetupDatasetLength);
-    const propertyLength = bodyBytesSetup.slice(0, 4).readInt32LE(0);
-    const porpertyValueLength = 4 + propertyLength;
-    const propertyValue = bodyBytesSetup.slice(4, porpertyValueLength);
-    const startLengthValue = 4 + propertyLength;
-    const endLengthValue = startLengthValue + 4;
-    const valueLength = bodyBytesSetup.slice(startLengthValue, endLengthValue).readInt32LE(0);
-    const value = bodyBytesSetup.slice(endLengthValue, endLengthValue + valueLength);
-    bytesConverted.bodyBytes = {
-        propertyLength: propertyLength,
-        propertyValue: propertyValue.toString(),
-        valueLength: valueLength,
-        value: value.toString(),
-    };
-    return bytesConverted;
-}
-function readRemoveDatasetBytes(txBytes, bytesConverted) {
-    const bodyBytesRemoveDatasetLength = txBytes.slice(161, 165).readInt32LE(0);
-    const bodyBytesRemoveDataSet = txBytes.slice(165, 165 + bodyBytesRemoveDatasetLength);
-    const propertyLengthRemove = bodyBytesRemoveDataSet.slice(0, 4).readInt32LE(0);
-    const porpertyValueLengthRemove = 4 + propertyLengthRemove;
-    const propertyValueRemove = bodyBytesRemoveDataSet.slice(4, porpertyValueLengthRemove);
-    const startLengthValueRemove = 4 + propertyLengthRemove;
-    const endLengthValueRemove = startLengthValueRemove + 4;
-    const valueLengthRemove = bodyBytesRemoveDataSet.slice(startLengthValueRemove, endLengthValueRemove).readInt32LE(0);
-    const valueRemove = bodyBytesRemoveDataSet.slice(endLengthValueRemove, endLengthValueRemove + valueLengthRemove);
-    bytesConverted.bodyBytes = {
-        propertyLength: porpertyValueLengthRemove,
-        propertyValue: propertyValueRemove.toString(),
-        valueLength: valueLengthRemove,
-        value: valueRemove.toString(),
-    };
-    return bytesConverted;
-}
-function readApprovalEscrowBytes(txBytes, bytesConverted) {
-    const bodyApprovalEscrowLength = txBytes.slice(161, 165).readInt32LE(0);
-    const bodyApprovalEscrow = txBytes.slice(165, 165 + bodyApprovalEscrowLength);
-    const approvalCode = bodyApprovalEscrow.slice(0, 4).readInt32LE(0);
-    const txId = readInt64(bodyApprovalEscrow.slice(4, 12), 0);
-    bytesConverted.bodyBytes = {
-        approvalCode: approvalCode,
-        txId: txId,
-    };
-    return bytesConverted;
-}
-function readMultisignatureTransactionBytes(txBytes, bytesConverted) {
-    const length32 = 4;
-    const length64 = 8;
-    const lengthHash = 32;
-    const bodyMultisignatureTransactionLength = txBytes.slice(161, 165).readInt32LE(0);
-    const bodyMultisignatureTransaction = txBytes.slice(165, 165 + bodyMultisignatureTransactionLength);
-    const MultisigInfoFieldPresent = bodyMultisignatureTransaction.slice(0, length32).readInt32LE(0);
-    const minsign = bodyMultisignatureTransaction.slice(length32, length64).readInt32LE(0);
-    const endNonceLength = length64 + length64;
-    const nonce = bodyMultisignatureTransaction.slice(length64, endNonceLength);
-    const endTotParticipant = length64 + length64 + length32;
-    const totParticipant = bodyMultisignatureTransaction.slice(endNonceLength, endTotParticipant).readInt32LE(0);
-    const lengthBytesParticipant = totParticipant * 70;
-    const endParticipant = endTotParticipant + lengthBytesParticipant;
-    const participant = bodyMultisignatureTransaction.slice(endTotParticipant, endParticipant);
-    let eachParticipant = [];
-    for (let i = 0; i < participant.length; i += 70) {
-        const sliceParticipant = participant.slice(i, i + 70);
-        const address = sliceParticipant.slice(4, 70);
-        eachParticipant.push(address.toString());
-    }
-    const endTxBytesLength = endParticipant + length32;
-    const txByteslength = bodyMultisignatureTransaction.slice(endParticipant, endTxBytesLength).readInt32LE(0);
-    const endTxBytesUnsign = endTxBytesLength + txByteslength;
-    bytesConverted.bodyBytes = {
-        multisiginfo: {
-            minimumSignatures: minsign,
-            nonce: readInt64(nonce, 0),
-            participantCount: totParticipant,
-            participants: eachParticipant,
-        },
-    };
-    if (txByteslength > 0) {
-        const txBytesUnsign = bodyMultisignatureTransaction.slice(endTxBytesLength, endTxBytesUnsign);
-        const transactionType = txBytesUnsign.slice(0, 4).readInt32LE(0);
-        let multisigTx;
-        multisigTx = readPostTransactionBytes(txBytesUnsign);
-        switch (transactionType) {
-            case transaction_pb_5.UPDATENODEREGISTRATIONTRANSACTION:
-                multisigTx.multisigTxType = 'Update Node';
-                multisigTx = readUpdateNodeBytes(txBytesUnsign, multisigTx);
-                break;
-            case transaction_pb_5.SENDMONEYTRANSACTION:
-                multisigTx.multisigTxType = 'Send Money';
-                multisigTx = readSendMoneyBytes(txBytesUnsign, multisigTx);
-                if (txBytesUnsign.length > 269) {
-                    multisigTx = readSendMoneyEscrowBytes(txBytesUnsign, multisigTx);
-                    break;
-                }
-                break;
-            case transaction_pb_5.REMOVENODEREGISTRATIONTRANSACTION:
-                multisigTx.multisigTxType = 'Remove Node';
-                multisigTx = readRemoveNodeRegistrationBytes(txBytesUnsign, multisigTx);
-                break;
-            case transaction_pb_5.NODEREGISTRATIONTRANSACTION:
-                multisigTx.multisigTxType = 'Node Registration';
-                multisigTx = readNodeRegistrationBytes(txBytesUnsign, multisigTx);
-                break;
-            case transaction_pb_5.CLAIMNODEREGISTRATIONTRANSACTION:
-                multisigTx.multisigTxType = 'Claim Node';
-                multisigTx = readClaimNodeBytes(txBytesUnsign, multisigTx);
-                break;
-            case transaction_pb_5.SETUPACCOUNTDATASETTRANSACTION:
-                multisigTx.multisigTxType = 'Setup Account Dataset';
-                multisigTx = readSetupAccountDatasetBytes(txBytesUnsign, multisigTx);
-                break;
-            case transaction_pb_5.REMOVEACCOUNTDATASETTRANSACTION:
-                multisigTx.multisigTxType = 'Remove Account Dataset';
-                multisigTx = readRemoveNodeRegistrationBytes(txBytesUnsign, multisigTx);
-                break;
-        }
-        bytesConverted.bodyBytes.transactionbytes = multisigTx;
-    }
-    const endSignPresentLength = endTxBytesUnsign + length32;
-    const signPresent = bodyMultisignatureTransaction.slice(endTxBytesUnsign, endSignPresentLength).readInt32LE(0);
-    if (signPresent) {
-        const endTxHashLength = endSignPresentLength + lengthHash;
-        const txHash = bodyMultisignatureTransaction.slice(endSignPresentLength, endTxHashLength);
-        const endPartSignLength = endTxHashLength + length32;
-        const totalPartSign = bodyMultisignatureTransaction.slice(endTxHashLength, endPartSignLength).readInt32LE(0);
-        const lengthBytesParticipantSign = totalPartSign * 142;
-        const endpartSignBytesLength = endPartSignLength + lengthBytesParticipantSign;
-        const partSign = bodyMultisignatureTransaction.slice(endPartSignLength, endpartSignBytesLength);
-        let eachParticipantSigned = [];
-        for (let i = 0; i < partSign.length; i += 142) {
-            const sliceParticipant = partSign.slice(i, i + 142);
-            const address = sliceParticipant.slice(4, 70);
-            const signByte = sliceParticipant.slice(74, 142);
-            eachParticipantSigned.push({ address: address.toString(), signBytes: signByte });
-        }
-        bytesConverted.bodyBytes.signatureInfo = {
-            txHash: getZBCAddress(txHash, 'ZTX'),
-            signatureCount: totalPartSign,
-            signatures: eachParticipantSigned,
-        };
-    }
-    return bytesConverted;
-}
 
 const TRANSACTION_TYPE$8 = new Buffer([1, 0, 0, 0]);
 function sendMoneyBuilder(data, seed) {
@@ -50140,6 +50097,49 @@ function sendMoneyBuilder(data, seed) {
     }
     else
         return bytes;
+}
+function readPostTransactionBytes(txBytes) {
+    const timestamp = readInt64(txBytes.slice(5, 13), 0);
+    const senderAddressLength = txBytes.slice(13, 17).readInt32LE(0);
+    const senderAddress = txBytes.slice(17, 17 + senderAddressLength).toString();
+    const recipientAddressLength = txBytes.slice(83, 87).readInt32LE(0);
+    const recipientAddress = txBytes.slice(87, 87 + recipientAddressLength).toString();
+    const txFee = readInt64(txBytes.slice(153, 161), 0);
+    let bytesConverted = {
+        timestamp: timestamp,
+        senderAddress: senderAddress,
+        recipientAddress: recipientAddress,
+        txFee: txFee,
+        bodyBytes: '',
+        approverAddress: '',
+        commission: '',
+        timeout: '',
+        instruction: '',
+        multisigTxType: '',
+    };
+    return bytesConverted;
+}
+function readSendMoneyBytes(txBytes, bytesConverted) {
+    const bodyBytesSendMoneyLength = txBytes.slice(161, 165).readInt32LE(0);
+    const bodyBytesSendMoney = txBytes.slice(165, 165 + bodyBytesSendMoneyLength);
+    bytesConverted.bodyBytes = {
+        amount: readInt64(bodyBytesSendMoney, 0),
+    };
+    return bytesConverted;
+}
+function readSendMoneyEscrowBytes(txBytes, bytesConverted) {
+    const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
+    const approverAddress = txBytes.slice(177, 177 + approverAddressLength);
+    const int64Length = 8;
+    const commission = readInt64(txBytes.slice(243, 243 + int64Length), 0);
+    const timeout = readInt64(txBytes.slice(251, 251 + int64Length), 0);
+    const instructionLength = txBytes.slice(259, 263).readInt32LE(0);
+    const instruction = txBytes.slice(263, 263 + instructionLength);
+    bytesConverted.approverAddress = getZBCAddress(approverAddress);
+    bytesConverted.commission = commission;
+    bytesConverted.timeout = timeout;
+    bytesConverted.instruction = instruction.toString();
+    return bytesConverted;
 }
 
 function getList$5(params) {
@@ -50238,5 +50238,5 @@ const zoobc$1 = {
 };
 
 export default zoobc$1;
-export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, Ledger, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, bufferToBase64, generateTransactionHash, getZBCAddress, isZBCAddressValid, readInt64, registerNodeBuilder, sendMoneyBuilder, shortenHash, signTransactionHash, toBase64Url, toGetPendingList, toTransactionListWallet, toTransactionWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet, toZBCPendingTransactions, toZBCTransactions };
+export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, Ledger, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, bufferToBase64, generateTransactionHash, getZBCAddress, isZBCAddressValid, readApprovalEscrowBytes, readClaimNodeBytes, readInt64, readNodeRegistrationBytes, readPostTransactionBytes, readRemoveDatasetBytes, readRemoveNodeRegistrationBytes, readSendMoneyBytes, readSendMoneyEscrowBytes, readSetupAccountDatasetBytes, readUpdateNodeBytes, registerNodeBuilder, sendMoneyBuilder, shortenHash, signTransactionHash, toBase64Url, toGetPendingList, toTransactionListWallet, toTransactionWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet, toZBCPendingTransactions, toZBCTransactions };
 //# sourceMappingURL=zoobc-sdk.mjs.map

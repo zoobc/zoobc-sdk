@@ -1,4 +1,4 @@
-import { writeInt32, writeInt64 } from '../utils';
+import { readInt64, writeInt32, writeInt64 } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 
@@ -49,4 +49,16 @@ export function escrowBuilder(data: EscrowApprovalInterface, seed: BIP32Interfac
   const signature = seed.sign(bytes);
   const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
   return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+}
+
+export function readApprovalEscrowBytes(txBytes: Buffer, bytesConverted: any) {
+  const bodyApprovalEscrowLength = txBytes.slice(161, 165).readInt32LE(0);
+  const bodyApprovalEscrow = txBytes.slice(165, 165 + bodyApprovalEscrowLength);
+  const approvalCode = bodyApprovalEscrow.slice(0, 4).readInt32LE(0);
+  const txId = readInt64(bodyApprovalEscrow.slice(4, 12), 0);
+  bytesConverted.bodyBytes = {
+    approvalCode: approvalCode,
+    txId: txId,
+  };
+  return bytesConverted;
 }

@@ -1,4 +1,4 @@
-import { writeInt32, writeInt64 } from '../utils';
+import { getZBCAddress, readInt64, writeInt32, writeInt64 } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 
@@ -53,4 +53,19 @@ export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed
   const signature = seed.sign(bytes);
   const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
   return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+}
+
+export function readUpdateNodeBytes(txBytes: Buffer, bytesConverted: any) {
+  const bodyBytesUpdateNodeLength = txBytes.slice(161, 165).readInt32LE(0);
+  const bodyBytes = txBytes.slice(165, 165 + bodyBytesUpdateNodeLength);
+  const pubkey = bodyBytes.slice(0, 32);
+  const lockAmount = bodyBytes.slice(32, 40);
+  const pown = bodyBytes.slice(40, 206);
+  bytesConverted.recipientAddress = '';
+  bytesConverted.bodyBytes = {
+    pubkey: getZBCAddress(pubkey, 'ZNK'),
+    lockedAmount: readInt64(lockAmount, 0),
+    pown: pown,
+  };
+  return bytesConverted;
 }
