@@ -7,4 +7,4 @@ export interface UpdateNodeInterface {
     nodeAddress: string;
     funds: number;
 }
-export declare function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed: BIP32Interface): Buffer;
+export declare function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed?: BIP32Interface): Buffer;

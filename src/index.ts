@@ -63,7 +63,7 @@ export {
 // EXPORT HELPER INTERFACE
 export { HostInterface } from './Network';
 export { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
-export { UpdateNodeInterface } from './helper/transaction-builder/update-node';
+export { UpdateNodeInterface, updateNodeBuilder } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
 export { EscrowApprovalInterface } from './helper/transaction-builder/escrow-transaction';
