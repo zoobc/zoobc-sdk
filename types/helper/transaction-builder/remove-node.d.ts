@@ -5,4 +5,4 @@ export interface RemoveNodeInterface {
     fee: number;
     nodePublicKey: Buffer;
 }
-export declare function removeNodeBuilder(data: RemoveNodeInterface, seed: BIP32Interface): Buffer;
+export declare function removeNodeBuilder(data: RemoveNodeInterface, seed?: BIP32Interface): Buffer;

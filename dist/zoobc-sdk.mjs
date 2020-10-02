@@ -43864,10 +43864,14 @@ function removeNodeBuilder(data, seed) {
     const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    if (seed) {
+        const signatureType = writeInt32(0);
+        const signature = seed.sign(bytes);
+        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    }
+    else
+        return bytes;
 }
 
 const TRANSACTION_TYPE$3 = new Buffer([2, 3, 0, 0]);
@@ -43900,10 +43904,14 @@ function claimNodeBuilder(data, poown, seed) {
     const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    if (seed) {
+        const signatureType = writeInt32(0);
+        const signature = seed.sign(bytes);
+        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    }
+    else
+        return bytes;
 }
 
 function createAuth(requestType, seed) {
@@ -44228,10 +44236,14 @@ function escrowBuilder(data, seed) {
     const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    if (seed) {
+        const signatureType = writeInt32(0);
+        const signature = seed.sign(bytes);
+        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    }
+    else
+        return bytes;
 }
 
 // source: service/escrow.proto
@@ -44966,10 +44978,14 @@ function multisignatureBuilder(data, seed) {
     const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    if (seed) {
+        const signatureType = writeInt32(0);
+        const signature = seed.sign(bytes);
+        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    }
+    else
+        return bytes;
 }
 function signTransactionHash(txHash, seed) {
     const signatureType = writeInt32(0);
@@ -46341,10 +46357,14 @@ function removeDatasetBuilder(data, seed) {
     const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    if (seed) {
+        const signatureType = writeInt32(0);
+        const signature = seed.sign(bytes);
+        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    }
+    else
+        return bytes;
 }
 
 function getList$3(params) {
@@ -49667,7 +49687,6 @@ function toGetPendingList(res) {
     };
 }
 function generateTransactionHash(buffer) {
-    // sads;
     const hashed = Buffer.from(sha3_256(buffer), 'hex');
     let binary = '';
     const len = hashed.byteLength;

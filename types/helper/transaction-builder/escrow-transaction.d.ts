@@ -6,4 +6,4 @@ export interface EscrowApprovalInterface {
     approvalCode: number;
     transactionId: string;
 }
-export declare function escrowBuilder(data: EscrowApprovalInterface, seed: BIP32Interface): Buffer;
+export declare function escrowBuilder(data: EscrowApprovalInterface, seed?: BIP32Interface): Buffer;
