@@ -15,11 +15,11 @@ export { AccountDatasetListParams, AccountDatasetsResponse, AccountDatasetRespon
 export { HostInterface } from './Network';
 export { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface, updateNodeBuilder } from './helper/transaction-builder/update-node';
-export { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
-export { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
-export { EscrowApprovalInterface } from './helper/transaction-builder/escrow-transaction';
+export { ClaimNodeInterface, claimNodeBuilder } from './helper/transaction-builder/claim-node';
+export { RemoveNodeInterface, removeNodeBuilder } from './helper/transaction-builder/remove-node';
+export { EscrowApprovalInterface, escrowBuilder } from './helper/transaction-builder/escrow-transaction';
 export { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
-export { RemoveDatasetInterface } from './helper/transaction-builder/remove-account-dataset';
+export { RemoveDatasetInterface, removeDatasetBuilder } from './helper/transaction-builder/remove-account-dataset';
 export { SetupDatasetInterface, setupDatasetBuilder } from './helper/transaction-builder/setup-account-dataset';
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
