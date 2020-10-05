@@ -33,7 +33,7 @@ export interface SignatureInfo {
   }[];
 }
 
-export function multisignatureBuilder(data: MultiSigInterface, seed: BIP32Interface): Buffer {
+export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Interface): Buffer {
   const { multisigInfo, unisgnedTransactions, signaturesInfo } = data;
   let bytes: Buffer;
 
@@ -111,10 +111,12 @@ export function multisignatureBuilder(data: MultiSigInterface, seed: BIP32Interf
   bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
   // ========== END NULLIFYING THE ESCROW =========
 
-  const signatureType = writeInt32(0);
-  const signature = seed.sign(bytes);
-  const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-  return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+  if (seed) {
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+  } else return bytes;
 }
 
 export function signTransactionHash(txHash: string, seed: BIP32Interface) {
