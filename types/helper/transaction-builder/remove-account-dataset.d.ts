@@ -7,4 +7,4 @@ export interface RemoveDatasetInterface {
     recipientAccountAddress: string;
     fee: number;
 }
-export declare function removeDatasetBuilder(data: RemoveDatasetInterface, seed: BIP32Interface): Buffer;
+export declare function removeDatasetBuilder(data: RemoveDatasetInterface, seed?: BIP32Interface): Buffer;

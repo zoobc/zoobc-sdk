@@ -7,4 +7,4 @@ export interface SetupDatasetInterface {
     recipientAccountAddress: string;
     fee: number;
 }
-export declare function setupDatasetBuilder(data: SetupDatasetInterface, seed: BIP32Interface): Buffer;
+export declare function setupDatasetBuilder(data: SetupDatasetInterface, seed?: BIP32Interface): Buffer;
