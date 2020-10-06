@@ -1,6 +1,5 @@
 import { MultisigPendingTxResponse } from '../../MultiSignature';
 import { readInt64 } from '../utils';
-import { SendMoneyInterface, sendMoneyBuilder } from '../transaction-builder/send-money';
 import { sha3_256 } from 'js-sha3';
 import { toBase64Url } from '../converters';
 
@@ -30,8 +29,7 @@ export function toGetPendingList(res: MultisigPendingTxResponse) {
   };
 }
 
-export function generateTransactionHash(data: SendMoneyInterface) {
-  const buffer = sendMoneyBuilder(data);
+export function generateTransactionHash(buffer: Buffer) {
   const hashed = Buffer.from(sha3_256(buffer), 'hex');
   let binary = '';
   const len = hashed.byteLength;

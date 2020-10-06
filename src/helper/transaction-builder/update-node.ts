@@ -12,7 +12,7 @@ export interface UpdateNodeInterface {
   funds: number;
 }
 
-export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed: BIP32Interface): Buffer {
+export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed?: BIP32Interface): Buffer {
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
@@ -49,10 +49,12 @@ export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed
   bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
   // ========== END NULLIFYING THE ESCROW =========
 
-  const signatureType = writeInt32(0);
-  const signature = seed.sign(bytes);
-  const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-  return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+  if (seed) {
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+  } else return bytes;
 }
 
 export function readUpdateNodeBytes(txBytes: Buffer, bytesConverted: any) {
