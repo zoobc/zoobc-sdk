@@ -13,16 +13,6 @@ export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxRespons
 export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
 export { AccountDatasetListParams, AccountDatasetsResponse, AccountDatasetResponse, SetupDatasetResponse, RemoveAccountDatasetResponse, } from './AccountDataset';
 export { HostInterface } from './Network';
-<<<<<<< HEAD
-export { RegisterNodeInterface, registerNodeBuilder, readNodeRegistrationBytes } from './helper/transaction-builder/register-node';
-export { UpdateNodeInterface, readUpdateNodeBytes } from './helper/transaction-builder/update-node';
-export { ClaimNodeInterface, readClaimNodeBytes } from './helper/transaction-builder/claim-node';
-export { RemoveNodeInterface, readRemoveNodeRegistrationBytes } from './helper/transaction-builder/remove-node';
-export { EscrowApprovalInterface, readApprovalEscrowBytes } from './helper/transaction-builder/escrow-transaction';
-export { SendMoneyInterface, sendMoneyBuilder, readPostTransactionBytes, readSendMoneyBytes, readSendMoneyEscrowBytes, } from './helper/transaction-builder/send-money';
-export { RemoveDatasetInterface, readRemoveDatasetBytes } from './helper/transaction-builder/remove-account-dataset';
-export { SetupDatasetInterface, readSetupAccountDatasetBytes } from './helper/transaction-builder/setup-account-dataset';
-=======
 export { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface, updateNodeBuilder } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface, claimNodeBuilder } from './helper/transaction-builder/claim-node';
@@ -31,7 +21,6 @@ export { EscrowApprovalInterface, escrowBuilder } from './helper/transaction-bui
 export { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
 export { RemoveDatasetInterface, removeDatasetBuilder } from './helper/transaction-builder/remove-account-dataset';
 export { SetupDatasetInterface, setupDatasetBuilder } from './helper/transaction-builder/setup-account-dataset';
->>>>>>> 6eff0a072c6aab7254cc23bfbebd4450568e0914
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
 export { toTransactionListWallet, toZBCTransactions, ZooTransactionsInterface, toTransactionWallet, ZooTransactionInterface, ZBCTransaction, ZBCTransactions, } from './helper/wallet/Transaction';
