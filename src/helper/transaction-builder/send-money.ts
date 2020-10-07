@@ -51,7 +51,7 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface
 
   if (seed) {
     const signatureType = writeInt32(0);
-    const txHash = generateTransactionHash(data);
+    const txHash = generateTransactionHash(bytes);
     const txHashBytes = Buffer.from(txHash, 'base64');
     const signature = seed.sign(txHashBytes);
     const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
