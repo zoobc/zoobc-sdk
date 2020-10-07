@@ -24,22 +24,26 @@ export interface ZBCTransactions {
 }
 
 export interface ZBCTransaction {
-  id: string;
+  id?: string;
   sender: string;
   senderAlias?: string;
   recipient: string;
   recipientAlias?: string;
   timestamp: number;
   fee: number;
-  blockId: string;
-  height: number;
-  transactionIndex: number;
-  transactionHash: string;
-  transactionType: number;
-  txBody: object;
+  blockId?: string;
+  height?: number;
+  transactionIndex?: number;
+  transactionHash?: string;
+  transactionType?: number;
+  txBody?: any;
   escrow?: boolean;
   escrowStatus?: number;
   multisig?: boolean;
+  approverAddress?: string;
+  commission?: number;
+  timeout?: number;
+  instruction?: string;
 }
 
 export function toZBCTransactions(transactions: Array<Transaction.AsObject>): ZBCTransaction[] {

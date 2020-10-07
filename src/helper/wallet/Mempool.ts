@@ -1,13 +1,12 @@
-import { readInt64 } from '../..';
+import { readInt64, ZBCTransaction } from '../..';
 import { GetMempoolTransactionsResponse } from '../../../grpc/model/mempool_pb';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { readClaimNodeBytes } from '../transaction-builder/claim-node';
 import { readApprovalEscrowBytes } from '../transaction-builder/escrow-transaction';
-import { readMultisignatureTransactionBytes } from '../transaction-builder/multisignature';
 import { readNodeRegistrationBytes } from '../transaction-builder/register-node';
 import { readRemoveDatasetBytes } from '../transaction-builder/remove-account-dataset';
 import { readRemoveNodeRegistrationBytes } from '../transaction-builder/remove-node';
-import { readPostTransactionBytes, readSendMoneyBytes, readSendMoneyEscrowBytes } from '../transaction-builder/send-money';
+import { readPostTransactionBytes, readSendMoneyBytes } from '../transaction-builder/send-money';
 import { readSetupAccountDatasetBytes } from '../transaction-builder/setup-account-dataset';
 import { readUpdateNodeBytes } from '../transaction-builder/update-node';
 
@@ -70,8 +69,8 @@ export function toUnconfirmTransactionNodeWallet(res: GetMempoolTransactionsResp
 
 export function toZBCPendingTransactions(res: GetMempoolTransactionsResponse.AsObject) {
   let mempoolTx = res.mempooltransactionsList;
-  let result: any = [];
-  let bytesConverted: any = [];
+  let result: ZBCTransaction[] = [];
+  let bytesConverted: ZBCTransaction;
   for (let i = 0; i < mempoolTx.length; i++) {
     const tx = mempoolTx[i].transactionbytes;
     const txBytes = Buffer.from(tx.toString(), 'base64');
@@ -79,46 +78,36 @@ export function toZBCPendingTransactions(res: GetMempoolTransactionsResponse.AsO
     bytesConverted = readPostTransactionBytes(txBytes);
     switch (type) {
       case TransactionType.UPDATENODEREGISTRATIONTRANSACTION:
-        bytesConverted = readUpdateNodeBytes(txBytes, bytesConverted);
-        result.push({ type: 'Update Node', tx: bytesConverted });
+        bytesConverted.txBody = readUpdateNodeBytes(txBytes);
+        result.push(bytesConverted);
         break;
       case TransactionType.SENDMONEYTRANSACTION:
-        bytesConverted = readSendMoneyBytes(txBytes, bytesConverted);
-        if (txBytes.length > 269) {
-          bytesConverted = readSendMoneyEscrowBytes(txBytes, bytesConverted);
-          result.push({ type: 'Send Money', tx: bytesConverted });
-          break;
-        } else {
-          result.push({ type: 'Send Money', tx: bytesConverted });
-          break;
-        }
+        bytesConverted.txBody = readSendMoneyBytes(txBytes);
+        result.push(bytesConverted);
+        break;
       case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
-        bytesConverted = readRemoveNodeRegistrationBytes(txBytes, bytesConverted);
-        result.push({ type: 'Remove Node', tx: bytesConverted });
+        bytesConverted.txBody = readRemoveNodeRegistrationBytes(txBytes);
+        result.push(bytesConverted);
         break;
       case TransactionType.NODEREGISTRATIONTRANSACTION:
-        bytesConverted = readNodeRegistrationBytes(txBytes, bytesConverted);
-        result.push({ type: 'Node Registration', tx: bytesConverted });
+        bytesConverted.txBody = readNodeRegistrationBytes(txBytes);
+        result.push(bytesConverted);
         break;
       case TransactionType.CLAIMNODEREGISTRATIONTRANSACTION:
-        bytesConverted = readClaimNodeBytes(txBytes, bytesConverted);
-        result.push({ type: 'Claim Node', tx: bytesConverted });
+        bytesConverted.txBody = readClaimNodeBytes(txBytes);
+        result.push(bytesConverted);
         break;
       case TransactionType.SETUPACCOUNTDATASETTRANSACTION:
-        bytesConverted = readSetupAccountDatasetBytes(txBytes, bytesConverted);
-        result.push({ type: 'Setup Account Dataset', tx: bytesConverted });
+        bytesConverted.txBody = readSetupAccountDatasetBytes(txBytes);
+        result.push(bytesConverted);
         break;
       case TransactionType.REMOVEACCOUNTDATASETTRANSACTION:
-        bytesConverted = readRemoveDatasetBytes(txBytes, bytesConverted);
-        result.push({ type: 'Remove Account Dataset', tx: bytesConverted });
+        bytesConverted.txBody = readRemoveDatasetBytes(txBytes);
+        result.push(bytesConverted);
         break;
       case TransactionType.APPROVALESCROWTRANSACTION:
-        bytesConverted = readApprovalEscrowBytes(txBytes, bytesConverted);
-        result.push({ type: 'Approval Escrow Transaction', tx: bytesConverted });
-        break;
-      case TransactionType.MULTISIGNATURETRANSACTION:
-        bytesConverted = readMultisignatureTransactionBytes(txBytes, bytesConverted);
-        result.push({ type: 'Multisignature Transaction', tx: bytesConverted });
+        bytesConverted.txBody = readApprovalEscrowBytes(txBytes);
+        result.push(bytesConverted);
         break;
     }
   }

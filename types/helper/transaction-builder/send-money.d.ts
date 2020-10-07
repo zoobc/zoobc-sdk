@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { BIP32Interface } from 'bip32';
+import { ZBCTransaction } from '../wallet/Transaction';
 export interface SendMoneyInterface {
     sender: string;
     recipient: string;
@@ -11,17 +12,7 @@ export interface SendMoneyInterface {
     instruction?: string;
 }
 export declare function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface): Buffer;
-export declare function readPostTransactionBytes(txBytes: Buffer): {
-    timestamp: string;
-    senderAddress: string;
-    recipientAddress: string;
-    txFee: string;
-    bodyBytes: string;
-    approverAddress: string;
-    commission: string;
-    timeout: string;
-    instruction: string;
-    multisigTxType: string;
+export declare function readPostTransactionBytes(txBytes: Buffer): ZBCTransaction;
+export declare function readSendMoneyBytes(txBytes: Buffer): {
+    amount: string;
 };
-export declare function readSendMoneyBytes(txBytes: Buffer, bytesConverted: any): any;
-export declare function readSendMoneyEscrowBytes(txBytes: Buffer, bytesConverted: any): any;

@@ -8,4 +8,8 @@ export interface UpdateNodeInterface {
     funds: number;
 }
 export declare function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed?: BIP32Interface): Buffer;
-export declare function readUpdateNodeBytes(txBytes: Buffer, bytesConverted: any): any;
+export declare function readUpdateNodeBytes(txBytes: Buffer): {
+    pubkey: string;
+    lockedAmount: string;
+    pown: Buffer;
+};

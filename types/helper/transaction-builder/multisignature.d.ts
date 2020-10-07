@@ -26,4 +26,3 @@ export interface SignatureInfo {
 }
 export declare function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Interface): Buffer;
 export declare function signTransactionHash(txHash: string, seed: BIP32Interface): Buffer;
-export declare function readMultisignatureTransactionBytes(txBytes: Buffer, bytesConverted: any): any;

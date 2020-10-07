@@ -18,7 +18,7 @@ export { UpdateNodeInterface, updateNodeBuilder, readUpdateNodeBytes } from './h
 export { ClaimNodeInterface, claimNodeBuilder, readClaimNodeBytes } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface, removeNodeBuilder, readRemoveNodeRegistrationBytes } from './helper/transaction-builder/remove-node';
 export { EscrowApprovalInterface, escrowBuilder, readApprovalEscrowBytes } from './helper/transaction-builder/escrow-transaction';
-export { SendMoneyInterface, sendMoneyBuilder, readPostTransactionBytes, readSendMoneyBytes, readSendMoneyEscrowBytes, } from './helper/transaction-builder/send-money';
+export { SendMoneyInterface, sendMoneyBuilder, readPostTransactionBytes, readSendMoneyBytes, } from './helper/transaction-builder/send-money';
 export { RemoveDatasetInterface, removeDatasetBuilder, readRemoveDatasetBytes } from './helper/transaction-builder/remove-account-dataset';
 export { SetupDatasetInterface, setupDatasetBuilder, readSetupAccountDatasetBytes, } from './helper/transaction-builder/setup-account-dataset';
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';

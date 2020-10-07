@@ -54,15 +54,14 @@ export function claimNodeBuilder(data: ClaimNodeInterface, poown: Buffer, seed?:
   } else return bytes;
 }
 
-export function readClaimNodeBytes(txBytes: Buffer, bytesConverted: any) {
+export function readClaimNodeBytes(txBytes: Buffer) {
   const bodyBytesClaimNodeLength = txBytes.slice(161, 165).readInt32LE(0);
   const bodyBytesClaim = txBytes.slice(165, 165 + bodyBytesClaimNodeLength);
   const pubkeyClaim = bodyBytesClaim.slice(0, 32);
   const pownClaim = bodyBytesClaim.slice(32, 198);
-  bytesConverted.bodyBytes = {
+  const txBody = {
     pubkey: getZBCAddress(pubkeyClaim, 'ZNK'),
     pown: pownClaim,
   };
-  bytesConverted.recipientAddress = '';
-  return bytesConverted;
+  return txBody;
 }

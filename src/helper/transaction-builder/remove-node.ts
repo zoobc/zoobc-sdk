@@ -52,12 +52,11 @@ export function removeNodeBuilder(data: RemoveNodeInterface, seed?: BIP32Interfa
   } else return bytes;
 }
 
-export function readRemoveNodeRegistrationBytes(txBytes: Buffer, bytesConverted: any) {
+export function readRemoveNodeRegistrationBytes(txBytes: Buffer) {
   const bodyBytesRemoveNodeLength = txBytes.slice(161, 165).readInt32LE(0);
   const bodyBytesRemove = txBytes.slice(165, 165 + bodyBytesRemoveNodeLength);
-  bytesConverted.bodyBytes = {
+  const txBody = {
     pubkey: getZBCAddress(bodyBytesRemove, 'ZNK'),
   };
-  bytesConverted.recipientAddress = '';
-  return bytesConverted;
+  return txBody;
 }

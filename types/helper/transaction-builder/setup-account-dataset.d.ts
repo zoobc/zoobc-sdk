@@ -8,4 +8,9 @@ export interface SetupDatasetInterface {
     fee: number;
 }
 export declare function setupDatasetBuilder(data: SetupDatasetInterface, seed?: BIP32Interface): Buffer;
-export declare function readSetupAccountDatasetBytes(txBytes: Buffer, bytesConverted: any): any;
+export declare function readSetupAccountDatasetBytes(txBytes: Buffer): {
+    propertyLength: number;
+    propertyValue: string;
+    valueLength: number;
+    value: string;
+};

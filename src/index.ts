@@ -72,7 +72,6 @@ export {
   sendMoneyBuilder,
   readPostTransactionBytes,
   readSendMoneyBytes,
-  readSendMoneyEscrowBytes,
 } from './helper/transaction-builder/send-money';
 export { RemoveDatasetInterface, removeDatasetBuilder, readRemoveDatasetBytes } from './helper/transaction-builder/remove-account-dataset';
 export {

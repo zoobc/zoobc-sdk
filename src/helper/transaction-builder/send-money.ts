@@ -1,6 +1,7 @@
 import { getZBCAddress, readInt64, writeInt32, writeInt64 } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
+import { ZBCTransaction } from '../wallet/Transaction';
 
 const TRANSACTION_TYPE = new Buffer([1, 0, 0, 0]);
 
@@ -57,47 +58,50 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface
 }
 
 export function readPostTransactionBytes(txBytes: Buffer) {
+  let bytesConverted: ZBCTransaction;
   const timestamp = readInt64(txBytes.slice(5, 13), 0);
   const senderAddressLength = txBytes.slice(13, 17).readInt32LE(0);
   const senderAddress = txBytes.slice(17, 17 + senderAddressLength).toString();
   const recipientAddressLength = txBytes.slice(83, 87).readInt32LE(0);
   const recipientAddress = txBytes.slice(87, 87 + recipientAddressLength).toString();
   const txFee = readInt64(txBytes.slice(153, 161), 0);
-  let bytesConverted = {
-    timestamp: timestamp,
-    senderAddress: senderAddress,
-    recipientAddress: recipientAddress,
-    txFee: txFee,
-    bodyBytes: '',
-    approverAddress: '',
-    commission: '',
-    timeout: '',
-    instruction: '',
-    multisigTxType: '',
-  };
+  const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
+  if (approverAddressLength > 0) {
+    const approverAddress = txBytes.slice(177, 177 + approverAddressLength);
+    const int64Length = 8;
+    const commission = readInt64(txBytes.slice(243, 243 + int64Length), 0);
+    const timeout = readInt64(txBytes.slice(251, 251 + int64Length), 0);
+    const instructionLength = txBytes.slice(259, 263).readInt32LE(0);
+    const instruction = txBytes.slice(263, 263 + instructionLength);
+    bytesConverted = {
+      timestamp: parseInt(timestamp) * 1000,
+      sender: senderAddress,
+      recipient: recipientAddress,
+      fee: parseInt(txFee),
+      approverAddress: getZBCAddress(approverAddress),
+      commission: parseInt(commission),
+      timeout: parseInt(timeout),
+      instruction: instruction.toString(),
+    };
+    bytesConverted.escrow = true;
+    console.log(bytesConverted);
+  } else {
+    bytesConverted = {
+      timestamp: parseInt(timestamp) * 1000,
+      sender: senderAddress,
+      recipient: recipientAddress,
+      fee: parseInt(txFee),
+    };
+    bytesConverted.escrow = false;
+  }
   return bytesConverted;
 }
 
-export function readSendMoneyBytes(txBytes: Buffer, bytesConverted: any) {
+export function readSendMoneyBytes(txBytes: Buffer) {
   const bodyBytesSendMoneyLength = txBytes.slice(161, 165).readInt32LE(0);
   const bodyBytesSendMoney = txBytes.slice(165, 165 + bodyBytesSendMoneyLength);
-  bytesConverted.bodyBytes = {
+  const bodyBytes = {
     amount: readInt64(bodyBytesSendMoney, 0),
   };
-  return bytesConverted;
-}
-
-export function readSendMoneyEscrowBytes(txBytes: Buffer, bytesConverted: any) {
-  const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
-  const approverAddress = txBytes.slice(177, 177 + approverAddressLength);
-  const int64Length = 8;
-  const commission = readInt64(txBytes.slice(243, 243 + int64Length), 0);
-  const timeout = readInt64(txBytes.slice(251, 251 + int64Length), 0);
-  const instructionLength = txBytes.slice(259, 263).readInt32LE(0);
-  const instruction = txBytes.slice(263, 263 + instructionLength);
-  bytesConverted.approverAddress = getZBCAddress(approverAddress);
-  bytesConverted.commission = commission;
-  bytesConverted.timeout = timeout;
-  bytesConverted.instruction = instruction.toString();
-  return bytesConverted;
+  return bodyBytes;
 }

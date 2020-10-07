@@ -60,7 +60,7 @@ export function removeDatasetBuilder(data: RemoveDatasetInterface, seed?: BIP32I
   } else return bytes;
 }
 
-export function readRemoveDatasetBytes(txBytes: Buffer, bytesConverted: any) {
+export function readRemoveDatasetBytes(txBytes: Buffer) {
   const bodyBytesRemoveDatasetLength = txBytes.slice(161, 165).readInt32LE(0);
   const bodyBytesRemoveDataSet = txBytes.slice(165, 165 + bodyBytesRemoveDatasetLength);
   const propertyLengthRemove = bodyBytesRemoveDataSet.slice(0, 4).readInt32LE(0);
@@ -70,11 +70,11 @@ export function readRemoveDatasetBytes(txBytes: Buffer, bytesConverted: any) {
   const endLengthValueRemove = startLengthValueRemove + 4;
   const valueLengthRemove = bodyBytesRemoveDataSet.slice(startLengthValueRemove, endLengthValueRemove).readInt32LE(0);
   const valueRemove = bodyBytesRemoveDataSet.slice(endLengthValueRemove, endLengthValueRemove + valueLengthRemove);
-  bytesConverted.bodyBytes = {
+  const txBody = {
     propertyLength: porpertyValueLengthRemove,
     propertyValue: propertyValueRemove.toString(),
     valueLength: valueLengthRemove,
     value: valueRemove.toString(),
   };
-  return bytesConverted;
+  return txBody;
 }

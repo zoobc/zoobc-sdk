@@ -57,17 +57,16 @@ export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed
   } else return bytes;
 }
 
-export function readUpdateNodeBytes(txBytes: Buffer, bytesConverted: any) {
+export function readUpdateNodeBytes(txBytes: Buffer) {
   const bodyBytesUpdateNodeLength = txBytes.slice(161, 165).readInt32LE(0);
   const bodyBytes = txBytes.slice(165, 165 + bodyBytesUpdateNodeLength);
   const pubkey = bodyBytes.slice(0, 32);
   const lockAmount = bodyBytes.slice(32, 40);
   const pown = bodyBytes.slice(40, 206);
-  bytesConverted.recipientAddress = '';
-  bytesConverted.bodyBytes = {
+  const txBody = {
     pubkey: getZBCAddress(pubkey, 'ZNK'),
     lockedAmount: readInt64(lockAmount, 0),
     pown: pown,
   };
-  return bytesConverted;
+  return txBody;
 }

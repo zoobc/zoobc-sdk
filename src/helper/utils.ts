@@ -4,13 +4,6 @@ import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
 import { Int64LE } from 'int64-buffer';
 import zoobc from '..';
-import { TransactionType } from '../../grpc/model/transaction_pb';
-import { readPostTransactionBytes, readSendMoneyBytes, readSendMoneyEscrowBytes } from './transaction-builder/send-money';
-import { readUpdateNodeBytes } from './transaction-builder/update-node';
-import { readClaimNodeBytes } from './transaction-builder/claim-node';
-import { readNodeRegistrationBytes } from './transaction-builder/register-node';
-import { readRemoveNodeRegistrationBytes } from './transaction-builder/remove-node';
-import { readSetupAccountDatasetBytes } from './transaction-builder/setup-account-dataset';
 
 export const errorDateMessage = {
   code: '',
