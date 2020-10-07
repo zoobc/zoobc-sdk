@@ -49688,12 +49688,14 @@ function toGetPendingList(res) {
 }
 function generateTransactionHash(buffer) {
     const hashed = Buffer.from(sha3_256(buffer), 'hex');
-    let binary = '';
-    const len = hashed.byteLength;
-    for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode(hashed[i]);
-    }
-    return toBase64Url(window.btoa(binary));
+    console.log(hashed);
+    // let binary = '';
+    // const len = hashed.byteLength;
+    // for (let i = 0; i < len; i++) {
+    //   binary += String.fromCharCode(hashed[i]);
+    // }
+    // const hash = toBase64Url(window.btoa(binary));
+    return getZBCAddress(hashed, 'ZTX');
 }
 
 var signature_pb = createCommonjsModule(function (module, exports) {
@@ -49807,13 +49809,12 @@ function encryptPassword(password, salt = 'salt') {
         iterations: 10000,
     }).toString();
 }
-function isZBCAddressValid(address, stdPrefix = 'ZBC') {
+function isZBCAddressValid(address) {
     if (address.length != 66)
         return false;
     const segs = address.split('_');
     const prefix = segs[0];
-    if (prefix != stdPrefix)
-        return false;
+    // if (prefix != stdPrefix) return false;
     segs.shift();
     if (segs.length != 7)
         return false;

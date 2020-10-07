@@ -31,7 +31,7 @@ export interface ZBCTransaction {
     transactionIndex: number;
     transactionHash: string;
     transactionType: number;
-    txBody: object;
+    txBody: any;
     escrow?: boolean;
     escrowStatus?: number;
     multisig?: boolean;
