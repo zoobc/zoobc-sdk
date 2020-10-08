@@ -1,4 +1,4 @@
-import { readInt64, ZBCTransaction } from '../..';
+import { readInt64, ZBCTransaction, ZBCTransactions } from '../..';
 import { GetMempoolTransactionsResponse } from '../../../grpc/model/mempool_pb';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { readClaimNodeBytes } from '../transaction-builder/claim-node';
@@ -67,52 +67,45 @@ export function toUnconfirmTransactionNodeWallet(res: GetMempoolTransactionsResp
   return result;
 }
 
-export function toZBCPendingTransactions(res: GetMempoolTransactionsResponse.AsObject) {
+export function toZBCPendingTransactions(res: GetMempoolTransactionsResponse.AsObject): ZBCTransactions {
   let mempoolTx = res.mempooltransactionsList;
-  let result: ZBCTransaction[] = [];
-  let bytesConverted: ZBCTransaction;
+  let transactions: ZBCTransaction[] = [];
+  let transaction: ZBCTransaction;
   for (let i = 0; i < mempoolTx.length; i++) {
     const tx = mempoolTx[i].transactionbytes;
     const txBytes = Buffer.from(tx.toString(), 'base64');
     const type = txBytes.slice(0, 4).readInt32LE(0);
-    bytesConverted = readPostTransactionBytes(txBytes);
+    transaction = readPostTransactionBytes(txBytes);
     switch (type) {
       case TransactionType.UPDATENODEREGISTRATIONTRANSACTION:
-        bytesConverted.txBody = readUpdateNodeBytes(txBytes);
-        result.push(bytesConverted);
+        transaction.txBody = readUpdateNodeBytes(txBytes);
         break;
       case TransactionType.SENDMONEYTRANSACTION:
-        bytesConverted.txBody = readSendMoneyBytes(txBytes);
-        result.push(bytesConverted);
+        transaction.txBody = readSendMoneyBytes(txBytes);
         break;
       case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
-        bytesConverted.txBody = readRemoveNodeRegistrationBytes(txBytes);
-        result.push(bytesConverted);
+        transaction.txBody = readRemoveNodeRegistrationBytes(txBytes);
         break;
       case TransactionType.NODEREGISTRATIONTRANSACTION:
-        bytesConverted.txBody = readNodeRegistrationBytes(txBytes);
-        result.push(bytesConverted);
+        transaction.txBody = readNodeRegistrationBytes(txBytes);
         break;
       case TransactionType.CLAIMNODEREGISTRATIONTRANSACTION:
-        bytesConverted.txBody = readClaimNodeBytes(txBytes);
-        result.push(bytesConverted);
+        transaction.txBody = readClaimNodeBytes(txBytes);
         break;
       case TransactionType.SETUPACCOUNTDATASETTRANSACTION:
-        bytesConverted.txBody = readSetupAccountDatasetBytes(txBytes);
-        result.push(bytesConverted);
+        transaction.txBody = readSetupAccountDatasetBytes(txBytes);
         break;
       case TransactionType.REMOVEACCOUNTDATASETTRANSACTION:
-        bytesConverted.txBody = readRemoveDatasetBytes(txBytes);
-        result.push(bytesConverted);
+        transaction.txBody = readRemoveDatasetBytes(txBytes);
         break;
       case TransactionType.APPROVALESCROWTRANSACTION:
-        bytesConverted.txBody = readApprovalEscrowBytes(txBytes);
-        result.push(bytesConverted);
+        transaction.txBody = readApprovalEscrowBytes(txBytes);
         break;
     }
+    transactions.push(transaction);
   }
   return {
     total: res.total,
-    mempoolTx: result,
+    transactions: transactions,
   };
 }

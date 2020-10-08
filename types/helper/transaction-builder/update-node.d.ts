@@ -11,5 +11,5 @@ export declare function updateNodeBuilder(data: UpdateNodeInterface, poown: Buff
 export declare function readUpdateNodeBytes(txBytes: Buffer): {
     pubkey: string;
     lockedAmount: string;
-    pown: Buffer;
+    poown: Buffer;
 };

@@ -43810,11 +43810,11 @@ function readUpdateNodeBytes(txBytes) {
     const bodyBytes = txBytes.slice(165, 165 + bodyBytesUpdateNodeLength);
     const pubkey = bodyBytes.slice(0, 32);
     const lockAmount = bodyBytes.slice(32, 40);
-    const pown = bodyBytes.slice(40, 206);
+    const poown = bodyBytes.slice(40, 206);
     const txBody = {
         pubkey: getZBCAddress(pubkey, 'ZNK'),
         lockedAmount: readInt64(lockAmount, 0),
-        pown: pown,
+        poown: poown,
     };
     return txBody;
 }
@@ -43909,10 +43909,10 @@ function readClaimNodeBytes(txBytes) {
     const bodyBytesClaimNodeLength = txBytes.slice(161, 165).readInt32LE(0);
     const bodyBytesClaim = txBytes.slice(165, 165 + bodyBytesClaimNodeLength);
     const pubkeyClaim = bodyBytesClaim.slice(0, 32);
-    const pownClaim = bodyBytesClaim.slice(32, 198);
+    const poownClaim = bodyBytesClaim.slice(32, 198);
     const txBody = {
         pubkey: getZBCAddress(pubkeyClaim, 'ZNK'),
-        pown: pownClaim,
+        poown: poownClaim,
     };
     return txBody;
 }
@@ -49643,51 +49643,44 @@ function toUnconfirmTransactionNodeWallet(res) {
 }
 function toZBCPendingTransactions(res) {
     let mempoolTx = res.mempooltransactionsList;
-    let result = [];
-    let bytesConverted;
+    let transactions = [];
+    let transaction;
     for (let i = 0; i < mempoolTx.length; i++) {
         const tx = mempoolTx[i].transactionbytes;
         const txBytes = Buffer.from(tx.toString(), 'base64');
         const type = txBytes.slice(0, 4).readInt32LE(0);
-        bytesConverted = readPostTransactionBytes(txBytes);
+        transaction = readPostTransactionBytes(txBytes);
         switch (type) {
             case transaction_pb_5.UPDATENODEREGISTRATIONTRANSACTION:
-                bytesConverted.txBody = readUpdateNodeBytes(txBytes);
-                result.push(bytesConverted);
+                transaction.txBody = readUpdateNodeBytes(txBytes);
                 break;
             case transaction_pb_5.SENDMONEYTRANSACTION:
-                bytesConverted.txBody = readSendMoneyBytes(txBytes);
-                result.push(bytesConverted);
+                transaction.txBody = readSendMoneyBytes(txBytes);
                 break;
             case transaction_pb_5.REMOVENODEREGISTRATIONTRANSACTION:
-                bytesConverted.txBody = readRemoveNodeRegistrationBytes(txBytes);
-                result.push(bytesConverted);
+                transaction.txBody = readRemoveNodeRegistrationBytes(txBytes);
                 break;
             case transaction_pb_5.NODEREGISTRATIONTRANSACTION:
-                bytesConverted.txBody = readNodeRegistrationBytes(txBytes);
-                result.push(bytesConverted);
+                transaction.txBody = readNodeRegistrationBytes(txBytes);
                 break;
             case transaction_pb_5.CLAIMNODEREGISTRATIONTRANSACTION:
-                bytesConverted.txBody = readClaimNodeBytes(txBytes);
-                result.push(bytesConverted);
+                transaction.txBody = readClaimNodeBytes(txBytes);
                 break;
             case transaction_pb_5.SETUPACCOUNTDATASETTRANSACTION:
-                bytesConverted.txBody = readSetupAccountDatasetBytes(txBytes);
-                result.push(bytesConverted);
+                transaction.txBody = readSetupAccountDatasetBytes(txBytes);
                 break;
             case transaction_pb_5.REMOVEACCOUNTDATASETTRANSACTION:
-                bytesConverted.txBody = readRemoveDatasetBytes(txBytes);
-                result.push(bytesConverted);
+                transaction.txBody = readRemoveDatasetBytes(txBytes);
                 break;
             case transaction_pb_5.APPROVALESCROWTRANSACTION:
-                bytesConverted.txBody = readApprovalEscrowBytes(txBytes);
-                result.push(bytesConverted);
+                transaction.txBody = readApprovalEscrowBytes(txBytes);
                 break;
         }
+        transactions.push(transaction);
     }
     return {
         total: res.total,
-        mempoolTx: result,
+        transactions: transactions,
     };
 }
 
@@ -50019,7 +50012,6 @@ function sendMoneyBuilder(data, seed) {
         return bytes;
 }
 function readPostTransactionBytes(txBytes) {
-    let bytesConverted;
     const timestamp = readInt64(txBytes.slice(5, 13), 0);
     const senderAddressLength = txBytes.slice(13, 17).readInt32LE(0);
     const senderAddress = txBytes.slice(17, 17 + senderAddressLength).toString();
@@ -50027,6 +50019,13 @@ function readPostTransactionBytes(txBytes) {
     const recipientAddress = txBytes.slice(87, 87 + recipientAddressLength).toString();
     const txFee = readInt64(txBytes.slice(153, 161), 0);
     const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
+    let transaction = {
+        timestamp: parseInt(timestamp) * 1000,
+        sender: senderAddress,
+        recipient: recipientAddress,
+        fee: parseInt(txFee),
+        escrow: false,
+    };
     if (approverAddressLength > 0) {
         const approverAddress = txBytes.slice(177, 177 + approverAddressLength);
         const int64Length = 8;
@@ -50034,29 +50033,13 @@ function readPostTransactionBytes(txBytes) {
         const timeout = readInt64(txBytes.slice(251, 251 + int64Length), 0);
         const instructionLength = txBytes.slice(259, 263).readInt32LE(0);
         const instruction = txBytes.slice(263, 263 + instructionLength);
-        bytesConverted = {
-            timestamp: parseInt(timestamp) * 1000,
-            sender: senderAddress,
-            recipient: recipientAddress,
-            fee: parseInt(txFee),
-            approverAddress: getZBCAddress(approverAddress),
-            commission: parseInt(commission),
-            timeout: parseInt(timeout),
-            instruction: instruction.toString(),
-        };
-        bytesConverted.escrow = true;
-        console.log(bytesConverted);
+        transaction.approverAddress = getZBCAddress(approverAddress);
+        transaction.commission = parseInt(commission);
+        transaction.timeout = parseInt(timeout);
+        transaction.instruction = instruction.toString();
+        transaction.escrow = true;
     }
-    else {
-        bytesConverted = {
-            timestamp: parseInt(timestamp) * 1000,
-            sender: senderAddress,
-            recipient: recipientAddress,
-            fee: parseInt(txFee),
-        };
-        bytesConverted.escrow = false;
-    }
-    return bytesConverted;
+    return transaction;
 }
 function readSendMoneyBytes(txBytes) {
     const bodyBytesSendMoneyLength = txBytes.slice(161, 165).readInt32LE(0);

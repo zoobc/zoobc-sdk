@@ -58,7 +58,6 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface
 }
 
 export function readPostTransactionBytes(txBytes: Buffer) {
-  let bytesConverted: ZBCTransaction;
   const timestamp = readInt64(txBytes.slice(5, 13), 0);
   const senderAddressLength = txBytes.slice(13, 17).readInt32LE(0);
   const senderAddress = txBytes.slice(17, 17 + senderAddressLength).toString();
@@ -66,6 +65,13 @@ export function readPostTransactionBytes(txBytes: Buffer) {
   const recipientAddress = txBytes.slice(87, 87 + recipientAddressLength).toString();
   const txFee = readInt64(txBytes.slice(153, 161), 0);
   const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
+  let transaction: ZBCTransaction = {
+    timestamp: parseInt(timestamp) * 1000,
+    sender: senderAddress,
+    recipient: recipientAddress,
+    fee: parseInt(txFee),
+    escrow: false,
+  };
   if (approverAddressLength > 0) {
     const approverAddress = txBytes.slice(177, 177 + approverAddressLength);
     const int64Length = 8;
@@ -73,28 +79,13 @@ export function readPostTransactionBytes(txBytes: Buffer) {
     const timeout = readInt64(txBytes.slice(251, 251 + int64Length), 0);
     const instructionLength = txBytes.slice(259, 263).readInt32LE(0);
     const instruction = txBytes.slice(263, 263 + instructionLength);
-    bytesConverted = {
-      timestamp: parseInt(timestamp) * 1000,
-      sender: senderAddress,
-      recipient: recipientAddress,
-      fee: parseInt(txFee),
-      approverAddress: getZBCAddress(approverAddress),
-      commission: parseInt(commission),
-      timeout: parseInt(timeout),
-      instruction: instruction.toString(),
-    };
-    bytesConverted.escrow = true;
-    console.log(bytesConverted);
-  } else {
-    bytesConverted = {
-      timestamp: parseInt(timestamp) * 1000,
-      sender: senderAddress,
-      recipient: recipientAddress,
-      fee: parseInt(txFee),
-    };
-    bytesConverted.escrow = false;
+    transaction.approverAddress = getZBCAddress(approverAddress);
+    transaction.commission = parseInt(commission);
+    transaction.timeout = parseInt(timeout);
+    transaction.instruction = instruction.toString();
+    transaction.escrow = true;
   }
-  return bytesConverted;
+  return transaction;
 }
 
 export function readSendMoneyBytes(txBytes: Buffer) {

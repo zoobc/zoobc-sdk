@@ -9,5 +9,5 @@ export interface ClaimNodeInterface {
 export declare function claimNodeBuilder(data: ClaimNodeInterface, poown: Buffer, seed?: BIP32Interface): Buffer;
 export declare function readClaimNodeBytes(txBytes: Buffer): {
     pubkey: string;
-    pown: Buffer;
+    poown: Buffer;
 };
