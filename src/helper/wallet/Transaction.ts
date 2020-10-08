@@ -96,6 +96,7 @@ function getBodyBytes(tx: Transaction.AsObject) {
     tx.claimnoderegistrationtransactionbody ||
     tx.multisignaturetransactionbody ||
     tx.noderegistrationtransactionbody ||
+    tx.setupaccountdatasettransactionbody ||
     tx.removeaccountdatasettransactionbody ||
     tx.removenoderegistrationtransactionbody ||
     tx.sendmoneytransactionbody ||

@@ -49731,6 +49731,7 @@ function getBodyBytes(tx) {
         tx.claimnoderegistrationtransactionbody ||
         tx.multisignaturetransactionbody ||
         tx.noderegistrationtransactionbody ||
+        tx.setupaccountdatasettransactionbody ||
         tx.removeaccountdatasettransactionbody ||
         tx.removenoderegistrationtransactionbody ||
         tx.sendmoneytransactionbody ||
