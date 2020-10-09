@@ -62,16 +62,25 @@ export {
 } from './AccountDataset';
 // EXPORT HELPER INTERFACE
 export { HostInterface } from './Network';
-export { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
-export { UpdateNodeInterface, updateNodeBuilder } from './helper/transaction-builder/update-node';
-export { ClaimNodeInterface, claimNodeBuilder } from './helper/transaction-builder/claim-node';
-export { RemoveNodeInterface, removeNodeBuilder } from './helper/transaction-builder/remove-node';
-export { EscrowApprovalInterface, escrowBuilder } from './helper/transaction-builder/escrow-transaction';
-export { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
-export { RemoveDatasetInterface, removeDatasetBuilder } from './helper/transaction-builder/remove-account-dataset';
-export { SetupDatasetInterface, setupDatasetBuilder } from './helper/transaction-builder/setup-account-dataset';
+export { RegisterNodeInterface, registerNodeBuilder, readNodeRegistrationBytes } from './helper/transaction-builder/register-node';
+export { UpdateNodeInterface, updateNodeBuilder, readUpdateNodeBytes } from './helper/transaction-builder/update-node';
+export { ClaimNodeInterface, claimNodeBuilder, readClaimNodeBytes } from './helper/transaction-builder/claim-node';
+export { RemoveNodeInterface, removeNodeBuilder, readRemoveNodeRegistrationBytes } from './helper/transaction-builder/remove-node';
+export { EscrowApprovalInterface, escrowBuilder, readApprovalEscrowBytes } from './helper/transaction-builder/escrow-transaction';
+export {
+  SendMoneyInterface,
+  sendMoneyBuilder,
+  readPostTransactionBytes,
+  readSendMoneyBytes,
+} from './helper/transaction-builder/send-money';
+export { RemoveDatasetInterface, removeDatasetBuilder, readRemoveDatasetBytes } from './helper/transaction-builder/remove-account-dataset';
+export {
+  SetupDatasetInterface,
+  setupDatasetBuilder,
+  readSetupAccountDatasetBytes,
+} from './helper/transaction-builder/setup-account-dataset';
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
-export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet } from './helper/wallet/Mempool';
+export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
 export {
   toTransactionListWallet,
   toZBCTransactions,

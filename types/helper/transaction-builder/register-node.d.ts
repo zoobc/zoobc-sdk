@@ -8,3 +8,8 @@ export interface RegisterNodeInterface {
     funds: number;
 }
 export declare function registerNodeBuilder(data: RegisterNodeInterface, poown: Buffer, seed?: BIP32Interface): Buffer;
+export declare function readNodeRegistrationBytes(txBytes: Buffer): {
+    pubkey: string;
+    accountAddress: string;
+    lockedBalance: string;
+};

@@ -59,3 +59,22 @@ export function setupDatasetBuilder(data: SetupDatasetInterface, seed?: BIP32Int
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
   } else return bytes;
 }
+
+export function readSetupAccountDatasetBytes(txBytes: Buffer) {
+  const bodyBytesSetupDatasetLength = txBytes.slice(161, 165).readInt32LE(0);
+  const bodyBytesSetup = txBytes.slice(165, 165 + bodyBytesSetupDatasetLength);
+  const propertyLength = bodyBytesSetup.slice(0, 4).readInt32LE(0);
+  const porpertyValueLength = 4 + propertyLength;
+  const propertyValue = bodyBytesSetup.slice(4, porpertyValueLength);
+  const startLengthValue = 4 + propertyLength;
+  const endLengthValue = startLengthValue + 4;
+  const valueLength = bodyBytesSetup.slice(startLengthValue, endLengthValue).readInt32LE(0);
+  const value = bodyBytesSetup.slice(endLengthValue, endLengthValue + valueLength);
+  const bodyBytes = {
+    propertyLength: propertyLength,
+    propertyValue: propertyValue.toString(),
+    valueLength: valueLength,
+    value: value.toString(),
+  };
+  return bodyBytes;
+}

@@ -8,3 +8,9 @@ export interface RemoveDatasetInterface {
     fee: number;
 }
 export declare function removeDatasetBuilder(data: RemoveDatasetInterface, seed?: BIP32Interface): Buffer;
+export declare function readRemoveDatasetBytes(txBytes: Buffer): {
+    propertyLength: number;
+    propertyValue: string;
+    valueLength: number;
+    value: string;
+};
