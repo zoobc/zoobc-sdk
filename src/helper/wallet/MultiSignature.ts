@@ -1,7 +1,6 @@
 import { MultisigPendingTxResponse } from '../../MultiSignature';
 import { getZBCAddress, readInt64 } from '../utils';
 import { sha3_256 } from 'js-sha3';
-import { toBase64Url } from '../converters';
 
 export function toGetPendingList(res: MultisigPendingTxResponse) {
   const list = res.pendingtransactionsList.map(tx => {
