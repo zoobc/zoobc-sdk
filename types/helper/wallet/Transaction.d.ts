@@ -19,22 +19,26 @@ export interface ZBCTransactions {
     transactions: ZBCTransaction[];
 }
 export interface ZBCTransaction {
-    id: string;
+    id?: string;
     sender: string;
     senderAlias?: string;
     recipient: string;
     recipientAlias?: string;
     timestamp: number;
     fee: number;
-    blockId: string;
-    height: number;
-    transactionIndex: number;
-    transactionHash: string;
-    transactionType: number;
-    txBody: any;
+    blockId?: string;
+    height?: number;
+    transactionIndex?: number;
+    transactionHash?: string;
+    transactionType?: number;
+    txBody?: any;
     escrow?: boolean;
     escrowStatus?: number;
     multisig?: boolean;
+    approverAddress?: string;
+    commission?: number;
+    timeout?: number;
+    instruction?: string;
 }
 export declare function toZBCTransactions(transactions: Array<Transaction.AsObject>): ZBCTransaction[];
 export declare function toTransactionListWallet(res: GetTransactionsResponse.AsObject, ownAddress: string): ZooTransactionsInterface;

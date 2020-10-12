@@ -29,15 +29,7 @@ export function toGetPendingList(res: MultisigPendingTxResponse) {
   };
 }
 
-export function generateTransactionHash(buffer: Buffer) {
+export function generateTransactionHash(buffer: Buffer): string {
   const hashed = Buffer.from(sha3_256(buffer), 'hex');
-  console.log(hashed);
-
-  // let binary = '';
-  // const len = hashed.byteLength;
-  // for (let i = 0; i < len; i++) {
-  //   binary += String.fromCharCode(hashed[i]);
-  // }
-  // const hash = toBase64Url(window.btoa(binary));
   return getZBCAddress(hashed, 'ZTX');
 }

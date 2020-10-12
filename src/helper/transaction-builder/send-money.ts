@@ -1,6 +1,7 @@
-import { readInt64, writeInt32, writeInt64 } from '../utils';
+import { getZBCAddress, readInt64, writeInt32, writeInt64 } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
+import { ZBCTransaction } from '../wallet/Transaction';
 
 const TRANSACTION_TYPE = new Buffer([1, 0, 0, 0]);
 
@@ -54,4 +55,44 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface
     const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
   } else return bytes;
+}
+
+export function readPostTransactionBytes(txBytes: Buffer) {
+  const timestamp = readInt64(txBytes.slice(5, 13), 0);
+  const senderAddressLength = txBytes.slice(13, 17).readInt32LE(0);
+  const senderAddress = txBytes.slice(17, 17 + senderAddressLength).toString();
+  const recipientAddressLength = txBytes.slice(83, 87).readInt32LE(0);
+  const recipientAddress = txBytes.slice(87, 87 + recipientAddressLength).toString();
+  const txFee = readInt64(txBytes.slice(153, 161), 0);
+  const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
+  let transaction: ZBCTransaction = {
+    timestamp: parseInt(timestamp) * 1000,
+    sender: senderAddress,
+    recipient: recipientAddress,
+    fee: parseInt(txFee),
+    escrow: false,
+  };
+  if (approverAddressLength > 0) {
+    const approverAddress = txBytes.slice(177, 177 + approverAddressLength);
+    const int64Length = 8;
+    const commission = readInt64(txBytes.slice(243, 243 + int64Length), 0);
+    const timeout = readInt64(txBytes.slice(251, 251 + int64Length), 0);
+    const instructionLength = txBytes.slice(259, 263).readInt32LE(0);
+    const instruction = txBytes.slice(263, 263 + instructionLength);
+    transaction.approverAddress = getZBCAddress(approverAddress);
+    transaction.commission = parseInt(commission);
+    transaction.timeout = parseInt(timeout);
+    transaction.instruction = instruction.toString();
+    transaction.escrow = true;
+  }
+  return transaction;
+}
+
+export function readSendMoneyBytes(txBytes: Buffer) {
+  const bodyBytesSendMoneyLength = txBytes.slice(161, 165).readInt32LE(0);
+  const bodyBytesSendMoney = txBytes.slice(165, 165 + bodyBytesSendMoneyLength);
+  const bodyBytes = {
+    amount: readInt64(bodyBytesSendMoney, 0),
+  };
+  return bodyBytes;
 }

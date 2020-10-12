@@ -1,4 +1,4 @@
-import { writeInt64, writeInt32 } from '../utils';
+import { writeInt64, writeInt32, getZBCAddress, readInt64 } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 
@@ -57,4 +57,18 @@ export function registerNodeBuilder(data: RegisterNodeInterface, poown: Buffer, 
     const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
   } else return bytes;
+}
+
+export function readNodeRegistrationBytes(txBytes: Buffer) {
+  const bodyBytesRegisterNodeLength = txBytes.slice(161, 165).readInt32LE(0);
+  const bodyBytesRegister = txBytes.slice(165, 165 + bodyBytesRegisterNodeLength);
+  const pubkeyRegister = bodyBytesRegister.slice(0, 32);
+  const accountaddress = bodyBytesRegister.slice(36, 102);
+  const lockedBalance = bodyBytesRegister.slice(102, 110);
+  const txBody = {
+    pubkey: getZBCAddress(pubkeyRegister, 'ZNK'),
+    accountAddress: accountaddress.toString(),
+    lockedBalance: readInt64(lockedBalance, 0),
+  };
+  return txBody;
 }
