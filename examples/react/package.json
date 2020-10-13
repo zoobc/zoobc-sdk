@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "start-https": "HTTPS=true react-scripts start"
   },
   "dependencies": {
     "@ledgerhq/hw-transport-webusb": "^5.22.0",
