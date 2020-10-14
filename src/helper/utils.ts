@@ -46,11 +46,10 @@ export function encryptPassword(password: string, salt: string = 'salt'): string
   }).toString();
 }
 
-export function isZBCAddressValid(address: string, stdPrefix: string = 'ZBC'): boolean {
+export function isZBCAddressValid(address: string): boolean {
   if (address.length != 66) return false;
   const segs = address.split('_');
   const prefix = segs[0];
-  if (prefix != stdPrefix) return false;
   segs.shift();
   if (segs.length != 7) return false;
   for (let i = 0; i < segs.length; i++) if (!/[A-Z2-7]{8}/.test(segs[i])) return false;
