@@ -5,7 +5,6 @@ import SignSendMoney from './SignSendMoney';
 import SignRegisterNode from './SignRegisterNode';
 import BlockList from './BlockList';
 import './app.css';
-import EstEid from './EstEid';
 
 const App = () => {
   const [appState, setAppState] = useState(0);
@@ -20,9 +19,6 @@ const App = () => {
       break;
     case 3:
       appContent = <SignRegisterNode />;
-      break;
-    case 4:
-      appContent = <EstEid />;
       break;
     default:
       appContent = null;
@@ -40,9 +36,6 @@ const App = () => {
         </li>
         <li onClick={() => setAppState(3)}>
           <a href="#SignRegisterNode">Sign RegisterNode</a>
-        </li>
-        <li onClick={() => setAppState(4)}>
-          <a href="#SignRegisterNode">Estonia eID functionalities</a>
         </li>
       </ul>
       {appContent}
