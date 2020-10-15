@@ -1,6 +1,7 @@
 import React from 'react';
+import { sha3_256 } from 'js-sha3';
 
-import { ZooKeyring, Ledger, writeInt32 } from '../../../../';
+import { ZooKeyring, Ledger } from '../../../../';
 
 const bytesToHexes = byteArr => {
   const a = [];
@@ -20,11 +21,12 @@ const SignatureGenerator = ({ accountIndex, walletSignature, signature, buildTra
     if (!txBytes || txBytes.length === 0 || accountIdxInt == NaN) return;
 
     // signing with keyring
+    const txHash = Buffer.from(sha3_256(txBytes), 'hex');
     const seed =
       'very tooth oxygen lucky fat wolf demise arrest video squeeze hybrid sock siege galaxy remain radar panda loyal culture virus goose dolphin learn throw';
     const zooKeyring = new ZooKeyring(seed, '');
     const childSeed = zooKeyring.calcDerivationPath(accountIdxInt);
-    const walletSignature = childSeed.sign(txBytes);
+    const walletSignature = childSeed.sign(txHash);
     setWalletSignature(bytesToHexes(walletSignature));
 
     // signing with Ledger
