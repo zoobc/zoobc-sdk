@@ -23,12 +23,12 @@ export function feeVoteCommitPhaseBuilder(data: feeVoteInterface, seed?: BIP32In
   const addressLength = writeInt32(ADDRESS_LENGTH);
   const fee = writeInt64(data.fee * 1e8);
 
-  const recentBlockHash = Buffer.from(data.recentBlockHash.toString(), 'base64')
-  const recentBlockHeight = writeInt32(data.recentBlockHeight)
-  const feeVote = writeInt64(data.feeVote * 1e8)
-  const bytesFeeVote = Buffer.concat([recentBlockHash, recentBlockHeight, feeVote])
+  const recentBlockHash = Buffer.from(data.recentBlockHash.toString(), 'base64');
+  const recentBlockHeight = writeInt32(data.recentBlockHeight);
+  const feeVote = writeInt64(data.feeVote * 1e8);
+  const bytesFeeVote = Buffer.concat([recentBlockHash, recentBlockHeight, feeVote]);
   const hashed = Buffer.from(sha3_256(bytesFeeVote), 'hex');
-  const bodyLength = writeInt32(hashed.length)
+  const bodyLength = writeInt32(hashed.length);
 
   bytes = Buffer.concat([
     TRANSACTION_TYPE_FEE_VOTE_COMMIT,
@@ -69,15 +69,17 @@ export function feeVoteRevealPhaseBuilder(data: feeVoteInterface, seed: BIP32Int
   const addressLength = writeInt32(ADDRESS_LENGTH);
   const fee = writeInt64(data.fee * 1e8);
 
-  const recentBlockHash = Buffer.from(data.recentBlockHash.toString(), 'base64')
-  const recentBlockHeight = writeInt32(data.recentBlockHeight)
-  const feeVote = writeInt64(data.feeVote * 1e8)
-  const feeVoteInfoBytes = Buffer.concat([recentBlockHash, recentBlockHeight, feeVote])
+  const recentBlockHash = Buffer.from(data.recentBlockHash.toString(), 'base64');
+  const recentBlockHeight = writeInt32(data.recentBlockHeight);
+  const feeVote = writeInt64(data.feeVote * 1e8);
+  const feeVoteInfoBytes = Buffer.concat([recentBlockHash, recentBlockHeight, feeVote]);
   const signTypeFeeVote = writeInt32(0);
-  const signFeeVote = seed.sign(feeVoteInfoBytes)
-  const voteSignature = Buffer.concat([signTypeFeeVote, signFeeVote])
-  const voteSignatureLength = writeInt32(voteSignature.length)
-  const bodyLength = writeInt32(recentBlockHash.length + recentBlockHeight.length + feeVote.length + voteSignatureLength.length + voteSignature.length )
+  const signFeeVote = seed.sign(feeVoteInfoBytes);
+  const voteSignature = Buffer.concat([signTypeFeeVote, signFeeVote]);
+  const voteSignatureLength = writeInt32(voteSignature.length);
+  const bodyLength = writeInt32(
+    recentBlockHash.length + recentBlockHeight.length + feeVote.length + voteSignatureLength.length + voteSignature.length,
+  );
 
   bytes = Buffer.concat([
     TRANSACTION_TYPE_FEE_VOTE_REVEAL,
@@ -93,7 +95,7 @@ export function feeVoteRevealPhaseBuilder(data: feeVoteInterface, seed: BIP32Int
     recentBlockHeight,
     feeVote,
     voteSignatureLength,
-    voteSignature
+    voteSignature,
   ]);
 
   // ========== NULLIFYING THE ESCROW ===========
