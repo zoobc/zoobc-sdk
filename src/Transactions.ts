@@ -7,13 +7,13 @@ import {
   GetTransactionRequest,
   Transaction,
   GetTransactionMinimumFeeResponse,
-  GetTransactionMinimumFeeRequest,
 } from '../grpc/model/transaction_pb';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
 import { BIP32Interface } from 'bip32';
 import { errorDateMessage, validationTimestamp } from './helper/utils';
+import { feeVoteCommitPhaseBuilder, feeVoteRevealPhaseBuilder, feeVoteInterface } from './helper/transaction-builder/fee-vote';
 
 export type TransactionsResponse = GetTransactionsResponse.AsObject;
 export type TransactionResponse = Transaction.AsObject;
@@ -108,4 +108,54 @@ function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<Post
   });
 }
 
-export default { sendMoney, get, getList };
+function feeVoteCommitPhase(data: feeVoteInterface, seed: BIP32Interface): Promise<PostTransactionResponses> {
+  const txBytes = feeVoteCommitPhaseBuilder(data, seed);
+
+  return new Promise(async (resolve, reject) => {
+    const networkIP = Network.selected();
+
+    const request = new PostTransactionRequest();
+    request.setTransactionbytes(txBytes);
+    const validTimestamp = await validationTimestamp(txBytes);
+    if (validTimestamp) {
+      const client = new TransactionServiceClient(networkIP.host);
+      client.postTransaction(request, (err, res) => {
+        if (err) {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        }
+        if (res) resolve(res.toObject());
+      });
+    } else {
+      const { code, message, metadata } = errorDateMessage;
+      reject({ code, message, metadata });
+    }
+  });
+}
+
+function feeVoteRevealPhase(data: feeVoteInterface, seed: BIP32Interface): Promise<PostTransactionResponses> {
+  const txBytes = feeVoteRevealPhaseBuilder(data, seed);
+
+  return new Promise(async (resolve, reject) => {
+    const networkIP = Network.selected();
+
+    const request = new PostTransactionRequest();
+    request.setTransactionbytes(txBytes);
+    const validTimestamp = await validationTimestamp(txBytes);
+    if (validTimestamp) {
+      const client = new TransactionServiceClient(networkIP.host);
+      client.postTransaction(request, (err, res) => {
+        if (err) {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        }
+        if (res) resolve(res.toObject());
+      });
+    } else {
+      const { code, message, metadata } = errorDateMessage;
+      reject({ code, message, metadata });
+    }
+  });
+}
+
+export default { sendMoney, get, getList, feeVoteCommitPhase, feeVoteRevealPhase };

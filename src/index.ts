@@ -79,6 +79,7 @@ export {
   setupDatasetBuilder,
   readSetupAccountDatasetBytes,
 } from './helper/transaction-builder/setup-account-dataset';
+export { feeVoteInterface, feeVoteCommitPhaseBuilder, feeVoteRevealPhaseBuilder } from './helper/transaction-builder/fee-vote';
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
 export {

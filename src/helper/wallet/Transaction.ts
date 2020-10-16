@@ -98,8 +98,11 @@ function getBodyBytes(tx: Transaction.AsObject) {
     tx.noderegistrationtransactionbody ||
     tx.setupaccountdatasettransactionbody ||
     tx.removeaccountdatasettransactionbody ||
+    tx.feevotecommittransactionbody ||
+    tx.feevoterevealtransactionbody ||
     tx.removenoderegistrationtransactionbody ||
     tx.sendmoneytransactionbody ||
+    tx.updatenoderegistrationtransactionbody ||
     {}
   );
 }

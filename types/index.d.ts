@@ -21,6 +21,7 @@ export { EscrowApprovalInterface, escrowBuilder, readApprovalEscrowBytes } from 
 export { SendMoneyInterface, sendMoneyBuilder, readPostTransactionBytes, readSendMoneyBytes, } from './helper/transaction-builder/send-money';
 export { RemoveDatasetInterface, removeDatasetBuilder, readRemoveDatasetBytes } from './helper/transaction-builder/remove-account-dataset';
 export { SetupDatasetInterface, setupDatasetBuilder, readSetupAccountDatasetBytes, } from './helper/transaction-builder/setup-account-dataset';
+export { feeVoteInterface, feeVoteCommitPhaseBuilder, feeVoteRevealPhaseBuilder } from './helper/transaction-builder/fee-vote';
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
 export { toTransactionListWallet, toZBCTransactions, ZooTransactionsInterface, toTransactionWallet, ZooTransactionInterface, ZBCTransaction, ZBCTransactions, } from './helper/wallet/Transaction';
@@ -45,6 +46,8 @@ declare const zoobc: {
         sendMoney: (data: import("./helper/transaction-builder/send-money").SendMoneyInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
         get: (id: string) => Promise<import("../grpc/model/transaction_pb").Transaction.AsObject>;
         getList: (params?: import("./Transactions").TransactionListParams | undefined) => Promise<import("../grpc/model/transaction_pb").GetTransactionsResponse.AsObject>;
+        feeVoteCommitPhase: (data: import("./helper/transaction-builder/fee-vote").feeVoteInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
+        feeVoteRevealPhase: (data: import("./helper/transaction-builder/fee-vote").feeVoteInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
     };
     Network: {
         list: (hosts: import("./Network").HostInterface[]) => void;
