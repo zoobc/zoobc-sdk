@@ -1,7 +1,6 @@
 import { BIP32Interface } from 'bip32';
-import { writeInt64, writeInt32 } from '../utils';
+import { writeInt64, writeInt32, ZBCAddressToBytes } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
-import { base64ToBuffer } from '../converters';
 
 const TRANSACTION_TYPE = new Buffer([5, 0, 0, 0]);
 
@@ -72,7 +71,7 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
   let signaturesInfoBytes = writeInt32(0);
   if (signaturesInfo) {
     const signatureInfoPresent = writeInt32(1);
-    const txHash = base64ToBuffer(signaturesInfo.txHash);
+    const txHash = ZBCAddressToBytes(signaturesInfo.txHash);
     const totalParticipants = writeInt32(signaturesInfo.participants.length);
 
     let participants = Buffer.from([]);
@@ -121,7 +120,7 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
 
 export function signTransactionHash(txHash: string, seed: BIP32Interface) {
   const signatureType = writeInt32(0);
-  const txHashBytes = base64ToBuffer(txHash);
+  const txHashBytes = ZBCAddressToBytes(txHash)
   const signature = seed.sign(txHashBytes);
   return Buffer.concat([signatureType, signature]);
 }

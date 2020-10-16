@@ -44963,24 +44963,6 @@ MultisigServiceClient.prototype.getMultisigAddressesByBlockHeightRange = functio
 
 var MultisigServiceClient_1 = MultisigServiceClient;
 
-function base64ToBuffer(base64) {
-    return new Buffer(base64, 'base64');
-}
-function bufferToBase64(bytes) {
-    const buf = bytes instanceof ArrayBuffer
-        ? Buffer.from(bytes)
-        : ArrayBuffer.isView(bytes)
-            ? Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength)
-            : Buffer.from(bytes);
-    return buf.toString('base64');
-}
-function toBase64Url(base64Str) {
-    return base64Str
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/\=/g, '');
-}
-
 const TRANSACTION_TYPE$5 = new Buffer([5, 0, 0, 0]);
 function multisignatureBuilder(data, seed) {
     const { multisigInfo, unisgnedTransactions, signaturesInfo } = data;
@@ -45014,7 +44996,7 @@ function multisignatureBuilder(data, seed) {
     let signaturesInfoBytes = writeInt32(0);
     if (signaturesInfo) {
         const signatureInfoPresent = writeInt32(1);
-        const txHash = base64ToBuffer(signaturesInfo.txHash);
+        const txHash = ZBCAddressToBytes(signaturesInfo.txHash);
         const totalParticipants = writeInt32(signaturesInfo.participants.length);
         let participants = Buffer.from([]);
         signaturesInfo.participants.forEach(participant => {
@@ -45057,7 +45039,7 @@ function multisignatureBuilder(data, seed) {
 }
 function signTransactionHash(txHash, seed) {
     const signatureType = writeInt32(0);
-    const txHashBytes = base64ToBuffer(txHash);
+    const txHashBytes = ZBCAddressToBytes(txHash);
     const signature = seed.sign(txHashBytes);
     return Buffer.concat([signatureType, signature]);
 }
@@ -49788,6 +49770,11 @@ function getBodyBytes(tx) {
         tx.removeaccountdatasettransactionbody ||
         tx.removenoderegistrationtransactionbody ||
         tx.sendmoneytransactionbody ||
+        tx.feevotecommittransactionbody ||
+        tx.feevoterevealtransactionbody ||
+        tx.liquidpaymentstoptransactionbody ||
+        tx.liquidpaymenttransactionbody ||
+        tx.updatenoderegistrationtransactionbody ||
         {});
 }
 function toTransactionWallet(tx, ownAddress) {
@@ -49806,6 +49793,21 @@ function toTransactionWallet(tx, ownAddress) {
         height: tx.height,
         transactionIndex: tx.transactionindex,
     };
+}
+
+function bufferToBase64(bytes) {
+    const buf = bytes instanceof ArrayBuffer
+        ? Buffer.from(bytes)
+        : ArrayBuffer.isView(bytes)
+            ? Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength)
+            : Buffer.from(bytes);
+    return buf.toString('base64');
+}
+function toBase64Url(base64Str) {
+    return base64Str
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/\=/g, '');
 }
 
 function toGetPendingList(res) {

@@ -5,7 +5,7 @@ export declare const errorDateMessage: {
     metadata: string;
 };
 export declare function getZBCAddress(publicKey: Uint8Array, prefix?: string): string;
-export declare function hash(str: any, format?: string): string | Buffer;
+export declare function hash(str: any, format?: any): string | Buffer;
 export declare function encryptPassword(password: string, salt?: string): string;
 export declare function isZBCAddressValid(address: string): boolean;
 export declare function ZBCAddressToBytes(address: string): Buffer;
