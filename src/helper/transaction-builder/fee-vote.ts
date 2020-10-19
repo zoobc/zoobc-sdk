@@ -14,7 +14,7 @@ export interface feeVoteInterface {
   feeVote: number;
 }
 
-export function feeVoteCommitPhaseBuilder(data: feeVoteInterface, seed?: BIP32Interface) {
+export function feeVoteCommitBuilder(data: feeVoteInterface, seed: BIP32Interface) {
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
@@ -52,15 +52,13 @@ export function feeVoteCommitPhaseBuilder(data: feeVoteInterface, seed?: BIP32In
   bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
   // ========== END NULLIFYING THE ESCROW =========
 
-  if (seed) {
-    const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
-  } else return bytes;
+  const signatureType = writeInt32(0);
+  const signature = seed.sign(bytes);
+  const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+  return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
-export function feeVoteRevealPhaseBuilder(data: feeVoteInterface, seed: BIP32Interface) {
+export function feeVoteRevealBuilder(data: feeVoteInterface, seed: BIP32Interface) {
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));

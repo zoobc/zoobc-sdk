@@ -48492,6 +48492,56 @@ function getHistory(fromHeight, toHeight) {
 }
 var ParticipationScore = { getLatest, getHistory };
 
+function feeVoteCommit(data, seed) {
+    const txBytes = feeVoteCommitBuilder(data, seed);
+    return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+        const networkIP = Network$1.selected();
+        const request = new transaction_pb_3();
+        request.setTransactionbytes(txBytes);
+        const validTimestamp = yield validationTimestamp(txBytes);
+        if (validTimestamp) {
+            const client = new TransactionServiceClient_1(networkIP.host);
+            client.postTransaction(request, (err, res) => {
+                if (err) {
+                    const { code, message, metadata } = err;
+                    reject({ code, message, metadata });
+                }
+                if (res)
+                    resolve(res.toObject());
+            });
+        }
+        else {
+            const { code, message, metadata } = errorDateMessage;
+            reject({ code, message, metadata });
+        }
+    }));
+}
+function feeVoteReveal(data, seed) {
+    const txBytes = feeVoteRevealBuilder(data, seed);
+    return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+        const networkIP = Network$1.selected();
+        const request = new transaction_pb_3();
+        request.setTransactionbytes(txBytes);
+        const validTimestamp = yield validationTimestamp(txBytes);
+        if (validTimestamp) {
+            const client = new TransactionServiceClient_1(networkIP.host);
+            client.postTransaction(request, (err, res) => {
+                if (err) {
+                    const { code, message, metadata } = err;
+                    reject({ code, message, metadata });
+                }
+                if (res)
+                    resolve(res.toObject());
+            });
+        }
+        else {
+            const { code, message, metadata } = errorDateMessage;
+            reject({ code, message, metadata });
+        }
+    }));
+}
+var FeeVoting = { feeVoteCommit, feeVoteReveal };
+
 function parseIntNoNaN(val, defaultVal) {
     const v = parseInt(val);
     if (isNaN(v)) {
@@ -49583,7 +49633,7 @@ class Ledger {
 
 const TRANSACTION_TYPE_FEE_VOTE_COMMIT = new Buffer([7, 0, 0, 0]);
 const TRANSACTION_TYPE_FEE_VOTE_REVEAL = new Buffer([7, 1, 0, 0]);
-function feeVoteCommitPhaseBuilder(data, seed) {
+function feeVoteCommitBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
@@ -49615,16 +49665,12 @@ function feeVoteCommitPhaseBuilder(data, seed) {
     const instructionLength = writeInt32(0);
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    if (seed) {
-        const signatureType = writeInt32(0);
-        const signature = seed.sign(bytes);
-        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
-    }
-    else
-        return bytes;
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
-function feeVoteRevealPhaseBuilder(data, seed) {
+function feeVoteRevealBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
@@ -49654,7 +49700,7 @@ function feeVoteRevealPhaseBuilder(data, seed) {
         recentBlockHeight,
         feeVote,
         voteSignatureLength,
-        voteSignature
+        voteSignature,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
     const approverAddressLength = writeInt32(0);
@@ -49937,6 +49983,7 @@ const zoobc = {
     AccountLedger,
     NodeAddress,
     ParticipationScore,
+    FeeVoting,
 };
 
 const errorDateMessage = {
@@ -50204,55 +50251,7 @@ function sendMoney(data, seed) {
         }
     }));
 }
-function feeVoteCommitPhase(data, seed) {
-    const txBytes = feeVoteCommitPhaseBuilder(data, seed);
-    return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-        const networkIP = Network$1.selected();
-        const request = new transaction_pb_3();
-        request.setTransactionbytes(txBytes);
-        const validTimestamp = yield validationTimestamp(txBytes);
-        if (validTimestamp) {
-            const client = new TransactionServiceClient_1(networkIP.host);
-            client.postTransaction(request, (err, res) => {
-                if (err) {
-                    const { code, message, metadata } = err;
-                    reject({ code, message, metadata });
-                }
-                if (res)
-                    resolve(res.toObject());
-            });
-        }
-        else {
-            const { code, message, metadata } = errorDateMessage;
-            reject({ code, message, metadata });
-        }
-    }));
-}
-function feeVoteRevealPhase(data, seed) {
-    const txBytes = feeVoteRevealPhaseBuilder(data, seed);
-    return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-        const networkIP = Network$1.selected();
-        const request = new transaction_pb_3();
-        request.setTransactionbytes(txBytes);
-        const validTimestamp = yield validationTimestamp(txBytes);
-        if (validTimestamp) {
-            const client = new TransactionServiceClient_1(networkIP.host);
-            client.postTransaction(request, (err, res) => {
-                if (err) {
-                    const { code, message, metadata } = err;
-                    reject({ code, message, metadata });
-                }
-                if (res)
-                    resolve(res.toObject());
-            });
-        }
-        else {
-            const { code, message, metadata } = errorDateMessage;
-            reject({ code, message, metadata });
-        }
-    }));
-}
-var Transactions = { sendMoney, get: get$4, getList: getList$5, feeVoteCommitPhase, feeVoteRevealPhase };
+var Transactions = { sendMoney, get: get$4, getList: getList$5 };
 
 const zoobc$1 = {
     Transactions,
@@ -50270,8 +50269,9 @@ const zoobc$1 = {
     AccountLedger,
     NodeAddress,
     ParticipationScore,
+    FeeVoting,
 };
 
 export default zoobc$1;
-export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, Ledger, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, bufferToBase64, claimNodeBuilder, escrowBuilder, feeVoteCommitPhaseBuilder, feeVoteRevealPhaseBuilder, generateTransactionHash, getZBCAddress, isZBCAddressValid, readApprovalEscrowBytes, readClaimNodeBytes, readInt64, readNodeRegistrationBytes, readPostTransactionBytes, readRemoveDatasetBytes, readRemoveNodeRegistrationBytes, readSendMoneyBytes, readSetupAccountDatasetBytes, readUpdateNodeBytes, registerNodeBuilder, removeDatasetBuilder, removeNodeBuilder, sendMoneyBuilder, setupDatasetBuilder, shortenHash, signTransactionHash, toBase64Url, toGetPendingList, toTransactionListWallet, toTransactionWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet, toZBCPendingTransactions, toZBCTransactions, updateNodeBuilder };
+export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, Ledger, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, bufferToBase64, claimNodeBuilder, escrowBuilder, feeVoteCommitBuilder, feeVoteRevealBuilder, generateTransactionHash, getZBCAddress, isZBCAddressValid, readApprovalEscrowBytes, readClaimNodeBytes, readInt64, readNodeRegistrationBytes, readPostTransactionBytes, readRemoveDatasetBytes, readRemoveNodeRegistrationBytes, readSendMoneyBytes, readSetupAccountDatasetBytes, readUpdateNodeBytes, registerNodeBuilder, removeDatasetBuilder, removeNodeBuilder, sendMoneyBuilder, setupDatasetBuilder, shortenHash, signTransactionHash, toBase64Url, toGetPendingList, toTransactionListWallet, toTransactionWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet, toZBCPendingTransactions, toZBCTransactions, updateNodeBuilder };
 //# sourceMappingURL=zoobc-sdk.mjs.map

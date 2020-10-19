@@ -1,7 +1,6 @@
 import { PostTransactionResponse, GetTransactionsResponse, Transaction, GetTransactionMinimumFeeResponse } from '../grpc/model/transaction_pb';
 import { SendMoneyInterface } from './helper/transaction-builder/send-money';
 import { BIP32Interface } from 'bip32';
-import { feeVoteInterface } from './helper/transaction-builder/fee-vote';
 export declare type TransactionsResponse = GetTransactionsResponse.AsObject;
 export declare type TransactionResponse = Transaction.AsObject;
 export declare type PostTransactionResponses = PostTransactionResponse.AsObject;
@@ -21,13 +20,9 @@ export interface TransactionListParams {
 declare function getList(params?: TransactionListParams): Promise<TransactionsResponse>;
 declare function get(id: string): Promise<TransactionResponse>;
 declare function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<PostTransactionResponses>;
-declare function feeVoteCommitPhase(data: feeVoteInterface, seed: BIP32Interface): Promise<PostTransactionResponses>;
-declare function feeVoteRevealPhase(data: feeVoteInterface, seed: BIP32Interface): Promise<PostTransactionResponses>;
 declare const _default: {
     sendMoney: typeof sendMoney;
     get: typeof get;
     getList: typeof getList;
-    feeVoteCommitPhase: typeof feeVoteCommitPhase;
-    feeVoteRevealPhase: typeof feeVoteRevealPhase;
 };
 export default _default;
