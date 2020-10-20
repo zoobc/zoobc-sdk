@@ -48534,6 +48534,56 @@ function getHistory(fromHeight, toHeight) {
 }
 var ParticipationScore = { getLatest, getHistory };
 
+function feeVoteCommit(data, seed) {
+    const txBytes = feeVoteCommitBuilder(data, seed);
+    return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+        const networkIP = Network$1.selected();
+        const request = new transaction_pb_3();
+        request.setTransactionbytes(txBytes);
+        const validTimestamp = yield validationTimestamp(txBytes);
+        if (validTimestamp) {
+            const client = new TransactionServiceClient_1(networkIP.host);
+            client.postTransaction(request, (err, res) => {
+                if (err) {
+                    const { code, message, metadata } = err;
+                    reject({ code, message, metadata });
+                }
+                if (res)
+                    resolve(res.toObject());
+            });
+        }
+        else {
+            const { code, message, metadata } = errorDateMessage;
+            reject({ code, message, metadata });
+        }
+    }));
+}
+function feeVoteReveal(data, seed) {
+    const txBytes = feeVoteRevealBuilder(data, seed);
+    return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+        const networkIP = Network$1.selected();
+        const request = new transaction_pb_3();
+        request.setTransactionbytes(txBytes);
+        const validTimestamp = yield validationTimestamp(txBytes);
+        if (validTimestamp) {
+            const client = new TransactionServiceClient_1(networkIP.host);
+            client.postTransaction(request, (err, res) => {
+                if (err) {
+                    const { code, message, metadata } = err;
+                    reject({ code, message, metadata });
+                }
+                if (res)
+                    resolve(res.toObject());
+            });
+        }
+        else {
+            const { code, message, metadata } = errorDateMessage;
+            reject({ code, message, metadata });
+        }
+    }));
+}
+var FeeVoting = { feeVoteCommit, feeVoteReveal };
+
 function parseIntNoNaN(val, defaultVal) {
     const v = parseInt(val);
     if (isNaN(v)) {
@@ -49622,6 +49672,90 @@ class Ledger {
     }
 }
 
+const TRANSACTION_TYPE_FEE_VOTE_COMMIT = new Buffer([7, 0, 0, 0]);
+const TRANSACTION_TYPE_FEE_VOTE_REVEAL = new Buffer([7, 1, 0, 0]);
+function feeVoteCommitBuilder(data, seed) {
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
+    const recipient = new Buffer(ADDRESS_LENGTH);
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
+    const recentBlockHash = Buffer.from(data.recentBlockHash.toString(), 'base64');
+    const recentBlockHeight = writeInt32(data.recentBlockHeight);
+    const feeVote = writeInt64(data.feeVote * 1e8);
+    const bytesFeeVote = Buffer.concat([recentBlockHash, recentBlockHeight, feeVote]);
+    const hashed = Buffer.from(jsSha3.sha3_256(bytesFeeVote), 'hex');
+    const bodyLength = writeInt32(hashed.length);
+    bytes = Buffer.concat([
+        TRANSACTION_TYPE_FEE_VOTE_COMMIT,
+        VERSION,
+        timestamp,
+        addressLength,
+        accountAddress,
+        addressLength,
+        recipient,
+        fee,
+        bodyLength,
+        hashed,
+    ]);
+    // ========== NULLIFYING THE ESCROW ===========
+    const approverAddressLength = writeInt32(0);
+    const commission = writeInt64(0);
+    const timeout = writeInt64(0);
+    const instructionLength = writeInt32(0);
+    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    // ========== END NULLIFYING THE ESCROW =========
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+}
+function feeVoteRevealBuilder(data, seed) {
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
+    const recipient = new Buffer(ADDRESS_LENGTH);
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
+    const recentBlockHash = Buffer.from(data.recentBlockHash.toString(), 'base64');
+    const recentBlockHeight = writeInt32(data.recentBlockHeight);
+    const feeVote = writeInt64(data.feeVote * 1e8);
+    const feeVoteInfoBytes = Buffer.concat([recentBlockHash, recentBlockHeight, feeVote]);
+    const signTypeFeeVote = writeInt32(0);
+    const signFeeVote = seed.sign(feeVoteInfoBytes);
+    const voteSignature = Buffer.concat([signTypeFeeVote, signFeeVote]);
+    const voteSignatureLength = writeInt32(voteSignature.length);
+    const bodyLength = writeInt32(recentBlockHash.length + recentBlockHeight.length + feeVote.length + voteSignatureLength.length + voteSignature.length);
+    bytes = Buffer.concat([
+        TRANSACTION_TYPE_FEE_VOTE_REVEAL,
+        VERSION,
+        timestamp,
+        addressLength,
+        accountAddress,
+        addressLength,
+        recipient,
+        fee,
+        bodyLength,
+        recentBlockHash,
+        recentBlockHeight,
+        feeVote,
+        voteSignatureLength,
+        voteSignature,
+    ]);
+    // ========== NULLIFYING THE ESCROW ===========
+    const approverAddressLength = writeInt32(0);
+    const commission = writeInt64(0);
+    const timeout = writeInt64(0);
+    const instructionLength = writeInt32(0);
+    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    // ========== END NULLIFYING THE ESCROW =========
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+}
+
 function toUnconfirmedSendMoneyWallet(res, ownAddress) {
     let transactions = res.mempooltransactionsList.filter(tx => {
         const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
@@ -49768,6 +49902,8 @@ function getBodyBytes(tx) {
         tx.noderegistrationtransactionbody ||
         tx.setupaccountdatasettransactionbody ||
         tx.removeaccountdatasettransactionbody ||
+        tx.feevotecommittransactionbody ||
+        tx.feevoterevealtransactionbody ||
         tx.removenoderegistrationtransactionbody ||
         tx.sendmoneytransactionbody ||
         tx.feevotecommittransactionbody ||
@@ -49907,6 +50043,7 @@ const zoobc = {
     AccountLedger,
     NodeAddress,
     ParticipationScore,
+    FeeVoting,
 };
 
 const errorDateMessage = {
@@ -50192,6 +50329,7 @@ const zoobc$1 = {
     AccountLedger,
     NodeAddress,
     ParticipationScore,
+    FeeVoting,
 };
 
 Object.defineProperty(exports, 'Subscription', {
@@ -50221,6 +50359,8 @@ exports.bufferToBase64 = bufferToBase64;
 exports.claimNodeBuilder = claimNodeBuilder;
 exports.default = zoobc$1;
 exports.escrowBuilder = escrowBuilder;
+exports.feeVoteCommitBuilder = feeVoteCommitBuilder;
+exports.feeVoteRevealBuilder = feeVoteRevealBuilder;
 exports.generateTransactionHash = generateTransactionHash;
 exports.getZBCAddress = getZBCAddress;
 exports.isZBCAddressValid = isZBCAddressValid;

@@ -13,6 +13,7 @@ import AccountDataset from './AccountDataset';
 import AccountLedger from './AccountLedger';
 import NodeAddress from './NodeAddress';
 import ParticipationScore from './ParticipationScore';
+import FeeVoting from './FeeVoting';
 
 export { ZooKeyring } from './Keyring';
 export { Ledger } from './Ledger';
@@ -79,6 +80,7 @@ export {
   setupDatasetBuilder,
   readSetupAccountDatasetBytes,
 } from './helper/transaction-builder/setup-account-dataset';
+export { feeVoteInterface, feeVoteCommitBuilder, feeVoteRevealBuilder } from './helper/transaction-builder/fee-vote';
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
 export {
@@ -130,6 +132,7 @@ const zoobc = {
   AccountLedger,
   NodeAddress,
   ParticipationScore,
+  FeeVoting,
 };
 
 export default zoobc;

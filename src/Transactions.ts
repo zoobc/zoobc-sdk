@@ -7,7 +7,6 @@ import {
   GetTransactionRequest,
   Transaction,
   GetTransactionMinimumFeeResponse,
-  GetTransactionMinimumFeeRequest,
 } from '../grpc/model/transaction_pb';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
