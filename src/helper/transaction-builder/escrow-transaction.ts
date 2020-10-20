@@ -59,8 +59,8 @@ export function readApprovalEscrowBytes(txBytes: Buffer) {
   const approvalCode = bodyApprovalEscrow.slice(0, 4).readInt32LE(0);
   const txId = readInt64(bodyApprovalEscrow.slice(4, 12), 0);
   const txBody = {
-    approvalCode: approvalCode,
-    txId: txId,
+    approval: approvalCode,
+    transactionid: txId,
   };
   return txBody;
 }

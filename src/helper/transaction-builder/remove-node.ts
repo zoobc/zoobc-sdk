@@ -56,7 +56,7 @@ export function readRemoveNodeRegistrationBytes(txBytes: Buffer) {
   const bodyBytesRemoveNodeLength = txBytes.slice(161, 165).readInt32LE(0);
   const bodyBytesRemove = txBytes.slice(165, 165 + bodyBytesRemoveNodeLength);
   const txBody = {
-    pubkey: getZBCAddress(bodyBytesRemove, 'ZNK'),
+    nodepublickey: getZBCAddress(bodyBytesRemove, 'ZNK'),
   };
   return txBody;
 }

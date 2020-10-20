@@ -60,7 +60,7 @@ export function readClaimNodeBytes(txBytes: Buffer) {
   const pubkeyClaim = bodyBytesClaim.slice(0, 32);
   const poownClaim = bodyBytesClaim.slice(32, 198);
   const txBody = {
-    pubkey: getZBCAddress(pubkeyClaim, 'ZNK'),
+    nodepublickey: getZBCAddress(pubkeyClaim, 'ZNK'),
     poown: poownClaim,
   };
   return txBody;

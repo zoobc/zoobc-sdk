@@ -66,9 +66,9 @@ export function readNodeRegistrationBytes(txBytes: Buffer) {
   const accountaddress = bodyBytesRegister.slice(36, 102);
   const lockedBalance = bodyBytesRegister.slice(102, 110);
   const txBody = {
-    pubkey: getZBCAddress(pubkeyRegister, 'ZNK'),
-    accountAddress: accountaddress.toString(),
-    lockedBalance: readInt64(lockedBalance, 0),
+    nodepublickey: getZBCAddress(pubkeyRegister, 'ZNK'),
+    accountaddress: accountaddress.toString(),
+    lockedbalance: readInt64(lockedBalance, 0),
   };
   return txBody;
 }

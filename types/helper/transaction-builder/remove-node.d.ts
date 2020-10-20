@@ -7,5 +7,5 @@ export interface RemoveNodeInterface {
 }
 export declare function removeNodeBuilder(data: RemoveNodeInterface, seed?: BIP32Interface): Buffer;
 export declare function readRemoveNodeRegistrationBytes(txBytes: Buffer): {
-    pubkey: string;
+    nodepublickey: string;
 };

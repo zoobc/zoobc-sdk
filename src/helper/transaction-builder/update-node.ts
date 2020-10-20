@@ -64,8 +64,8 @@ export function readUpdateNodeBytes(txBytes: Buffer) {
   const lockAmount = bodyBytes.slice(32, 40);
   const poown = bodyBytes.slice(40, 206);
   const txBody = {
-    pubkey: getZBCAddress(pubkey, 'ZNK'),
-    lockedAmount: readInt64(lockAmount, 0),
+    nodepublickey: getZBCAddress(pubkey, 'ZNK'),
+    lockedbalance: readInt64(lockAmount, 0),
     poown: poown,
   };
   return txBody;

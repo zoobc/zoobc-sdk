@@ -72,7 +72,7 @@ export function readRemoveDatasetBytes(txBytes: Buffer) {
   const valueRemove = bodyBytesRemoveDataSet.slice(endLengthValueRemove, endLengthValueRemove + valueLengthRemove);
   const txBody = {
     propertyLength: porpertyValueLengthRemove,
-    propertyValue: propertyValueRemove.toString(),
+    property: propertyValueRemove.toString(),
     valueLength: valueLengthRemove,
     value: valueRemove.toString(),
   };
