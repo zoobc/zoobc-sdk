@@ -1,4 +1,4 @@
-import { feeVoteInterface, BIP32Interface, PostTransactionResponses } from ".";
+import { feeVoteInterface, BIP32Interface, PostTransactionResponses } from '.';
 declare function feeVoteCommit(data: feeVoteInterface, seed: BIP32Interface): Promise<PostTransactionResponses>;
 declare function feeVoteReveal(data: feeVoteInterface, seed: BIP32Interface): Promise<PostTransactionResponses>;
 declare const _default: {

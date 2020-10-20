@@ -31,7 +31,7 @@ export function getZBCAddress(publicKey: Uint8Array, prefix: string = 'ZBC'): st
   }
 }
 
-export function hash(str: any, format: string = 'buffer') {
+export function hash(str: any, format: any = 'buffer') {
   const h = new SHA3(256);
   h.update(str);
   const b = h.digest();

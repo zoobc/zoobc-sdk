@@ -102,6 +102,10 @@ function getBodyBytes(tx: Transaction.AsObject) {
     tx.feevoterevealtransactionbody ||
     tx.removenoderegistrationtransactionbody ||
     tx.sendmoneytransactionbody ||
+    tx.feevotecommittransactionbody ||
+    tx.feevoterevealtransactionbody ||
+    tx.liquidpaymentstoptransactionbody ||
+    tx.liquidpaymenttransactionbody ||
     tx.updatenoderegistrationtransactionbody ||
     {}
   );
