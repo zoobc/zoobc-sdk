@@ -14,18 +14,18 @@ import { fromSeed } from 'bip32';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
 
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
 
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
 ***************************************************************************** */
 
 function __awaiter(thisArg, _arguments, P, generator) {
@@ -4652,8 +4652,7 @@ proto.google.protobuf.FieldDescriptorProto.toObject = function(includeInstance, 
     defaultValue: (f = googleProtobuf.Message.getField(msg, 7)) == null ? undefined : f,
     oneofIndex: (f = googleProtobuf.Message.getField(msg, 9)) == null ? undefined : f,
     jsonName: (f = googleProtobuf.Message.getField(msg, 10)) == null ? undefined : f,
-    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f),
-    proto3Optional: (f = googleProtobuf.Message.getBooleanField(msg, 17)) == null ? undefined : f
+    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -4730,10 +4729,6 @@ proto.google.protobuf.FieldDescriptorProto.deserializeBinaryFromReader = functio
       var value = new proto.google.protobuf.FieldOptions;
       reader.readMessage(value,proto.google.protobuf.FieldOptions.deserializeBinaryFromReader);
       msg.setOptions(value);
-      break;
-    case 17:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setProto3Optional(value);
       break;
     default:
       reader.skipField();
@@ -4833,13 +4828,6 @@ proto.google.protobuf.FieldDescriptorProto.serializeBinaryToWriter = function(me
       8,
       f,
       proto.google.protobuf.FieldOptions.serializeBinaryToWriter
-    );
-  }
-  f = /** @type {boolean} */ (googleProtobuf.Message.getField(message, 17));
-  if (f != null) {
-    writer.writeBool(
-      17,
-      f
     );
   }
 };
@@ -5236,42 +5224,6 @@ proto.google.protobuf.FieldDescriptorProto.prototype.clearOptions = function() {
  */
 proto.google.protobuf.FieldDescriptorProto.prototype.hasOptions = function() {
   return googleProtobuf.Message.getField(this, 8) != null;
-};
-
-
-/**
- * optional bool proto3_optional = 17;
- * @return {boolean}
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.getProto3Optional = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 17, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.setProto3Optional = function(value) {
-  return googleProtobuf.Message.setField(this, 17, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.clearProto3Optional = function() {
-  return googleProtobuf.Message.setField(this, 17, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.hasProto3Optional = function() {
-  return googleProtobuf.Message.getField(this, 17) != null;
 };
 
 
@@ -6979,7 +6931,7 @@ proto.google.protobuf.FileOptions.toObject = function(includeInstance, msg) {
     pyGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 18, false),
     phpGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 42, false),
     deprecated: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 23, false),
-    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, true),
+    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, false),
     objcClassPrefix: (f = googleProtobuf.Message.getField(msg, 36)) == null ? undefined : f,
     csharpNamespace: (f = googleProtobuf.Message.getField(msg, 37)) == null ? undefined : f,
     swiftPrefix: (f = googleProtobuf.Message.getField(msg, 39)) == null ? undefined : f,
@@ -7744,7 +7696,7 @@ proto.google.protobuf.FileOptions.prototype.hasDeprecated = function() {
  * @return {boolean}
  */
 proto.google.protobuf.FileOptions.prototype.getCcEnableArenas = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, true));
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, false));
 };
 
 
@@ -48540,6 +48492,56 @@ function getHistory(fromHeight, toHeight) {
 }
 var ParticipationScore = { getLatest, getHistory };
 
+function feeVoteCommit(data, seed) {
+    const txBytes = feeVoteCommitBuilder(data, seed);
+    return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+        const networkIP = Network$1.selected();
+        const request = new transaction_pb_3();
+        request.setTransactionbytes(txBytes);
+        const validTimestamp = yield validationTimestamp(txBytes);
+        if (validTimestamp) {
+            const client = new TransactionServiceClient_1(networkIP.host);
+            client.postTransaction(request, (err, res) => {
+                if (err) {
+                    const { code, message, metadata } = err;
+                    reject({ code, message, metadata });
+                }
+                if (res)
+                    resolve(res.toObject());
+            });
+        }
+        else {
+            const { code, message, metadata } = errorDateMessage;
+            reject({ code, message, metadata });
+        }
+    }));
+}
+function feeVoteReveal(data, seed) {
+    const txBytes = feeVoteRevealBuilder(data, seed);
+    return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+        const networkIP = Network$1.selected();
+        const request = new transaction_pb_3();
+        request.setTransactionbytes(txBytes);
+        const validTimestamp = yield validationTimestamp(txBytes);
+        if (validTimestamp) {
+            const client = new TransactionServiceClient_1(networkIP.host);
+            client.postTransaction(request, (err, res) => {
+                if (err) {
+                    const { code, message, metadata } = err;
+                    reject({ code, message, metadata });
+                }
+                if (res)
+                    resolve(res.toObject());
+            });
+        }
+        else {
+            const { code, message, metadata } = errorDateMessage;
+            reject({ code, message, metadata });
+        }
+    }));
+}
+var FeeVoting = { feeVoteCommit, feeVoteReveal };
+
 function parseIntNoNaN(val, defaultVal) {
     const v = parseInt(val);
     if (isNaN(v)) {
@@ -49522,7 +49524,8 @@ class ZooKeyring {
         else {
             throw new Error(NOT_IMPLEMENTED);
         }
-        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey, sign(message, lowR) {
+        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey,
+            sign(message, lowR) {
                 if (curveName === 'secp256k1') {
                     return bip32ExtendedKey.sign(!Buffer.isBuffer(message) ? Buffer.from(message) : message, lowR);
                 }
@@ -49626,6 +49629,90 @@ class Ledger {
             return response.slice(0, response.length - 2);
         });
     }
+}
+
+const TRANSACTION_TYPE_FEE_VOTE_COMMIT = new Buffer([7, 0, 0, 0]);
+const TRANSACTION_TYPE_FEE_VOTE_REVEAL = new Buffer([7, 1, 0, 0]);
+function feeVoteCommitBuilder(data, seed) {
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
+    const recipient = new Buffer(ADDRESS_LENGTH);
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
+    const recentBlockHash = Buffer.from(data.recentBlockHash.toString(), 'base64');
+    const recentBlockHeight = writeInt32(data.recentBlockHeight);
+    const feeVote = writeInt64(data.feeVote * 1e8);
+    const bytesFeeVote = Buffer.concat([recentBlockHash, recentBlockHeight, feeVote]);
+    const hashed = Buffer.from(sha3_256(bytesFeeVote), 'hex');
+    const bodyLength = writeInt32(hashed.length);
+    bytes = Buffer.concat([
+        TRANSACTION_TYPE_FEE_VOTE_COMMIT,
+        VERSION,
+        timestamp,
+        addressLength,
+        accountAddress,
+        addressLength,
+        recipient,
+        fee,
+        bodyLength,
+        hashed,
+    ]);
+    // ========== NULLIFYING THE ESCROW ===========
+    const approverAddressLength = writeInt32(0);
+    const commission = writeInt64(0);
+    const timeout = writeInt64(0);
+    const instructionLength = writeInt32(0);
+    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    // ========== END NULLIFYING THE ESCROW =========
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+}
+function feeVoteRevealBuilder(data, seed) {
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
+    const recipient = new Buffer(ADDRESS_LENGTH);
+    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const fee = writeInt64(data.fee * 1e8);
+    const recentBlockHash = Buffer.from(data.recentBlockHash.toString(), 'base64');
+    const recentBlockHeight = writeInt32(data.recentBlockHeight);
+    const feeVote = writeInt64(data.feeVote * 1e8);
+    const feeVoteInfoBytes = Buffer.concat([recentBlockHash, recentBlockHeight, feeVote]);
+    const signTypeFeeVote = writeInt32(0);
+    const signFeeVote = seed.sign(feeVoteInfoBytes);
+    const voteSignature = Buffer.concat([signTypeFeeVote, signFeeVote]);
+    const voteSignatureLength = writeInt32(voteSignature.length);
+    const bodyLength = writeInt32(recentBlockHash.length + recentBlockHeight.length + feeVote.length + voteSignatureLength.length + voteSignature.length);
+    bytes = Buffer.concat([
+        TRANSACTION_TYPE_FEE_VOTE_REVEAL,
+        VERSION,
+        timestamp,
+        addressLength,
+        accountAddress,
+        addressLength,
+        recipient,
+        fee,
+        bodyLength,
+        recentBlockHash,
+        recentBlockHeight,
+        feeVote,
+        voteSignatureLength,
+        voteSignature,
+    ]);
+    // ========== NULLIFYING THE ESCROW ===========
+    const approverAddressLength = writeInt32(0);
+    const commission = writeInt64(0);
+    const timeout = writeInt64(0);
+    const instructionLength = writeInt32(0);
+    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    // ========== END NULLIFYING THE ESCROW =========
+    const signatureType = writeInt32(0);
+    const signature = seed.sign(bytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
 function toUnconfirmedSendMoneyWallet(res, ownAddress) {
@@ -49774,8 +49861,11 @@ function getBodyBytes(tx) {
         tx.noderegistrationtransactionbody ||
         tx.setupaccountdatasettransactionbody ||
         tx.removeaccountdatasettransactionbody ||
+        tx.feevotecommittransactionbody ||
+        tx.feevoterevealtransactionbody ||
         tx.removenoderegistrationtransactionbody ||
         tx.sendmoneytransactionbody ||
+        tx.updatenoderegistrationtransactionbody ||
         {});
 }
 function toTransactionWallet(tx, ownAddress) {
@@ -49893,6 +49983,7 @@ const zoobc = {
     AccountLedger,
     NodeAddress,
     ParticipationScore,
+    FeeVoting,
 };
 
 const errorDateMessage = {
@@ -50178,8 +50269,9 @@ const zoobc$1 = {
     AccountLedger,
     NodeAddress,
     ParticipationScore,
+    FeeVoting,
 };
 
 export default zoobc$1;
-export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, Ledger, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, bufferToBase64, claimNodeBuilder, escrowBuilder, generateTransactionHash, getZBCAddress, isZBCAddressValid, readApprovalEscrowBytes, readClaimNodeBytes, readInt64, readNodeRegistrationBytes, readPostTransactionBytes, readRemoveDatasetBytes, readRemoveNodeRegistrationBytes, readSendMoneyBytes, readSetupAccountDatasetBytes, readUpdateNodeBytes, registerNodeBuilder, removeDatasetBuilder, removeNodeBuilder, sendMoneyBuilder, setupDatasetBuilder, shortenHash, signTransactionHash, toBase64Url, toGetPendingList, toTransactionListWallet, toTransactionWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet, toZBCPendingTransactions, toZBCTransactions, updateNodeBuilder };
+export { accountDataset_pb_3 as AccountDatasetProperty, signature_pb_3 as BitcoinPublicKeyFormat, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, Ledger, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, signature_pb_2 as PrivateKeyBytesLength, auth_pb_1 as RequestType, signature_pb_1 as SignatureType, spineBlockManifest_pb_1 as SpineBlockManifestType, spine_pb_1 as SpinePublicKeyAction, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, bufferToBase64, claimNodeBuilder, escrowBuilder, feeVoteCommitBuilder, feeVoteRevealBuilder, generateTransactionHash, getZBCAddress, isZBCAddressValid, readApprovalEscrowBytes, readClaimNodeBytes, readInt64, readNodeRegistrationBytes, readPostTransactionBytes, readRemoveDatasetBytes, readRemoveNodeRegistrationBytes, readSendMoneyBytes, readSetupAccountDatasetBytes, readUpdateNodeBytes, registerNodeBuilder, removeDatasetBuilder, removeNodeBuilder, sendMoneyBuilder, setupDatasetBuilder, shortenHash, signTransactionHash, toBase64Url, toGetPendingList, toTransactionListWallet, toTransactionWallet, toUnconfirmTransactionNodeWallet, toUnconfirmedSendMoneyWallet, toZBCPendingTransactions, toZBCTransactions, updateNodeBuilder };
 //# sourceMappingURL=zoobc-sdk.mjs.map
