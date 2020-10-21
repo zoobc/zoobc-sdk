@@ -10,7 +10,7 @@ export interface RemoveDatasetInterface {
 export declare function removeDatasetBuilder(data: RemoveDatasetInterface, seed?: BIP32Interface): Buffer;
 export declare function readRemoveDatasetBytes(txBytes: Buffer): {
     propertyLength: number;
-    propertyValue: string;
+    property: string;
     valueLength: number;
     value: string;
 };

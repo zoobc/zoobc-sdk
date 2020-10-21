@@ -43799,9 +43799,9 @@ function readNodeRegistrationBytes(txBytes) {
     const accountaddress = bodyBytesRegister.slice(36, 102);
     const lockedBalance = bodyBytesRegister.slice(102, 110);
     const txBody = {
-        pubkey: getZBCAddress(pubkeyRegister, 'ZNK'),
-        accountAddress: accountaddress.toString(),
-        lockedBalance: readInt64(lockedBalance, 0),
+        nodepublickey: getZBCAddress(pubkeyRegister, 'ZNK'),
+        accountaddress: accountaddress.toString(),
+        lockedbalance: readInt64(lockedBalance, 0),
     };
     return txBody;
 }
@@ -43854,8 +43854,8 @@ function readUpdateNodeBytes(txBytes) {
     const lockAmount = bodyBytes.slice(32, 40);
     const poown = bodyBytes.slice(40, 206);
     const txBody = {
-        pubkey: getZBCAddress(pubkey, 'ZNK'),
-        lockedAmount: readInt64(lockAmount, 0),
+        nodepublickey: getZBCAddress(pubkey, 'ZNK'),
+        lockedbalance: readInt64(lockAmount, 0),
         poown: poown,
     };
     return txBody;
@@ -43903,7 +43903,7 @@ function readRemoveNodeRegistrationBytes(txBytes) {
     const bodyBytesRemoveNodeLength = txBytes.slice(161, 165).readInt32LE(0);
     const bodyBytesRemove = txBytes.slice(165, 165 + bodyBytesRemoveNodeLength);
     const txBody = {
-        pubkey: getZBCAddress(bodyBytesRemove, 'ZNK'),
+        nodepublickey: getZBCAddress(bodyBytesRemove, 'ZNK'),
     };
     return txBody;
 }
@@ -43953,7 +43953,7 @@ function readClaimNodeBytes(txBytes) {
     const pubkeyClaim = bodyBytesClaim.slice(0, 32);
     const poownClaim = bodyBytesClaim.slice(32, 198);
     const txBody = {
-        pubkey: getZBCAddress(pubkeyClaim, 'ZNK'),
+        nodepublickey: getZBCAddress(pubkeyClaim, 'ZNK'),
         poown: poownClaim,
     };
     return txBody;
@@ -44296,8 +44296,8 @@ function readApprovalEscrowBytes(txBytes) {
     const approvalCode = bodyApprovalEscrow.slice(0, 4).readInt32LE(0);
     const txId = readInt64(bodyApprovalEscrow.slice(4, 12), 0);
     const txBody = {
-        approvalCode: approvalCode,
-        txId: txId,
+        approval: approvalCode,
+        transactionid: txId,
     };
     return txBody;
 }
@@ -46371,7 +46371,7 @@ function readSetupAccountDatasetBytes(txBytes) {
     const value = bodyBytesSetup.slice(endLengthValue, endLengthValue + valueLength);
     const bodyBytes = {
         propertyLength: propertyLength,
-        propertyValue: propertyValue.toString(),
+        property: propertyValue.toString(),
         valueLength: valueLength,
         value: value.toString(),
     };
@@ -46434,7 +46434,7 @@ function readRemoveDatasetBytes(txBytes) {
     const valueRemove = bodyBytesRemoveDataSet.slice(endLengthValueRemove, endLengthValueRemove + valueLengthRemove);
     const txBody = {
         propertyLength: porpertyValueLengthRemove,
-        propertyValue: propertyValueRemove.toString(),
+        property: propertyValueRemove.toString(),
         valueLength: valueLengthRemove,
         value: valueRemove.toString(),
     };
@@ -49554,7 +49554,8 @@ class ZooKeyring {
         else {
             throw new Error(NOT_IMPLEMENTED);
         }
-        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey, sign(message, lowR) {
+        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey,
+            sign(message, lowR) {
                 if (curveName === 'secp256k1') {
                     return bip32ExtendedKey.sign(!Buffer.isBuffer(message) ? Buffer.from(message) : message, lowR);
                 }
@@ -49809,36 +49810,44 @@ function toZBCPendingTransactions(res) {
         transaction = readPostTransactionBytes(txBytes);
         switch (type) {
             case transaction_pb_5.UPDATENODEREGISTRATIONTRANSACTION:
+                transaction.transactionType = transaction_pb_5.UPDATENODEREGISTRATIONTRANSACTION;
                 transaction.txBody = readUpdateNodeBytes(txBytes);
                 break;
             case transaction_pb_5.SENDMONEYTRANSACTION:
+                const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
+                if (approverAddressLength > 0)
+                    transaction = readEscrowBytes(txBytes, transaction);
+                transaction.transactionType = transaction_pb_5.SENDMONEYTRANSACTION;
                 transaction.txBody = readSendMoneyBytes(txBytes);
                 break;
             case transaction_pb_5.REMOVENODEREGISTRATIONTRANSACTION:
+                transaction.transactionType = transaction_pb_5.REMOVENODEREGISTRATIONTRANSACTION;
                 transaction.txBody = readRemoveNodeRegistrationBytes(txBytes);
                 break;
             case transaction_pb_5.NODEREGISTRATIONTRANSACTION:
+                transaction.transactionType = transaction_pb_5.NODEREGISTRATIONTRANSACTION;
                 transaction.txBody = readNodeRegistrationBytes(txBytes);
                 break;
             case transaction_pb_5.CLAIMNODEREGISTRATIONTRANSACTION:
+                transaction.transactionType = transaction_pb_5.CLAIMNODEREGISTRATIONTRANSACTION;
                 transaction.txBody = readClaimNodeBytes(txBytes);
                 break;
             case transaction_pb_5.SETUPACCOUNTDATASETTRANSACTION:
+                transaction.transactionType = transaction_pb_5.SETUPACCOUNTDATASETTRANSACTION;
                 transaction.txBody = readSetupAccountDatasetBytes(txBytes);
                 break;
             case transaction_pb_5.REMOVEACCOUNTDATASETTRANSACTION:
+                transaction.transactionType = transaction_pb_5.REMOVEACCOUNTDATASETTRANSACTION;
                 transaction.txBody = readRemoveDatasetBytes(txBytes);
                 break;
             case transaction_pb_5.APPROVALESCROWTRANSACTION:
+                transaction.transactionType = transaction_pb_5.APPROVALESCROWTRANSACTION;
                 transaction.txBody = readApprovalEscrowBytes(txBytes);
                 break;
         }
         transactions.push(transaction);
     }
-    return {
-        total: res.total,
-        transactions: transactions,
-    };
+    return transactions;
 }
 
 function toZBCTransactions(transactions) {
@@ -50192,7 +50201,6 @@ function readPostTransactionBytes(txBytes) {
     const recipientAddressLength = txBytes.slice(83, 87).readInt32LE(0);
     const recipientAddress = txBytes.slice(87, 87 + recipientAddressLength).toString();
     const txFee = readInt64(txBytes.slice(153, 161), 0);
-    const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
     let transaction = {
         timestamp: parseInt(timestamp) * 1000,
         sender: senderAddress,
@@ -50200,19 +50208,21 @@ function readPostTransactionBytes(txBytes) {
         fee: parseInt(txFee),
         escrow: false,
     };
-    if (approverAddressLength > 0) {
-        const approverAddress = txBytes.slice(177, 177 + approverAddressLength);
-        const int64Length = 8;
-        const commission = readInt64(txBytes.slice(243, 243 + int64Length), 0);
-        const timeout = readInt64(txBytes.slice(251, 251 + int64Length), 0);
-        const instructionLength = txBytes.slice(259, 263).readInt32LE(0);
-        const instruction = txBytes.slice(263, 263 + instructionLength);
-        transaction.approverAddress = getZBCAddress(approverAddress);
-        transaction.commission = parseInt(commission);
-        transaction.timeout = parseInt(timeout);
-        transaction.instruction = instruction.toString();
-        transaction.escrow = true;
-    }
+    return transaction;
+}
+function readEscrowBytes(txBytes, transaction) {
+    const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
+    const approverAddress = txBytes.slice(177, 177 + approverAddressLength);
+    const int64Length = 8;
+    const commission = readInt64(txBytes.slice(243, 243 + int64Length), 0);
+    const timeout = readInt64(txBytes.slice(251, 251 + int64Length), 0);
+    const instructionLength = txBytes.slice(259, 263).readInt32LE(0);
+    const instruction = txBytes.slice(263, 263 + instructionLength);
+    transaction.approverAddress = getZBCAddress(approverAddress);
+    transaction.commission = parseInt(commission);
+    transaction.timeout = parseInt(timeout);
+    transaction.instruction = instruction.toString();
+    transaction.escrow = true;
     return transaction;
 }
 function readSendMoneyBytes(txBytes) {

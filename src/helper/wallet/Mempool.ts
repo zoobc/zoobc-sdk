@@ -1,4 +1,4 @@
-import { readInt64, ZBCTransaction, ZBCTransactions } from '../..';
+import { readInt64, ZBCTransaction } from '../..';
 import { GetMempoolTransactionsResponse } from '../../../grpc/model/mempool_pb';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { readClaimNodeBytes } from '../transaction-builder/claim-node';
@@ -6,7 +6,7 @@ import { readApprovalEscrowBytes } from '../transaction-builder/escrow-transacti
 import { readNodeRegistrationBytes } from '../transaction-builder/register-node';
 import { readRemoveDatasetBytes } from '../transaction-builder/remove-account-dataset';
 import { readRemoveNodeRegistrationBytes } from '../transaction-builder/remove-node';
-import { readPostTransactionBytes, readSendMoneyBytes } from '../transaction-builder/send-money';
+import { readEscrowBytes, readPostTransactionBytes, readSendMoneyBytes } from '../transaction-builder/send-money';
 import { readSetupAccountDatasetBytes } from '../transaction-builder/setup-account-dataset';
 import { readUpdateNodeBytes } from '../transaction-builder/update-node';
 
@@ -67,7 +67,7 @@ export function toUnconfirmTransactionNodeWallet(res: GetMempoolTransactionsResp
   return result;
 }
 
-export function toZBCPendingTransactions(res: GetMempoolTransactionsResponse.AsObject): ZBCTransactions {
+export function toZBCPendingTransactions(res: GetMempoolTransactionsResponse.AsObject): ZBCTransaction[] {
   let mempoolTx = res.mempooltransactionsList;
   let transactions: ZBCTransaction[] = [];
   let transaction: ZBCTransaction;
@@ -78,34 +78,41 @@ export function toZBCPendingTransactions(res: GetMempoolTransactionsResponse.AsO
     transaction = readPostTransactionBytes(txBytes);
     switch (type) {
       case TransactionType.UPDATENODEREGISTRATIONTRANSACTION:
+        transaction.transactionType = TransactionType.UPDATENODEREGISTRATIONTRANSACTION
         transaction.txBody = readUpdateNodeBytes(txBytes);
         break;
       case TransactionType.SENDMONEYTRANSACTION:
+        const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
+        if (approverAddressLength > 0 ) transaction = readEscrowBytes(txBytes, transaction)
+        transaction.transactionType = TransactionType.SENDMONEYTRANSACTION
         transaction.txBody = readSendMoneyBytes(txBytes);
         break;
       case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
+        transaction.transactionType = TransactionType.REMOVENODEREGISTRATIONTRANSACTION
         transaction.txBody = readRemoveNodeRegistrationBytes(txBytes);
         break;
       case TransactionType.NODEREGISTRATIONTRANSACTION:
+        transaction.transactionType = TransactionType.NODEREGISTRATIONTRANSACTION
         transaction.txBody = readNodeRegistrationBytes(txBytes);
         break;
       case TransactionType.CLAIMNODEREGISTRATIONTRANSACTION:
+        transaction.transactionType = TransactionType.CLAIMNODEREGISTRATIONTRANSACTION;
         transaction.txBody = readClaimNodeBytes(txBytes);
         break;
       case TransactionType.SETUPACCOUNTDATASETTRANSACTION:
+        transaction.transactionType = TransactionType.SETUPACCOUNTDATASETTRANSACTION;
         transaction.txBody = readSetupAccountDatasetBytes(txBytes);
         break;
       case TransactionType.REMOVEACCOUNTDATASETTRANSACTION:
+        transaction.transactionType = TransactionType.REMOVEACCOUNTDATASETTRANSACTION;
         transaction.txBody = readRemoveDatasetBytes(txBytes);
         break;
       case TransactionType.APPROVALESCROWTRANSACTION:
+        transaction.transactionType = TransactionType.APPROVALESCROWTRANSACTION;
         transaction.txBody = readApprovalEscrowBytes(txBytes);
         break;
     }
     transactions.push(transaction);
   }
-  return {
-    total: res.total,
-    transactions: transactions,
-  };
+  return transactions
 }

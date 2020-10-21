@@ -13,6 +13,7 @@ export interface SendMoneyInterface {
 }
 export declare function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface): Buffer;
 export declare function readPostTransactionBytes(txBytes: Buffer): ZBCTransaction;
+export declare function readEscrowBytes(txBytes: Buffer, transaction: ZBCTransaction): ZBCTransaction;
 export declare function readSendMoneyBytes(txBytes: Buffer): {
     amount: string;
 };

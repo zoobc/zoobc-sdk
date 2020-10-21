@@ -72,7 +72,7 @@ export function readSetupAccountDatasetBytes(txBytes: Buffer) {
   const value = bodyBytesSetup.slice(endLengthValue, endLengthValue + valueLength);
   const bodyBytes = {
     propertyLength: propertyLength,
-    propertyValue: propertyValue.toString(),
+    property: propertyValue.toString(),
     valueLength: valueLength,
     value: value.toString(),
   };

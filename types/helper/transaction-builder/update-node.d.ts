@@ -9,7 +9,7 @@ export interface UpdateNodeInterface {
 }
 export declare function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed?: BIP32Interface): Buffer;
 export declare function readUpdateNodeBytes(txBytes: Buffer): {
-    pubkey: string;
-    lockedAmount: string;
+    nodepublickey: string;
+    lockedbalance: string;
     poown: Buffer;
 };
