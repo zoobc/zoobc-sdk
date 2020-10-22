@@ -1,6 +1,7 @@
-import { writeInt32, writeInt64 } from '../utils';
+import { writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
+import { generateTransactionHash } from '../wallet/MultiSignature';
 
 const TRANSACTION_TYPE = new Buffer([3, 0, 0, 0]);
 
@@ -54,7 +55,9 @@ export function setupDatasetBuilder(data: SetupDatasetInterface, seed?: BIP32Int
 
   if (seed) {
     const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
+    const txFormat = generateTransactionHash(bytes);
+    const txBytes = ZBCAddressToBytes(txFormat)
+    const signature = seed.sign(txBytes);
     const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
   } else return bytes;
