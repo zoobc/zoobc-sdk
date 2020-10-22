@@ -75,7 +75,7 @@ export function readPostTransactionBytes(txBytes: Buffer) {
   return transaction;
 }
 
-export function readEscrowBytes(txBytes: Buffer, transaction:ZBCTransaction){
+export function readEscrowBytes(txBytes: Buffer, transaction: ZBCTransaction) {
   const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
   const approverAddress = txBytes.slice(177, 177 + approverAddressLength);
   const int64Length = 8;
