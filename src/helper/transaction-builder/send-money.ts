@@ -23,40 +23,36 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
   const sender = Buffer.from(data.sender, 'utf-8');
   const recipient = Buffer.from(data.recipient, 'utf-8');
-  const addressLength = writeInt32(ADDRESS_LENGTH);
+  const addressType = writeInt32(0);
   const fee = writeInt64(data.fee * 1e8);
   const amount = writeInt64(data.amount * 1e8);
   const bodyLength = writeInt32(amount.length);
 
-  bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, addressLength, sender, addressLength, recipient, fee, bodyLength, amount]);
+  bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, addressType, sender, addressType, recipient, fee, bodyLength, amount]);
 
   if (data.approverAddress && data.commission && data.timeout && data.instruction) {
     // escrow bytes
-    const approverAddressLength = writeInt32(ADDRESS_LENGTH);
     const approverAddress = Buffer.from(data.approverAddress, 'utf-8');
     const commission = writeInt64(data.commission * 1e8);
     const timeout = writeInt64(data.timeout);
     const instruction = Buffer.from(data.instruction, 'utf-8');
     const instructionLength = writeInt32(instruction.length);
 
-    bytes = Buffer.concat([bytes, approverAddressLength, approverAddress, commission, timeout, instructionLength, instruction]);
+    bytes = Buffer.concat([bytes, addressType, approverAddress, commission, timeout, instructionLength, instruction]);
   } else {
     // escrow bytes default value
-    const approverAddressLength = writeInt32(0);
     const commission = writeInt64(0);
     const timeout = writeInt64(0);
     const instructionLength = writeInt32(0);
 
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    bytes = Buffer.concat([bytes, addressType, commission, timeout, instructionLength]);
   }
 
   if (seed) {
-    const signatureType = writeInt32(0);
     const txFormat = generateTransactionHash(bytes);
-    const txBytes = ZBCAddressToBytes(txFormat)
+    const txBytes = ZBCAddressToBytes(txFormat);
     const signature = seed.sign(txBytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    return Buffer.concat([bytes, signature]);
   } else return bytes;
 }
 
@@ -78,7 +74,7 @@ export function readPostTransactionBytes(txBytes: Buffer) {
   return transaction;
 }
 
-export function readEscrowBytes(txBytes: Buffer, transaction:ZBCTransaction){
+export function readEscrowBytes(txBytes: Buffer, transaction: ZBCTransaction) {
   const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
   const approverAddress = txBytes.slice(177, 177 + approverAddressLength);
   const int64Length = 8;

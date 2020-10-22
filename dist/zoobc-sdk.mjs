@@ -43737,41 +43737,38 @@ function registerNodeBuilder(data, poown, seed) {
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
     const recipient = new Buffer(ADDRESS_LENGTH);
-    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const addressType = writeInt32(0);
     const fee = writeInt64(data.fee * 1e8);
     const nodePublicKey = data.nodePublicKey;
     const funds = writeInt64(data.funds * 1e8);
-    const bodyLength = writeInt32(nodePublicKey.length + addressLength.length + accountAddress.length + funds.length + poown.length);
+    const bodyLength = writeInt32(nodePublicKey.length + addressType.length + accountAddress.length + funds.length + poown.length);
     bytes = Buffer.concat([
         TRANSACTION_TYPE,
         VERSION,
         timestamp,
-        addressLength,
+        addressType,
         accountAddress,
-        addressLength,
+        addressType,
         recipient,
         fee,
         bodyLength,
         nodePublicKey,
-        addressLength,
+        addressType,
         accountAddress,
         funds,
         poown,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
     const commission = writeInt64(0);
     const timeout = writeInt64(0);
     const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    bytes = Buffer.concat([bytes, addressType, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
-        const signatureType = writeInt32(0);
         const txFormat = generateTransactionHash(bytes);
         const txBytes = ZBCAddressToBytes(txFormat);
         const signature = seed.sign(txBytes);
-        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+        return Buffer.concat([bytes, signature]);
     }
     else
         return bytes;
@@ -43796,7 +43793,7 @@ function updateNodeBuilder(data, poown, seed) {
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
     const recipient = new Buffer(ADDRESS_LENGTH);
-    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const addressType = writeInt32(0);
     const fee = writeInt64(data.fee * 1e8);
     const nodePublicKey = data.nodePublicKey;
     const funds = writeInt64(data.funds * 1e8);
@@ -43805,9 +43802,9 @@ function updateNodeBuilder(data, poown, seed) {
         TRANSACTION_TYPE$1,
         VERSION,
         timestamp,
-        addressLength,
+        addressType,
         accountAddress,
-        addressLength,
+        addressType,
         recipient,
         fee,
         bodyLength,
@@ -43816,19 +43813,16 @@ function updateNodeBuilder(data, poown, seed) {
         poown,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
     const commission = writeInt64(0);
     const timeout = writeInt64(0);
     const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    bytes = Buffer.concat([bytes, addressType, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
-        const signatureType = writeInt32(0);
         const txFormat = generateTransactionHash(bytes);
         const txBytes = ZBCAddressToBytes(txFormat);
         const signature = seed.sign(txBytes);
-        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+        return Buffer.concat([bytes, signature]);
     }
     else
         return bytes;
@@ -43853,7 +43847,7 @@ function removeNodeBuilder(data, seed) {
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
     const recipient = new Buffer(ADDRESS_LENGTH);
-    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const addressType = writeInt32(0);
     const fee = writeInt64(data.fee * 1e8);
     const nodePublicKey = data.nodePublicKey;
     const bodyLength = writeInt32(nodePublicKey.length);
@@ -43861,28 +43855,25 @@ function removeNodeBuilder(data, seed) {
         TRANSACTION_TYPE$2,
         VERSION,
         timestamp,
-        addressLength,
+        addressType,
         accountAddress,
-        addressLength,
+        addressType,
         recipient,
         fee,
         bodyLength,
         nodePublicKey,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
     const commission = writeInt64(0);
     const timeout = writeInt64(0);
     const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    bytes = Buffer.concat([bytes, addressType, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
-        const signatureType = writeInt32(0);
         const txFormat = generateTransactionHash(bytes);
         const txBytes = ZBCAddressToBytes(txFormat);
         const signature = seed.sign(txBytes);
-        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+        return Buffer.concat([bytes, signature]);
     }
     else
         return bytes;
@@ -43902,7 +43893,7 @@ function claimNodeBuilder(data, poown, seed) {
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
     const recipient = new Buffer(ADDRESS_LENGTH);
-    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const addressType = writeInt32(0);
     const fee = writeInt64(data.fee * 1e8);
     const nodePublicKey = data.nodePublicKey;
     const bodyLength = writeInt32(nodePublicKey.length + poown.length);
@@ -43910,9 +43901,9 @@ function claimNodeBuilder(data, poown, seed) {
         TRANSACTION_TYPE$3,
         VERSION,
         timestamp,
-        addressLength,
+        addressType,
         accountAddress,
-        addressLength,
+        addressType,
         recipient,
         fee,
         bodyLength,
@@ -43920,19 +43911,16 @@ function claimNodeBuilder(data, poown, seed) {
         poown,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
     const commission = writeInt64(0);
     const timeout = writeInt64(0);
     const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    bytes = Buffer.concat([bytes, addressType, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
-        const signatureType = writeInt32(0);
         const txFormat = generateTransactionHash(bytes);
         const txBytes = ZBCAddressToBytes(txFormat);
         const signature = seed.sign(txBytes);
-        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+        return Buffer.concat([bytes, signature]);
     }
     else
         return bytes;
@@ -44245,7 +44233,7 @@ function escrowBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const approvalAddress = Buffer.from(data.approvalAddress, 'utf-8');
-    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const addressType = writeInt32(0);
     const recepient = new Buffer(ADDRESS_LENGTH);
     const fee = writeInt64(data.fee * 1e8);
     const approvalCode = writeInt32(data.approvalCode);
@@ -44255,9 +44243,9 @@ function escrowBuilder(data, seed) {
         TRANSACTION_TYPE$4,
         VERSION,
         timestamp,
-        addressLength,
+        addressType,
         approvalAddress,
-        addressLength,
+        addressType,
         recepient,
         fee,
         bodyLength,
@@ -44265,19 +44253,16 @@ function escrowBuilder(data, seed) {
         transactionId,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
     const commission = writeInt64(0);
     const timeout = writeInt64(0);
     const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    bytes = Buffer.concat([bytes, addressType, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
-        const signatureType = writeInt32(0);
         const txFormat = generateTransactionHash(bytes);
         const txBytes = ZBCAddressToBytes(txFormat);
         const signature = seed.sign(txBytes);
-        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+        return Buffer.concat([bytes, signature]);
     }
     else
         return bytes;
@@ -44950,7 +44935,7 @@ function multisignatureBuilder(data, seed) {
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
     const recipient = new Buffer(ADDRESS_LENGTH);
-    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const addressType = writeInt32(0);
     const fee = writeInt64(data.fee * 1e8);
     // MULTISIG INFO
     let multisigInfoBytes = writeInt32(0);
@@ -44961,7 +44946,7 @@ function multisignatureBuilder(data, seed) {
         let participants = Buffer.from([]);
         multisigInfo.participants.forEach(participant => {
             const address = Buffer.from(participant, 'utf-8');
-            participants = Buffer.concat([participants, addressLength, address]);
+            participants = Buffer.concat([participants, addressType, address]);
         });
         const totalParticipants = writeInt32(multisigInfo.participants.length);
         multisigInfoBytes = Buffer.concat([multisigPresent, minSign, nonce, totalParticipants, participants]);
@@ -44982,7 +44967,7 @@ function multisignatureBuilder(data, seed) {
         signaturesInfo.participants.forEach(participant => {
             const address = Buffer.from(participant.address, 'utf-8');
             const signatureLen = writeInt32(participant.signature.length);
-            participants = Buffer.concat([participants, addressLength, address, signatureLen, participant.signature]);
+            participants = Buffer.concat([participants, addressType, address, signatureLen, participant.signature]);
         });
         signaturesInfoBytes = Buffer.concat([signatureInfoPresent, txHash, totalParticipants, participants]);
     }
@@ -44991,9 +44976,9 @@ function multisignatureBuilder(data, seed) {
         TRANSACTION_TYPE$5,
         VERSION,
         timestamp,
-        addressLength,
+        addressType,
         accountAddress,
-        addressLength,
+        addressType,
         recipient,
         fee,
         bodyLength,
@@ -45002,19 +44987,16 @@ function multisignatureBuilder(data, seed) {
         signaturesInfoBytes,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
     const commission = writeInt64(0);
     const timeout = writeInt64(0);
     const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    bytes = Buffer.concat([bytes, addressType, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
-        const signatureType = writeInt32(0);
         const txFormat = generateTransactionHash(bytes);
         const txBytes = ZBCAddressToBytes(txFormat);
         const signature = seed.sign(txBytes);
-        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+        return Buffer.concat([bytes, signature]);
     }
     else
         return bytes;
@@ -46315,7 +46297,7 @@ function setupDatasetBuilder(data, seed) {
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const accountAddress = Buffer.from(data.setterAccountAddress, 'utf-8');
     const recipient = Buffer.from(data.recipientAccountAddress, 'utf-8');
-    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const addressType = writeInt32(0);
     const fee = writeInt64(data.fee * 1e8);
     const property = Buffer.from(data.property, 'utf-8');
     const propertyLength = writeInt32(property.length);
@@ -46326,9 +46308,9 @@ function setupDatasetBuilder(data, seed) {
         TRANSACTION_TYPE$6,
         VERSION,
         timestamp,
-        addressLength,
+        addressType,
         accountAddress,
-        addressLength,
+        addressType,
         recipient,
         fee,
         bodyLength,
@@ -46338,19 +46320,16 @@ function setupDatasetBuilder(data, seed) {
         value,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
     const commission = writeInt64(0);
     const timeout = writeInt64(0);
     const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    bytes = Buffer.concat([bytes, addressType, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
-        const signatureType = writeInt32(0);
         const txFormat = generateTransactionHash(bytes);
         const txBytes = ZBCAddressToBytes(txFormat);
         const signature = seed.sign(txBytes);
-        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+        return Buffer.concat([bytes, signature]);
     }
     else
         return bytes;
@@ -46380,7 +46359,7 @@ function removeDatasetBuilder(data, seed) {
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const setterAccountAddress = Buffer.from(data.setterAccountAddress, 'utf-8');
     const recipient = Buffer.from(data.recipientAccountAddress, 'utf-8');
-    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const addressType = writeInt32(0);
     const fee = writeInt64(data.fee * 1e8);
     const property = Buffer.from(data.property, 'utf-8');
     const propertyLength = writeInt32(property.length);
@@ -46391,9 +46370,9 @@ function removeDatasetBuilder(data, seed) {
         TRANSACTION_TYPE$7,
         VERSION,
         timestamp,
-        addressLength,
+        addressType,
         setterAccountAddress,
-        addressLength,
+        addressType,
         recipient,
         fee,
         bodyLength,
@@ -46403,19 +46382,16 @@ function removeDatasetBuilder(data, seed) {
         value,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
     const commission = writeInt64(0);
     const timeout = writeInt64(0);
     const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    bytes = Buffer.concat([bytes, addressType, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
-        const signatureType = writeInt32(0);
         const txFormat = generateTransactionHash(bytes);
         const txBytes = ZBCAddressToBytes(txFormat);
         const signature = seed.sign(txBytes);
-        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+        return Buffer.concat([bytes, signature]);
     }
     else
         return bytes;
@@ -49666,7 +49642,7 @@ function feeVoteCommitBuilder(data, seed) {
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
     const recipient = new Buffer(ADDRESS_LENGTH);
-    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const addressType = writeInt32(0);
     const fee = writeInt64(data.fee * 1e8);
     const recentBlockHash = Buffer.from(data.recentBlockHash.toString(), 'base64');
     const recentBlockHeight = writeInt32(data.recentBlockHeight);
@@ -49678,9 +49654,9 @@ function feeVoteCommitBuilder(data, seed) {
         TRANSACTION_TYPE_FEE_VOTE_COMMIT,
         VERSION,
         timestamp,
-        addressLength,
+        addressType,
         accountAddress,
-        addressLength,
+        addressType,
         recipient,
         fee,
         bodyLength,
@@ -49703,7 +49679,7 @@ function feeVoteRevealBuilder(data, seed) {
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
     const recipient = new Buffer(ADDRESS_LENGTH);
-    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const addressType = writeInt32(0);
     const fee = writeInt64(data.fee * 1e8);
     const recentBlockHash = Buffer.from(data.recentBlockHash.toString(), 'base64');
     const recentBlockHeight = writeInt32(data.recentBlockHeight);
@@ -49718,9 +49694,9 @@ function feeVoteRevealBuilder(data, seed) {
         TRANSACTION_TYPE_FEE_VOTE_REVEAL,
         VERSION,
         timestamp,
-        addressLength,
+        addressType,
         accountAddress,
-        addressLength,
+        addressType,
         recipient,
         fee,
         bodyLength,
@@ -49731,18 +49707,15 @@ function feeVoteRevealBuilder(data, seed) {
         voteSignature,
     ]);
     // ========== NULLIFYING THE ESCROW ===========
-    const approverAddressLength = writeInt32(0);
     const commission = writeInt64(0);
     const timeout = writeInt64(0);
     const instructionLength = writeInt32(0);
-    bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+    bytes = Buffer.concat([bytes, addressType, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
-    const signatureType = writeInt32(0);
     const txFormat = generateTransactionHash(bytes);
     const txBytes = ZBCAddressToBytes(txFormat);
     const signature = seed.sign(txBytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    return Buffer.concat([bytes, signature]);
 }
 
 function toUnconfirmedSendMoneyWallet(res, ownAddress) {
@@ -50132,36 +50105,32 @@ function sendMoneyBuilder(data, seed) {
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const sender = Buffer.from(data.sender, 'utf-8');
     const recipient = Buffer.from(data.recipient, 'utf-8');
-    const addressLength = writeInt32(ADDRESS_LENGTH);
+    const addressType = writeInt32(0);
     const fee = writeInt64(data.fee * 1e8);
     const amount = writeInt64(data.amount * 1e8);
     const bodyLength = writeInt32(amount.length);
-    bytes = Buffer.concat([TRANSACTION_TYPE$8, VERSION, timestamp, addressLength, sender, addressLength, recipient, fee, bodyLength, amount]);
+    bytes = Buffer.concat([TRANSACTION_TYPE$8, VERSION, timestamp, addressType, sender, addressType, recipient, fee, bodyLength, amount]);
     if (data.approverAddress && data.commission && data.timeout && data.instruction) {
         // escrow bytes
-        const approverAddressLength = writeInt32(ADDRESS_LENGTH);
         const approverAddress = Buffer.from(data.approverAddress, 'utf-8');
         const commission = writeInt64(data.commission * 1e8);
         const timeout = writeInt64(data.timeout);
         const instruction = Buffer.from(data.instruction, 'utf-8');
         const instructionLength = writeInt32(instruction.length);
-        bytes = Buffer.concat([bytes, approverAddressLength, approverAddress, commission, timeout, instructionLength, instruction]);
+        bytes = Buffer.concat([bytes, addressType, approverAddress, commission, timeout, instructionLength, instruction]);
     }
     else {
         // escrow bytes default value
-        const approverAddressLength = writeInt32(0);
         const commission = writeInt64(0);
         const timeout = writeInt64(0);
         const instructionLength = writeInt32(0);
-        bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+        bytes = Buffer.concat([bytes, addressType, commission, timeout, instructionLength]);
     }
     if (seed) {
-        const signatureType = writeInt32(0);
         const txFormat = generateTransactionHash(bytes);
         const txBytes = ZBCAddressToBytes(txFormat);
         const signature = seed.sign(txBytes);
-        const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-        return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+        return Buffer.concat([bytes, signature]);
     }
     else
         return bytes;

@@ -19,7 +19,7 @@ export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
   const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
   const recipient = new Buffer(ADDRESS_LENGTH);
-  const addressLength = writeInt32(ADDRESS_LENGTH);
+  const addressType = writeInt32(0);
   const fee = writeInt64(data.fee * 1e8);
 
   const nodePublicKey = data.nodePublicKey;
@@ -30,9 +30,9 @@ export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed
     TRANSACTION_TYPE,
     VERSION,
     timestamp,
-    addressLength,
+    addressType,
     accountAddress,
-    addressLength,
+    addressType,
     recipient,
     fee,
     bodyLength,
@@ -42,21 +42,18 @@ export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed
   ]);
 
   // ========== NULLIFYING THE ESCROW ===========
-  const approverAddressLength = writeInt32(0);
   const commission = writeInt64(0);
   const timeout = writeInt64(0);
   const instructionLength = writeInt32(0);
 
-  bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+  bytes = Buffer.concat([bytes, addressType, commission, timeout, instructionLength]);
   // ========== END NULLIFYING THE ESCROW =========
 
   if (seed) {
-    const signatureType = writeInt32(0);
     const txFormat = generateTransactionHash(bytes);
-    const txBytes = ZBCAddressToBytes(txFormat)
+    const txBytes = ZBCAddressToBytes(txFormat);
     const signature = seed.sign(txBytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    return Buffer.concat([bytes, signature]);
   } else return bytes;
 }
 

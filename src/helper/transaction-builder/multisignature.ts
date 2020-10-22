@@ -40,7 +40,7 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
   const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
   const recipient = new Buffer(ADDRESS_LENGTH);
-  const addressLength = writeInt32(ADDRESS_LENGTH);
+  const addressType = writeInt32(0);
   const fee = writeInt64(data.fee * 1e8);
 
   // MULTISIG INFO
@@ -53,7 +53,7 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
     let participants = Buffer.from([]);
     multisigInfo.participants.forEach(participant => {
       const address = Buffer.from(participant, 'utf-8');
-      participants = Buffer.concat([participants, addressLength, address]);
+      participants = Buffer.concat([participants, addressType, address]);
     });
 
     const totalParticipants = writeInt32(multisigInfo.participants.length);
@@ -79,7 +79,7 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
     signaturesInfo.participants.forEach(participant => {
       const address = Buffer.from(participant.address, 'utf-8');
       const signatureLen = writeInt32(participant.signature.length);
-      participants = Buffer.concat([participants, addressLength, address, signatureLen, participant.signature]);
+      participants = Buffer.concat([participants, addressType, address, signatureLen, participant.signature]);
     });
 
     signaturesInfoBytes = Buffer.concat([signatureInfoPresent, txHash, totalParticipants, participants]);
@@ -91,9 +91,9 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
     TRANSACTION_TYPE,
     VERSION,
     timestamp,
-    addressLength,
+    addressType,
     accountAddress,
-    addressLength,
+    addressType,
     recipient,
     fee,
     bodyLength,
@@ -103,27 +103,24 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
   ]);
 
   // ========== NULLIFYING THE ESCROW ===========
-  const approverAddressLength = writeInt32(0);
   const commission = writeInt64(0);
   const timeout = writeInt64(0);
   const instructionLength = writeInt32(0);
 
-  bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+  bytes = Buffer.concat([bytes, addressType, commission, timeout, instructionLength]);
   // ========== END NULLIFYING THE ESCROW =========
 
   if (seed) {
-    const signatureType = writeInt32(0);
     const txFormat = generateTransactionHash(bytes);
-    const txBytes = ZBCAddressToBytes(txFormat)
+    const txBytes = ZBCAddressToBytes(txFormat);
     const signature = seed.sign(txBytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    return Buffer.concat([bytes, signature]);
   } else return bytes;
 }
 
 export function signTransactionHash(txHash: string, seed: BIP32Interface) {
   const signatureType = writeInt32(0);
-  const txHashBytes = ZBCAddressToBytes(txHash)
+  const txHashBytes = ZBCAddressToBytes(txHash);
   const signature = seed.sign(txHashBytes);
   return Buffer.concat([signatureType, signature]);
 }
