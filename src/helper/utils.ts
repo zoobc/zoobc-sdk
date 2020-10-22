@@ -4,6 +4,7 @@ import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
 import { Int64LE } from 'int64-buffer';
 import zoobc from '..';
+import { BTC_ACCOUNT, ZBC_ACCOUNT } from './transaction-builder/constant';
 
 export const errorDateMessage = {
   code: '',
@@ -111,4 +112,20 @@ export async function validationTimestamp(txBytes: Buffer) {
   const deviation = parseInt(timestampPostTransaction) - parseInt(timestampServer);
   if (deviation < 30 && deviation > -30) return true;
   else return false;
+}
+
+export function parseAccountAddress(account: Buffer): { address: string; type: Buffer } {
+  console.log(account);
+
+  const type = account.slice(0, 4);
+  console.log(type);
+  console.log(account.slice(4, 36));
+
+  let address = '';
+  if (type.equals(ZBC_ACCOUNT)) {
+    address = getZBCAddress(account.slice(4, 36));
+    return { address, type };
+  } else if (type.equals(BTC_ACCOUNT)) {
+    return { address, type };
+  } else return { address, type };
 }

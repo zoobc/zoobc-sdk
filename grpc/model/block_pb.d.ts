@@ -3,7 +3,7 @@
 
 import * as jspb from "google-protobuf";
 import * as model_transaction_pb from "../model/transaction_pb";
-import * as model_batchReceipt_pb from "../model/batchReceipt_pb";
+import * as model_receipt_pb from "../model/receipt_pb";
 import * as model_publishedReceipt_pb from "../model/publishedReceipt_pb";
 import * as model_skippedBlocksmith_pb from "../model/skippedBlocksmith_pb";
 import * as model_spine_pb from "../model/spine_pb";
@@ -67,6 +67,19 @@ export class Block extends jspb.Message {
   getPayloadhash_asB64(): string;
   setPayloadhash(value: Uint8Array | string): void;
 
+  getMerkleroot(): Uint8Array | string;
+  getMerkleroot_asU8(): Uint8Array;
+  getMerkleroot_asB64(): string;
+  setMerkleroot(value: Uint8Array | string): void;
+
+  getMerkletree(): Uint8Array | string;
+  getMerkletree_asU8(): Uint8Array;
+  getMerkletree_asB64(): string;
+  setMerkletree(value: Uint8Array | string): void;
+
+  getReferenceblockheight(): number;
+  setReferenceblockheight(value: number): void;
+
   clearTransactionsList(): void;
   getTransactionsList(): Array<model_transaction_pb.Transaction>;
   setTransactionsList(value: Array<model_transaction_pb.Transaction>): void;
@@ -119,6 +132,9 @@ export namespace Block {
     version: number,
     payloadlength: number,
     payloadhash: Uint8Array | string,
+    merkleroot: Uint8Array | string,
+    merkletree: Uint8Array | string,
+    referenceblockheight: number,
     transactionsList: Array<model_transaction_pb.Transaction.AsObject>,
     publishedreceiptsList: Array<model_publishedReceipt_pb.PublishedReceipt.AsObject>,
     spinepublickeysList: Array<model_spine_pb.SpinePublicKey.AsObject>,
@@ -139,8 +155,10 @@ export class BlockExtendedInfo extends jspb.Message {
   getReceiptvalue(): string;
   setReceiptvalue(value: string): void;
 
-  getBlocksmithaccountaddress(): string;
-  setBlocksmithaccountaddress(value: string): void;
+  getBlocksmithaccountaddress(): Uint8Array | string;
+  getBlocksmithaccountaddress_asU8(): Uint8Array;
+  getBlocksmithaccountaddress_asB64(): string;
+  setBlocksmithaccountaddress(value: Uint8Array | string): void;
 
   getPopchange(): string;
   setPopchange(value: string): void;
@@ -165,7 +183,7 @@ export namespace BlockExtendedInfo {
     block?: Block.AsObject,
     totalreceipts: string,
     receiptvalue: string,
-    blocksmithaccountaddress: string,
+    blocksmithaccountaddress: Uint8Array | string,
     popchange: string,
     skippedblocksmithsList: Array<model_skippedBlocksmith_pb.SkippedBlocksmith.AsObject>,
   }
@@ -422,10 +440,10 @@ export namespace SendBlockRequest {
 }
 
 export class SendBlockResponse extends jspb.Message {
-  hasBatchreceipt(): boolean;
-  clearBatchreceipt(): void;
-  getBatchreceipt(): model_batchReceipt_pb.BatchReceipt | undefined;
-  setBatchreceipt(value?: model_batchReceipt_pb.BatchReceipt): void;
+  hasReceipt(): boolean;
+  clearReceipt(): void;
+  getReceipt(): model_receipt_pb.Receipt | undefined;
+  setReceipt(value?: model_receipt_pb.Receipt): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SendBlockResponse.AsObject;
@@ -439,7 +457,7 @@ export class SendBlockResponse extends jspb.Message {
 
 export namespace SendBlockResponse {
   export type AsObject = {
-    batchreceipt?: model_batchReceipt_pb.BatchReceipt.AsObject,
+    receipt?: model_receipt_pb.Receipt.AsObject,
   }
 }
 

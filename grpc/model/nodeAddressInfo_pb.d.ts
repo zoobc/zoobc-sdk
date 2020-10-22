@@ -96,10 +96,10 @@ export namespace GetNodeAddressesInfoResponse {
 }
 
 export class SendNodeAddressInfoRequest extends jspb.Message {
-  hasNodeaddressinfomessage(): boolean;
-  clearNodeaddressinfomessage(): void;
-  getNodeaddressinfomessage(): NodeAddressInfo | undefined;
-  setNodeaddressinfomessage(value?: NodeAddressInfo): void;
+  clearNodeaddressinfomessageList(): void;
+  getNodeaddressinfomessageList(): Array<NodeAddressInfo>;
+  setNodeaddressinfomessageList(value: Array<NodeAddressInfo>): void;
+  addNodeaddressinfomessage(value?: NodeAddressInfo, index?: number): NodeAddressInfo;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SendNodeAddressInfoRequest.AsObject;
@@ -113,7 +113,7 @@ export class SendNodeAddressInfoRequest extends jspb.Message {
 
 export namespace SendNodeAddressInfoRequest {
   export type AsObject = {
-    nodeaddressinfomessage?: NodeAddressInfo.AsObject,
+    nodeaddressinfomessageList: Array<NodeAddressInfo.AsObject>,
   }
 }
 

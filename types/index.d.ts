@@ -28,7 +28,7 @@ export { toTransactionListWallet, toZBCTransactions, ZooTransactionsInterface, t
 export { bufferToBase64, toBase64Url } from './helper/converters';
 export { MultiSigInterface, signTransactionHash, MultiSigAddress, MultiSigInfo, SignatureInfo, } from './helper/transaction-builder/multisignature';
 export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
-export { AccountBalanceResponse, AccountBalancesResponse } from './Account';
+export { ZBCAccount } from './Account';
 export { HostInfoResponse } from './Host';
 export { ParticipationScoreResponse } from './ParticipationScore';
 export { AccountDatasetProperty } from '../grpc/model/accountDataset_pb';
@@ -58,8 +58,11 @@ declare const zoobc: {
         decryptPassphrase: (encPassphrase: string, password: string, salt?: string) => string;
     };
     Account: {
-        getBalance: (address: string) => Promise<import("../grpc/model/accountBalance_pb").GetAccountBalanceResponse.AsObject>;
-        getBalances: (addresses: string[]) => Promise<import("../grpc/model/accountBalance_pb").GetAccountBalancesResponse.AsObject>;
+        getBalance: (address: string, accountType?: Buffer) => Promise<import("./Account").ZBCAccount>;
+        getBalances: (accounts: {
+            address: string;
+            type: Buffer;
+        }[]) => Promise<import("./Account").ZBCAccount[]>;
     };
     Host: {
         getInfo: () => Promise<import("../grpc/model/host_pb").HostInfo.AsObject>;

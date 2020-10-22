@@ -8,7 +8,7 @@ export declare function toGetPendingList(res: MultisigPendingTxResponse): {
         blockheight: number;
         fee: string;
         latest: boolean;
-        senderaddress: string;
+        senderaddress: string | Uint8Array;
         recipientaddress: string;
         status: 0 | 1 | 2 | 3;
         timestamp: string;

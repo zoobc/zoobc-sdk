@@ -8,7 +8,7 @@ export interface ZooTransactionsInterface {
 
 export interface ZooTransactionInterface {
   id: string;
-  address: string;
+  address: string | Uint8Array;
   timestamp: number;
   fee: number;
   type: string;
@@ -25,9 +25,9 @@ export interface ZBCTransactions {
 
 export interface ZBCTransaction {
   id?: string;
-  sender: string;
+  sender: string | Uint8Array;
   senderAlias?: string;
-  recipient: string;
+  recipient: string | Uint8Array;
   recipientAlias?: string;
   timestamp: number;
   fee: number;

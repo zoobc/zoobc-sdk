@@ -135,12 +135,13 @@ proto.model.Node.prototype.toObject = function(opt_includeInstance) {
 proto.model.Node.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    sharedaddress: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    address: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    port: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    addressstatus: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    version: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    codename: jspb.Message.getFieldWithDefault(msg, 7, "")
+    publickey: msg.getPublickey_asB64(),
+    sharedaddress: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    address: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    port: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    addressstatus: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    version: jspb.Message.getFieldWithDefault(msg, 7, ""),
+    codename: jspb.Message.getFieldWithDefault(msg, 8, "")
   };
 
   if (includeInstance) {
@@ -182,26 +183,30 @@ proto.model.Node.deserializeBinaryFromReader = function(msg, reader) {
       msg.setId(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setSharedaddress(value);
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setPublickey(value);
       break;
     case 3:
       var value = /** @type {string} */ (reader.readString());
-      msg.setAddress(value);
+      msg.setSharedaddress(value);
       break;
     case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setAddress(value);
+      break;
+    case 5:
       var value = /** @type {number} */ (reader.readUint32());
       msg.setPort(value);
       break;
-    case 5:
+    case 6:
       var value = /** @type {!proto.model.NodeAddressStatus} */ (reader.readEnum());
       msg.setAddressstatus(value);
       break;
-    case 6:
+    case 7:
       var value = /** @type {string} */ (reader.readString());
       msg.setVersion(value);
       break;
-    case 7:
+    case 8:
       var value = /** @type {string} */ (reader.readString());
       msg.setCodename(value);
       break;
@@ -241,45 +246,52 @@ proto.model.Node.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getSharedaddress();
+  f = message.getPublickey_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       2,
       f
     );
   }
-  f = message.getAddress();
+  f = message.getSharedaddress();
   if (f.length > 0) {
     writer.writeString(
       3,
       f
     );
   }
+  f = message.getAddress();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
   f = message.getPort();
   if (f !== 0) {
     writer.writeUint32(
-      4,
+      5,
       f
     );
   }
   f = message.getAddressstatus();
   if (f !== 0.0) {
     writer.writeEnum(
-      5,
+      6,
       f
     );
   }
   f = message.getVersion();
   if (f.length > 0) {
     writer.writeString(
-      6,
+      7,
       f
     );
   }
   f = message.getCodename();
   if (f.length > 0) {
     writer.writeString(
-      7,
+      8,
       f
     );
   }
@@ -302,92 +314,131 @@ proto.model.Node.prototype.setId = function(value) {
 
 
 /**
- * optional string SharedAddress = 2;
- * @return {string}
+ * optional bytes PublicKey = 2;
+ * @return {!(string|Uint8Array)}
  */
-proto.model.Node.prototype.getSharedaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
-};
-
-
-/** @param {string} value */
-proto.model.Node.prototype.setSharedaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+proto.model.Node.prototype.getPublickey = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /**
- * optional string Address = 3;
+ * optional bytes PublicKey = 2;
+ * This is a type-conversion wrapper around `getPublickey()`
  * @return {string}
  */
-proto.model.Node.prototype.getAddress = function() {
+proto.model.Node.prototype.getPublickey_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getPublickey()));
+};
+
+
+/**
+ * optional bytes PublicKey = 2;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getPublickey()`
+ * @return {!Uint8Array}
+ */
+proto.model.Node.prototype.getPublickey_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getPublickey()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.Node.prototype.setPublickey = function(value) {
+  jspb.Message.setProto3BytesField(this, 2, value);
+};
+
+
+/**
+ * optional string SharedAddress = 3;
+ * @return {string}
+ */
+proto.model.Node.prototype.getSharedaddress = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
 /** @param {string} value */
-proto.model.Node.prototype.setAddress = function(value) {
+proto.model.Node.prototype.setSharedaddress = function(value) {
   jspb.Message.setProto3StringField(this, 3, value);
 };
 
 
 /**
- * optional uint32 Port = 4;
+ * optional string Address = 4;
+ * @return {string}
+ */
+proto.model.Node.prototype.getAddress = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/** @param {string} value */
+proto.model.Node.prototype.setAddress = function(value) {
+  jspb.Message.setProto3StringField(this, 4, value);
+};
+
+
+/**
+ * optional uint32 Port = 5;
  * @return {number}
  */
 proto.model.Node.prototype.getPort = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
 };
 
 
 /** @param {number} value */
 proto.model.Node.prototype.setPort = function(value) {
-  jspb.Message.setProto3IntField(this, 4, value);
+  jspb.Message.setProto3IntField(this, 5, value);
 };
 
 
 /**
- * optional NodeAddressStatus AddressStatus = 5;
+ * optional NodeAddressStatus AddressStatus = 6;
  * @return {!proto.model.NodeAddressStatus}
  */
 proto.model.Node.prototype.getAddressstatus = function() {
-  return /** @type {!proto.model.NodeAddressStatus} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+  return /** @type {!proto.model.NodeAddressStatus} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
 };
 
 
 /** @param {!proto.model.NodeAddressStatus} value */
 proto.model.Node.prototype.setAddressstatus = function(value) {
-  jspb.Message.setProto3EnumField(this, 5, value);
+  jspb.Message.setProto3EnumField(this, 6, value);
 };
 
 
 /**
- * optional string Version = 6;
+ * optional string Version = 7;
  * @return {string}
  */
 proto.model.Node.prototype.getVersion = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
-};
-
-
-/** @param {string} value */
-proto.model.Node.prototype.setVersion = function(value) {
-  jspb.Message.setProto3StringField(this, 6, value);
-};
-
-
-/**
- * optional string CodeName = 7;
- * @return {string}
- */
-proto.model.Node.prototype.getCodename = function() {
   return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
 };
 
 
 /** @param {string} value */
-proto.model.Node.prototype.setCodename = function(value) {
+proto.model.Node.prototype.setVersion = function(value) {
   jspb.Message.setProto3StringField(this, 7, value);
+};
+
+
+/**
+ * optional string CodeName = 8;
+ * @return {string}
+ */
+proto.model.Node.prototype.getCodename = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 8, ""));
+};
+
+
+/** @param {string} value */
+proto.model.Node.prototype.setCodename = function(value) {
+  jspb.Message.setProto3StringField(this, 8, value);
 };
 
 

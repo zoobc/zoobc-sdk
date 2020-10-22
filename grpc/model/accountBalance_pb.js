@@ -154,7 +154,7 @@ proto.model.AccountBalance.prototype.toObject = function(opt_includeInstance) {
  */
 proto.model.AccountBalance.toObject = function(includeInstance, msg) {
   var f, obj = {
-    accountaddress: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    accountaddress: msg.getAccountaddress_asB64(),
     blockheight: jspb.Message.getFieldWithDefault(msg, 2, 0),
     spendablebalance: jspb.Message.getFieldWithDefault(msg, 3, "0"),
     balance: jspb.Message.getFieldWithDefault(msg, 4, "0"),
@@ -197,7 +197,7 @@ proto.model.AccountBalance.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setAccountaddress(value);
       break;
     case 2:
@@ -249,9 +249,9 @@ proto.model.AccountBalance.prototype.serializeBinary = function() {
  */
 proto.model.AccountBalance.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getAccountaddress();
+  f = message.getAccountaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       1,
       f
     );
@@ -295,17 +295,41 @@ proto.model.AccountBalance.serializeBinaryToWriter = function(message, writer) {
 
 
 /**
- * optional string AccountAddress = 1;
- * @return {string}
+ * optional bytes AccountAddress = 1;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.AccountBalance.prototype.getAccountaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes AccountAddress = 1;
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {string}
+ */
+proto.model.AccountBalance.prototype.getAccountaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getAccountaddress()));
+};
+
+
+/**
+ * optional bytes AccountAddress = 1;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.AccountBalance.prototype.getAccountaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getAccountaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.AccountBalance.prototype.setAccountaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  jspb.Message.setProto3BytesField(this, 1, value);
 };
 
 
@@ -416,7 +440,7 @@ proto.model.GetAccountBalanceRequest.prototype.toObject = function(opt_includeIn
  */
 proto.model.GetAccountBalanceRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    accountaddress: jspb.Message.getFieldWithDefault(msg, 1, "")
+    accountaddress: msg.getAccountaddress_asB64()
   };
 
   if (includeInstance) {
@@ -454,7 +478,7 @@ proto.model.GetAccountBalanceRequest.deserializeBinaryFromReader = function(msg,
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setAccountaddress(value);
       break;
     default:
@@ -486,9 +510,9 @@ proto.model.GetAccountBalanceRequest.prototype.serializeBinary = function() {
  */
 proto.model.GetAccountBalanceRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getAccountaddress();
+  f = message.getAccountaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       1,
       f
     );
@@ -497,17 +521,41 @@ proto.model.GetAccountBalanceRequest.serializeBinaryToWriter = function(message,
 
 
 /**
- * optional string AccountAddress = 1;
- * @return {string}
+ * optional bytes AccountAddress = 1;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.GetAccountBalanceRequest.prototype.getAccountaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes AccountAddress = 1;
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {string}
+ */
+proto.model.GetAccountBalanceRequest.prototype.getAccountaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getAccountaddress()));
+};
+
+
+/**
+ * optional bytes AccountAddress = 1;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.GetAccountBalanceRequest.prototype.getAccountaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getAccountaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.GetAccountBalanceRequest.prototype.setAccountaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  jspb.Message.setProto3BytesField(this, 1, value);
 };
 
 
@@ -697,7 +745,7 @@ proto.model.GetAccountBalancesRequest.prototype.toObject = function(opt_includeI
  */
 proto.model.GetAccountBalancesRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    accountaddressesList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
+    accountaddressesList: msg.getAccountaddressesList_asB64()
   };
 
   if (includeInstance) {
@@ -735,7 +783,7 @@ proto.model.GetAccountBalancesRequest.deserializeBinaryFromReader = function(msg
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.addAccountaddresses(value);
       break;
     default:
@@ -767,9 +815,9 @@ proto.model.GetAccountBalancesRequest.prototype.serializeBinary = function() {
  */
 proto.model.GetAccountBalancesRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getAccountaddressesList();
+  f = message.getAccountaddressesList_asU8();
   if (f.length > 0) {
-    writer.writeRepeatedString(
+    writer.writeRepeatedBytes(
       1,
       f
     );
@@ -778,22 +826,46 @@ proto.model.GetAccountBalancesRequest.serializeBinaryToWriter = function(message
 
 
 /**
- * repeated string AccountAddresses = 1;
- * @return {!Array<string>}
+ * repeated bytes AccountAddresses = 1;
+ * @return {!(Array<!Uint8Array>|Array<string>)}
  */
 proto.model.GetAccountBalancesRequest.prototype.getAccountaddressesList = function() {
-  return /** @type {!Array<string>} */ (jspb.Message.getRepeatedField(this, 1));
+  return /** @type {!(Array<!Uint8Array>|Array<string>)} */ (jspb.Message.getRepeatedField(this, 1));
 };
 
 
-/** @param {!Array<string>} value */
+/**
+ * repeated bytes AccountAddresses = 1;
+ * This is a type-conversion wrapper around `getAccountaddressesList()`
+ * @return {!Array<string>}
+ */
+proto.model.GetAccountBalancesRequest.prototype.getAccountaddressesList_asB64 = function() {
+  return /** @type {!Array<string>} */ (jspb.Message.bytesListAsB64(
+      this.getAccountaddressesList()));
+};
+
+
+/**
+ * repeated bytes AccountAddresses = 1;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getAccountaddressesList()`
+ * @return {!Array<!Uint8Array>}
+ */
+proto.model.GetAccountBalancesRequest.prototype.getAccountaddressesList_asU8 = function() {
+  return /** @type {!Array<!Uint8Array>} */ (jspb.Message.bytesListAsU8(
+      this.getAccountaddressesList()));
+};
+
+
+/** @param {!(Array<!Uint8Array>|Array<string>)} value */
 proto.model.GetAccountBalancesRequest.prototype.setAccountaddressesList = function(value) {
   jspb.Message.setField(this, 1, value || []);
 };
 
 
 /**
- * @param {string} value
+ * @param {!(string|Uint8Array)} value
  * @param {number=} opt_index
  */
 proto.model.GetAccountBalancesRequest.prototype.addAccountaddresses = function(value, opt_index) {

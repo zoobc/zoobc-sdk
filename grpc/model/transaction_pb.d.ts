@@ -4,7 +4,7 @@
 import * as jspb from "google-protobuf";
 import * as model_proofOfOwnership_pb from "../model/proofOfOwnership_pb";
 import * as model_pagination_pb from "../model/pagination_pb";
-import * as model_batchReceipt_pb from "../model/batchReceipt_pb";
+import * as model_receipt_pb from "../model/receipt_pb";
 import * as model_nodeRegistration_pb from "../model/nodeRegistration_pb";
 import * as model_escrow_pb from "../model/escrow_pb";
 import * as model_multiSignature_pb from "../model/multiSignature_pb";
@@ -23,11 +23,15 @@ export class Transaction extends jspb.Message {
   getHeight(): number;
   setHeight(value: number): void;
 
-  getSenderaccountaddress(): string;
-  setSenderaccountaddress(value: string): void;
+  getSenderaccountaddress(): Uint8Array | string;
+  getSenderaccountaddress_asU8(): Uint8Array;
+  getSenderaccountaddress_asB64(): string;
+  setSenderaccountaddress(value: Uint8Array | string): void;
 
-  getRecipientaccountaddress(): string;
-  setRecipientaccountaddress(value: string): void;
+  getRecipientaccountaddress(): Uint8Array | string;
+  getRecipientaccountaddress_asU8(): Uint8Array;
+  getRecipientaccountaddress_asB64(): string;
+  setRecipientaccountaddress(value: Uint8Array | string): void;
 
   getTransactiontype(): number;
   setTransactiontype(value: number): void;
@@ -137,6 +141,11 @@ export class Transaction extends jspb.Message {
   getEscrow(): model_escrow_pb.Escrow | undefined;
   setEscrow(value?: model_escrow_pb.Escrow): void;
 
+  getMessage(): Uint8Array | string;
+  getMessage_asU8(): Uint8Array;
+  getMessage_asB64(): string;
+  setMessage(value: Uint8Array | string): void;
+
   getTransactionbodyCase(): Transaction.TransactionbodyCase;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Transaction.AsObject;
@@ -154,8 +163,8 @@ export namespace Transaction {
     id: string,
     blockid: string,
     height: number,
-    senderaccountaddress: string,
-    recipientaccountaddress: string,
+    senderaccountaddress: Uint8Array | string,
+    recipientaccountaddress: Uint8Array | string,
     transactiontype: number,
     fee: string,
     timestamp: string,
@@ -180,24 +189,25 @@ export namespace Transaction {
     liquidpaymentstoptransactionbody?: LiquidPaymentStopTransactionBody.AsObject,
     signature: Uint8Array | string,
     escrow?: model_escrow_pb.Escrow.AsObject,
+    message: Uint8Array | string,
   }
 
   export enum TransactionbodyCase {
     TRANSACTIONBODY_NOT_SET = 0,
-    EMPTYTRANSACTIONBODY = 15,
-    SENDMONEYTRANSACTIONBODY = 16,
-    NODEREGISTRATIONTRANSACTIONBODY = 17,
-    UPDATENODEREGISTRATIONTRANSACTIONBODY = 18,
-    REMOVENODEREGISTRATIONTRANSACTIONBODY = 19,
-    CLAIMNODEREGISTRATIONTRANSACTIONBODY = 20,
-    SETUPACCOUNTDATASETTRANSACTIONBODY = 21,
-    REMOVEACCOUNTDATASETTRANSACTIONBODY = 22,
-    APPROVALESCROWTRANSACTIONBODY = 23,
-    MULTISIGNATURETRANSACTIONBODY = 24,
-    FEEVOTECOMMITTRANSACTIONBODY = 25,
-    FEEVOTEREVEALTRANSACTIONBODY = 26,
-    LIQUIDPAYMENTTRANSACTIONBODY = 27,
-    LIQUIDPAYMENTSTOPTRANSACTIONBODY = 28,
+    EMPTYTRANSACTIONBODY = 17,
+    SENDMONEYTRANSACTIONBODY = 18,
+    NODEREGISTRATIONTRANSACTIONBODY = 19,
+    UPDATENODEREGISTRATIONTRANSACTIONBODY = 20,
+    REMOVENODEREGISTRATIONTRANSACTIONBODY = 21,
+    CLAIMNODEREGISTRATIONTRANSACTIONBODY = 22,
+    SETUPACCOUNTDATASETTRANSACTIONBODY = 23,
+    REMOVEACCOUNTDATASETTRANSACTIONBODY = 24,
+    APPROVALESCROWTRANSACTIONBODY = 25,
+    MULTISIGNATURETRANSACTIONBODY = 26,
+    FEEVOTECOMMITTRANSACTIONBODY = 27,
+    FEEVOTEREVEALTRANSACTIONBODY = 28,
+    LIQUIDPAYMENTTRANSACTIONBODY = 29,
+    LIQUIDPAYMENTSTOPTRANSACTIONBODY = 30,
   }
 }
 
@@ -243,8 +253,10 @@ export class NodeRegistrationTransactionBody extends jspb.Message {
   getNodepublickey_asB64(): string;
   setNodepublickey(value: Uint8Array | string): void;
 
-  getAccountaddress(): string;
-  setAccountaddress(value: string): void;
+  getAccountaddress(): Uint8Array | string;
+  getAccountaddress_asU8(): Uint8Array;
+  getAccountaddress_asB64(): string;
+  setAccountaddress(value: Uint8Array | string): void;
 
   getLockedbalance(): string;
   setLockedbalance(value: string): void;
@@ -267,7 +279,7 @@ export class NodeRegistrationTransactionBody extends jspb.Message {
 export namespace NodeRegistrationTransactionBody {
   export type AsObject = {
     nodepublickey: Uint8Array | string,
-    accountaddress: string,
+    accountaddress: Uint8Array | string,
     lockedbalance: string,
     poown?: model_proofOfOwnership_pb.ProofOfOwnership.AsObject,
   }
@@ -576,8 +588,10 @@ export namespace GetTransactionRequest {
 }
 
 export class GetTransactionsRequest extends jspb.Message {
-  getAccountaddress(): string;
-  setAccountaddress(value: string): void;
+  getAccountaddress(): Uint8Array | string;
+  getAccountaddress_asU8(): Uint8Array;
+  getAccountaddress_asB64(): string;
+  setAccountaddress(value: Uint8Array | string): void;
 
   getHeight(): number;
   setHeight(value: number): void;
@@ -608,7 +622,7 @@ export class GetTransactionsRequest extends jspb.Message {
 
 export namespace GetTransactionsRequest {
   export type AsObject = {
-    accountaddress: string,
+    accountaddress: Uint8Array | string,
     height: number,
     timestampstart: string,
     timestampend: string,
@@ -720,10 +734,10 @@ export namespace SendTransactionRequest {
 }
 
 export class SendTransactionResponse extends jspb.Message {
-  hasBatchreceipt(): boolean;
-  clearBatchreceipt(): void;
-  getBatchreceipt(): model_batchReceipt_pb.BatchReceipt | undefined;
-  setBatchreceipt(value?: model_batchReceipt_pb.BatchReceipt): void;
+  hasReceipt(): boolean;
+  clearReceipt(): void;
+  getReceipt(): model_receipt_pb.Receipt | undefined;
+  setReceipt(value?: model_receipt_pb.Receipt): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SendTransactionResponse.AsObject;
@@ -737,7 +751,7 @@ export class SendTransactionResponse extends jspb.Message {
 
 export namespace SendTransactionResponse {
   export type AsObject = {
-    batchreceipt?: model_batchReceipt_pb.BatchReceipt.AsObject,
+    receipt?: model_receipt_pb.Receipt.AsObject,
   }
 }
 
@@ -806,10 +820,10 @@ export namespace SendBlockTransactionsRequest {
 }
 
 export class SendBlockTransactionsResponse extends jspb.Message {
-  clearBatchreceiptsList(): void;
-  getBatchreceiptsList(): Array<model_batchReceipt_pb.BatchReceipt>;
-  setBatchreceiptsList(value: Array<model_batchReceipt_pb.BatchReceipt>): void;
-  addBatchreceipts(value?: model_batchReceipt_pb.BatchReceipt, index?: number): model_batchReceipt_pb.BatchReceipt;
+  clearReceiptsList(): void;
+  getReceiptsList(): Array<model_receipt_pb.Receipt>;
+  setReceiptsList(value: Array<model_receipt_pb.Receipt>): void;
+  addReceipts(value?: model_receipt_pb.Receipt, index?: number): model_receipt_pb.Receipt;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): SendBlockTransactionsResponse.AsObject;
@@ -823,7 +837,7 @@ export class SendBlockTransactionsResponse extends jspb.Message {
 
 export namespace SendBlockTransactionsResponse {
   export type AsObject = {
-    batchreceiptsList: Array<model_batchReceipt_pb.BatchReceipt.AsObject>,
+    receiptsList: Array<model_receipt_pb.Receipt.AsObject>,
   }
 }
 

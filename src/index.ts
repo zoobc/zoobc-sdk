@@ -101,7 +101,7 @@ export {
   SignatureInfo,
 } from './helper/transaction-builder/multisignature';
 export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
-export { AccountBalanceResponse, AccountBalancesResponse } from './Account';
+export { ZBCAccount } from './Account';
 export { HostInfoResponse } from './Host';
 export { ParticipationScoreResponse } from './ParticipationScore';
 // Export type

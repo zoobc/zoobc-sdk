@@ -111,7 +111,7 @@ proto.model.FeeVoteCommitmentVote.prototype.toObject = function(opt_includeInsta
 proto.model.FeeVoteCommitmentVote.toObject = function(includeInstance, msg) {
   var f, obj = {
     votehash: msg.getVotehash_asB64(),
-    voteraddress: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    voteraddress: msg.getVoteraddress_asB64(),
     blockheight: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
@@ -154,7 +154,7 @@ proto.model.FeeVoteCommitmentVote.deserializeBinaryFromReader = function(msg, re
       msg.setVotehash(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setVoteraddress(value);
       break;
     case 3:
@@ -197,9 +197,9 @@ proto.model.FeeVoteCommitmentVote.serializeBinaryToWriter = function(message, wr
       f
     );
   }
-  f = message.getVoteraddress();
+  f = message.getVoteraddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       2,
       f
     );
@@ -254,17 +254,41 @@ proto.model.FeeVoteCommitmentVote.prototype.setVotehash = function(value) {
 
 
 /**
- * optional string VoterAddress = 2;
- * @return {string}
+ * optional bytes VoterAddress = 2;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.FeeVoteCommitmentVote.prototype.getVoteraddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes VoterAddress = 2;
+ * This is a type-conversion wrapper around `getVoteraddress()`
+ * @return {string}
+ */
+proto.model.FeeVoteCommitmentVote.prototype.getVoteraddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getVoteraddress()));
+};
+
+
+/**
+ * optional bytes VoterAddress = 2;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getVoteraddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.FeeVoteCommitmentVote.prototype.getVoteraddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getVoteraddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.FeeVoteCommitmentVote.prototype.setVoteraddress = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  jspb.Message.setProto3BytesField(this, 2, value);
 };
 
 
@@ -522,7 +546,7 @@ proto.model.FeeVoteRevealVote.toObject = function(includeInstance, msg) {
   var f, obj = {
     voteinfo: (f = msg.getVoteinfo()) && proto.model.FeeVoteInfo.toObject(includeInstance, f),
     votersignature: msg.getVotersignature_asB64(),
-    voteraddress: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    voteraddress: msg.getVoteraddress_asB64(),
     blockheight: jspb.Message.getFieldWithDefault(msg, 4, 0)
   };
 
@@ -570,7 +594,7 @@ proto.model.FeeVoteRevealVote.deserializeBinaryFromReader = function(msg, reader
       msg.setVotersignature(value);
       break;
     case 3:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setVoteraddress(value);
       break;
     case 4:
@@ -621,9 +645,9 @@ proto.model.FeeVoteRevealVote.serializeBinaryToWriter = function(message, writer
       f
     );
   }
-  f = message.getVoteraddress();
+  f = message.getVoteraddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       3,
       f
     );
@@ -711,17 +735,41 @@ proto.model.FeeVoteRevealVote.prototype.setVotersignature = function(value) {
 
 
 /**
- * optional string VoterAddress = 3;
- * @return {string}
+ * optional bytes VoterAddress = 3;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.FeeVoteRevealVote.prototype.getVoteraddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes VoterAddress = 3;
+ * This is a type-conversion wrapper around `getVoteraddress()`
+ * @return {string}
+ */
+proto.model.FeeVoteRevealVote.prototype.getVoteraddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getVoteraddress()));
+};
+
+
+/**
+ * optional bytes VoterAddress = 3;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getVoteraddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.FeeVoteRevealVote.prototype.getVoteraddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getVoteraddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.FeeVoteRevealVote.prototype.setVoteraddress = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  jspb.Message.setProto3BytesField(this, 3, value);
 };
 
 

@@ -1,8 +1,18 @@
-import { GetAccountBalanceResponse, GetAccountBalancesResponse } from '../grpc/model/accountBalance_pb';
-export declare type AccountBalanceResponse = GetAccountBalanceResponse.AsObject;
-export declare type AccountBalancesResponse = GetAccountBalancesResponse.AsObject;
-declare function getBalance(address: string): Promise<AccountBalanceResponse>;
-declare function getBalances(addresses: string[]): Promise<AccountBalancesResponse>;
+/// <reference types="node" />
+export interface ZBCAccount {
+    accountAddress: string;
+    accountType: Buffer;
+    blockHeight: number;
+    spendableBalance: number;
+    balance: number;
+    popRevenue: string;
+    latest: boolean;
+}
+declare function getBalance(address: string, accountType?: Buffer): Promise<ZBCAccount>;
+declare function getBalances(accounts: {
+    address: string;
+    type: Buffer;
+}[]): Promise<ZBCAccount[]>;
 declare const _default: {
     getBalance: typeof getBalance;
     getBalances: typeof getBalances;
