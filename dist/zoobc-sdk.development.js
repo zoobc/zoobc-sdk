@@ -20,18 +20,18 @@ var bip32 = require('bip32');
 var TransportWebUSB = _interopDefault(require('@ledgerhq/hw-transport-webusb'));
 
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
 
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
 
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
 ***************************************************************************** */
 
 function __awaiter(thisArg, _arguments, P, generator) {
@@ -4658,8 +4658,7 @@ proto.google.protobuf.FieldDescriptorProto.toObject = function(includeInstance, 
     defaultValue: (f = googleProtobuf.Message.getField(msg, 7)) == null ? undefined : f,
     oneofIndex: (f = googleProtobuf.Message.getField(msg, 9)) == null ? undefined : f,
     jsonName: (f = googleProtobuf.Message.getField(msg, 10)) == null ? undefined : f,
-    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f),
-    proto3Optional: (f = googleProtobuf.Message.getBooleanField(msg, 17)) == null ? undefined : f
+    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -4736,10 +4735,6 @@ proto.google.protobuf.FieldDescriptorProto.deserializeBinaryFromReader = functio
       var value = new proto.google.protobuf.FieldOptions;
       reader.readMessage(value,proto.google.protobuf.FieldOptions.deserializeBinaryFromReader);
       msg.setOptions(value);
-      break;
-    case 17:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setProto3Optional(value);
       break;
     default:
       reader.skipField();
@@ -4839,13 +4834,6 @@ proto.google.protobuf.FieldDescriptorProto.serializeBinaryToWriter = function(me
       8,
       f,
       proto.google.protobuf.FieldOptions.serializeBinaryToWriter
-    );
-  }
-  f = /** @type {boolean} */ (googleProtobuf.Message.getField(message, 17));
-  if (f != null) {
-    writer.writeBool(
-      17,
-      f
     );
   }
 };
@@ -5242,42 +5230,6 @@ proto.google.protobuf.FieldDescriptorProto.prototype.clearOptions = function() {
  */
 proto.google.protobuf.FieldDescriptorProto.prototype.hasOptions = function() {
   return googleProtobuf.Message.getField(this, 8) != null;
-};
-
-
-/**
- * optional bool proto3_optional = 17;
- * @return {boolean}
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.getProto3Optional = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 17, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.setProto3Optional = function(value) {
-  return googleProtobuf.Message.setField(this, 17, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.clearProto3Optional = function() {
-  return googleProtobuf.Message.setField(this, 17, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.hasProto3Optional = function() {
-  return googleProtobuf.Message.getField(this, 17) != null;
 };
 
 
@@ -6985,7 +6937,7 @@ proto.google.protobuf.FileOptions.toObject = function(includeInstance, msg) {
     pyGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 18, false),
     phpGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 42, false),
     deprecated: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 23, false),
-    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, true),
+    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, false),
     objcClassPrefix: (f = googleProtobuf.Message.getField(msg, 36)) == null ? undefined : f,
     csharpNamespace: (f = googleProtobuf.Message.getField(msg, 37)) == null ? undefined : f,
     swiftPrefix: (f = googleProtobuf.Message.getField(msg, 39)) == null ? undefined : f,
@@ -7750,7 +7702,7 @@ proto.google.protobuf.FileOptions.prototype.hasDeprecated = function() {
  * @return {boolean}
  */
 proto.google.protobuf.FileOptions.prototype.getCcEnableArenas = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, true));
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, false));
 };
 
 
@@ -43755,6 +43707,36 @@ var auth_pb_1 = auth_pb.RequestType;
 const ADDRESS_LENGTH = 66;
 const VERSION = new Buffer([1]);
 
+function toGetPendingList(res) {
+    const list = res.pendingtransactionsList.map(tx => {
+        const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
+        const amount = readInt64(bytes, 165);
+        const fee = readInt64(bytes, 153);
+        const timestamp = readInt64(bytes, 5);
+        const recipient = bytes.slice(87, 153);
+        return {
+            amount: amount,
+            blockheight: tx.blockheight,
+            fee: fee,
+            latest: tx.latest,
+            senderaddress: tx.senderaddress,
+            recipientaddress: recipient.toString(),
+            status: tx.status,
+            timestamp: timestamp,
+            transactionhash: tx.transactionhash,
+        };
+    });
+    return {
+        count: res.count,
+        page: res.page,
+        pendingtransactionsList: list,
+    };
+}
+function generateTransactionHash(buffer) {
+    const hashed = Buffer.from(jsSha3.sha3_256(buffer), 'hex');
+    return getZBCAddress(hashed, 'ZTX');
+}
+
 const TRANSACTION_TYPE = new Buffer([2, 0, 0, 0]);
 function registerNodeBuilder(data, poown, seed) {
     let bytes;
@@ -43791,7 +43773,9 @@ function registerNodeBuilder(data, poown, seed) {
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
         const signatureType = writeInt32(0);
-        const signature = seed.sign(bytes);
+        const txFormat = generateTransactionHash(bytes);
+        const txBytes = ZBCAddressToBytes(txFormat);
+        const signature = seed.sign(txBytes);
         const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
         return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
     }
@@ -43846,7 +43830,9 @@ function updateNodeBuilder(data, poown, seed) {
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
         const signatureType = writeInt32(0);
-        const signature = seed.sign(bytes);
+        const txFormat = generateTransactionHash(bytes);
+        const txBytes = ZBCAddressToBytes(txFormat);
+        const signature = seed.sign(txBytes);
         const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
         return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
     }
@@ -43898,7 +43884,9 @@ function removeNodeBuilder(data, seed) {
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
         const signatureType = writeInt32(0);
-        const signature = seed.sign(bytes);
+        const txFormat = generateTransactionHash(bytes);
+        const txBytes = ZBCAddressToBytes(txFormat);
+        const signature = seed.sign(txBytes);
         const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
         return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
     }
@@ -43946,7 +43934,9 @@ function claimNodeBuilder(data, poown, seed) {
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
         const signatureType = writeInt32(0);
-        const signature = seed.sign(bytes);
+        const txFormat = generateTransactionHash(bytes);
+        const txBytes = ZBCAddressToBytes(txFormat);
+        const signature = seed.sign(txBytes);
         const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
         return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
     }
@@ -44289,7 +44279,9 @@ function escrowBuilder(data, seed) {
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
         const signatureType = writeInt32(0);
-        const signature = seed.sign(bytes);
+        const txFormat = generateTransactionHash(bytes);
+        const txBytes = ZBCAddressToBytes(txFormat);
+        const signature = seed.sign(txBytes);
         const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
         return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
     }
@@ -45024,7 +45016,9 @@ function multisignatureBuilder(data, seed) {
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
         const signatureType = writeInt32(0);
-        const signature = seed.sign(bytes);
+        const txFormat = generateTransactionHash(bytes);
+        const txBytes = ZBCAddressToBytes(txFormat);
+        const signature = seed.sign(txBytes);
         const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
         return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
     }
@@ -46358,7 +46352,9 @@ function setupDatasetBuilder(data, seed) {
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
         const signatureType = writeInt32(0);
-        const signature = seed.sign(bytes);
+        const txFormat = generateTransactionHash(bytes);
+        const txBytes = ZBCAddressToBytes(txFormat);
+        const signature = seed.sign(txBytes);
         const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
         return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
     }
@@ -46421,7 +46417,9 @@ function removeDatasetBuilder(data, seed) {
     // ========== END NULLIFYING THE ESCROW =========
     if (seed) {
         const signatureType = writeInt32(0);
-        const signature = seed.sign(bytes);
+        const txFormat = generateTransactionHash(bytes);
+        const txBytes = ZBCAddressToBytes(txFormat);
+        const signature = seed.sign(txBytes);
         const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
         return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
     }
@@ -49746,7 +49744,9 @@ function feeVoteRevealBuilder(data, seed) {
     bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
     // ========== END NULLIFYING THE ESCROW =========
     const signatureType = writeInt32(0);
-    const signature = seed.sign(bytes);
+    const txFormat = generateTransactionHash(bytes);
+    const txBytes = ZBCAddressToBytes(txFormat);
+    const signature = seed.sign(txBytes);
     const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
@@ -49947,36 +49947,6 @@ function toBase64Url(base64Str) {
         .replace(/\+/g, '-')
         .replace(/\//g, '_')
         .replace(/\=/g, '');
-}
-
-function toGetPendingList(res) {
-    const list = res.pendingtransactionsList.map(tx => {
-        const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        const amount = readInt64(bytes, 165);
-        const fee = readInt64(bytes, 153);
-        const timestamp = readInt64(bytes, 5);
-        const recipient = bytes.slice(87, 153);
-        return {
-            amount: amount,
-            blockheight: tx.blockheight,
-            fee: fee,
-            latest: tx.latest,
-            senderaddress: tx.senderaddress,
-            recipientaddress: recipient.toString(),
-            status: tx.status,
-            timestamp: timestamp,
-            transactionhash: tx.transactionhash,
-        };
-    });
-    return {
-        count: res.count,
-        page: res.page,
-        pendingtransactionsList: list,
-    };
-}
-function generateTransactionHash(buffer) {
-    const hashed = Buffer.from(jsSha3.sha3_256(buffer), 'hex');
-    return getZBCAddress(hashed, 'ZTX');
 }
 
 var signature_pb = createCommonjsModule(function (module, exports) {
@@ -50193,7 +50163,9 @@ function sendMoneyBuilder(data, seed) {
     }
     if (seed) {
         const signatureType = writeInt32(0);
-        const signature = seed.sign(bytes);
+        const txFormat = generateTransactionHash(bytes);
+        const txBytes = ZBCAddressToBytes(txFormat);
+        const signature = seed.sign(txBytes);
         const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
         return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
     }
