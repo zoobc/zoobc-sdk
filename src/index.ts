@@ -23,13 +23,12 @@ export { RequestType } from '../grpc/model/auth_pb';
 export { Subscription } from 'rxjs';
 
 // EXPORT INTERFACE
-export { EscrowListParams, EscrowTransactionsResponse, EscrowTransactionResponse, ApprovalEscrowTransactionResponse } from './Escrows';
+export { EscrowListParams, ApprovalEscrowTransactionResponse } from './Escrows';
 export {
   NodeListParams,
   NodeParams,
   NodeHardwareResponse,
   GenerateNodeKeyResponses,
-  NodeRegistrationsResponse,
   NodePostTransactionResponse,
   GetPendingNodeRegistrationResponse,
   GetMyNodePublicKeyResponses,
@@ -53,14 +52,8 @@ export {
   MultisigPostTransactionResponse,
   GetMultisigAddressResponse,
 } from './MultiSignature';
-export { AccountLedgerListParams, AccountLedgersResponse } from './AccountLedger';
-export {
-  AccountDatasetListParams,
-  AccountDatasetsResponse,
-  AccountDatasetResponse,
-  SetupDatasetResponse,
-  RemoveAccountDatasetResponse,
-} from './AccountDataset';
+export { AccountLedgerListParams } from './AccountLedger';
+export { AccountDatasetListParams, SetupDatasetResponse, RemoveAccountDatasetResponse } from './AccountDataset';
 // EXPORT HELPER INTERFACE
 export { HostInterface } from './Network';
 export { RegisterNodeInterface, registerNodeBuilder, readNodeRegistrationBytes } from './helper/transaction-builder/register-node';
@@ -83,15 +76,7 @@ export {
 export { feeVoteInterface, feeVoteCommitBuilder, feeVoteRevealBuilder } from './helper/transaction-builder/fee-vote';
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
 export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
-export {
-  toTransactionListWallet,
-  toZBCTransactions,
-  ZooTransactionsInterface,
-  toTransactionWallet,
-  ZooTransactionInterface,
-  ZBCTransaction,
-  ZBCTransactions,
-} from './helper/wallet/Transaction';
+export { toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
 export { bufferToBase64, toBase64Url } from './helper/converters';
 export {
   MultiSigInterface,
@@ -101,7 +86,7 @@ export {
   SignatureInfo,
 } from './helper/transaction-builder/multisignature';
 export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
-export { ZBCAccount } from './Account';
+export { AccountBalance } from './Account';
 export { HostInfoResponse } from './Host';
 export { ParticipationScoreResponse } from './ParticipationScore';
 // Export type

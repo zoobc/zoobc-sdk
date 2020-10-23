@@ -5,6 +5,8 @@ import B32Dec from 'base32-decode';
 import { Int64LE } from 'int64-buffer';
 import zoobc from '..';
 import { BTC_ACCOUNT, ZBC_ACCOUNT } from './transaction-builder/constant';
+import { Account } from './interfaces';
+import { AccountType } from '../../grpc/model/accountType_pb';
 
 export const errorDateMessage = {
   code: '',
@@ -98,7 +100,7 @@ export function readInt64(buff: Buffer, offset: number): string {
 }
 
 export function writeInt32(number: number): Buffer {
-  let byte = new Buffer(4);
+  let byte = Buffer.alloc(4);
   byte.writeUInt32LE(number, 0);
   return byte;
 }
@@ -114,18 +116,32 @@ export async function validationTimestamp(txBytes: Buffer) {
   else return false;
 }
 
-export function parseAccountAddress(account: Buffer): { address: string; type: Buffer } {
-  console.log(account);
-
-  const type = account.slice(0, 4);
-  console.log(type);
-  console.log(account.slice(4, 36));
+export function parseAccountAddress(account: string | Uint8Array): Account {
+  const accountBytes = Buffer.from(account.toString(), 'base64');
+  const type = accountBytes.readInt32LE(0);
 
   let address = '';
-  if (type.equals(ZBC_ACCOUNT)) {
-    address = getZBCAddress(account.slice(4, 36));
-    return { address, type };
-  } else if (type.equals(BTC_ACCOUNT)) {
-    return { address, type };
-  } else return { address, type };
+  switch (type) {
+    case AccountType.ZBCACCOUNTTYPE:
+      address = getZBCAddress(accountBytes.slice(4, 36));
+      return { address, type };
+    case AccountType.BTCACCOUNTTYPE:
+      return { address, type };
+    default:
+      return { address, type };
+  }
+}
+
+export function accountToBytes(account: Account): Buffer {
+  const type = account.type;
+  switch (type) {
+    case AccountType.ZBCACCOUNTTYPE:
+      const bytes = ZBCAddressToBytes(account.address);
+      const typeBytes = writeInt32(account.type);
+      return Buffer.from([...typeBytes, ...bytes]);
+    case AccountType.BTCACCOUNTTYPE:
+      return Buffer.from([]);
+    default:
+      return Buffer.from([]);
+  }
 }

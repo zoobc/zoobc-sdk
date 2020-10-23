@@ -1,22 +1,6 @@
-import { readInt64, getZBCAddress } from '../utils';
-import { GetTransactionsResponse, Transaction, TransactionType } from '../../../grpc/model/transaction_pb';
-
-export interface ZooTransactionsInterface {
-  total: number;
-  transactions: ZooTransactionInterface[];
-}
-
-export interface ZooTransactionInterface {
-  id: string;
-  address: string | Uint8Array;
-  timestamp: number;
-  fee: number;
-  type: string;
-  amount: number;
-  blockId: string;
-  height: number;
-  transactionIndex: number;
-}
+import { getZBCAddress, parseAccountAddress } from '../utils';
+import { GetTransactionsResponse, Transaction } from '../../../grpc/model/transaction_pb';
+import { Account } from '../interfaces';
 
 export interface ZBCTransactions {
   total: number;
@@ -25,9 +9,9 @@ export interface ZBCTransactions {
 
 export interface ZBCTransaction {
   id?: string;
-  sender: string | Uint8Array;
+  sender: Account;
   senderAlias?: string;
-  recipient: string | Uint8Array;
+  recipient: Account;
   recipientAlias?: string;
   timestamp: number;
   fee: number;
@@ -40,53 +24,34 @@ export interface ZBCTransaction {
   escrow?: boolean;
   escrowStatus?: number;
   multisig?: boolean;
-  approverAddress?: string;
+  approverAddress?: Account;
   commission?: number;
   timeout?: number;
   instruction?: string;
 }
 
-export function toZBCTransactions(transactions: Array<Transaction.AsObject>): ZBCTransaction[] {
-  let transactionList: ZBCTransaction[] = transactions.map(tx => {
-    const txBody = getBodyBytes(tx);
-    return {
-      id: tx.id,
-      sender: tx.senderaccountaddress,
-      recipient: tx.recipientaccountaddress,
-      timestamp: parseInt(tx.timestamp) * 1000,
-      fee: parseInt(tx.fee),
-      blockId: tx.blockid,
-      height: tx.height,
-      transactionIndex: tx.transactionindex,
-      transactionHash: getZBCAddress(Buffer.from(tx.transactionhash.toString(), 'base64'), 'ZTX'),
-      transactionType: tx.transactiontype,
-      txBody,
-    };
-  });
-  return transactionList;
+export function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransaction {
+  const txBody = getBodyBytes(transaction);
+  return {
+    id: transaction.id,
+    sender: parseAccountAddress(transaction.senderaccountaddress),
+    recipient: parseAccountAddress(transaction.recipientaccountaddress),
+    timestamp: parseInt(transaction.timestamp) * 1000,
+    fee: parseInt(transaction.fee),
+    blockId: transaction.blockid,
+    height: transaction.height,
+    transactionIndex: transaction.transactionindex,
+    transactionHash: getZBCAddress(Buffer.from(transaction.transactionhash.toString(), 'base64'), 'ZTX'),
+    transactionType: transaction.transactiontype,
+    txBody,
+  };
 }
 
-export function toTransactionListWallet(res: GetTransactionsResponse.AsObject, ownAddress: string): ZooTransactionsInterface {
-  let transactionList = res.transactionsList.map(tx => {
-    const bytes = Buffer.from(tx.transactionbodybytes.toString(), 'base64');
-    const amount = readInt64(bytes, 0);
-    const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
-    const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
-    return {
-      id: tx.id,
-      address: friendAddress,
-      type: type,
-      timestamp: parseInt(tx.timestamp) * 1000,
-      fee: parseInt(tx.fee),
-      amount: parseInt(amount),
-      blockId: tx.blockid,
-      height: tx.height,
-      transactionIndex: tx.transactionindex,
-    };
-  });
+export function toZBCTransactions(transactions: GetTransactionsResponse.AsObject): ZBCTransactions {
+  const list = transactions.transactionsList.map(tx => toZBCTransaction(tx));
   return {
-    total: parseInt(res.total),
-    transactions: transactionList,
+    total: parseInt(transactions.total),
+    transactions: list,
   };
 }
 
@@ -109,22 +74,4 @@ function getBodyBytes(tx: Transaction.AsObject) {
     tx.updatenoderegistrationtransactionbody ||
     {}
   );
-}
-
-export function toTransactionWallet(tx: Transaction.AsObject, ownAddress: string): ZooTransactionInterface {
-  const bytes = Buffer.from(tx.transactionbodybytes.toString(), 'base64');
-  const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
-  const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
-  const amount = readInt64(bytes, 0);
-  return {
-    id: tx.id,
-    address: friendAddress,
-    type: type,
-    timestamp: parseInt(tx.timestamp) * 1000,
-    fee: parseInt(tx.fee),
-    amount: parseInt(amount),
-    blockId: tx.blockid,
-    height: tx.height,
-    transactionIndex: tx.transactionindex,
-  };
 }

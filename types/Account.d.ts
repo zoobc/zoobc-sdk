@@ -1,18 +1,14 @@
-/// <reference types="node" />
-export interface ZBCAccount {
-    accountAddress: string;
-    accountType: Buffer;
+import { Account } from './helper/interfaces';
+export interface AccountBalance {
+    account: Account;
     blockHeight: number;
     spendableBalance: number;
     balance: number;
     popRevenue: string;
     latest: boolean;
 }
-declare function getBalance(address: string, accountType?: Buffer): Promise<ZBCAccount>;
-declare function getBalances(accounts: {
-    address: string;
-    type: Buffer;
-}[]): Promise<ZBCAccount[]>;
+declare function getBalance(account: Account): Promise<AccountBalance>;
+declare function getBalances(accounts: Account[]): Promise<AccountBalance[]>;
 declare const _default: {
     getBalance: typeof getBalance;
     getBalances: typeof getBalances;

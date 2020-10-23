@@ -1,8 +1,9 @@
 import {
   GetAccountDatasetsResponse,
   GetAccountDatasetsRequest,
-  AccountDataset,
+  // AccountDataset,
   GetAccountDatasetRequest,
+  // AccountDataset,
 } from '../grpc/model/accountDataset_pb';
 import { AccountDatasetServiceClient } from '../grpc/service/accountDataset_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
@@ -12,18 +13,20 @@ import { TransactionServiceClient } from '../grpc/service/transaction_pb_service
 import { setupDatasetBuilder, SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
 import { BIP32Interface } from 'bip32';
 import { RemoveDatasetInterface, removeDatasetBuilder } from './helper/transaction-builder/remove-account-dataset';
-import { errorDateMessage, validationTimestamp } from './helper/utils';
+import { accountToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
+import { Account } from './helper/interfaces';
+import { AccountDataset, AccountDatasets, toZBCDataset, toZBCDatasets } from './helper/wallet/AccountDataset';
 
-export type AccountDatasetsResponse = GetAccountDatasetsResponse.AsObject;
-export type AccountDatasetResponse = AccountDataset.AsObject;
+// export type AccountDatasetsResponse = GetAccountDatasetsResponse.AsObject;
+// export type AccountDatasetResponse = AccountDataset.AsObject;
 export type SetupDatasetResponse = PostTransactionResponse.AsObject;
 export type RemoveAccountDatasetResponse = PostTransactionResponse.AsObject;
 
 export interface AccountDatasetListParams {
   property?: string;
   value?: string;
-  recipientAccountAddress?: string;
-  setterAccountAddress?: string;
+  setter?: Account;
+  recipient?: Account;
   height?: number;
   pagination?: {
     limit?: number;
@@ -32,16 +35,16 @@ export interface AccountDatasetListParams {
   };
 }
 
-export function getList(params?: AccountDatasetListParams): Promise<AccountDatasetsResponse> {
+export function getList(params?: AccountDatasetListParams): Promise<AccountDatasets> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetAccountDatasetsRequest();
     if (params) {
-      const { property, value, recipientAccountAddress, setterAccountAddress, height, pagination } = params;
+      const { property, value, setter, recipient, height, pagination } = params;
       if (property) request.setProperty(property);
       if (value) request.setValue(value);
-      if (setterAccountAddress) request.setSetteraccountaddress(setterAccountAddress);
-      if (recipientAccountAddress) request.setRecipientaccountaddress(recipientAccountAddress);
+      if (setter) request.setSetteraccountaddress(accountToBytes(setter));
+      if (recipient) request.setRecipientaccountaddress(accountToBytes(recipient));
       if (height) request.setHeight(height);
       if (pagination) {
         const reqPagination = new Pagination();
@@ -57,24 +60,24 @@ export function getList(params?: AccountDatasetListParams): Promise<AccountDatas
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      if (res) resolve(res.toObject());
+      if (res) resolve(toZBCDatasets(res.toObject()));
     });
   });
 }
 
-export function get(property: string, recipient: string): Promise<AccountDatasetResponse> {
+export function get(property: string, recipient: Account): Promise<AccountDataset> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetAccountDatasetRequest();
     request.setProperty(property);
-    request.setRecipientaccountaddress(recipient);
+    request.setRecipientaccountaddress(accountToBytes(recipient));
     const client = new AccountDatasetServiceClient(networkIP.host);
     client.getAccountDataset(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      if (res) resolve(res.toObject());
+      if (res) resolve(toZBCDataset(res.toObject()));
     });
   });
 }

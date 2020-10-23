@@ -42,6 +42,7 @@ const commonjsPulgin = () => {
       './grpc/model/signature_pb.js': ['SignatureType', 'PrivateKeyBytesLength', 'BitcoinPublicKeyFormat'],
       './grpc/model/spine_pb.js': ['SpinePublicKeyAction'],
       './grpc/model/spineBlockManifest_pb.js': ['SpineBlockManifestType'],
+      './grpc/model/accountType_pb': ['AccountType']
 
     },
   });

@@ -1,28 +1,14 @@
 import { GetTransactionsResponse, Transaction } from '../../../grpc/model/transaction_pb';
-export interface ZooTransactionsInterface {
-    total: number;
-    transactions: ZooTransactionInterface[];
-}
-export interface ZooTransactionInterface {
-    id: string;
-    address: string | Uint8Array;
-    timestamp: number;
-    fee: number;
-    type: string;
-    amount: number;
-    blockId: string;
-    height: number;
-    transactionIndex: number;
-}
+import { Account } from '../interfaces';
 export interface ZBCTransactions {
     total: number;
     transactions: ZBCTransaction[];
 }
 export interface ZBCTransaction {
     id?: string;
-    sender: string | Uint8Array;
+    sender: Account;
     senderAlias?: string;
-    recipient: string | Uint8Array;
+    recipient: Account;
     recipientAlias?: string;
     timestamp: number;
     fee: number;
@@ -35,11 +21,10 @@ export interface ZBCTransaction {
     escrow?: boolean;
     escrowStatus?: number;
     multisig?: boolean;
-    approverAddress?: string;
+    approverAddress?: Account;
     commission?: number;
     timeout?: number;
     instruction?: string;
 }
-export declare function toZBCTransactions(transactions: Array<Transaction.AsObject>): ZBCTransaction[];
-export declare function toTransactionListWallet(res: GetTransactionsResponse.AsObject, ownAddress: string): ZooTransactionsInterface;
-export declare function toTransactionWallet(tx: Transaction.AsObject, ownAddress: string): ZooTransactionInterface;
+export declare function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransaction;
+export declare function toZBCTransactions(transactions: GetTransactionsResponse.AsObject): ZBCTransactions;

@@ -12,7 +12,9 @@ import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
 import { BIP32Interface } from 'bip32';
-import { errorDateMessage, validationTimestamp } from './helper/utils';
+import { accountToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
+import { Account } from './helper/interfaces';
+import { toZBCTransaction, toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
 
 export type TransactionsResponse = GetTransactionsResponse.AsObject;
 export type TransactionResponse = Transaction.AsObject;
@@ -20,7 +22,7 @@ export type PostTransactionResponses = PostTransactionResponse.AsObject;
 export type TransactionMinimumFeeResponse = GetTransactionMinimumFeeResponse.AsObject;
 
 export interface TransactionListParams {
-  address?: string;
+  address?: Account;
   height?: number;
   transactionType?: number;
   timestampStart?: string;
@@ -32,7 +34,7 @@ export interface TransactionListParams {
   };
 }
 
-function getList(params?: TransactionListParams): Promise<TransactionsResponse> {
+function getList(params?: TransactionListParams): Promise<ZBCTransactions> {
   return new Promise((resolve, reject) => {
     const request = new GetTransactionsRequest();
     const networkIP = Network.selected();
@@ -40,7 +42,7 @@ function getList(params?: TransactionListParams): Promise<TransactionsResponse> 
     if (params) {
       const { address, height, transactionType, timestampStart, timestampEnd, pagination } = params;
 
-      if (address) request.setAccountaddress(address);
+      if (address) request.setAccountaddress(accountToBytes(address));
       if (height) request.setHeight(height);
       if (transactionType) request.setTransactiontype(transactionType);
       if (timestampStart) request.setTimestampstart(timestampStart);
@@ -60,12 +62,12 @@ function getList(params?: TransactionListParams): Promise<TransactionsResponse> 
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      if (res) resolve(res.toObject());
+      if (res) resolve(toZBCTransactions(res.toObject()));
     });
   });
 }
 
-function get(id: string): Promise<TransactionResponse> {
+function get(id: string): Promise<ZBCTransaction> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetTransactionRequest();
@@ -77,7 +79,7 @@ function get(id: string): Promise<TransactionResponse> {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      if (res) resolve(res.toObject());
+      if (res) resolve(toZBCTransaction(res.toObject()));
     });
   });
 }

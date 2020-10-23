@@ -2,12 +2,12 @@ import { GetAccountBalanceRequest, GetAccountBalancesRequest } from '../grpc/mod
 import { AccountBalanceServiceClient } from '../grpc/service/accountBalance_pb_service';
 import Network from './Network';
 import { grpc } from '@improbable-eng/grpc-web';
-import { parseAccountAddress, ZBCAddressToBytes } from './helper/utils';
+import { accountToBytes, parseAccountAddress, ZBCAddressToBytes } from './helper/utils';
 import { ZBC_ACCOUNT } from './helper/transaction-builder/constant';
+import { Account } from './helper/interfaces';
 
-export interface ZBCAccount {
-  accountAddress: string;
-  accountType: Buffer;
+export interface AccountBalance {
+  account: Account;
   blockHeight: number;
   spendableBalance: number;
   balance: number;
@@ -15,13 +15,14 @@ export interface ZBCAccount {
   latest: boolean;
 }
 
-function getBalance(address: string, accountType: Buffer = ZBC_ACCOUNT): Promise<ZBCAccount> {
+function getBalance(account: Account): Promise<AccountBalance> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetAccountBalanceRequest();
 
-    const addressBytes = ZBCAddressToBytes(address);
-    request.setAccountaddress(Buffer.from([...accountType, ...addressBytes]));
+    const { type, address } = account;
+    const addressBytes = accountToBytes(account);
+    request.setAccountaddress(addressBytes);
     const client = new AccountBalanceServiceClient(networkIP.host);
     client.getAccountBalance(request, (err, res) => {
       if (err) {
@@ -30,8 +31,7 @@ function getBalance(address: string, accountType: Buffer = ZBC_ACCOUNT): Promise
           return resolve({
             spendableBalance: 0,
             balance: 0,
-            accountAddress: address,
-            accountType: accountType,
+            account: { address, type },
             blockHeight: 0,
             popRevenue: '0',
             latest: true,
@@ -41,13 +41,14 @@ function getBalance(address: string, accountType: Buffer = ZBC_ACCOUNT): Promise
 
       const account = res && res.toObject().accountbalance;
       if (account) {
-        const addressBytes = Buffer.from(account.accountaddress.toString(), 'base64');
-        const parsedAddress = parseAccountAddress(addressBytes);
+        const parsedAddress = parseAccountAddress(account.accountaddress);
         resolve({
           spendableBalance: parseInt(account.spendablebalance),
           balance: parseInt(account.balance),
-          accountAddress: parsedAddress.address,
-          accountType: parsedAddress.type,
+          account: {
+            address: parsedAddress.address,
+            type: parsedAddress.type,
+          },
           blockHeight: account.blockheight,
           popRevenue: account.poprevenue,
           latest: account.latest,
@@ -57,15 +58,11 @@ function getBalance(address: string, accountType: Buffer = ZBC_ACCOUNT): Promise
   });
 }
 
-function getBalances(accounts: { address: string; type: Buffer }[]): Promise<ZBCAccount[]> {
+function getBalances(accounts: Account[]): Promise<AccountBalance[]> {
   return new Promise((resolve, reject) => {
+    const addressesBytes: Buffer[] = accounts.map(account => accountToBytes(account));
     const networkIP = Network.selected();
     const request = new GetAccountBalancesRequest();
-
-    const addressesBytes: Buffer[] = accounts.map(account => {
-      const bytes = ZBCAddressToBytes(account.address);
-      return Buffer.from([...account.type, ...bytes]);
-    });
 
     request.setAccountaddressesList(addressesBytes);
     const client = new AccountBalanceServiceClient(networkIP.host);
@@ -78,13 +75,14 @@ function getBalances(accounts: { address: string; type: Buffer }[]): Promise<ZBC
       const accounts = res && res.toObject().accountbalancesList;
       if (accounts) {
         const zbcAccounts = accounts.map(account => {
-          const addressBytes = Buffer.from(account.accountaddress.toString(), 'base64');
-          const parsedAddress = parseAccountAddress(addressBytes);
+          const parsedAddress = parseAccountAddress(account.accountaddress);
           return {
             spendableBalance: parseInt(account.spendablebalance),
             balance: parseInt(account.balance),
-            accountAddress: parsedAddress.address,
-            accountType: parsedAddress.type,
+            account: {
+              address: parsedAddress.address,
+              type: parsedAddress.type,
+            },
             blockHeight: account.blockheight,
             popRevenue: account.poprevenue,
             latest: account.latest,

@@ -26,11 +26,13 @@ import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/t
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { Empty } from '../grpc/model/empty_pb';
-import { errorDateMessage, validationTimestamp } from './helper/utils';
+import { accountToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
+import { Account } from './helper/interfaces';
+import { NodeRegistration, NodeRegistrations, toZBCNodeRegistration, toZBCNodeRegistrations } from './helper/wallet/Node';
 
 export type NodeHardwareResponse = GetNodeHardwareResponse.AsObject;
 export type GenerateNodeKeyResponses = GenerateNodeKeyResponse.AsObject;
-export type NodeRegistrationsResponse = GetNodeRegistrationResponse.AsObject;
+// export type NodeRegistrationsResponse = GetNodeRegistrationResponse.AsObject;
 export type NodePostTransactionResponse = PostTransactionResponse.AsObject;
 export type GetPendingNodeRegistrationResponse = GetPendingNodeRegistrationsResponse.AsObject;
 export type GetMyNodePublicKeyResponses = GetMyNodePublicKeyResponse.AsObject;
@@ -48,7 +50,7 @@ export interface NodeListParams {
 }
 
 export interface NodeParams {
-  owner?: string;
+  owner?: Account;
   publicKey?: string;
   height?: number;
 }
@@ -87,7 +89,7 @@ function generateNodeKey(networkIP: string, childSeed: BIP32Interface): Promise<
   });
 }
 
-function getList(params?: NodeListParams): Promise<GetNodeRegistrationsResponse.AsObject> {
+function getList(params?: NodeListParams): Promise<NodeRegistrations> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetNodeRegistrationsRequest();
@@ -114,19 +116,19 @@ function getList(params?: NodeListParams): Promise<GetNodeRegistrationsResponse.
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      if (res) resolve(res.toObject());
+      if (res) resolve(toZBCNodeRegistrations(res.toObject()));
     });
   });
 }
 
-function get(params: NodeParams): Promise<NodeRegistrationsResponse> {
+function get(params: NodeParams): Promise<NodeRegistration> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetNodeRegistrationRequest();
     if (params) {
       const { height, owner, publicKey } = params;
 
-      if (owner) request.setAccountaddress(owner);
+      if (owner) request.setAccountaddress(accountToBytes(owner));
       if (publicKey) request.setNodepublickey(publicKey);
       if (height) request.setRegistrationheight(height);
     }
@@ -138,7 +140,7 @@ function get(params: NodeParams): Promise<NodeRegistrationsResponse> {
         if (code == grpc.Code.NotFound) return resolve(undefined);
         else if (code != grpc.Code.OK) return reject({ code, message, metadata });
       }
-      if (res) resolve(res.toObject());
+      if (res) resolve(toZBCNodeRegistration(res.toObject().noderegistration));
     });
   });
 }
