@@ -32,15 +32,9 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface
 
   bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, sender, recipient, fee, bodyLength, amount]);
 
-  console.log(data);
-
   if (data.approverAddress && data.commission && data.timeout && data.instruction) {
     // escrow bytes
-    console.log('hello there');
-
     const approverAddress = accountToBytes(data.approverAddress);
-    console.log(approverAddress);
-
     const commission = writeInt64(data.commission * 1e8);
     const timeout = writeInt64(data.timeout);
     const instruction = Buffer.from(data.instruction, 'utf-8');
