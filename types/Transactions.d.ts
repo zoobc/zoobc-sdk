@@ -1,10 +1,8 @@
-import { PostTransactionResponse, GetTransactionsResponse, Transaction, GetTransactionMinimumFeeResponse } from '../grpc/model/transaction_pb';
+import { PostTransactionResponse, GetTransactionMinimumFeeResponse } from '../grpc/model/transaction_pb';
 import { SendMoneyInterface } from './helper/transaction-builder/send-money';
 import { BIP32Interface } from 'bip32';
 import { Account } from './helper/interfaces';
 import { ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
-export declare type TransactionsResponse = GetTransactionsResponse.AsObject;
-export declare type TransactionResponse = Transaction.AsObject;
 export declare type PostTransactionResponses = PostTransactionResponse.AsObject;
 export declare type TransactionMinimumFeeResponse = GetTransactionMinimumFeeResponse.AsObject;
 export interface TransactionListParams {

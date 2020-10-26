@@ -4,7 +4,6 @@ import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
 import { Int64LE } from 'int64-buffer';
 import zoobc from '..';
-import { BTC_ACCOUNT, ZBC_ACCOUNT } from './transaction-builder/constant';
 import { Account } from './interfaces';
 import { AccountType } from '../../grpc/model/accountType_pb';
 

@@ -14,5 +14,5 @@ export interface NodeRegistrations {
     total: number;
     nodeList: NodeRegistration[] | any;
 }
-export declare function toZBCNodeRegistration(node: NodeResponse.AsObject | undefined): NodeRegistration | undefined;
+export declare function toZBCNodeRegistration(node: NodeResponse.AsObject): NodeRegistration;
 export declare function toZBCNodeRegistrations(nodes: GetNodeRegistrationsResponse.AsObject): NodeRegistrations;

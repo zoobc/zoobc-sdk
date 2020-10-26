@@ -45921,18 +45921,16 @@ function request(auth, networkIp) {
 var Poown = { request, createAuth };
 
 function toZBCNodeRegistration(node) {
-    if (node) {
-        return {
-            nodeId: node.nodeid,
-            nodePublicKey: getZBCAddress(Buffer.from(node.nodepublickey.toString(), 'base64'), 'ZNK'),
-            accountAddress: parseAccountAddress(node.accountaddress),
-            registrationHeight: node.registrationheight,
-            lockedBalance: node.lockedbalance,
-            registrationStatus: node.registrationstatus,
-            latest: node.latest,
-            height: node.height,
-        };
-    }
+    return {
+        nodeId: node.nodeid,
+        nodePublicKey: getZBCAddress(Buffer.from(node.nodepublickey.toString(), 'base64'), 'ZNK'),
+        accountAddress: parseAccountAddress(node.accountaddress),
+        registrationHeight: node.registrationheight,
+        lockedBalance: node.lockedbalance,
+        registrationStatus: node.registrationstatus,
+        latest: node.latest,
+        height: node.height,
+    };
 }
 function toZBCNodeRegistrations(nodes) {
     const list = nodes.noderegistrationsList.map(node => toZBCNodeRegistration(node));
@@ -46027,8 +46025,11 @@ function get$1(params) {
                 else if (code != grpcWeb.grpc.Code.OK)
                     return reject({ code, message, metadata });
             }
-            if (res)
-                resolve(toZBCNodeRegistration(res.toObject().noderegistration));
+            if (res) {
+                const node = res.toObject().noderegistration;
+                if (node !== undefined)
+                    resolve(toZBCNodeRegistration(node));
+            }
         });
     });
 }
@@ -51960,6 +51961,72 @@ function feeVoteRevealBuilder(data, seed) {
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
 }
 
+function bufferToBase64(bytes) {
+    const buf = bytes instanceof ArrayBuffer
+        ? Buffer.from(bytes)
+        : ArrayBuffer.isView(bytes)
+            ? Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength)
+            : Buffer.from(bytes);
+    return buf.toString('base64');
+}
+function toBase64Url(base64Str) {
+    return base64Str
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/\=/g, '');
+}
+
+var signature_pb = createCommonjsModule(function (module, exports) {
+// source: model/signature.proto
+/**
+ * @fileoverview
+ * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
+ * @public
+ */
+// GENERATED CODE -- DO NOT EDIT!
+
+
+var goog = googleProtobuf__default['default'];
+var global = Function('return this')();
+
+goog.exportSymbol('proto.model.BitcoinPublicKeyFormat', null, global);
+goog.exportSymbol('proto.model.PrivateKeyBytesLength', null, global);
+goog.exportSymbol('proto.model.SignatureType', null, global);
+/**
+ * @enum {number}
+ */
+proto.model.SignatureType = {
+  DEFAULTSIGNATURE: 0,
+  BITCOINSIGNATURE: 1,
+  MULTISIGSIGNATURE: 2
+};
+
+/**
+ * @enum {number}
+ */
+proto.model.PrivateKeyBytesLength = {
+  PRIVATEKEYINVALID: 0,
+  PRIVATEKEY256BITS: 32,
+  PRIVATEKEY384BITS: 48,
+  PRIVATEKEY512BITS: 64
+};
+
+/**
+ * @enum {number}
+ */
+proto.model.BitcoinPublicKeyFormat = {
+  PUBLICKEYFORMATUNCOMPRESSED: 0,
+  PUBLICKEYFORMATCOMPRESSED: 1
+};
+
+goog.object.extend(exports, proto.model);
+});
+var signature_pb_1 = signature_pb.SignatureType;
+var signature_pb_2 = signature_pb.PrivateKeyBytesLength;
+var signature_pb_3 = signature_pb.BitcoinPublicKeyFormat;
+
 function toUnconfirmedSendMoneyWallet(res, ownAddress) {
     let transactions = res.mempooltransactionsList.filter(tx => {
         const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
@@ -52107,21 +52174,6 @@ function getBodyBytes(tx) {
         {});
 }
 
-function bufferToBase64(bytes) {
-    const buf = bytes instanceof ArrayBuffer
-        ? Buffer.from(bytes)
-        : ArrayBuffer.isView(bytes)
-            ? Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength)
-            : Buffer.from(bytes);
-    return buf.toString('base64');
-}
-function toBase64Url(base64Str) {
-    return base64Str
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/\=/g, '');
-}
-
 function toGetPendingList(res) {
     const list = res.pendingtransactionsList.map(tx => {
         const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
@@ -52151,57 +52203,6 @@ function generateTransactionHash(buffer) {
     const hashed = Buffer.from(jsSha3.sha3_256(buffer), 'hex');
     return getZBCAddress(hashed, 'ZTX');
 }
-
-var signature_pb = createCommonjsModule(function (module, exports) {
-// source: model/signature.proto
-/**
- * @fileoverview
- * @enhanceable
- * @suppress {messageConventions} JS Compiler reports an error if a variable or
- *     field starts with 'MSG_' and isn't a translatable message.
- * @public
- */
-// GENERATED CODE -- DO NOT EDIT!
-
-
-var goog = googleProtobuf__default['default'];
-var global = Function('return this')();
-
-goog.exportSymbol('proto.model.BitcoinPublicKeyFormat', null, global);
-goog.exportSymbol('proto.model.PrivateKeyBytesLength', null, global);
-goog.exportSymbol('proto.model.SignatureType', null, global);
-/**
- * @enum {number}
- */
-proto.model.SignatureType = {
-  DEFAULTSIGNATURE: 0,
-  BITCOINSIGNATURE: 1,
-  MULTISIGSIGNATURE: 2
-};
-
-/**
- * @enum {number}
- */
-proto.model.PrivateKeyBytesLength = {
-  PRIVATEKEYINVALID: 0,
-  PRIVATEKEY256BITS: 32,
-  PRIVATEKEY384BITS: 48,
-  PRIVATEKEY512BITS: 64
-};
-
-/**
- * @enum {number}
- */
-proto.model.BitcoinPublicKeyFormat = {
-  PUBLICKEYFORMATUNCOMPRESSED: 0,
-  PUBLICKEYFORMATCOMPRESSED: 1
-};
-
-goog.object.extend(exports, proto.model);
-});
-var signature_pb_1 = signature_pb.SignatureType;
-var signature_pb_2 = signature_pb.PrivateKeyBytesLength;
-var signature_pb_3 = signature_pb.BitcoinPublicKeyFormat;
 
 const zoobc = {
     Transactions,

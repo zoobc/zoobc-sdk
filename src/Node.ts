@@ -10,8 +10,6 @@ import { GenerateNodeKeyRequest, GenerateNodeKeyResponse } from '../grpc/model/n
 import Network from './Network';
 import {
   GetNodeRegistrationRequest,
-  GetNodeRegistrationResponse,
-  GetNodeRegistrationsResponse,
   GetNodeRegistrationsRequest,
   GetPendingNodeRegistrationsRequest,
   GetPendingNodeRegistrationsResponse,
@@ -32,7 +30,6 @@ import { NodeRegistration, NodeRegistrations, toZBCNodeRegistration, toZBCNodeRe
 
 export type NodeHardwareResponse = GetNodeHardwareResponse.AsObject;
 export type GenerateNodeKeyResponses = GenerateNodeKeyResponse.AsObject;
-// export type NodeRegistrationsResponse = GetNodeRegistrationResponse.AsObject;
 export type NodePostTransactionResponse = PostTransactionResponse.AsObject;
 export type GetPendingNodeRegistrationResponse = GetPendingNodeRegistrationsResponse.AsObject;
 export type GetMyNodePublicKeyResponses = GetMyNodePublicKeyResponse.AsObject;
@@ -140,7 +137,10 @@ function get(params: NodeParams): Promise<NodeRegistration> {
         if (code == grpc.Code.NotFound) return resolve(undefined);
         else if (code != grpc.Code.OK) return reject({ code, message, metadata });
       }
-      if (res) resolve(toZBCNodeRegistration(res.toObject().noderegistration));
+      if (res) {
+        const node = res.toObject().noderegistration;
+        if (node !== undefined) resolve(toZBCNodeRegistration(node));
+      }
     });
   });
 }

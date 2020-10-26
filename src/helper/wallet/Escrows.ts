@@ -1,4 +1,3 @@
-import { parse } from 'path';
 import { Escrow as EscrowResponse, GetEscrowTransactionsResponse } from '../../../grpc/model/escrow_pb';
 import { Account } from '../interfaces';
 import { parseAccountAddress } from '../utils';

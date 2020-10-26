@@ -2,8 +2,7 @@ import { GetAccountBalanceRequest, GetAccountBalancesRequest } from '../grpc/mod
 import { AccountBalanceServiceClient } from '../grpc/service/accountBalance_pb_service';
 import Network from './Network';
 import { grpc } from '@improbable-eng/grpc-web';
-import { accountToBytes, parseAccountAddress, ZBCAddressToBytes } from './helper/utils';
-import { ZBC_ACCOUNT } from './helper/transaction-builder/constant';
+import { accountToBytes, parseAccountAddress } from './helper/utils';
 import { Account } from './helper/interfaces';
 
 export interface AccountBalance {

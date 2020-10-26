@@ -1,10 +1,4 @@
-import {
-  GetAccountDatasetsResponse,
-  GetAccountDatasetsRequest,
-  // AccountDataset,
-  GetAccountDatasetRequest,
-  // AccountDataset,
-} from '../grpc/model/accountDataset_pb';
+import { GetAccountDatasetsRequest, GetAccountDatasetRequest } from '../grpc/model/accountDataset_pb';
 import { AccountDatasetServiceClient } from '../grpc/service/accountDataset_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import Network from './Network';
@@ -17,8 +11,6 @@ import { accountToBytes, errorDateMessage, validationTimestamp } from './helper/
 import { Account } from './helper/interfaces';
 import { AccountDataset, AccountDatasets, toZBCDataset, toZBCDatasets } from './helper/wallet/AccountDataset';
 
-// export type AccountDatasetsResponse = GetAccountDatasetsResponse.AsObject;
-// export type AccountDatasetResponse = AccountDataset.AsObject;
 export type SetupDatasetResponse = PostTransactionResponse.AsObject;
 export type RemoveAccountDatasetResponse = PostTransactionResponse.AsObject;
 

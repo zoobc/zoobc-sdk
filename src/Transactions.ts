@@ -3,9 +3,7 @@ import {
   GetTransactionsRequest,
   PostTransactionRequest,
   PostTransactionResponse,
-  GetTransactionsResponse,
   GetTransactionRequest,
-  Transaction,
   GetTransactionMinimumFeeResponse,
 } from '../grpc/model/transaction_pb';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
@@ -16,8 +14,6 @@ import { accountToBytes, errorDateMessage, validationTimestamp } from './helper/
 import { Account } from './helper/interfaces';
 import { toZBCTransaction, toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
 
-export type TransactionsResponse = GetTransactionsResponse.AsObject;
-export type TransactionResponse = Transaction.AsObject;
 export type PostTransactionResponses = PostTransactionResponse.AsObject;
 export type TransactionMinimumFeeResponse = GetTransactionMinimumFeeResponse.AsObject;
 

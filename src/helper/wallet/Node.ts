@@ -18,19 +18,17 @@ export interface NodeRegistrations {
   nodeList: NodeRegistration[] | any;
 }
 
-export function toZBCNodeRegistration(node: NodeResponse.AsObject | undefined): NodeRegistration | undefined {
-  if (node) {
-    return {
-      nodeId: node.nodeid,
-      nodePublicKey: getZBCAddress(Buffer.from(node.nodepublickey.toString(), 'base64'), 'ZNK'),
-      accountAddress: parseAccountAddress(node.accountaddress),
-      registrationHeight: node.registrationheight,
-      lockedBalance: node.lockedbalance,
-      registrationStatus: node.registrationstatus,
-      latest: node.latest,
-      height: node.height,
-    };
-  }
+export function toZBCNodeRegistration(node: NodeResponse.AsObject): NodeRegistration {
+  return {
+    nodeId: node.nodeid,
+    nodePublicKey: getZBCAddress(Buffer.from(node.nodepublickey.toString(), 'base64'), 'ZNK'),
+    accountAddress: parseAccountAddress(node.accountaddress),
+    registrationHeight: node.registrationheight,
+    lockedBalance: node.lockedbalance,
+    registrationStatus: node.registrationstatus,
+    latest: node.latest,
+    height: node.height,
+  };
 }
 
 export function toZBCNodeRegistrations(nodes: GetNodeRegistrationsResponse.AsObject): NodeRegistrations {

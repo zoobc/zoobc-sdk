@@ -7,7 +7,7 @@ export { Subscription } from 'rxjs';
 export { EscrowListParams, ApprovalEscrowTransactionResponse } from './Escrows';
 export { NodeListParams, NodeParams, NodeHardwareResponse, GenerateNodeKeyResponses, NodePostTransactionResponse, GetPendingNodeRegistrationResponse, GetMyNodePublicKeyResponses, GetNodeTimeResponses, } from './Node';
 export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
-export { TransactionListParams, TransactionsResponse, TransactionResponse, PostTransactionResponses, TransactionMinimumFeeResponse, } from './Transactions';
+export { TransactionListParams, PostTransactionResponses, TransactionMinimumFeeResponse } from './Transactions';
 export { BlocksResponse, BlockResponse } from './Block';
 export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, MultisigPostTransactionResponse, GetMultisigAddressResponse, } from './MultiSignature';
 export { AccountLedgerListParams } from './AccountLedger';
@@ -23,11 +23,8 @@ export { RemoveDatasetInterface, removeDatasetBuilder, readRemoveDatasetBytes } 
 export { SetupDatasetInterface, setupDatasetBuilder, readSetupAccountDatasetBytes, } from './helper/transaction-builder/setup-account-dataset';
 export { feeVoteInterface, feeVoteCommitBuilder, feeVoteRevealBuilder } from './helper/transaction-builder/fee-vote';
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
-export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
-export { toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
 export { bufferToBase64, toBase64Url } from './helper/converters';
 export { MultiSigInterface, signTransactionHash, MultiSigAddress, MultiSigInfo, SignatureInfo, } from './helper/transaction-builder/multisignature';
-export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
 export { AccountBalance } from './Account';
 export { HostInfoResponse } from './Host';
 export { ParticipationScoreResponse } from './ParticipationScore';
@@ -41,6 +38,13 @@ export { SignatureType, PrivateKeyBytesLength, BitcoinPublicKeyFormat } from '..
 export { SpinePublicKeyAction } from '../grpc/model/spine_pb';
 export { SpineBlockManifestType } from '../grpc/model/spineBlockManifest_pb';
 export { TransactionType } from '../grpc/model/transaction_pb';
+export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
+export { toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
+export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
+export { AccountDataset, AccountDatasets } from './helper/wallet/AccountDataset';
+export { AccountLedger, AccountLedgerList } from './helper/wallet/AccountLedger';
+export { Escrow, Escrows } from './helper/wallet/Escrows';
+export { NodeRegistrations, NodeRegistration } from './helper/wallet/Node';
 declare const zoobc: {
     Transactions: {
         sendMoney: (data: import("./helper/transaction-builder/send-money").SendMoneyInterface, seed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;

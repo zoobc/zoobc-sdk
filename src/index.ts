@@ -35,13 +35,7 @@ export {
   GetNodeTimeResponses,
 } from './Node';
 export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
-export {
-  TransactionListParams,
-  TransactionsResponse,
-  TransactionResponse,
-  PostTransactionResponses,
-  TransactionMinimumFeeResponse,
-} from './Transactions';
+export { TransactionListParams, PostTransactionResponses, TransactionMinimumFeeResponse } from './Transactions';
 export { BlocksResponse, BlockResponse } from './Block';
 export {
   MultisigPendingListParams,
@@ -75,8 +69,6 @@ export {
 } from './helper/transaction-builder/setup-account-dataset';
 export { feeVoteInterface, feeVoteCommitBuilder, feeVoteRevealBuilder } from './helper/transaction-builder/fee-vote';
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
-export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
-export { toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
 export { bufferToBase64, toBase64Url } from './helper/converters';
 export {
   MultiSigInterface,
@@ -85,7 +77,6 @@ export {
   MultiSigInfo,
   SignatureInfo,
 } from './helper/transaction-builder/multisignature';
-export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
 export { AccountBalance } from './Account';
 export { HostInfoResponse } from './Host';
 export { ParticipationScoreResponse } from './ParticipationScore';
@@ -100,6 +91,15 @@ export { SignatureType, PrivateKeyBytesLength, BitcoinPublicKeyFormat } from '..
 export { SpinePublicKeyAction } from '../grpc/model/spine_pb';
 export { SpineBlockManifestType } from '../grpc/model/spineBlockManifest_pb';
 export { TransactionType } from '../grpc/model/transaction_pb';
+
+// WALLET FORMATTER
+export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
+export { toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
+export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
+export { AccountDataset, AccountDatasets } from './helper/wallet/AccountDataset';
+export { AccountLedger, AccountLedgerList } from './helper/wallet/AccountLedger';
+export { Escrow, Escrows } from './helper/wallet/Escrows';
+export { NodeRegistrations, NodeRegistration } from './helper/wallet/Node';
 
 const zoobc = {
   Transactions,
