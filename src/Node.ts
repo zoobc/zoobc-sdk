@@ -51,7 +51,7 @@ export interface NodeListParams {
 
 export interface NodeParams {
   owner?: Account;
-  publicKey?: string;
+  publicKey?: Buffer;
   height?: number;
 }
 

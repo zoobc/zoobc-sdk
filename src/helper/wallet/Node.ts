@@ -11,7 +11,6 @@ export interface NodeRegistration {
   registrationStatus: number;
   latest: boolean;
   height: number;
-  // nodeAddressInfo?: model_nodeAddressInfo_pb.NodeAddressInfo.AsObject;
 }
 
 export interface NodeRegistrations {

@@ -32,11 +32,9 @@ export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed
 
   // ========== NULLIFYING THE ESCROW ===========
   const approverAddress = writeInt32(AccountType.EMPTYACCOUNTTYPE);
-  bytes = Buffer.concat([bytes, approverAddress]);
-  // ========== END NULLIFYING THE ESCROW =========
-
   const message = writeInt32(0);
-  bytes = Buffer.concat([bytes, message]);
+  bytes = Buffer.concat([bytes, approverAddress, message]);
+  // ========== END NULLIFYING THE ESCROW =========
 
   if (seed) {
     const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));

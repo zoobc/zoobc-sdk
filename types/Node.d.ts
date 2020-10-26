@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { Observable } from 'rxjs';
 import { BIP32Interface } from 'bip32';
 import { GetNodeHardwareResponse, GetNodeTimeResponse } from '../grpc/model/nodeHardware_pb';
@@ -28,7 +29,7 @@ export interface NodeListParams {
 }
 export interface NodeParams {
     owner?: Account;
-    publicKey?: string;
+    publicKey?: Buffer;
     height?: number;
 }
 declare function getHardwareInfo(networkIP: string, childSeed: BIP32Interface): Observable<NodeHardwareResponse>;
