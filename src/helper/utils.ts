@@ -4,6 +4,8 @@ import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
 import { Int64LE } from 'int64-buffer';
 import zoobc from '..';
+import { Account } from './interfaces';
+import { AccountType } from '../../grpc/model/accountType_pb';
 
 export const errorDateMessage = {
   code: '',
@@ -97,7 +99,7 @@ export function readInt64(buff: Buffer, offset: number): string {
 }
 
 export function writeInt32(number: number): Buffer {
-  let byte = new Buffer(4);
+  let byte = Buffer.alloc(4);
   byte.writeUInt32LE(number, 0);
   return byte;
 }
@@ -111,4 +113,34 @@ export async function validationTimestamp(txBytes: Buffer) {
   const deviation = parseInt(timestampPostTransaction) - parseInt(timestampServer);
   if (deviation < 30 && deviation > -30) return true;
   else return false;
+}
+
+export function parseAccountAddress(account: string | Uint8Array): Account {
+  const accountBytes = Buffer.from(account.toString(), 'base64');
+  const type = accountBytes.readInt32LE(0);
+
+  let address = '';
+  switch (type) {
+    case AccountType.ZBCACCOUNTTYPE:
+      address = getZBCAddress(accountBytes.slice(4, 36));
+      return { address, type };
+    case AccountType.BTCACCOUNTTYPE:
+      return { address, type };
+    default:
+      return { address, type };
+  }
+}
+
+export function accountToBytes(account: Account): Buffer {
+  const type = account.type;
+  switch (type) {
+    case AccountType.ZBCACCOUNTTYPE:
+      const bytes = ZBCAddressToBytes(account.address);
+      const typeBytes = writeInt32(account.type);
+      return Buffer.from([...typeBytes, ...bytes]);
+    case AccountType.BTCACCOUNTTYPE:
+      return Buffer.from([]);
+    default:
+      return Buffer.from([]);
+  }
 }

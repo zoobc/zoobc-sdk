@@ -1,4 +1,4 @@
-import { getZBCAddress, readInt64, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
+import { parseAccountAddress, readInt64, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 import { ZBCTransaction } from '../wallet/Transaction';
@@ -53,7 +53,7 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface
   if (seed) {
     const signatureType = writeInt32(0);
     const txFormat = generateTransactionHash(bytes);
-    const txBytes = ZBCAddressToBytes(txFormat)
+    const txBytes = ZBCAddressToBytes(txFormat);
     const signature = seed.sign(txBytes);
     const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
@@ -70,15 +70,15 @@ export function readPostTransactionBytes(txBytes: Buffer) {
 
   let transaction: ZBCTransaction = {
     timestamp: parseInt(timestamp) * 1000,
-    sender: senderAddress,
-    recipient: recipientAddress,
+    sender: parseAccountAddress(senderAddress),
+    recipient: parseAccountAddress(recipientAddress),
     fee: parseInt(txFee),
     escrow: false,
   };
   return transaction;
 }
 
-export function readEscrowBytes(txBytes: Buffer, transaction:ZBCTransaction){
+export function readEscrowBytes(txBytes: Buffer, transaction: ZBCTransaction) {
   const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
   const approverAddress = txBytes.slice(177, 177 + approverAddressLength);
   const int64Length = 8;
@@ -86,7 +86,7 @@ export function readEscrowBytes(txBytes: Buffer, transaction:ZBCTransaction){
   const timeout = readInt64(txBytes.slice(251, 251 + int64Length), 0);
   const instructionLength = txBytes.slice(259, 263).readInt32LE(0);
   const instruction = txBytes.slice(263, 263 + instructionLength);
-  transaction.approverAddress = getZBCAddress(approverAddress);
+  transaction.approverAddress = parseAccountAddress(approverAddress);
   transaction.commission = parseInt(commission);
   transaction.timeout = parseInt(timeout);
   transaction.instruction = instruction.toString();

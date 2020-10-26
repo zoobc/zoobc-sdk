@@ -48,7 +48,7 @@ export function removeNodeBuilder(data: RemoveNodeInterface, seed?: BIP32Interfa
   if (seed) {
     const signatureType = writeInt32(0);
     const txFormat = generateTransactionHash(bytes);
-    const txBytes = ZBCAddressToBytes(txFormat)
+    const txBytes = ZBCAddressToBytes(txFormat);
     const signature = seed.sign(txBytes);
     const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
     return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);

@@ -137,9 +137,9 @@ proto.model.Escrow.prototype.toObject = function(opt_includeInstance) {
 proto.model.Escrow.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, "0"),
-    senderaddress: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    recipientaddress: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    approveraddress: jspb.Message.getFieldWithDefault(msg, 4, ""),
+    senderaddress: msg.getSenderaddress_asB64(),
+    recipientaddress: msg.getRecipientaddress_asB64(),
+    approveraddress: msg.getApproveraddress_asB64(),
     amount: jspb.Message.getFieldWithDefault(msg, 5, "0"),
     commission: jspb.Message.getFieldWithDefault(msg, 6, "0"),
     timeout: jspb.Message.getFieldWithDefault(msg, 7, "0"),
@@ -188,15 +188,15 @@ proto.model.Escrow.deserializeBinaryFromReader = function(msg, reader) {
       msg.setId(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setSenderaddress(value);
       break;
     case 3:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setRecipientaddress(value);
       break;
     case 4:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setApproveraddress(value);
       break;
     case 5:
@@ -263,23 +263,23 @@ proto.model.Escrow.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getSenderaddress();
+  f = message.getSenderaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       2,
       f
     );
   }
-  f = message.getRecipientaddress();
+  f = message.getRecipientaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       3,
       f
     );
   }
-  f = message.getApproveraddress();
+  f = message.getApproveraddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       4,
       f
     );
@@ -352,47 +352,119 @@ proto.model.Escrow.prototype.setId = function(value) {
 
 
 /**
- * optional string SenderAddress = 2;
- * @return {string}
+ * optional bytes SenderAddress = 2;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.Escrow.prototype.getSenderaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
-};
-
-
-/** @param {string} value */
-proto.model.Escrow.prototype.setSenderaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /**
- * optional string RecipientAddress = 3;
+ * optional bytes SenderAddress = 2;
+ * This is a type-conversion wrapper around `getSenderaddress()`
  * @return {string}
+ */
+proto.model.Escrow.prototype.getSenderaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getSenderaddress()));
+};
+
+
+/**
+ * optional bytes SenderAddress = 2;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getSenderaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.Escrow.prototype.getSenderaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getSenderaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.Escrow.prototype.setSenderaddress = function(value) {
+  jspb.Message.setProto3BytesField(this, 2, value);
+};
+
+
+/**
+ * optional bytes RecipientAddress = 3;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.Escrow.prototype.getRecipientaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
-};
-
-
-/** @param {string} value */
-proto.model.Escrow.prototype.setRecipientaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
 /**
- * optional string ApproverAddress = 4;
+ * optional bytes RecipientAddress = 3;
+ * This is a type-conversion wrapper around `getRecipientaddress()`
  * @return {string}
  */
-proto.model.Escrow.prototype.getApproveraddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+proto.model.Escrow.prototype.getRecipientaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getRecipientaddress()));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes RecipientAddress = 3;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getRecipientaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.Escrow.prototype.getRecipientaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getRecipientaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.Escrow.prototype.setRecipientaddress = function(value) {
+  jspb.Message.setProto3BytesField(this, 3, value);
+};
+
+
+/**
+ * optional bytes ApproverAddress = 4;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.Escrow.prototype.getApproveraddress = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/**
+ * optional bytes ApproverAddress = 4;
+ * This is a type-conversion wrapper around `getApproveraddress()`
+ * @return {string}
+ */
+proto.model.Escrow.prototype.getApproveraddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getApproveraddress()));
+};
+
+
+/**
+ * optional bytes ApproverAddress = 4;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getApproveraddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.Escrow.prototype.getApproveraddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getApproveraddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.Escrow.prototype.setApproveraddress = function(value) {
-  jspb.Message.setProto3StringField(this, 4, value);
+  jspb.Message.setProto3BytesField(this, 4, value);
 };
 
 
@@ -540,9 +612,9 @@ proto.model.GetEscrowTransactionsRequest.prototype.toObject = function(opt_inclu
  */
 proto.model.GetEscrowTransactionsRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    approveraddress: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    senderaddress: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    recipientaddress: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    approveraddress: msg.getApproveraddress_asB64(),
+    senderaddress: msg.getSenderaddress_asB64(),
+    recipientaddress: msg.getRecipientaddress_asB64(),
     id: jspb.Message.getFieldWithDefault(msg, 4, "0"),
     statusesList: (f = jspb.Message.getRepeatedField(msg, 5)) == null ? undefined : f,
     blockheightstart: jspb.Message.getFieldWithDefault(msg, 6, 0),
@@ -586,15 +658,15 @@ proto.model.GetEscrowTransactionsRequest.deserializeBinaryFromReader = function(
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setApproveraddress(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setSenderaddress(value);
       break;
     case 3:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setRecipientaddress(value);
       break;
     case 4:
@@ -651,23 +723,23 @@ proto.model.GetEscrowTransactionsRequest.prototype.serializeBinary = function() 
  */
 proto.model.GetEscrowTransactionsRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getApproveraddress();
+  f = message.getApproveraddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       1,
       f
     );
   }
-  f = message.getSenderaddress();
+  f = message.getSenderaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       2,
       f
     );
   }
-  f = message.getRecipientaddress();
+  f = message.getRecipientaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       3,
       f
     );
@@ -719,47 +791,119 @@ proto.model.GetEscrowTransactionsRequest.serializeBinaryToWriter = function(mess
 
 
 /**
- * optional string ApproverAddress = 1;
- * @return {string}
+ * optional bytes ApproverAddress = 1;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.GetEscrowTransactionsRequest.prototype.getApproveraddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
-};
-
-
-/** @param {string} value */
-proto.model.GetEscrowTransactionsRequest.prototype.setApproveraddress = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
 /**
- * optional string SenderAddress = 2;
+ * optional bytes ApproverAddress = 1;
+ * This is a type-conversion wrapper around `getApproveraddress()`
  * @return {string}
+ */
+proto.model.GetEscrowTransactionsRequest.prototype.getApproveraddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getApproveraddress()));
+};
+
+
+/**
+ * optional bytes ApproverAddress = 1;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getApproveraddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.GetEscrowTransactionsRequest.prototype.getApproveraddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getApproveraddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.GetEscrowTransactionsRequest.prototype.setApproveraddress = function(value) {
+  jspb.Message.setProto3BytesField(this, 1, value);
+};
+
+
+/**
+ * optional bytes SenderAddress = 2;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.GetEscrowTransactionsRequest.prototype.getSenderaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
-};
-
-
-/** @param {string} value */
-proto.model.GetEscrowTransactionsRequest.prototype.setSenderaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /**
- * optional string RecipientAddress = 3;
+ * optional bytes SenderAddress = 2;
+ * This is a type-conversion wrapper around `getSenderaddress()`
  * @return {string}
  */
-proto.model.GetEscrowTransactionsRequest.prototype.getRecipientaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+proto.model.GetEscrowTransactionsRequest.prototype.getSenderaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getSenderaddress()));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes SenderAddress = 2;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getSenderaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.GetEscrowTransactionsRequest.prototype.getSenderaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getSenderaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.GetEscrowTransactionsRequest.prototype.setSenderaddress = function(value) {
+  jspb.Message.setProto3BytesField(this, 2, value);
+};
+
+
+/**
+ * optional bytes RecipientAddress = 3;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.GetEscrowTransactionsRequest.prototype.getRecipientaddress = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * optional bytes RecipientAddress = 3;
+ * This is a type-conversion wrapper around `getRecipientaddress()`
+ * @return {string}
+ */
+proto.model.GetEscrowTransactionsRequest.prototype.getRecipientaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getRecipientaddress()));
+};
+
+
+/**
+ * optional bytes RecipientAddress = 3;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getRecipientaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.GetEscrowTransactionsRequest.prototype.getRecipientaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getRecipientaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.GetEscrowTransactionsRequest.prototype.setRecipientaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  jspb.Message.setProto3BytesField(this, 3, value);
 };
 
 

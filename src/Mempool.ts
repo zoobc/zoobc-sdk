@@ -7,12 +7,14 @@ import {
 } from '../grpc/model/mempool_pb';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { MempoolServiceClient } from '../grpc/service/mempool_pb_service';
+import { Account } from './helper/interfaces';
+import { accountToBytes } from './helper/utils';
 
 export type MempoolTransactionsResponse = GetMempoolTransactionsResponse.AsObject;
 export type MempoolTransactionResponse = MempoolTransaction.AsObject;
 
 export interface MempoolListParams {
-  address?: string;
+  address?: Account;
   timestampStart?: string;
   timestampEnd?: string;
   pagination?: {
@@ -30,7 +32,7 @@ function getList(params?: MempoolListParams): Promise<MempoolTransactionsRespons
     if (params) {
       const { address, timestampEnd, timestampStart, pagination } = params;
 
-      if (address) request.setAddress(address);
+      if (address) request.setAddress(accountToBytes(address));
       if (timestampStart) request.setTimestampstart(timestampStart);
       if (timestampEnd) request.setTimestampend(timestampEnd);
       if (pagination) {

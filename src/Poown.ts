@@ -11,9 +11,8 @@ function createAuth(requestType: number, seed: BIP32Interface): string {
   const requestTypeBytes = writeInt32(requestType);
   bytes = Buffer.concat([timestamp, requestTypeBytes]);
 
-  const signatureType = writeInt32(0);
   const signature = seed.sign(bytes);
-  return Buffer.concat([bytes, signatureType, signature]).toString('base64');
+  return Buffer.concat([bytes, signature]).toString('base64');
 }
 
 function request(auth: string, networkIp: string): Promise<Buffer> {

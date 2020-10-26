@@ -7,11 +7,15 @@ export class LiquidPayment extends jspb.Message {
   getId(): string;
   setId(value: string): void;
 
-  getSenderaddress(): string;
-  setSenderaddress(value: string): void;
+  getSenderaddress(): Uint8Array | string;
+  getSenderaddress_asU8(): Uint8Array;
+  getSenderaddress_asB64(): string;
+  setSenderaddress(value: Uint8Array | string): void;
 
-  getRecipientaddress(): string;
-  setRecipientaddress(value: string): void;
+  getRecipientaddress(): Uint8Array | string;
+  getRecipientaddress_asU8(): Uint8Array;
+  getRecipientaddress_asB64(): string;
+  setRecipientaddress(value: Uint8Array | string): void;
 
   getAmount(): string;
   setAmount(value: string): void;
@@ -44,8 +48,8 @@ export class LiquidPayment extends jspb.Message {
 export namespace LiquidPayment {
   export type AsObject = {
     id: string,
-    senderaddress: string,
-    recipientaddress: string,
+    senderaddress: Uint8Array | string,
+    recipientaddress: Uint8Array | string,
     amount: string,
     appliedtime: string,
     completeminutes: string,

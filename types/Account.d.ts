@@ -1,8 +1,14 @@
-import { GetAccountBalanceResponse, GetAccountBalancesResponse } from '../grpc/model/accountBalance_pb';
-export declare type AccountBalanceResponse = GetAccountBalanceResponse.AsObject;
-export declare type AccountBalancesResponse = GetAccountBalancesResponse.AsObject;
-declare function getBalance(address: string): Promise<AccountBalanceResponse>;
-declare function getBalances(addresses: string[]): Promise<AccountBalancesResponse>;
+import { Account } from './helper/interfaces';
+export interface AccountBalance {
+    account: Account;
+    blockHeight: number;
+    spendableBalance: number;
+    balance: number;
+    popRevenue: string;
+    latest: boolean;
+}
+declare function getBalance(account: Account): Promise<AccountBalance>;
+declare function getBalances(accounts: Account[]): Promise<AccountBalance[]>;
 declare const _default: {
     getBalance: typeof getBalance;
     getBalances: typeof getBalances;

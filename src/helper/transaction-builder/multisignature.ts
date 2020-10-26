@@ -123,7 +123,7 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
 
 export function signTransactionHash(txHash: string, seed: BIP32Interface) {
   const signatureType = writeInt32(0);
-  const txHashBytes = ZBCAddressToBytes(txHash)
+  const txHashBytes = ZBCAddressToBytes(txHash);
   const signature = seed.sign(txHashBytes);
   return Buffer.concat([signatureType, signature]);
 }

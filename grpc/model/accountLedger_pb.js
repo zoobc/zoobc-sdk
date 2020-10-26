@@ -114,7 +114,7 @@ proto.model.AccountLedger.prototype.toObject = function(opt_includeInstance) {
  */
 proto.model.AccountLedger.toObject = function(includeInstance, msg) {
   var f, obj = {
-    accountaddress: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    accountaddress: msg.getAccountaddress_asB64(),
     balancechange: jspb.Message.getFieldWithDefault(msg, 2, 0),
     blockheight: jspb.Message.getFieldWithDefault(msg, 3, 0),
     transactionid: jspb.Message.getFieldWithDefault(msg, 4, "0"),
@@ -157,7 +157,7 @@ proto.model.AccountLedger.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setAccountaddress(value);
       break;
     case 2:
@@ -209,9 +209,9 @@ proto.model.AccountLedger.prototype.serializeBinary = function() {
  */
 proto.model.AccountLedger.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getAccountaddress();
+  f = message.getAccountaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       1,
       f
     );
@@ -255,17 +255,41 @@ proto.model.AccountLedger.serializeBinaryToWriter = function(message, writer) {
 
 
 /**
- * optional string AccountAddress = 1;
- * @return {string}
+ * optional bytes AccountAddress = 1;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.AccountLedger.prototype.getAccountaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes AccountAddress = 1;
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {string}
+ */
+proto.model.AccountLedger.prototype.getAccountaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getAccountaddress()));
+};
+
+
+/**
+ * optional bytes AccountAddress = 1;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.AccountLedger.prototype.getAccountaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getAccountaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.AccountLedger.prototype.setAccountaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  jspb.Message.setProto3BytesField(this, 1, value);
 };
 
 
@@ -376,7 +400,7 @@ proto.model.GetAccountLedgersRequest.prototype.toObject = function(opt_includeIn
  */
 proto.model.GetAccountLedgersRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    accountaddress: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    accountaddress: msg.getAccountaddress_asB64(),
     eventtype: jspb.Message.getFieldWithDefault(msg, 2, 0),
     transactionid: jspb.Message.getFieldWithDefault(msg, 3, "0"),
     timestampstart: jspb.Message.getFieldWithDefault(msg, 4, 0),
@@ -419,7 +443,7 @@ proto.model.GetAccountLedgersRequest.deserializeBinaryFromReader = function(msg,
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setAccountaddress(value);
       break;
     case 2:
@@ -472,9 +496,9 @@ proto.model.GetAccountLedgersRequest.prototype.serializeBinary = function() {
  */
 proto.model.GetAccountLedgersRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getAccountaddress();
+  f = message.getAccountaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       1,
       f
     );
@@ -519,17 +543,41 @@ proto.model.GetAccountLedgersRequest.serializeBinaryToWriter = function(message,
 
 
 /**
- * optional string AccountAddress = 1;
- * @return {string}
+ * optional bytes AccountAddress = 1;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.GetAccountLedgersRequest.prototype.getAccountaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes AccountAddress = 1;
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {string}
+ */
+proto.model.GetAccountLedgersRequest.prototype.getAccountaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getAccountaddress()));
+};
+
+
+/**
+ * optional bytes AccountAddress = 1;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.GetAccountLedgersRequest.prototype.getAccountaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getAccountaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.GetAccountLedgersRequest.prototype.setAccountaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  jspb.Message.setProto3BytesField(this, 1, value);
 };
 
 

@@ -163,8 +163,8 @@ proto.model.MempoolTransaction.toObject = function(includeInstance, msg) {
     feeperbyte: jspb.Message.getFieldWithDefault(msg, 3, "0"),
     arrivaltimestamp: jspb.Message.getFieldWithDefault(msg, 4, "0"),
     transactionbytes: msg.getTransactionbytes_asB64(),
-    senderaccountaddress: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    recipientaccountaddress: jspb.Message.getFieldWithDefault(msg, 7, ""),
+    senderaccountaddress: msg.getSenderaccountaddress_asB64(),
+    recipientaccountaddress: msg.getRecipientaccountaddress_asB64(),
     escrow: (f = msg.getEscrow()) && model_escrow_pb.Escrow.toObject(includeInstance, f)
   };
 
@@ -223,11 +223,11 @@ proto.model.MempoolTransaction.deserializeBinaryFromReader = function(msg, reade
       msg.setTransactionbytes(value);
       break;
     case 6:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setSenderaccountaddress(value);
       break;
     case 7:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setRecipientaccountaddress(value);
       break;
     case 8:
@@ -299,16 +299,16 @@ proto.model.MempoolTransaction.serializeBinaryToWriter = function(message, write
       f
     );
   }
-  f = message.getSenderaccountaddress();
+  f = message.getSenderaccountaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       6,
       f
     );
   }
-  f = message.getRecipientaccountaddress();
+  f = message.getRecipientaccountaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       7,
       f
     );
@@ -424,32 +424,80 @@ proto.model.MempoolTransaction.prototype.setTransactionbytes = function(value) {
 
 
 /**
- * optional string SenderAccountAddress = 6;
- * @return {string}
+ * optional bytes SenderAccountAddress = 6;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.MempoolTransaction.prototype.getSenderaccountaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
-};
-
-
-/** @param {string} value */
-proto.model.MempoolTransaction.prototype.setSenderaccountaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 6, value);
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
 };
 
 
 /**
- * optional string RecipientAccountAddress = 7;
+ * optional bytes SenderAccountAddress = 6;
+ * This is a type-conversion wrapper around `getSenderaccountaddress()`
  * @return {string}
  */
-proto.model.MempoolTransaction.prototype.getRecipientaccountaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
+proto.model.MempoolTransaction.prototype.getSenderaccountaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getSenderaccountaddress()));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes SenderAccountAddress = 6;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getSenderaccountaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.MempoolTransaction.prototype.getSenderaccountaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getSenderaccountaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.MempoolTransaction.prototype.setSenderaccountaddress = function(value) {
+  jspb.Message.setProto3BytesField(this, 6, value);
+};
+
+
+/**
+ * optional bytes RecipientAccountAddress = 7;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.MempoolTransaction.prototype.getRecipientaccountaddress = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
+};
+
+
+/**
+ * optional bytes RecipientAccountAddress = 7;
+ * This is a type-conversion wrapper around `getRecipientaccountaddress()`
+ * @return {string}
+ */
+proto.model.MempoolTransaction.prototype.getRecipientaccountaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getRecipientaccountaddress()));
+};
+
+
+/**
+ * optional bytes RecipientAccountAddress = 7;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getRecipientaccountaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.MempoolTransaction.prototype.getRecipientaccountaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getRecipientaccountaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.MempoolTransaction.prototype.setRecipientaccountaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 7, value);
+  jspb.Message.setProto3BytesField(this, 7, value);
 };
 
 
@@ -794,7 +842,7 @@ proto.model.GetMempoolTransactionsRequest.toObject = function(includeInstance, m
   var f, obj = {
     timestampstart: jspb.Message.getFieldWithDefault(msg, 1, "0"),
     timestampend: jspb.Message.getFieldWithDefault(msg, 2, "0"),
-    address: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    address: msg.getAddress_asB64(),
     pagination: (f = msg.getPagination()) && model_pagination_pb.Pagination.toObject(includeInstance, f)
   };
 
@@ -841,7 +889,7 @@ proto.model.GetMempoolTransactionsRequest.deserializeBinaryFromReader = function
       msg.setTimestampend(value);
       break;
     case 3:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setAddress(value);
       break;
     case 4:
@@ -892,9 +940,9 @@ proto.model.GetMempoolTransactionsRequest.serializeBinaryToWriter = function(mes
       f
     );
   }
-  f = message.getAddress();
+  f = message.getAddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       3,
       f
     );
@@ -941,17 +989,41 @@ proto.model.GetMempoolTransactionsRequest.prototype.setTimestampend = function(v
 
 
 /**
- * optional string address = 3;
- * @return {string}
+ * optional bytes address = 3;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.GetMempoolTransactionsRequest.prototype.getAddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes address = 3;
+ * This is a type-conversion wrapper around `getAddress()`
+ * @return {string}
+ */
+proto.model.GetMempoolTransactionsRequest.prototype.getAddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getAddress()));
+};
+
+
+/**
+ * optional bytes address = 3;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getAddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.GetMempoolTransactionsRequest.prototype.getAddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getAddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.GetMempoolTransactionsRequest.prototype.setAddress = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  jspb.Message.setProto3BytesField(this, 3, value);
 };
 
 

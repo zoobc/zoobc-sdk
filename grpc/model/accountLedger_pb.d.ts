@@ -6,8 +6,10 @@ import * as model_event_pb from "../model/event_pb";
 import * as model_pagination_pb from "../model/pagination_pb";
 
 export class AccountLedger extends jspb.Message {
-  getAccountaddress(): string;
-  setAccountaddress(value: string): void;
+  getAccountaddress(): Uint8Array | string;
+  getAccountaddress_asU8(): Uint8Array;
+  getAccountaddress_asB64(): string;
+  setAccountaddress(value: Uint8Array | string): void;
 
   getBalancechange(): number;
   setBalancechange(value: number): void;
@@ -36,7 +38,7 @@ export class AccountLedger extends jspb.Message {
 
 export namespace AccountLedger {
   export type AsObject = {
-    accountaddress: string,
+    accountaddress: Uint8Array | string,
     balancechange: number,
     blockheight: number,
     transactionid: string,
@@ -46,8 +48,10 @@ export namespace AccountLedger {
 }
 
 export class GetAccountLedgersRequest extends jspb.Message {
-  getAccountaddress(): string;
-  setAccountaddress(value: string): void;
+  getAccountaddress(): Uint8Array | string;
+  getAccountaddress_asU8(): Uint8Array;
+  getAccountaddress_asB64(): string;
+  setAccountaddress(value: Uint8Array | string): void;
 
   getEventtype(): model_event_pb.EventTypeMap[keyof model_event_pb.EventTypeMap];
   setEventtype(value: model_event_pb.EventTypeMap[keyof model_event_pb.EventTypeMap]): void;
@@ -78,7 +82,7 @@ export class GetAccountLedgersRequest extends jspb.Message {
 
 export namespace GetAccountLedgersRequest {
   export type AsObject = {
-    accountaddress: string,
+    accountaddress: Uint8Array | string,
     eventtype: model_event_pb.EventTypeMap[keyof model_event_pb.EventTypeMap],
     transactionid: string,
     timestampstart: number,

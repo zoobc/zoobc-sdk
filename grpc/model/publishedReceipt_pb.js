@@ -12,8 +12,8 @@ var jspb = require('google-protobuf');
 var goog = jspb;
 var global = Function('return this')();
 
-var model_batchReceipt_pb = require('../model/batchReceipt_pb.js');
-goog.object.extend(proto, model_batchReceipt_pb);
+var model_receipt_pb = require('../model/receipt_pb.js');
+goog.object.extend(proto, model_receipt_pb);
 goog.exportSymbol('proto.model.GetPublishedReceiptsRequest', null, global);
 goog.exportSymbol('proto.model.GetPublishedReceiptsResponse', null, global);
 goog.exportSymbol('proto.model.PublishedReceipt', null, global);
@@ -112,7 +112,7 @@ proto.model.PublishedReceipt.prototype.toObject = function(opt_includeInstance) 
  */
 proto.model.PublishedReceipt.toObject = function(includeInstance, msg) {
   var f, obj = {
-    batchreceipt: (f = msg.getBatchreceipt()) && model_batchReceipt_pb.BatchReceipt.toObject(includeInstance, f),
+    receipt: (f = msg.getReceipt()) && model_receipt_pb.Receipt.toObject(includeInstance, f),
     intermediatehashes: msg.getIntermediatehashes_asB64(),
     blockheight: jspb.Message.getFieldWithDefault(msg, 3, 0),
     receiptindex: jspb.Message.getFieldWithDefault(msg, 4, 0),
@@ -154,9 +154,9 @@ proto.model.PublishedReceipt.deserializeBinaryFromReader = function(msg, reader)
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new model_batchReceipt_pb.BatchReceipt;
-      reader.readMessage(value,model_batchReceipt_pb.BatchReceipt.deserializeBinaryFromReader);
-      msg.setBatchreceipt(value);
+      var value = new model_receipt_pb.Receipt;
+      reader.readMessage(value,model_receipt_pb.Receipt.deserializeBinaryFromReader);
+      msg.setReceipt(value);
       break;
     case 2:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
@@ -203,12 +203,12 @@ proto.model.PublishedReceipt.prototype.serializeBinary = function() {
  */
 proto.model.PublishedReceipt.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getBatchreceipt();
+  f = message.getReceipt();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      model_batchReceipt_pb.BatchReceipt.serializeBinaryToWriter
+      model_receipt_pb.Receipt.serializeBinaryToWriter
     );
   }
   f = message.getIntermediatehashes_asU8();
@@ -243,17 +243,17 @@ proto.model.PublishedReceipt.serializeBinaryToWriter = function(message, writer)
 
 
 /**
- * optional BatchReceipt BatchReceipt = 1;
- * @return {?proto.model.BatchReceipt}
+ * optional Receipt Receipt = 1;
+ * @return {?proto.model.Receipt}
  */
-proto.model.PublishedReceipt.prototype.getBatchreceipt = function() {
-  return /** @type{?proto.model.BatchReceipt} */ (
-    jspb.Message.getWrapperField(this, model_batchReceipt_pb.BatchReceipt, 1));
+proto.model.PublishedReceipt.prototype.getReceipt = function() {
+  return /** @type{?proto.model.Receipt} */ (
+    jspb.Message.getWrapperField(this, model_receipt_pb.Receipt, 1));
 };
 
 
-/** @param {?proto.model.BatchReceipt|undefined} value */
-proto.model.PublishedReceipt.prototype.setBatchreceipt = function(value) {
+/** @param {?proto.model.Receipt|undefined} value */
+proto.model.PublishedReceipt.prototype.setReceipt = function(value) {
   jspb.Message.setWrapperField(this, 1, value);
 };
 
@@ -261,8 +261,8 @@ proto.model.PublishedReceipt.prototype.setBatchreceipt = function(value) {
 /**
  * Clears the message field making it undefined.
  */
-proto.model.PublishedReceipt.prototype.clearBatchreceipt = function() {
-  this.setBatchreceipt(undefined);
+proto.model.PublishedReceipt.prototype.clearReceipt = function() {
+  this.setReceipt(undefined);
 };
 
 
@@ -270,7 +270,7 @@ proto.model.PublishedReceipt.prototype.clearBatchreceipt = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.model.PublishedReceipt.prototype.hasBatchreceipt = function() {
+proto.model.PublishedReceipt.prototype.hasReceipt = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
