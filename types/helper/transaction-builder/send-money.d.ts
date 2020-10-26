@@ -1,13 +1,12 @@
 /// <reference types="node" />
 import { BIP32Interface } from 'bip32';
 import { ZBCTransaction } from '../wallet/Transaction';
-import { Account } from '../interfaces';
 export interface SendMoneyInterface {
-    sender: Account;
-    recipient: Account;
+    sender: string;
+    recipient: string;
     fee: number;
     amount: number;
-    approverAddress?: Account;
+    approverAddress?: string;
     commission?: number;
     timeout?: number;
     instruction?: string;

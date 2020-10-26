@@ -1,8 +1,7 @@
 /// <reference types="node" />
 import { BIP32Interface } from 'bip32';
-import { Account } from '../interfaces';
 export interface UpdateNodeInterface {
-    accountAddress: Account;
+    accountAddress: string;
     fee: number;
     nodePublicKey: Buffer;
     nodeAddress: string;
