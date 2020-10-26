@@ -16,8 +16,8 @@ var model_proofOfOwnership_pb = require('../model/proofOfOwnership_pb.js');
 goog.object.extend(proto, model_proofOfOwnership_pb);
 var model_pagination_pb = require('../model/pagination_pb.js');
 goog.object.extend(proto, model_pagination_pb);
-var model_batchReceipt_pb = require('../model/batchReceipt_pb.js');
-goog.object.extend(proto, model_batchReceipt_pb);
+var model_receipt_pb = require('../model/receipt_pb.js');
+goog.object.extend(proto, model_receipt_pb);
 var model_nodeRegistration_pb = require('../model/nodeRegistration_pb.js');
 goog.object.extend(proto, model_nodeRegistration_pb);
 var model_escrow_pb = require('../model/escrow_pb.js');
@@ -631,27 +631,27 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.model.Transaction.oneofGroups_ = [[15,16,17,18,19,20,21,22,23,24,25,26,27,28]];
+proto.model.Transaction.oneofGroups_ = [[17,18,19,20,21,22,23,24,25,26,27,28,29,30]];
 
 /**
  * @enum {number}
  */
 proto.model.Transaction.TransactionbodyCase = {
   TRANSACTIONBODY_NOT_SET: 0,
-  EMPTYTRANSACTIONBODY: 15,
-  SENDMONEYTRANSACTIONBODY: 16,
-  NODEREGISTRATIONTRANSACTIONBODY: 17,
-  UPDATENODEREGISTRATIONTRANSACTIONBODY: 18,
-  REMOVENODEREGISTRATIONTRANSACTIONBODY: 19,
-  CLAIMNODEREGISTRATIONTRANSACTIONBODY: 20,
-  SETUPACCOUNTDATASETTRANSACTIONBODY: 21,
-  REMOVEACCOUNTDATASETTRANSACTIONBODY: 22,
-  APPROVALESCROWTRANSACTIONBODY: 23,
-  MULTISIGNATURETRANSACTIONBODY: 24,
-  FEEVOTECOMMITTRANSACTIONBODY: 25,
-  FEEVOTEREVEALTRANSACTIONBODY: 26,
-  LIQUIDPAYMENTTRANSACTIONBODY: 27,
-  LIQUIDPAYMENTSTOPTRANSACTIONBODY: 28
+  EMPTYTRANSACTIONBODY: 17,
+  SENDMONEYTRANSACTIONBODY: 18,
+  NODEREGISTRATIONTRANSACTIONBODY: 19,
+  UPDATENODEREGISTRATIONTRANSACTIONBODY: 20,
+  REMOVENODEREGISTRATIONTRANSACTIONBODY: 21,
+  CLAIMNODEREGISTRATIONTRANSACTIONBODY: 22,
+  SETUPACCOUNTDATASETTRANSACTIONBODY: 23,
+  REMOVEACCOUNTDATASETTRANSACTIONBODY: 24,
+  APPROVALESCROWTRANSACTIONBODY: 25,
+  MULTISIGNATURETRANSACTIONBODY: 26,
+  FEEVOTECOMMITTRANSACTIONBODY: 27,
+  FEEVOTEREVEALTRANSACTIONBODY: 28,
+  LIQUIDPAYMENTTRANSACTIONBODY: 29,
+  LIQUIDPAYMENTSTOPTRANSACTIONBODY: 30
 };
 
 /**
@@ -696,8 +696,8 @@ proto.model.Transaction.toObject = function(includeInstance, msg) {
     id: jspb.Message.getFieldWithDefault(msg, 2, "0"),
     blockid: jspb.Message.getFieldWithDefault(msg, 3, "0"),
     height: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    senderaccountaddress: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    recipientaccountaddress: jspb.Message.getFieldWithDefault(msg, 6, ""),
+    senderaccountaddress: msg.getSenderaccountaddress_asB64(),
+    recipientaccountaddress: msg.getRecipientaccountaddress_asB64(),
     transactiontype: jspb.Message.getFieldWithDefault(msg, 7, 0),
     fee: jspb.Message.getFieldWithDefault(msg, 8, "0"),
     timestamp: jspb.Message.getFieldWithDefault(msg, 9, "0"),
@@ -721,7 +721,8 @@ proto.model.Transaction.toObject = function(includeInstance, msg) {
     liquidpaymenttransactionbody: (f = msg.getLiquidpaymenttransactionbody()) && proto.model.LiquidPaymentTransactionBody.toObject(includeInstance, f),
     liquidpaymentstoptransactionbody: (f = msg.getLiquidpaymentstoptransactionbody()) && proto.model.LiquidPaymentStopTransactionBody.toObject(includeInstance, f),
     signature: msg.getSignature_asB64(),
-    escrow: (f = msg.getEscrow()) && model_escrow_pb.Escrow.toObject(includeInstance, f)
+    escrow: (f = msg.getEscrow()) && model_escrow_pb.Escrow.toObject(includeInstance, f),
+    message: msg.getMessage_asB64()
   };
 
   if (includeInstance) {
@@ -775,11 +776,11 @@ proto.model.Transaction.deserializeBinaryFromReader = function(msg, reader) {
       msg.setHeight(value);
       break;
     case 5:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setSenderaccountaddress(value);
       break;
     case 6:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setRecipientaccountaddress(value);
       break;
     case 7:
@@ -814,84 +815,88 @@ proto.model.Transaction.deserializeBinaryFromReader = function(msg, reader) {
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setMultisigchild(value);
       break;
-    case 15:
+    case 17:
       var value = new proto.model.EmptyTransactionBody;
       reader.readMessage(value,proto.model.EmptyTransactionBody.deserializeBinaryFromReader);
       msg.setEmptytransactionbody(value);
       break;
-    case 16:
+    case 18:
       var value = new proto.model.SendMoneyTransactionBody;
       reader.readMessage(value,proto.model.SendMoneyTransactionBody.deserializeBinaryFromReader);
       msg.setSendmoneytransactionbody(value);
       break;
-    case 17:
+    case 19:
       var value = new proto.model.NodeRegistrationTransactionBody;
       reader.readMessage(value,proto.model.NodeRegistrationTransactionBody.deserializeBinaryFromReader);
       msg.setNoderegistrationtransactionbody(value);
       break;
-    case 18:
+    case 20:
       var value = new proto.model.UpdateNodeRegistrationTransactionBody;
       reader.readMessage(value,proto.model.UpdateNodeRegistrationTransactionBody.deserializeBinaryFromReader);
       msg.setUpdatenoderegistrationtransactionbody(value);
       break;
-    case 19:
+    case 21:
       var value = new proto.model.RemoveNodeRegistrationTransactionBody;
       reader.readMessage(value,proto.model.RemoveNodeRegistrationTransactionBody.deserializeBinaryFromReader);
       msg.setRemovenoderegistrationtransactionbody(value);
       break;
-    case 20:
+    case 22:
       var value = new proto.model.ClaimNodeRegistrationTransactionBody;
       reader.readMessage(value,proto.model.ClaimNodeRegistrationTransactionBody.deserializeBinaryFromReader);
       msg.setClaimnoderegistrationtransactionbody(value);
       break;
-    case 21:
+    case 23:
       var value = new proto.model.SetupAccountDatasetTransactionBody;
       reader.readMessage(value,proto.model.SetupAccountDatasetTransactionBody.deserializeBinaryFromReader);
       msg.setSetupaccountdatasettransactionbody(value);
       break;
-    case 22:
+    case 24:
       var value = new proto.model.RemoveAccountDatasetTransactionBody;
       reader.readMessage(value,proto.model.RemoveAccountDatasetTransactionBody.deserializeBinaryFromReader);
       msg.setRemoveaccountdatasettransactionbody(value);
       break;
-    case 23:
+    case 25:
       var value = new proto.model.ApprovalEscrowTransactionBody;
       reader.readMessage(value,proto.model.ApprovalEscrowTransactionBody.deserializeBinaryFromReader);
       msg.setApprovalescrowtransactionbody(value);
       break;
-    case 24:
+    case 26:
       var value = new proto.model.MultiSignatureTransactionBody;
       reader.readMessage(value,proto.model.MultiSignatureTransactionBody.deserializeBinaryFromReader);
       msg.setMultisignaturetransactionbody(value);
       break;
-    case 25:
+    case 27:
       var value = new proto.model.FeeVoteCommitTransactionBody;
       reader.readMessage(value,proto.model.FeeVoteCommitTransactionBody.deserializeBinaryFromReader);
       msg.setFeevotecommittransactionbody(value);
       break;
-    case 26:
+    case 28:
       var value = new proto.model.FeeVoteRevealTransactionBody;
       reader.readMessage(value,proto.model.FeeVoteRevealTransactionBody.deserializeBinaryFromReader);
       msg.setFeevoterevealtransactionbody(value);
       break;
-    case 27:
+    case 29:
       var value = new proto.model.LiquidPaymentTransactionBody;
       reader.readMessage(value,proto.model.LiquidPaymentTransactionBody.deserializeBinaryFromReader);
       msg.setLiquidpaymenttransactionbody(value);
       break;
-    case 28:
+    case 30:
       var value = new proto.model.LiquidPaymentStopTransactionBody;
       reader.readMessage(value,proto.model.LiquidPaymentStopTransactionBody.deserializeBinaryFromReader);
       msg.setLiquidpaymentstoptransactionbody(value);
       break;
-    case 29:
+    case 31:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setSignature(value);
       break;
-    case 30:
+    case 32:
       var value = new model_escrow_pb.Escrow;
       reader.readMessage(value,model_escrow_pb.Escrow.deserializeBinaryFromReader);
       msg.setEscrow(value);
+      break;
+    case 33:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setMessage(value);
       break;
     default:
       reader.skipField();
@@ -950,16 +955,16 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getSenderaccountaddress();
+  f = message.getSenderaccountaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       5,
       f
     );
   }
-  f = message.getRecipientaccountaddress();
+  f = message.getRecipientaccountaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       6,
       f
     );
@@ -1023,7 +1028,7 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getEmptytransactionbody();
   if (f != null) {
     writer.writeMessage(
-      15,
+      17,
       f,
       proto.model.EmptyTransactionBody.serializeBinaryToWriter
     );
@@ -1031,7 +1036,7 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getSendmoneytransactionbody();
   if (f != null) {
     writer.writeMessage(
-      16,
+      18,
       f,
       proto.model.SendMoneyTransactionBody.serializeBinaryToWriter
     );
@@ -1039,7 +1044,7 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getNoderegistrationtransactionbody();
   if (f != null) {
     writer.writeMessage(
-      17,
+      19,
       f,
       proto.model.NodeRegistrationTransactionBody.serializeBinaryToWriter
     );
@@ -1047,7 +1052,7 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getUpdatenoderegistrationtransactionbody();
   if (f != null) {
     writer.writeMessage(
-      18,
+      20,
       f,
       proto.model.UpdateNodeRegistrationTransactionBody.serializeBinaryToWriter
     );
@@ -1055,7 +1060,7 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getRemovenoderegistrationtransactionbody();
   if (f != null) {
     writer.writeMessage(
-      19,
+      21,
       f,
       proto.model.RemoveNodeRegistrationTransactionBody.serializeBinaryToWriter
     );
@@ -1063,7 +1068,7 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getClaimnoderegistrationtransactionbody();
   if (f != null) {
     writer.writeMessage(
-      20,
+      22,
       f,
       proto.model.ClaimNodeRegistrationTransactionBody.serializeBinaryToWriter
     );
@@ -1071,7 +1076,7 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getSetupaccountdatasettransactionbody();
   if (f != null) {
     writer.writeMessage(
-      21,
+      23,
       f,
       proto.model.SetupAccountDatasetTransactionBody.serializeBinaryToWriter
     );
@@ -1079,7 +1084,7 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getRemoveaccountdatasettransactionbody();
   if (f != null) {
     writer.writeMessage(
-      22,
+      24,
       f,
       proto.model.RemoveAccountDatasetTransactionBody.serializeBinaryToWriter
     );
@@ -1087,7 +1092,7 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getApprovalescrowtransactionbody();
   if (f != null) {
     writer.writeMessage(
-      23,
+      25,
       f,
       proto.model.ApprovalEscrowTransactionBody.serializeBinaryToWriter
     );
@@ -1095,7 +1100,7 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getMultisignaturetransactionbody();
   if (f != null) {
     writer.writeMessage(
-      24,
+      26,
       f,
       proto.model.MultiSignatureTransactionBody.serializeBinaryToWriter
     );
@@ -1103,7 +1108,7 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getFeevotecommittransactionbody();
   if (f != null) {
     writer.writeMessage(
-      25,
+      27,
       f,
       proto.model.FeeVoteCommitTransactionBody.serializeBinaryToWriter
     );
@@ -1111,7 +1116,7 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getFeevoterevealtransactionbody();
   if (f != null) {
     writer.writeMessage(
-      26,
+      28,
       f,
       proto.model.FeeVoteRevealTransactionBody.serializeBinaryToWriter
     );
@@ -1119,7 +1124,7 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getLiquidpaymenttransactionbody();
   if (f != null) {
     writer.writeMessage(
-      27,
+      29,
       f,
       proto.model.LiquidPaymentTransactionBody.serializeBinaryToWriter
     );
@@ -1127,7 +1132,7 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getLiquidpaymentstoptransactionbody();
   if (f != null) {
     writer.writeMessage(
-      28,
+      30,
       f,
       proto.model.LiquidPaymentStopTransactionBody.serializeBinaryToWriter
     );
@@ -1135,16 +1140,23 @@ proto.model.Transaction.serializeBinaryToWriter = function(message, writer) {
   f = message.getSignature_asU8();
   if (f.length > 0) {
     writer.writeBytes(
-      29,
+      31,
       f
     );
   }
   f = message.getEscrow();
   if (f != null) {
     writer.writeMessage(
-      30,
+      32,
       f,
       model_escrow_pb.Escrow.serializeBinaryToWriter
+    );
+  }
+  f = message.getMessage_asU8();
+  if (f.length > 0) {
+    writer.writeBytes(
+      33,
+      f
     );
   }
 };
@@ -1211,32 +1223,80 @@ proto.model.Transaction.prototype.setHeight = function(value) {
 
 
 /**
- * optional string SenderAccountAddress = 5;
- * @return {string}
+ * optional bytes SenderAccountAddress = 5;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.Transaction.prototype.getSenderaccountaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
-};
-
-
-/** @param {string} value */
-proto.model.Transaction.prototype.setSenderaccountaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 5, value);
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
 };
 
 
 /**
- * optional string RecipientAccountAddress = 6;
+ * optional bytes SenderAccountAddress = 5;
+ * This is a type-conversion wrapper around `getSenderaccountaddress()`
  * @return {string}
  */
-proto.model.Transaction.prototype.getRecipientaccountaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+proto.model.Transaction.prototype.getSenderaccountaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getSenderaccountaddress()));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes SenderAccountAddress = 5;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getSenderaccountaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.Transaction.prototype.getSenderaccountaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getSenderaccountaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.Transaction.prototype.setSenderaccountaddress = function(value) {
+  jspb.Message.setProto3BytesField(this, 5, value);
+};
+
+
+/**
+ * optional bytes RecipientAccountAddress = 6;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.Transaction.prototype.getRecipientaccountaddress = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/**
+ * optional bytes RecipientAccountAddress = 6;
+ * This is a type-conversion wrapper around `getRecipientaccountaddress()`
+ * @return {string}
+ */
+proto.model.Transaction.prototype.getRecipientaccountaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getRecipientaccountaddress()));
+};
+
+
+/**
+ * optional bytes RecipientAccountAddress = 6;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getRecipientaccountaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.Transaction.prototype.getRecipientaccountaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getRecipientaccountaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.Transaction.prototype.setRecipientaccountaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 6, value);
+  jspb.Message.setProto3BytesField(this, 6, value);
 };
 
 
@@ -1409,18 +1469,18 @@ proto.model.Transaction.prototype.setMultisigchild = function(value) {
 
 
 /**
- * optional EmptyTransactionBody emptyTransactionBody = 15;
+ * optional EmptyTransactionBody emptyTransactionBody = 17;
  * @return {?proto.model.EmptyTransactionBody}
  */
 proto.model.Transaction.prototype.getEmptytransactionbody = function() {
   return /** @type{?proto.model.EmptyTransactionBody} */ (
-    jspb.Message.getWrapperField(this, proto.model.EmptyTransactionBody, 15));
+    jspb.Message.getWrapperField(this, proto.model.EmptyTransactionBody, 17));
 };
 
 
 /** @param {?proto.model.EmptyTransactionBody|undefined} value */
 proto.model.Transaction.prototype.setEmptytransactionbody = function(value) {
-  jspb.Message.setOneofWrapperField(this, 15, proto.model.Transaction.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 17, proto.model.Transaction.oneofGroups_[0], value);
 };
 
 
@@ -1437,23 +1497,23 @@ proto.model.Transaction.prototype.clearEmptytransactionbody = function() {
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasEmptytransactionbody = function() {
-  return jspb.Message.getField(this, 15) != null;
+  return jspb.Message.getField(this, 17) != null;
 };
 
 
 /**
- * optional SendMoneyTransactionBody sendMoneyTransactionBody = 16;
+ * optional SendMoneyTransactionBody sendMoneyTransactionBody = 18;
  * @return {?proto.model.SendMoneyTransactionBody}
  */
 proto.model.Transaction.prototype.getSendmoneytransactionbody = function() {
   return /** @type{?proto.model.SendMoneyTransactionBody} */ (
-    jspb.Message.getWrapperField(this, proto.model.SendMoneyTransactionBody, 16));
+    jspb.Message.getWrapperField(this, proto.model.SendMoneyTransactionBody, 18));
 };
 
 
 /** @param {?proto.model.SendMoneyTransactionBody|undefined} value */
 proto.model.Transaction.prototype.setSendmoneytransactionbody = function(value) {
-  jspb.Message.setOneofWrapperField(this, 16, proto.model.Transaction.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 18, proto.model.Transaction.oneofGroups_[0], value);
 };
 
 
@@ -1470,23 +1530,23 @@ proto.model.Transaction.prototype.clearSendmoneytransactionbody = function() {
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasSendmoneytransactionbody = function() {
-  return jspb.Message.getField(this, 16) != null;
+  return jspb.Message.getField(this, 18) != null;
 };
 
 
 /**
- * optional NodeRegistrationTransactionBody nodeRegistrationTransactionBody = 17;
+ * optional NodeRegistrationTransactionBody nodeRegistrationTransactionBody = 19;
  * @return {?proto.model.NodeRegistrationTransactionBody}
  */
 proto.model.Transaction.prototype.getNoderegistrationtransactionbody = function() {
   return /** @type{?proto.model.NodeRegistrationTransactionBody} */ (
-    jspb.Message.getWrapperField(this, proto.model.NodeRegistrationTransactionBody, 17));
+    jspb.Message.getWrapperField(this, proto.model.NodeRegistrationTransactionBody, 19));
 };
 
 
 /** @param {?proto.model.NodeRegistrationTransactionBody|undefined} value */
 proto.model.Transaction.prototype.setNoderegistrationtransactionbody = function(value) {
-  jspb.Message.setOneofWrapperField(this, 17, proto.model.Transaction.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 19, proto.model.Transaction.oneofGroups_[0], value);
 };
 
 
@@ -1503,23 +1563,23 @@ proto.model.Transaction.prototype.clearNoderegistrationtransactionbody = functio
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasNoderegistrationtransactionbody = function() {
-  return jspb.Message.getField(this, 17) != null;
+  return jspb.Message.getField(this, 19) != null;
 };
 
 
 /**
- * optional UpdateNodeRegistrationTransactionBody updateNodeRegistrationTransactionBody = 18;
+ * optional UpdateNodeRegistrationTransactionBody updateNodeRegistrationTransactionBody = 20;
  * @return {?proto.model.UpdateNodeRegistrationTransactionBody}
  */
 proto.model.Transaction.prototype.getUpdatenoderegistrationtransactionbody = function() {
   return /** @type{?proto.model.UpdateNodeRegistrationTransactionBody} */ (
-    jspb.Message.getWrapperField(this, proto.model.UpdateNodeRegistrationTransactionBody, 18));
+    jspb.Message.getWrapperField(this, proto.model.UpdateNodeRegistrationTransactionBody, 20));
 };
 
 
 /** @param {?proto.model.UpdateNodeRegistrationTransactionBody|undefined} value */
 proto.model.Transaction.prototype.setUpdatenoderegistrationtransactionbody = function(value) {
-  jspb.Message.setOneofWrapperField(this, 18, proto.model.Transaction.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 20, proto.model.Transaction.oneofGroups_[0], value);
 };
 
 
@@ -1536,23 +1596,23 @@ proto.model.Transaction.prototype.clearUpdatenoderegistrationtransactionbody = f
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasUpdatenoderegistrationtransactionbody = function() {
-  return jspb.Message.getField(this, 18) != null;
+  return jspb.Message.getField(this, 20) != null;
 };
 
 
 /**
- * optional RemoveNodeRegistrationTransactionBody removeNodeRegistrationTransactionBody = 19;
+ * optional RemoveNodeRegistrationTransactionBody removeNodeRegistrationTransactionBody = 21;
  * @return {?proto.model.RemoveNodeRegistrationTransactionBody}
  */
 proto.model.Transaction.prototype.getRemovenoderegistrationtransactionbody = function() {
   return /** @type{?proto.model.RemoveNodeRegistrationTransactionBody} */ (
-    jspb.Message.getWrapperField(this, proto.model.RemoveNodeRegistrationTransactionBody, 19));
+    jspb.Message.getWrapperField(this, proto.model.RemoveNodeRegistrationTransactionBody, 21));
 };
 
 
 /** @param {?proto.model.RemoveNodeRegistrationTransactionBody|undefined} value */
 proto.model.Transaction.prototype.setRemovenoderegistrationtransactionbody = function(value) {
-  jspb.Message.setOneofWrapperField(this, 19, proto.model.Transaction.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 21, proto.model.Transaction.oneofGroups_[0], value);
 };
 
 
@@ -1569,23 +1629,23 @@ proto.model.Transaction.prototype.clearRemovenoderegistrationtransactionbody = f
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasRemovenoderegistrationtransactionbody = function() {
-  return jspb.Message.getField(this, 19) != null;
+  return jspb.Message.getField(this, 21) != null;
 };
 
 
 /**
- * optional ClaimNodeRegistrationTransactionBody claimNodeRegistrationTransactionBody = 20;
+ * optional ClaimNodeRegistrationTransactionBody claimNodeRegistrationTransactionBody = 22;
  * @return {?proto.model.ClaimNodeRegistrationTransactionBody}
  */
 proto.model.Transaction.prototype.getClaimnoderegistrationtransactionbody = function() {
   return /** @type{?proto.model.ClaimNodeRegistrationTransactionBody} */ (
-    jspb.Message.getWrapperField(this, proto.model.ClaimNodeRegistrationTransactionBody, 20));
+    jspb.Message.getWrapperField(this, proto.model.ClaimNodeRegistrationTransactionBody, 22));
 };
 
 
 /** @param {?proto.model.ClaimNodeRegistrationTransactionBody|undefined} value */
 proto.model.Transaction.prototype.setClaimnoderegistrationtransactionbody = function(value) {
-  jspb.Message.setOneofWrapperField(this, 20, proto.model.Transaction.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 22, proto.model.Transaction.oneofGroups_[0], value);
 };
 
 
@@ -1602,23 +1662,23 @@ proto.model.Transaction.prototype.clearClaimnoderegistrationtransactionbody = fu
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasClaimnoderegistrationtransactionbody = function() {
-  return jspb.Message.getField(this, 20) != null;
+  return jspb.Message.getField(this, 22) != null;
 };
 
 
 /**
- * optional SetupAccountDatasetTransactionBody setupAccountDatasetTransactionBody = 21;
+ * optional SetupAccountDatasetTransactionBody setupAccountDatasetTransactionBody = 23;
  * @return {?proto.model.SetupAccountDatasetTransactionBody}
  */
 proto.model.Transaction.prototype.getSetupaccountdatasettransactionbody = function() {
   return /** @type{?proto.model.SetupAccountDatasetTransactionBody} */ (
-    jspb.Message.getWrapperField(this, proto.model.SetupAccountDatasetTransactionBody, 21));
+    jspb.Message.getWrapperField(this, proto.model.SetupAccountDatasetTransactionBody, 23));
 };
 
 
 /** @param {?proto.model.SetupAccountDatasetTransactionBody|undefined} value */
 proto.model.Transaction.prototype.setSetupaccountdatasettransactionbody = function(value) {
-  jspb.Message.setOneofWrapperField(this, 21, proto.model.Transaction.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 23, proto.model.Transaction.oneofGroups_[0], value);
 };
 
 
@@ -1635,23 +1695,23 @@ proto.model.Transaction.prototype.clearSetupaccountdatasettransactionbody = func
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasSetupaccountdatasettransactionbody = function() {
-  return jspb.Message.getField(this, 21) != null;
+  return jspb.Message.getField(this, 23) != null;
 };
 
 
 /**
- * optional RemoveAccountDatasetTransactionBody removeAccountDatasetTransactionBody = 22;
+ * optional RemoveAccountDatasetTransactionBody removeAccountDatasetTransactionBody = 24;
  * @return {?proto.model.RemoveAccountDatasetTransactionBody}
  */
 proto.model.Transaction.prototype.getRemoveaccountdatasettransactionbody = function() {
   return /** @type{?proto.model.RemoveAccountDatasetTransactionBody} */ (
-    jspb.Message.getWrapperField(this, proto.model.RemoveAccountDatasetTransactionBody, 22));
+    jspb.Message.getWrapperField(this, proto.model.RemoveAccountDatasetTransactionBody, 24));
 };
 
 
 /** @param {?proto.model.RemoveAccountDatasetTransactionBody|undefined} value */
 proto.model.Transaction.prototype.setRemoveaccountdatasettransactionbody = function(value) {
-  jspb.Message.setOneofWrapperField(this, 22, proto.model.Transaction.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 24, proto.model.Transaction.oneofGroups_[0], value);
 };
 
 
@@ -1668,23 +1728,23 @@ proto.model.Transaction.prototype.clearRemoveaccountdatasettransactionbody = fun
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasRemoveaccountdatasettransactionbody = function() {
-  return jspb.Message.getField(this, 22) != null;
+  return jspb.Message.getField(this, 24) != null;
 };
 
 
 /**
- * optional ApprovalEscrowTransactionBody approvalEscrowTransactionBody = 23;
+ * optional ApprovalEscrowTransactionBody approvalEscrowTransactionBody = 25;
  * @return {?proto.model.ApprovalEscrowTransactionBody}
  */
 proto.model.Transaction.prototype.getApprovalescrowtransactionbody = function() {
   return /** @type{?proto.model.ApprovalEscrowTransactionBody} */ (
-    jspb.Message.getWrapperField(this, proto.model.ApprovalEscrowTransactionBody, 23));
+    jspb.Message.getWrapperField(this, proto.model.ApprovalEscrowTransactionBody, 25));
 };
 
 
 /** @param {?proto.model.ApprovalEscrowTransactionBody|undefined} value */
 proto.model.Transaction.prototype.setApprovalescrowtransactionbody = function(value) {
-  jspb.Message.setOneofWrapperField(this, 23, proto.model.Transaction.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 25, proto.model.Transaction.oneofGroups_[0], value);
 };
 
 
@@ -1701,23 +1761,23 @@ proto.model.Transaction.prototype.clearApprovalescrowtransactionbody = function(
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasApprovalescrowtransactionbody = function() {
-  return jspb.Message.getField(this, 23) != null;
+  return jspb.Message.getField(this, 25) != null;
 };
 
 
 /**
- * optional MultiSignatureTransactionBody multiSignatureTransactionBody = 24;
+ * optional MultiSignatureTransactionBody multiSignatureTransactionBody = 26;
  * @return {?proto.model.MultiSignatureTransactionBody}
  */
 proto.model.Transaction.prototype.getMultisignaturetransactionbody = function() {
   return /** @type{?proto.model.MultiSignatureTransactionBody} */ (
-    jspb.Message.getWrapperField(this, proto.model.MultiSignatureTransactionBody, 24));
+    jspb.Message.getWrapperField(this, proto.model.MultiSignatureTransactionBody, 26));
 };
 
 
 /** @param {?proto.model.MultiSignatureTransactionBody|undefined} value */
 proto.model.Transaction.prototype.setMultisignaturetransactionbody = function(value) {
-  jspb.Message.setOneofWrapperField(this, 24, proto.model.Transaction.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 26, proto.model.Transaction.oneofGroups_[0], value);
 };
 
 
@@ -1734,23 +1794,23 @@ proto.model.Transaction.prototype.clearMultisignaturetransactionbody = function(
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasMultisignaturetransactionbody = function() {
-  return jspb.Message.getField(this, 24) != null;
+  return jspb.Message.getField(this, 26) != null;
 };
 
 
 /**
- * optional FeeVoteCommitTransactionBody feeVoteCommitTransactionBody = 25;
+ * optional FeeVoteCommitTransactionBody feeVoteCommitTransactionBody = 27;
  * @return {?proto.model.FeeVoteCommitTransactionBody}
  */
 proto.model.Transaction.prototype.getFeevotecommittransactionbody = function() {
   return /** @type{?proto.model.FeeVoteCommitTransactionBody} */ (
-    jspb.Message.getWrapperField(this, proto.model.FeeVoteCommitTransactionBody, 25));
+    jspb.Message.getWrapperField(this, proto.model.FeeVoteCommitTransactionBody, 27));
 };
 
 
 /** @param {?proto.model.FeeVoteCommitTransactionBody|undefined} value */
 proto.model.Transaction.prototype.setFeevotecommittransactionbody = function(value) {
-  jspb.Message.setOneofWrapperField(this, 25, proto.model.Transaction.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 27, proto.model.Transaction.oneofGroups_[0], value);
 };
 
 
@@ -1767,23 +1827,23 @@ proto.model.Transaction.prototype.clearFeevotecommittransactionbody = function()
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasFeevotecommittransactionbody = function() {
-  return jspb.Message.getField(this, 25) != null;
+  return jspb.Message.getField(this, 27) != null;
 };
 
 
 /**
- * optional FeeVoteRevealTransactionBody feeVoteRevealTransactionBody = 26;
+ * optional FeeVoteRevealTransactionBody feeVoteRevealTransactionBody = 28;
  * @return {?proto.model.FeeVoteRevealTransactionBody}
  */
 proto.model.Transaction.prototype.getFeevoterevealtransactionbody = function() {
   return /** @type{?proto.model.FeeVoteRevealTransactionBody} */ (
-    jspb.Message.getWrapperField(this, proto.model.FeeVoteRevealTransactionBody, 26));
+    jspb.Message.getWrapperField(this, proto.model.FeeVoteRevealTransactionBody, 28));
 };
 
 
 /** @param {?proto.model.FeeVoteRevealTransactionBody|undefined} value */
 proto.model.Transaction.prototype.setFeevoterevealtransactionbody = function(value) {
-  jspb.Message.setOneofWrapperField(this, 26, proto.model.Transaction.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 28, proto.model.Transaction.oneofGroups_[0], value);
 };
 
 
@@ -1800,23 +1860,23 @@ proto.model.Transaction.prototype.clearFeevoterevealtransactionbody = function()
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasFeevoterevealtransactionbody = function() {
-  return jspb.Message.getField(this, 26) != null;
+  return jspb.Message.getField(this, 28) != null;
 };
 
 
 /**
- * optional LiquidPaymentTransactionBody liquidPaymentTransactionBody = 27;
+ * optional LiquidPaymentTransactionBody liquidPaymentTransactionBody = 29;
  * @return {?proto.model.LiquidPaymentTransactionBody}
  */
 proto.model.Transaction.prototype.getLiquidpaymenttransactionbody = function() {
   return /** @type{?proto.model.LiquidPaymentTransactionBody} */ (
-    jspb.Message.getWrapperField(this, proto.model.LiquidPaymentTransactionBody, 27));
+    jspb.Message.getWrapperField(this, proto.model.LiquidPaymentTransactionBody, 29));
 };
 
 
 /** @param {?proto.model.LiquidPaymentTransactionBody|undefined} value */
 proto.model.Transaction.prototype.setLiquidpaymenttransactionbody = function(value) {
-  jspb.Message.setOneofWrapperField(this, 27, proto.model.Transaction.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 29, proto.model.Transaction.oneofGroups_[0], value);
 };
 
 
@@ -1833,23 +1893,23 @@ proto.model.Transaction.prototype.clearLiquidpaymenttransactionbody = function()
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasLiquidpaymenttransactionbody = function() {
-  return jspb.Message.getField(this, 27) != null;
+  return jspb.Message.getField(this, 29) != null;
 };
 
 
 /**
- * optional LiquidPaymentStopTransactionBody liquidPaymentStopTransactionBody = 28;
+ * optional LiquidPaymentStopTransactionBody liquidPaymentStopTransactionBody = 30;
  * @return {?proto.model.LiquidPaymentStopTransactionBody}
  */
 proto.model.Transaction.prototype.getLiquidpaymentstoptransactionbody = function() {
   return /** @type{?proto.model.LiquidPaymentStopTransactionBody} */ (
-    jspb.Message.getWrapperField(this, proto.model.LiquidPaymentStopTransactionBody, 28));
+    jspb.Message.getWrapperField(this, proto.model.LiquidPaymentStopTransactionBody, 30));
 };
 
 
 /** @param {?proto.model.LiquidPaymentStopTransactionBody|undefined} value */
 proto.model.Transaction.prototype.setLiquidpaymentstoptransactionbody = function(value) {
-  jspb.Message.setOneofWrapperField(this, 28, proto.model.Transaction.oneofGroups_[0], value);
+  jspb.Message.setOneofWrapperField(this, 30, proto.model.Transaction.oneofGroups_[0], value);
 };
 
 
@@ -1866,21 +1926,21 @@ proto.model.Transaction.prototype.clearLiquidpaymentstoptransactionbody = functi
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasLiquidpaymentstoptransactionbody = function() {
-  return jspb.Message.getField(this, 28) != null;
+  return jspb.Message.getField(this, 30) != null;
 };
 
 
 /**
- * optional bytes Signature = 29;
+ * optional bytes Signature = 31;
  * @return {!(string|Uint8Array)}
  */
 proto.model.Transaction.prototype.getSignature = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 29, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 31, ""));
 };
 
 
 /**
- * optional bytes Signature = 29;
+ * optional bytes Signature = 31;
  * This is a type-conversion wrapper around `getSignature()`
  * @return {string}
  */
@@ -1891,7 +1951,7 @@ proto.model.Transaction.prototype.getSignature_asB64 = function() {
 
 
 /**
- * optional bytes Signature = 29;
+ * optional bytes Signature = 31;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
  * This is a type-conversion wrapper around `getSignature()`
@@ -1905,23 +1965,23 @@ proto.model.Transaction.prototype.getSignature_asU8 = function() {
 
 /** @param {!(string|Uint8Array)} value */
 proto.model.Transaction.prototype.setSignature = function(value) {
-  jspb.Message.setProto3BytesField(this, 29, value);
+  jspb.Message.setProto3BytesField(this, 31, value);
 };
 
 
 /**
- * optional Escrow Escrow = 30;
+ * optional Escrow Escrow = 32;
  * @return {?proto.model.Escrow}
  */
 proto.model.Transaction.prototype.getEscrow = function() {
   return /** @type{?proto.model.Escrow} */ (
-    jspb.Message.getWrapperField(this, model_escrow_pb.Escrow, 30));
+    jspb.Message.getWrapperField(this, model_escrow_pb.Escrow, 32));
 };
 
 
 /** @param {?proto.model.Escrow|undefined} value */
 proto.model.Transaction.prototype.setEscrow = function(value) {
-  jspb.Message.setWrapperField(this, 30, value);
+  jspb.Message.setWrapperField(this, 32, value);
 };
 
 
@@ -1938,7 +1998,46 @@ proto.model.Transaction.prototype.clearEscrow = function() {
  * @return {boolean}
  */
 proto.model.Transaction.prototype.hasEscrow = function() {
-  return jspb.Message.getField(this, 30) != null;
+  return jspb.Message.getField(this, 32) != null;
+};
+
+
+/**
+ * optional bytes Message = 33;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.Transaction.prototype.getMessage = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 33, ""));
+};
+
+
+/**
+ * optional bytes Message = 33;
+ * This is a type-conversion wrapper around `getMessage()`
+ * @return {string}
+ */
+proto.model.Transaction.prototype.getMessage_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getMessage()));
+};
+
+
+/**
+ * optional bytes Message = 33;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getMessage()`
+ * @return {!Uint8Array}
+ */
+proto.model.Transaction.prototype.getMessage_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getMessage()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.Transaction.prototype.setMessage = function(value) {
+  jspb.Message.setProto3BytesField(this, 33, value);
 };
 
 
@@ -2203,7 +2302,7 @@ proto.model.NodeRegistrationTransactionBody.prototype.toObject = function(opt_in
 proto.model.NodeRegistrationTransactionBody.toObject = function(includeInstance, msg) {
   var f, obj = {
     nodepublickey: msg.getNodepublickey_asB64(),
-    accountaddress: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    accountaddress: msg.getAccountaddress_asB64(),
     lockedbalance: jspb.Message.getFieldWithDefault(msg, 3, "0"),
     poown: (f = msg.getPoown()) && model_proofOfOwnership_pb.ProofOfOwnership.toObject(includeInstance, f)
   };
@@ -2247,7 +2346,7 @@ proto.model.NodeRegistrationTransactionBody.deserializeBinaryFromReader = functi
       msg.setNodepublickey(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setAccountaddress(value);
       break;
     case 3:
@@ -2295,9 +2394,9 @@ proto.model.NodeRegistrationTransactionBody.serializeBinaryToWriter = function(m
       f
     );
   }
-  f = message.getAccountaddress();
+  f = message.getAccountaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       2,
       f
     );
@@ -2360,17 +2459,41 @@ proto.model.NodeRegistrationTransactionBody.prototype.setNodepublickey = functio
 
 
 /**
- * optional string AccountAddress = 2;
- * @return {string}
+ * optional bytes AccountAddress = 2;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.NodeRegistrationTransactionBody.prototype.getAccountaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes AccountAddress = 2;
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {string}
+ */
+proto.model.NodeRegistrationTransactionBody.prototype.getAccountaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getAccountaddress()));
+};
+
+
+/**
+ * optional bytes AccountAddress = 2;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.NodeRegistrationTransactionBody.prototype.getAccountaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getAccountaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.NodeRegistrationTransactionBody.prototype.setAccountaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  jspb.Message.setProto3BytesField(this, 2, value);
 };
 
 
@@ -4492,7 +4615,7 @@ proto.model.GetTransactionsRequest.prototype.toObject = function(opt_includeInst
  */
 proto.model.GetTransactionsRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    accountaddress: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    accountaddress: msg.getAccountaddress_asB64(),
     height: jspb.Message.getFieldWithDefault(msg, 2, 0),
     timestampstart: jspb.Message.getFieldWithDefault(msg, 3, "0"),
     timestampend: jspb.Message.getFieldWithDefault(msg, 4, "0"),
@@ -4535,7 +4658,7 @@ proto.model.GetTransactionsRequest.deserializeBinaryFromReader = function(msg, r
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setAccountaddress(value);
       break;
     case 2:
@@ -4588,9 +4711,9 @@ proto.model.GetTransactionsRequest.prototype.serializeBinary = function() {
  */
 proto.model.GetTransactionsRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getAccountaddress();
+  f = message.getAccountaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       1,
       f
     );
@@ -4635,17 +4758,41 @@ proto.model.GetTransactionsRequest.serializeBinaryToWriter = function(message, w
 
 
 /**
- * optional string AccountAddress = 1;
- * @return {string}
+ * optional bytes AccountAddress = 1;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.GetTransactionsRequest.prototype.getAccountaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes AccountAddress = 1;
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {string}
+ */
+proto.model.GetTransactionsRequest.prototype.getAccountaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getAccountaddress()));
+};
+
+
+/**
+ * optional bytes AccountAddress = 1;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.GetTransactionsRequest.prototype.getAccountaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getAccountaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.GetTransactionsRequest.prototype.setAccountaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  jspb.Message.setProto3BytesField(this, 1, value);
 };
 
 
@@ -5484,7 +5631,7 @@ proto.model.SendTransactionResponse.prototype.toObject = function(opt_includeIns
  */
 proto.model.SendTransactionResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    batchreceipt: (f = msg.getBatchreceipt()) && model_batchReceipt_pb.BatchReceipt.toObject(includeInstance, f)
+    receipt: (f = msg.getReceipt()) && model_receipt_pb.Receipt.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -5522,9 +5669,9 @@ proto.model.SendTransactionResponse.deserializeBinaryFromReader = function(msg, 
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new model_batchReceipt_pb.BatchReceipt;
-      reader.readMessage(value,model_batchReceipt_pb.BatchReceipt.deserializeBinaryFromReader);
-      msg.setBatchreceipt(value);
+      var value = new model_receipt_pb.Receipt;
+      reader.readMessage(value,model_receipt_pb.Receipt.deserializeBinaryFromReader);
+      msg.setReceipt(value);
       break;
     default:
       reader.skipField();
@@ -5555,29 +5702,29 @@ proto.model.SendTransactionResponse.prototype.serializeBinary = function() {
  */
 proto.model.SendTransactionResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getBatchreceipt();
+  f = message.getReceipt();
   if (f != null) {
     writer.writeMessage(
       1,
       f,
-      model_batchReceipt_pb.BatchReceipt.serializeBinaryToWriter
+      model_receipt_pb.Receipt.serializeBinaryToWriter
     );
   }
 };
 
 
 /**
- * optional BatchReceipt BatchReceipt = 1;
- * @return {?proto.model.BatchReceipt}
+ * optional Receipt Receipt = 1;
+ * @return {?proto.model.Receipt}
  */
-proto.model.SendTransactionResponse.prototype.getBatchreceipt = function() {
-  return /** @type{?proto.model.BatchReceipt} */ (
-    jspb.Message.getWrapperField(this, model_batchReceipt_pb.BatchReceipt, 1));
+proto.model.SendTransactionResponse.prototype.getReceipt = function() {
+  return /** @type{?proto.model.Receipt} */ (
+    jspb.Message.getWrapperField(this, model_receipt_pb.Receipt, 1));
 };
 
 
-/** @param {?proto.model.BatchReceipt|undefined} value */
-proto.model.SendTransactionResponse.prototype.setBatchreceipt = function(value) {
+/** @param {?proto.model.Receipt|undefined} value */
+proto.model.SendTransactionResponse.prototype.setReceipt = function(value) {
   jspb.Message.setWrapperField(this, 1, value);
 };
 
@@ -5585,8 +5732,8 @@ proto.model.SendTransactionResponse.prototype.setBatchreceipt = function(value) 
 /**
  * Clears the message field making it undefined.
  */
-proto.model.SendTransactionResponse.prototype.clearBatchreceipt = function() {
-  this.setBatchreceipt(undefined);
+proto.model.SendTransactionResponse.prototype.clearReceipt = function() {
+  this.setReceipt(undefined);
 };
 
 
@@ -5594,7 +5741,7 @@ proto.model.SendTransactionResponse.prototype.clearBatchreceipt = function() {
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.model.SendTransactionResponse.prototype.hasBatchreceipt = function() {
+proto.model.SendTransactionResponse.prototype.hasReceipt = function() {
   return jspb.Message.getField(this, 1) != null;
 };
 
@@ -6096,8 +6243,8 @@ proto.model.SendBlockTransactionsResponse.prototype.toObject = function(opt_incl
  */
 proto.model.SendBlockTransactionsResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    batchreceiptsList: jspb.Message.toObjectList(msg.getBatchreceiptsList(),
-    model_batchReceipt_pb.BatchReceipt.toObject, includeInstance)
+    receiptsList: jspb.Message.toObjectList(msg.getReceiptsList(),
+    model_receipt_pb.Receipt.toObject, includeInstance)
   };
 
   if (includeInstance) {
@@ -6135,9 +6282,9 @@ proto.model.SendBlockTransactionsResponse.deserializeBinaryFromReader = function
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new model_batchReceipt_pb.BatchReceipt;
-      reader.readMessage(value,model_batchReceipt_pb.BatchReceipt.deserializeBinaryFromReader);
-      msg.addBatchreceipts(value);
+      var value = new model_receipt_pb.Receipt;
+      reader.readMessage(value,model_receipt_pb.Receipt.deserializeBinaryFromReader);
+      msg.addReceipts(value);
       break;
     default:
       reader.skipField();
@@ -6168,48 +6315,48 @@ proto.model.SendBlockTransactionsResponse.prototype.serializeBinary = function()
  */
 proto.model.SendBlockTransactionsResponse.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getBatchreceiptsList();
+  f = message.getReceiptsList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
       1,
       f,
-      model_batchReceipt_pb.BatchReceipt.serializeBinaryToWriter
+      model_receipt_pb.Receipt.serializeBinaryToWriter
     );
   }
 };
 
 
 /**
- * repeated BatchReceipt BatchReceipts = 1;
- * @return {!Array<!proto.model.BatchReceipt>}
+ * repeated Receipt Receipts = 1;
+ * @return {!Array<!proto.model.Receipt>}
  */
-proto.model.SendBlockTransactionsResponse.prototype.getBatchreceiptsList = function() {
-  return /** @type{!Array<!proto.model.BatchReceipt>} */ (
-    jspb.Message.getRepeatedWrapperField(this, model_batchReceipt_pb.BatchReceipt, 1));
+proto.model.SendBlockTransactionsResponse.prototype.getReceiptsList = function() {
+  return /** @type{!Array<!proto.model.Receipt>} */ (
+    jspb.Message.getRepeatedWrapperField(this, model_receipt_pb.Receipt, 1));
 };
 
 
-/** @param {!Array<!proto.model.BatchReceipt>} value */
-proto.model.SendBlockTransactionsResponse.prototype.setBatchreceiptsList = function(value) {
+/** @param {!Array<!proto.model.Receipt>} value */
+proto.model.SendBlockTransactionsResponse.prototype.setReceiptsList = function(value) {
   jspb.Message.setRepeatedWrapperField(this, 1, value);
 };
 
 
 /**
- * @param {!proto.model.BatchReceipt=} opt_value
+ * @param {!proto.model.Receipt=} opt_value
  * @param {number=} opt_index
- * @return {!proto.model.BatchReceipt}
+ * @return {!proto.model.Receipt}
  */
-proto.model.SendBlockTransactionsResponse.prototype.addBatchreceipts = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.model.BatchReceipt, opt_index);
+proto.model.SendBlockTransactionsResponse.prototype.addReceipts = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.model.Receipt, opt_index);
 };
 
 
 /**
  * Clears the list making it empty but non-null.
  */
-proto.model.SendBlockTransactionsResponse.prototype.clearBatchreceiptsList = function() {
-  this.setBatchreceiptsList([]);
+proto.model.SendBlockTransactionsResponse.prototype.clearReceiptsList = function() {
+  this.setReceiptsList([]);
 };
 
 

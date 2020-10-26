@@ -14,8 +14,10 @@ export class NodeRegistration extends jspb.Message {
   getNodepublickey_asB64(): string;
   setNodepublickey(value: Uint8Array | string): void;
 
-  getAccountaddress(): string;
-  setAccountaddress(value: string): void;
+  getAccountaddress(): Uint8Array | string;
+  getAccountaddress_asU8(): Uint8Array;
+  getAccountaddress_asB64(): string;
+  setAccountaddress(value: Uint8Array | string): void;
 
   getRegistrationheight(): number;
   setRegistrationheight(value: number): void;
@@ -51,7 +53,7 @@ export namespace NodeRegistration {
   export type AsObject = {
     nodeid: string,
     nodepublickey: Uint8Array | string,
-    accountaddress: string,
+    accountaddress: Uint8Array | string,
     registrationheight: number,
     lockedbalance: string,
     registrationstatus: number,
@@ -129,8 +131,10 @@ export class GetNodeRegistrationRequest extends jspb.Message {
   getNodepublickey_asB64(): string;
   setNodepublickey(value: Uint8Array | string): void;
 
-  getAccountaddress(): string;
-  setAccountaddress(value: string): void;
+  getAccountaddress(): Uint8Array | string;
+  getAccountaddress_asU8(): Uint8Array;
+  getAccountaddress_asB64(): string;
+  setAccountaddress(value: Uint8Array | string): void;
 
   getRegistrationheight(): number;
   setRegistrationheight(value: number): void;
@@ -148,7 +152,7 @@ export class GetNodeRegistrationRequest extends jspb.Message {
 export namespace GetNodeRegistrationRequest {
   export type AsObject = {
     nodepublickey: Uint8Array | string,
-    accountaddress: string,
+    accountaddress: Uint8Array | string,
     registrationheight: number,
   }
 }

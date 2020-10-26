@@ -78,21 +78,21 @@ export function toZBCPendingTransactions(res: GetMempoolTransactionsResponse.AsO
     transaction = readPostTransactionBytes(txBytes);
     switch (type) {
       case TransactionType.UPDATENODEREGISTRATIONTRANSACTION:
-        transaction.transactionType = TransactionType.UPDATENODEREGISTRATIONTRANSACTION
+        transaction.transactionType = TransactionType.UPDATENODEREGISTRATIONTRANSACTION;
         transaction.txBody = readUpdateNodeBytes(txBytes);
         break;
       case TransactionType.SENDMONEYTRANSACTION:
         const approverAddressLength = txBytes.slice(173, 177).readInt32LE(0);
-        if (approverAddressLength > 0 ) transaction = readEscrowBytes(txBytes, transaction)
-        transaction.transactionType = TransactionType.SENDMONEYTRANSACTION
+        if (approverAddressLength > 0) transaction = readEscrowBytes(txBytes, transaction);
+        transaction.transactionType = TransactionType.SENDMONEYTRANSACTION;
         transaction.txBody = readSendMoneyBytes(txBytes);
         break;
       case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
-        transaction.transactionType = TransactionType.REMOVENODEREGISTRATIONTRANSACTION
+        transaction.transactionType = TransactionType.REMOVENODEREGISTRATIONTRANSACTION;
         transaction.txBody = readRemoveNodeRegistrationBytes(txBytes);
         break;
       case TransactionType.NODEREGISTRATIONTRANSACTION:
-        transaction.transactionType = TransactionType.NODEREGISTRATIONTRANSACTION
+        transaction.transactionType = TransactionType.NODEREGISTRATIONTRANSACTION;
         transaction.txBody = readNodeRegistrationBytes(txBytes);
         break;
       case TransactionType.CLAIMNODEREGISTRATIONTRANSACTION:
@@ -114,5 +114,5 @@ export function toZBCPendingTransactions(res: GetMempoolTransactionsResponse.AsO
     }
     transactions.push(transaction);
   }
-  return transactions
+  return transactions;
 }

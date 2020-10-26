@@ -59,6 +59,15 @@ type MultisigServiceGetMultisigAddressesByBlockHeightRange = {
   readonly responseType: typeof model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeResponse;
 };
 
+type MultisigServiceGetParticipantsByMultisigAddresses = {
+  readonly methodName: string;
+  readonly service: typeof MultisigService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof model_multiSignature_pb.GetParticipantsByMultisigAddressesRequest;
+  readonly responseType: typeof model_multiSignature_pb.GetParticipantsByMultisigAddressesResponse;
+};
+
 export class MultisigService {
   static readonly serviceName: string;
   static readonly GetPendingTransactions: MultisigServiceGetPendingTransactions;
@@ -67,6 +76,7 @@ export class MultisigService {
   static readonly GetMultisigAddressByParticipantAddress: MultisigServiceGetMultisigAddressByParticipantAddress;
   static readonly GetPendingTransactionsByHeight: MultisigServiceGetPendingTransactionsByHeight;
   static readonly GetMultisigAddressesByBlockHeightRange: MultisigServiceGetMultisigAddressesByBlockHeightRange;
+  static readonly GetParticipantsByMultisigAddresses: MultisigServiceGetParticipantsByMultisigAddresses;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -154,6 +164,15 @@ export class MultisigServiceClient {
   getMultisigAddressesByBlockHeightRange(
     requestMessage: model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeRequest,
     callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeResponse|null) => void
+  ): UnaryResponse;
+  getParticipantsByMultisigAddresses(
+    requestMessage: model_multiSignature_pb.GetParticipantsByMultisigAddressesRequest,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetParticipantsByMultisigAddressesResponse|null) => void
+  ): UnaryResponse;
+  getParticipantsByMultisigAddresses(
+    requestMessage: model_multiSignature_pb.GetParticipantsByMultisigAddressesRequest,
+    callback: (error: ServiceError|null, responseMessage: model_multiSignature_pb.GetParticipantsByMultisigAddressesResponse|null) => void
   ): UnaryResponse;
 }
 

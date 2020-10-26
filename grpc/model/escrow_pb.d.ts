@@ -8,14 +8,20 @@ export class Escrow extends jspb.Message {
   getId(): string;
   setId(value: string): void;
 
-  getSenderaddress(): string;
-  setSenderaddress(value: string): void;
+  getSenderaddress(): Uint8Array | string;
+  getSenderaddress_asU8(): Uint8Array;
+  getSenderaddress_asB64(): string;
+  setSenderaddress(value: Uint8Array | string): void;
 
-  getRecipientaddress(): string;
-  setRecipientaddress(value: string): void;
+  getRecipientaddress(): Uint8Array | string;
+  getRecipientaddress_asU8(): Uint8Array;
+  getRecipientaddress_asB64(): string;
+  setRecipientaddress(value: Uint8Array | string): void;
 
-  getApproveraddress(): string;
-  setApproveraddress(value: string): void;
+  getApproveraddress(): Uint8Array | string;
+  getApproveraddress_asU8(): Uint8Array;
+  getApproveraddress_asB64(): string;
+  setApproveraddress(value: Uint8Array | string): void;
 
   getAmount(): string;
   setAmount(value: string): void;
@@ -51,9 +57,9 @@ export class Escrow extends jspb.Message {
 export namespace Escrow {
   export type AsObject = {
     id: string,
-    senderaddress: string,
-    recipientaddress: string,
-    approveraddress: string,
+    senderaddress: Uint8Array | string,
+    recipientaddress: Uint8Array | string,
+    approveraddress: Uint8Array | string,
     amount: string,
     commission: string,
     timeout: string,
@@ -65,14 +71,20 @@ export namespace Escrow {
 }
 
 export class GetEscrowTransactionsRequest extends jspb.Message {
-  getApproveraddress(): string;
-  setApproveraddress(value: string): void;
+  getApproveraddress(): Uint8Array | string;
+  getApproveraddress_asU8(): Uint8Array;
+  getApproveraddress_asB64(): string;
+  setApproveraddress(value: Uint8Array | string): void;
 
-  getSenderaddress(): string;
-  setSenderaddress(value: string): void;
+  getSenderaddress(): Uint8Array | string;
+  getSenderaddress_asU8(): Uint8Array;
+  getSenderaddress_asB64(): string;
+  setSenderaddress(value: Uint8Array | string): void;
 
-  getRecipientaddress(): string;
-  setRecipientaddress(value: string): void;
+  getRecipientaddress(): Uint8Array | string;
+  getRecipientaddress_asU8(): Uint8Array;
+  getRecipientaddress_asB64(): string;
+  setRecipientaddress(value: Uint8Array | string): void;
 
   getId(): string;
   setId(value: string): void;
@@ -108,9 +120,9 @@ export class GetEscrowTransactionsRequest extends jspb.Message {
 
 export namespace GetEscrowTransactionsRequest {
   export type AsObject = {
-    approveraddress: string,
-    senderaddress: string,
-    recipientaddress: string,
+    approveraddress: Uint8Array | string,
+    senderaddress: Uint8Array | string,
+    recipientaddress: Uint8Array | string,
     id: string,
     statusesList: Array<EscrowStatusMap[keyof EscrowStatusMap]>,
     blockheightstart: number,

@@ -4,8 +4,10 @@
 import * as jspb from "google-protobuf";
 
 export class AccountBalance extends jspb.Message {
-  getAccountaddress(): string;
-  setAccountaddress(value: string): void;
+  getAccountaddress(): Uint8Array | string;
+  getAccountaddress_asU8(): Uint8Array;
+  getAccountaddress_asB64(): string;
+  setAccountaddress(value: Uint8Array | string): void;
 
   getBlockheight(): number;
   setBlockheight(value: number): void;
@@ -34,7 +36,7 @@ export class AccountBalance extends jspb.Message {
 
 export namespace AccountBalance {
   export type AsObject = {
-    accountaddress: string,
+    accountaddress: Uint8Array | string,
     blockheight: number,
     spendablebalance: string,
     balance: string,
@@ -44,8 +46,10 @@ export namespace AccountBalance {
 }
 
 export class GetAccountBalanceRequest extends jspb.Message {
-  getAccountaddress(): string;
-  setAccountaddress(value: string): void;
+  getAccountaddress(): Uint8Array | string;
+  getAccountaddress_asU8(): Uint8Array;
+  getAccountaddress_asB64(): string;
+  setAccountaddress(value: Uint8Array | string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetAccountBalanceRequest.AsObject;
@@ -59,7 +63,7 @@ export class GetAccountBalanceRequest extends jspb.Message {
 
 export namespace GetAccountBalanceRequest {
   export type AsObject = {
-    accountaddress: string,
+    accountaddress: Uint8Array | string,
   }
 }
 
@@ -87,9 +91,11 @@ export namespace GetAccountBalanceResponse {
 
 export class GetAccountBalancesRequest extends jspb.Message {
   clearAccountaddressesList(): void;
-  getAccountaddressesList(): Array<string>;
-  setAccountaddressesList(value: Array<string>): void;
-  addAccountaddresses(value: string, index?: number): string;
+  getAccountaddressesList(): Array<Uint8Array | string>;
+  getAccountaddressesList_asU8(): Array<Uint8Array>;
+  getAccountaddressesList_asB64(): Array<string>;
+  setAccountaddressesList(value: Array<Uint8Array | string>): void;
+  addAccountaddresses(value: Uint8Array | string, index?: number): Uint8Array | string;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetAccountBalancesRequest.AsObject;
@@ -103,7 +109,7 @@ export class GetAccountBalancesRequest extends jspb.Message {
 
 export namespace GetAccountBalancesRequest {
   export type AsObject = {
-    accountaddressesList: Array<string>,
+    accountaddressesList: Array<Uint8Array | string>,
   }
 }
 

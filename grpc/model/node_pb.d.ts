@@ -8,6 +8,11 @@ export class Node extends jspb.Message {
   getId(): number;
   setId(value: number): void;
 
+  getPublickey(): Uint8Array | string;
+  getPublickey_asU8(): Uint8Array;
+  getPublickey_asB64(): string;
+  setPublickey(value: Uint8Array | string): void;
+
   getSharedaddress(): string;
   setSharedaddress(value: string): void;
 
@@ -39,6 +44,7 @@ export class Node extends jspb.Message {
 export namespace Node {
   export type AsObject = {
     id: number,
+    publickey: Uint8Array | string,
     sharedaddress: string,
     address: string,
     port: number,

@@ -1,4 +1,4 @@
-import { writeInt32, getZBCAddress, validationTimestamp, errorDateMessage } from './helper/utils';
+import { writeInt32, getZBCAddress, validationTimestamp, errorDateMessage, accountToBytes } from './helper/utils';
 import { sha3_256 } from 'js-sha3';
 import Network from './Network';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
@@ -17,6 +17,7 @@ import { MultiSigInterface, multisignatureBuilder, MultiSigAddress } from './hel
 import { BIP32Interface } from 'bip32';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
+import { Account } from './helper/interfaces';
 
 export type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
@@ -25,7 +26,7 @@ export type MultisigPostTransactionResponse = PostTransactionResponse.AsObject;
 export type GetMultisigAddressResponse = GetMultisigAddressByParticipantAddressResponse.AsObject;
 
 export interface MultisigPendingListParams {
-  address?: string;
+  address?: Account;
   status?: 0 | 1 | 2 | 3;
   pagination: {
     limit?: number;
@@ -74,7 +75,7 @@ function getPendingList(params: MultisigPendingListParams): Promise<MultisigPend
     const networkIP = Network.selected();
 
     const { address, pagination, status } = params;
-    if (address) request.setSenderaddress(address);
+    if (address) request.setSenderaddress(accountToBytes(address));
     if (status) request.setStatus(status);
     if (pagination) {
       const reqPagination = new Pagination();

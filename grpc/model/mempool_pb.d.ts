@@ -23,11 +23,15 @@ export class MempoolTransaction extends jspb.Message {
   getTransactionbytes_asB64(): string;
   setTransactionbytes(value: Uint8Array | string): void;
 
-  getSenderaccountaddress(): string;
-  setSenderaccountaddress(value: string): void;
+  getSenderaccountaddress(): Uint8Array | string;
+  getSenderaccountaddress_asU8(): Uint8Array;
+  getSenderaccountaddress_asB64(): string;
+  setSenderaccountaddress(value: Uint8Array | string): void;
 
-  getRecipientaccountaddress(): string;
-  setRecipientaccountaddress(value: string): void;
+  getRecipientaccountaddress(): Uint8Array | string;
+  getRecipientaccountaddress_asU8(): Uint8Array;
+  getRecipientaccountaddress_asB64(): string;
+  setRecipientaccountaddress(value: Uint8Array | string): void;
 
   hasEscrow(): boolean;
   clearEscrow(): void;
@@ -51,8 +55,8 @@ export namespace MempoolTransaction {
     feeperbyte: string,
     arrivaltimestamp: string,
     transactionbytes: Uint8Array | string,
-    senderaccountaddress: string,
-    recipientaccountaddress: string,
+    senderaccountaddress: Uint8Array | string,
+    recipientaccountaddress: Uint8Array | string,
     escrow?: model_escrow_pb.Escrow.AsObject,
   }
 }
@@ -106,8 +110,10 @@ export class GetMempoolTransactionsRequest extends jspb.Message {
   getTimestampend(): string;
   setTimestampend(value: string): void;
 
-  getAddress(): string;
-  setAddress(value: string): void;
+  getAddress(): Uint8Array | string;
+  getAddress_asU8(): Uint8Array;
+  getAddress_asB64(): string;
+  setAddress(value: Uint8Array | string): void;
 
   hasPagination(): boolean;
   clearPagination(): void;
@@ -128,7 +134,7 @@ export namespace GetMempoolTransactionsRequest {
   export type AsObject = {
     timestampstart: string,
     timestampend: string,
-    address: string,
+    address: Uint8Array | string,
     pagination?: model_pagination_pb.Pagination.AsObject,
   }
 }

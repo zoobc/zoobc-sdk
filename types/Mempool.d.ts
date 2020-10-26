@@ -1,8 +1,9 @@
 import { GetMempoolTransactionsResponse, MempoolTransaction } from '../grpc/model/mempool_pb';
+import { Account } from './helper/interfaces';
 export declare type MempoolTransactionsResponse = GetMempoolTransactionsResponse.AsObject;
 export declare type MempoolTransactionResponse = MempoolTransaction.AsObject;
 export interface MempoolListParams {
-    address?: string;
+    address?: Account;
     timestampStart?: string;
     timestampEnd?: string;
     pagination?: {
