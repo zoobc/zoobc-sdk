@@ -1,15 +1,12 @@
-import { writeInt64, writeInt32, getZBCAddress, parseAccountAddress, accountToBytes, ZBCAddressToBytes } from '../utils';
+import { writeInt64, writeInt32, getZBCAddress, ZBCAddressToBytes } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
-import { TransactionType } from '../../../grpc/model/transaction_pb';
-import { Account } from '../interfaces';
-import { AccountType } from '../../../grpc/model/accountType_pb';
-import { generateTransactionHash } from '../..';
+import { generateTransactionHash } from '../wallet/MultiSignature';
 
-const TRANSACTION_TYPE = writeInt32(TransactionType.REMOVENODEREGISTRATIONTRANSACTION);
+const TRANSACTION_TYPE = new Buffer([2, 2, 0, 0]);
 
 export interface RemoveNodeInterface {
-  accountAddress: Account;
+  accountAddress: string;
   fee: number;
   nodePublicKey: Buffer;
 }
@@ -18,24 +15,43 @@ export function removeNodeBuilder(data: RemoveNodeInterface, seed?: BIP32Interfa
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-  const accountAddress = accountToBytes(data.accountAddress);
-  const recipient = writeInt32(AccountType.ZBCACCOUNTTYPE);
+  const accountAddress = Buffer.from(data.accountAddress, 'utf-8');
+  const recipient = new Buffer(ADDRESS_LENGTH);
+  const addressLength = writeInt32(ADDRESS_LENGTH);
   const fee = writeInt64(data.fee * 1e8);
+
   const nodePublicKey = data.nodePublicKey;
   const bodyLength = writeInt32(nodePublicKey.length);
 
-  bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, accountAddress, recipient, fee, bodyLength, nodePublicKey]);
+  bytes = Buffer.concat([
+    TRANSACTION_TYPE,
+    VERSION,
+    timestamp,
+    addressLength,
+    accountAddress,
+    addressLength,
+    recipient,
+    fee,
+    bodyLength,
+    nodePublicKey,
+  ]);
 
   // ========== NULLIFYING THE ESCROW ===========
-  const approverAddress = writeInt32(AccountType.EMPTYACCOUNTTYPE);
-  const message = writeInt32(0);
-  bytes = Buffer.concat([bytes, approverAddress, message]);
+  const approverAddressLength = writeInt32(0);
+  const commission = writeInt64(0);
+  const timeout = writeInt64(0);
+  const instructionLength = writeInt32(0);
+
+  bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
   // ========== END NULLIFYING THE ESCROW =========
 
   if (seed) {
-    const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-    const signature = seed.sign(txHash);
-    return Buffer.concat([bytes, signature]);
+    const signatureType = writeInt32(0);
+    const txFormat = generateTransactionHash(bytes);
+    const txBytes = ZBCAddressToBytes(txFormat);
+    const signature = seed.sign(txBytes);
+    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
+    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
   } else return bytes;
 }
 
