@@ -1,7 +1,9 @@
 /// <reference types="node" />
 import { BIP32Interface } from 'bip32';
-export interface feeVoteInterface {
-    accountAddress: string;
+import { EscrowTransactionInterface } from './send-money';
+import { Account } from '../interfaces';
+export interface feeVoteInterface extends EscrowTransactionInterface {
+    accountAddress: Account;
     fee: number;
     recentBlockHash: string;
     recentBlockHeight: number;

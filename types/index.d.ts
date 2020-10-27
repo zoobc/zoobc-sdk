@@ -102,7 +102,7 @@ declare const zoobc: {
     MultiSignature: {
         getPendingByTxHash: (txHash: string) => Promise<import("../grpc/model/multiSignature_pb").GetPendingTransactionDetailByTransactionHashResponse.AsObject>;
         getPendingList: (params: import("./MultiSignature").MultisigPendingListParams) => Promise<import("../grpc/model/multiSignature_pb").GetPendingTransactionsResponse.AsObject>;
-        createMultiSigAddress: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigAddress) => string;
+        createMultiSigAddress: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigAddress, typeAccount?: number) => import("./helper/interfaces").Account;
         generateMultiSigInfo: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigAddress) => Buffer;
         getMultisigInfo: (params: import("./MultiSignature").MultisigInfoParams) => Promise<import("../grpc/model/multiSignature_pb").GetMultisignatureInfoResponse.AsObject>;
         postTransaction: (data: import("./helper/transaction-builder/multisignature").MultiSigInterface, childSeed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;

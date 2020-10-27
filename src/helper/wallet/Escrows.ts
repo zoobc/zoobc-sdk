@@ -1,6 +1,7 @@
+import { AccountType } from '../../../grpc/model/accountType_pb';
 import { Escrow as EscrowResponse, GetEscrowTransactionsResponse } from '../../../grpc/model/escrow_pb';
 import { Account } from '../interfaces';
-import { parseAccountAddress } from '../utils';
+import { accountToBytes, parseAccountAddress, writeInt32, writeInt64 } from '../utils';
 
 export interface Escrow {
   id: string;

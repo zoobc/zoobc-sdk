@@ -1,10 +1,12 @@
 /// <reference types="node" />
 import { BIP32Interface } from 'bip32';
-export interface SetupDatasetInterface {
+import { EscrowTransactionInterface } from './send-money';
+import { Account } from '../interfaces';
+export interface SetupDatasetInterface extends EscrowTransactionInterface {
     property: string;
     value: string;
-    setterAccountAddress: string;
-    recipientAccountAddress: string;
+    setterAccountAddress: Account;
+    recipientAccountAddress: Account;
     fee: number;
 }
 export declare function setupDatasetBuilder(data: SetupDatasetInterface, seed?: BIP32Interface): Buffer;

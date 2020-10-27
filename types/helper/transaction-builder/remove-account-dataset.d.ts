@@ -1,10 +1,12 @@
 /// <reference types="node" />
 import { BIP32Interface } from 'bip32';
-export interface RemoveDatasetInterface {
+import { EscrowTransactionInterface } from './send-money';
+import { Account } from '../interfaces';
+export interface RemoveDatasetInterface extends EscrowTransactionInterface {
     property: string;
     value: string;
-    setterAccountAddress: string;
-    recipientAccountAddress: string;
+    setterAccountAddress: Account;
+    recipientAccountAddress: Account;
     fee: number;
 }
 export declare function removeDatasetBuilder(data: RemoveDatasetInterface, seed?: BIP32Interface): Buffer;

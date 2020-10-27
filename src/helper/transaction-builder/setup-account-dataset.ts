@@ -1,15 +1,19 @@
-import { writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
-import { ADDRESS_LENGTH, VERSION } from './constant';
+import { accountToBytes, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
+import { VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 import { generateTransactionHash } from '../wallet/MultiSignature';
+import { EscrowTransactionInterface } from './send-money';
+import { Account } from '../interfaces';
+import { TransactionType } from '../../../grpc/model/transaction_pb';
+import { addEscrowBytes } from './escrow-transaction';
 
-const TRANSACTION_TYPE = new Buffer([3, 0, 0, 0]);
+const TRANSACTION_TYPE = writeInt32(TransactionType.SETUPACCOUNTDATASETTRANSACTION);
 
-export interface SetupDatasetInterface {
+export interface SetupDatasetInterface extends EscrowTransactionInterface {
   property: string;
   value: string;
-  setterAccountAddress: string;
-  recipientAccountAddress: string;
+  setterAccountAddress: Account;
+  recipientAccountAddress: Account;
   fee: number;
 }
 
@@ -17,9 +21,8 @@ export function setupDatasetBuilder(data: SetupDatasetInterface, seed?: BIP32Int
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-  const accountAddress = Buffer.from(data.setterAccountAddress, 'utf-8');
-  const recipient = Buffer.from(data.recipientAccountAddress, 'utf-8');
-  const addressLength = writeInt32(ADDRESS_LENGTH);
+  const sender = accountToBytes(data.setterAccountAddress);
+  const recipient = accountToBytes(data.recipientAccountAddress);
   const fee = writeInt64(data.fee * 1e8);
 
   const property = Buffer.from(data.property, 'utf-8');
@@ -32,9 +35,7 @@ export function setupDatasetBuilder(data: SetupDatasetInterface, seed?: BIP32Int
     TRANSACTION_TYPE,
     VERSION,
     timestamp,
-    addressLength,
-    accountAddress,
-    addressLength,
+    sender,
     recipient,
     fee,
     bodyLength,
@@ -43,23 +44,17 @@ export function setupDatasetBuilder(data: SetupDatasetInterface, seed?: BIP32Int
     valueLength,
     value,
   ]);
-  // ========== NULLIFYING THE ESCROW ===========
-  const approverAddressLength = writeInt32(0);
-  const commission = writeInt64(0);
-  const timeout = writeInt64(0);
-  const instructionLength = writeInt32(0);
 
-  bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+  // Add Escrow Bytes
+  bytes = addEscrowBytes(bytes, data);
 
-  // ========== END NULLIFYING THE ESCROW =========
+  const message = writeInt32(0);
+  bytes = Buffer.concat([bytes, message]);
 
   if (seed) {
-    const signatureType = writeInt32(0);
-    const txFormat = generateTransactionHash(bytes);
-    const txBytes = ZBCAddressToBytes(txFormat);
-    const signature = seed.sign(txBytes);
-    const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-    return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+    const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
+    const signature = seed.sign(txHash);
+    return Buffer.concat([bytes, signature]);
   } else return bytes;
 }
 
