@@ -60,8 +60,7 @@ export function feeVoteRevealBuilder(data: feeVoteInterface, seed: BIP32Interfac
   const recentBlockHeight = writeInt32(data.recentBlockHeight);
   const feeVote = writeInt64(data.feeVote * 1e8);
   const feeVoteInfoBytes = Buffer.concat([recentBlockHash, recentBlockHeight, feeVote]);
-  const signFeeVote = seed.sign(feeVoteInfoBytes);
-  const voteSignature = Buffer.concat([signFeeVote]);
+  const voteSignature = seed.sign(feeVoteInfoBytes);
   const voteSignatureLength = writeInt32(voteSignature.length);
   const bodyLength = writeInt32(
     recentBlockHash.length + recentBlockHeight.length + feeVote.length + voteSignatureLength.length + voteSignature.length,

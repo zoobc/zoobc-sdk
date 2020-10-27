@@ -46950,7 +46950,7 @@ function multisignatureBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const sender = accountToBytes(data.accountAddress);
-    const recipient = writeInt32(2);
+    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
     const fee = writeInt64(data.fee * 1e8);
     // MULTISIG INFO
     let multisigInfoBytes = writeInt32(0);
@@ -51869,8 +51869,7 @@ function feeVoteRevealBuilder(data, seed) {
     const recentBlockHeight = writeInt32(data.recentBlockHeight);
     const feeVote = writeInt64(data.feeVote * 1e8);
     const feeVoteInfoBytes = Buffer.concat([recentBlockHash, recentBlockHeight, feeVote]);
-    const signFeeVote = seed.sign(feeVoteInfoBytes);
-    const voteSignature = Buffer.concat([signFeeVote]);
+    const voteSignature = seed.sign(feeVoteInfoBytes);
     const voteSignatureLength = writeInt32(voteSignature.length);
     const bodyLength = writeInt32(recentBlockHash.length + recentBlockHeight.length + feeVote.length + voteSignatureLength.length + voteSignature.length);
     bytes = Buffer.concat([

@@ -1,4 +1,5 @@
 import { BIP32Interface } from 'bip32';
+import { AccountType } from '../../../grpc/model/accountType_pb';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { Account } from '../interfaces';
 import { writeInt64, writeInt32, ZBCAddressToBytes, accountToBytes } from '../utils';
@@ -43,7 +44,7 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
   const sender = accountToBytes(data.accountAddress);
-  const recipient = writeInt32(2);
+  const recipient = writeInt32(AccountType.EMPTYACCOUNTTYPE);
   const fee = writeInt64(data.fee * 1e8);
 
   // MULTISIG INFO
