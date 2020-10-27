@@ -1,7 +1,9 @@
 /// <reference types="node" />
 import { BIP32Interface } from 'bip32';
-export interface MultiSigInterface {
-    accountAddress: string;
+import { Account } from '../interfaces';
+import { EscrowTransactionInterface } from './send-money';
+export interface MultiSigInterface extends EscrowTransactionInterface {
+    accountAddress: Account;
     fee: number;
     multisigInfo?: MultiSigInfo;
     unisgnedTransactions?: Buffer;
@@ -13,14 +15,14 @@ export interface MultiSigAddress {
     minSigs: number;
 }
 export interface MultiSigInfo {
-    participants: string[];
+    participants: Account[];
     nonce: number;
     minSigs: number;
 }
 export interface SignatureInfo {
     txHash: string;
     participants: {
-        address: string;
+        address: Account;
         signature: Buffer;
     }[];
 }

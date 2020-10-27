@@ -17,3 +17,4 @@ export declare function writeInt32(number: number): Buffer;
 export declare function validationTimestamp(txBytes: Buffer): Promise<boolean>;
 export declare function parseAccountAddress(account: string | Uint8Array): Account;
 export declare function accountToBytes(account: Account): Buffer;
+export declare function hasEscrowTransaction(bytes: Buffer, data: any): Buffer;

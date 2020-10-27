@@ -1,17 +1,22 @@
-import { parseAccountAddress, readInt64, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
-import { ADDRESS_LENGTH, VERSION } from './constant';
+import { accountToBytes, hasEscrowTransaction, parseAccountAddress, readInt64, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
+import { VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 import { ZBCTransaction } from '../wallet/Transaction';
 import { generateTransactionHash } from '../wallet/MultiSignature';
+import { TransactionType } from '../../../grpc/model/transaction_pb';
+import { Account } from '../interfaces';
 
-const TRANSACTION_TYPE = new Buffer([1, 0, 0, 0]);
+const TRANSACTION_TYPE = writeInt32(TransactionType.SENDMONEYTRANSACTION);
 
-export interface SendMoneyInterface {
-  sender: string;
-  recipient: string;
+export interface SendMoneyInterface extends EscrowTransactionInterface {
+  sender: Account;
+  recipient: Account;
   fee: number;
   amount: number;
-  approverAddress?: string;
+}
+
+export interface EscrowTransactionInterface {
+  approverAddress?: Account;
   commission?: number;
   timeout?: number;
   instruction?: string;
@@ -21,37 +26,29 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-  const sender = Buffer.from(data.sender, 'utf-8');
-  const recipient = Buffer.from(data.recipient, 'utf-8');
-  const addressType = writeInt32(0);
+  const sender = accountToBytes(data.sender);
+  const recipient = accountToBytes(data.recipient);
   const fee = writeInt64(data.fee * 1e8);
   const amount = writeInt64(data.amount * 1e8);
   const bodyLength = writeInt32(amount.length);
 
-  bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, addressType, sender, addressType, recipient, fee, bodyLength, amount]);
+  bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, sender, recipient, fee, bodyLength, amount]);
 
   if (data.approverAddress && data.commission && data.timeout && data.instruction) {
     // escrow bytes
-    const approverAddress = Buffer.from(data.approverAddress, 'utf-8');
-    const commission = writeInt64(data.commission * 1e8);
-    const timeout = writeInt64(data.timeout);
-    const instruction = Buffer.from(data.instruction, 'utf-8');
-    const instructionLength = writeInt32(instruction.length);
-
-    bytes = Buffer.concat([bytes, addressType, approverAddress, commission, timeout, instructionLength, instruction]);
+    bytes = hasEscrowTransaction(bytes, data);
   } else {
     // escrow bytes default value
-    const commission = writeInt64(0);
-    const timeout = writeInt64(0);
-    const instructionLength = writeInt32(0);
-
-    bytes = Buffer.concat([bytes, addressType, commission, timeout, instructionLength]);
+    const approverAddress = writeInt32(2);
+    bytes = Buffer.concat([bytes, approverAddress]);
   }
 
+  const message = writeInt32(0);
+  bytes = Buffer.concat([bytes, message]);
+
   if (seed) {
-    const txFormat = generateTransactionHash(bytes);
-    const txBytes = ZBCAddressToBytes(txFormat);
-    const signature = seed.sign(txBytes);
+    const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
+    const signature = seed.sign(txHash);
     return Buffer.concat([bytes, signature]);
   } else return bytes;
 }

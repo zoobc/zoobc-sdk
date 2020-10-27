@@ -1,7 +1,9 @@
 /// <reference types="node" />
 import { BIP32Interface } from 'bip32';
-export interface ClaimNodeInterface {
-    accountAddress: string;
+import { EscrowTransactionInterface } from './send-money';
+import { Account } from '../interfaces';
+export interface ClaimNodeInterface extends EscrowTransactionInterface {
+    accountAddress: Account;
     fee: number;
     nodePublicKey: Buffer;
     nodeAddress: string;
