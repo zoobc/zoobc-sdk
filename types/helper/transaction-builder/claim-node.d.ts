@@ -9,7 +9,7 @@ export interface ClaimNodeInterface extends EscrowTransactionInterface {
     nodeAddress: string;
 }
 export declare function claimNodeBuilder(data: ClaimNodeInterface, poown: Buffer, seed?: BIP32Interface): Buffer;
-export declare function readClaimNodeBytes(txBytes: Buffer): {
+export declare function readClaimNodeBytes(txBytes: Buffer, offset: number): {
     nodepublickey: string;
     poown: Buffer;
 };

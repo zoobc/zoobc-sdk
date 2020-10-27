@@ -34,7 +34,7 @@ export {
   GetMyNodePublicKeyResponses,
   GetNodeTimeResponses,
 } from './Node';
-export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
+export { MempoolListParams } from './Mempool';
 export { TransactionListParams, PostTransactionResponses, TransactionMinimumFeeResponse } from './Transactions';
 export { BlocksResponse, BlockResponse } from './Block';
 export {
@@ -50,23 +50,14 @@ export { AccountLedgerListParams } from './AccountLedger';
 export { AccountDatasetListParams, SetupDatasetResponse, RemoveAccountDatasetResponse } from './AccountDataset';
 // EXPORT HELPER INTERFACE
 export { HostInterface } from './Network';
-export { RegisterNodeInterface, registerNodeBuilder, readNodeRegistrationBytes } from './helper/transaction-builder/register-node';
+export { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface, updateNodeBuilder, readUpdateNodeBytes } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface, claimNodeBuilder, readClaimNodeBytes } from './helper/transaction-builder/claim-node';
-export { RemoveNodeInterface, removeNodeBuilder, readRemoveNodeRegistrationBytes } from './helper/transaction-builder/remove-node';
+export { RemoveNodeInterface, removeNodeBuilder } from './helper/transaction-builder/remove-node';
 export { EscrowApprovalInterface, escrowBuilder, readApprovalEscrowBytes } from './helper/transaction-builder/escrow-transaction';
-export {
-  SendMoneyInterface,
-  sendMoneyBuilder,
-  readPostTransactionBytes,
-  readSendMoneyBytes,
-} from './helper/transaction-builder/send-money';
+export { SendMoneyInterface, sendMoneyBuilder, readSendMoneyBytes } from './helper/transaction-builder/send-money';
 export { RemoveDatasetInterface, removeDatasetBuilder, readRemoveDatasetBytes } from './helper/transaction-builder/remove-account-dataset';
-export {
-  SetupDatasetInterface,
-  setupDatasetBuilder,
-  readSetupAccountDatasetBytes,
-} from './helper/transaction-builder/setup-account-dataset';
+export { SetupDatasetInterface, setupDatasetBuilder } from './helper/transaction-builder/setup-account-dataset';
 export { feeVoteInterface, feeVoteCommitBuilder, feeVoteRevealBuilder } from './helper/transaction-builder/fee-vote';
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
 export { bufferToBase64, toBase64Url } from './helper/converters';
@@ -93,7 +84,7 @@ export { SpineBlockManifestType } from '../grpc/model/spineBlockManifest_pb';
 export { TransactionType } from '../grpc/model/transaction_pb';
 
 // WALLET FORMATTER
-export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
+export { toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
 export { toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
 export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
 export { AccountDataset, AccountDatasets } from './helper/wallet/AccountDataset';

@@ -1,5 +1,5 @@
 import { writeInt64, writeInt32, getZBCAddress, ZBCAddressToBytes, accountToBytes } from '../utils';
-import { VERSION } from './constant';
+import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 import { generateTransactionHash } from '../wallet/MultiSignature';
 import { EscrowTransactionInterface } from './send-money';
@@ -42,11 +42,7 @@ export function removeNodeBuilder(data: RemoveNodeInterface, seed?: BIP32Interfa
   } else return bytes;
 }
 
-export function readRemoveNodeRegistrationBytes(txBytes: Buffer) {
-  const bodyBytesRemoveNodeLength = txBytes.slice(161, 165).readInt32LE(0);
-  const bodyBytesRemove = txBytes.slice(165, 165 + bodyBytesRemoveNodeLength);
-  const txBody = {
-    nodepublickey: getZBCAddress(bodyBytesRemove, 'ZNK'),
-  };
-  return txBody;
+export function readRemoveNodeBytes(txBytes: Buffer, offset: number) {
+  const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
+  return { nodepublickey };
 }

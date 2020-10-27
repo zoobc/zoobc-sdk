@@ -10,8 +10,8 @@ export interface UpdateNodeInterface extends EscrowTransactionInterface {
     funds: number;
 }
 export declare function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed?: BIP32Interface): Buffer;
-export declare function readUpdateNodeBytes(txBytes: Buffer): {
+export declare function readUpdateNodeBytes(txBytes: Buffer, offset: number): {
     nodepublickey: string;
-    lockedbalance: string;
+    lockedbalance: number;
     poown: Buffer;
 };

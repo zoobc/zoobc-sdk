@@ -10,9 +10,7 @@ export interface SetupDatasetInterface extends EscrowTransactionInterface {
     fee: number;
 }
 export declare function setupDatasetBuilder(data: SetupDatasetInterface, seed?: BIP32Interface): Buffer;
-export declare function readSetupAccountDatasetBytes(txBytes: Buffer): {
-    propertyLength: number;
+export declare function readSetupDatasetBytes(txBytes: Buffer, offset: number): {
     property: string;
-    valueLength: number;
     value: string;
 };

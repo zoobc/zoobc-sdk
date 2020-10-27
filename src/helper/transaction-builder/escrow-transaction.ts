@@ -41,16 +41,12 @@ export function escrowBuilder(data: EscrowApprovalInterface, seed?: BIP32Interfa
   } else return bytes;
 }
 
-export function readApprovalEscrowBytes(txBytes: Buffer) {
-  const bodyApprovalEscrowLength = txBytes.slice(161, 165).readInt32LE(0);
-  const bodyApprovalEscrow = txBytes.slice(165, 165 + bodyApprovalEscrowLength);
-  const approvalCode = bodyApprovalEscrow.slice(0, 4).readInt32LE(0);
-  const txId = readInt64(bodyApprovalEscrow.slice(4, 12), 0);
-  const txBody = {
-    approval: approvalCode,
-    transactionid: txId,
-  };
-  return txBody;
+export function readApprovalEscrowBytes(txBytes: Buffer, offset: number) {
+  const approval = txBytes.readInt32LE(offset);
+  offset += 4;
+
+  const transactionid = readInt64(txBytes, offset);
+  return { approval, transactionid };
 }
 
 export function addEscrowBytes(bytes: Buffer, data: any): Buffer {

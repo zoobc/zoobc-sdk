@@ -1,5 +1,5 @@
 import { writeInt64, writeInt32, getZBCAddress, ZBCAddressToBytes, accountToBytes } from '../utils';
-import { VERSION } from './constant';
+import { ADDRESS_LENGTH, POOWN_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 import { generateTransactionHash } from '../wallet/MultiSignature';
 import { EscrowTransactionInterface } from './send-money';
@@ -44,14 +44,10 @@ export function claimNodeBuilder(data: ClaimNodeInterface, poown: Buffer, seed?:
   } else return bytes;
 }
 
-export function readClaimNodeBytes(txBytes: Buffer) {
-  const bodyBytesClaimNodeLength = txBytes.slice(161, 165).readInt32LE(0);
-  const bodyBytesClaim = txBytes.slice(165, 165 + bodyBytesClaimNodeLength);
-  const pubkeyClaim = bodyBytesClaim.slice(0, 32);
-  const poownClaim = bodyBytesClaim.slice(32, 198);
-  const txBody = {
-    nodepublickey: getZBCAddress(pubkeyClaim, 'ZNK'),
-    poown: poownClaim,
-  };
-  return txBody;
+export function readClaimNodeBytes(txBytes: Buffer, offset: number) {
+  const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
+  offset += ADDRESS_LENGTH;
+
+  const poown = txBytes.slice(offset, offset + POOWN_LENGTH);
+  return { nodepublickey, poown };
 }

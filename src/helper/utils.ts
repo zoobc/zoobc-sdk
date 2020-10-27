@@ -116,7 +116,13 @@ export async function validationTimestamp(txBytes: Buffer) {
 }
 
 export function parseAccountAddress(account: string | Uint8Array): Account {
-  const accountBytes = Buffer.from(account.toString(), 'base64');
+  if (account == '') return { address: '', type: 2 };
+
+  // convert to bytes
+  let accountBytes: Buffer;
+  if (typeof account == 'string') accountBytes = Buffer.from(account.toString(), 'base64');
+  else accountBytes = Buffer.from(account);
+
   const type = accountBytes.readInt32LE(0);
 
   let address = '';

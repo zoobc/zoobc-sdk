@@ -1,5 +1,5 @@
 import { accountToBytes, getZBCAddress, readInt64, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
-import { VERSION } from './constant';
+import { ADDRESS_LENGTH, POOWN_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 import { generateTransactionHash } from '../wallet/MultiSignature';
 import { EscrowTransactionInterface } from './send-money';
@@ -45,16 +45,13 @@ export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed
   } else return bytes;
 }
 
-export function readUpdateNodeBytes(txBytes: Buffer) {
-  const bodyBytesUpdateNodeLength = txBytes.slice(161, 165).readInt32LE(0);
-  const bodyBytes = txBytes.slice(165, 165 + bodyBytesUpdateNodeLength);
-  const pubkey = bodyBytes.slice(0, 32);
-  const lockAmount = bodyBytes.slice(32, 40);
-  const poown = bodyBytes.slice(40, 206);
-  const txBody = {
-    nodepublickey: getZBCAddress(pubkey, 'ZNK'),
-    lockedbalance: readInt64(lockAmount, 0),
-    poown: poown,
-  };
-  return txBody;
+export function readUpdateNodeBytes(txBytes: Buffer, offset: number) {
+  const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
+  offset += ADDRESS_LENGTH;
+
+  const lockedbalance = parseInt(readInt64(txBytes, offset));
+  offset += 8;
+
+  const poown = txBytes.slice(offset, offset + POOWN_LENGTH);
+  return { nodepublickey, lockedbalance, poown };
 }

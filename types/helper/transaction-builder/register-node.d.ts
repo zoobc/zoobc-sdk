@@ -10,8 +10,8 @@ export interface RegisterNodeInterface extends EscrowTransactionInterface {
     funds: number;
 }
 export declare function registerNodeBuilder(data: RegisterNodeInterface, poown: Buffer, seed?: BIP32Interface): Buffer;
-export declare function readNodeRegistrationBytes(txBytes: Buffer): {
+export declare function readRegisterNodeBytes(txBytes: Buffer, offset: number): {
     nodepublickey: string;
     accountaddress: Account;
-    lockedbalance: string;
+    lockedbalance: number;
 };

@@ -8,6 +8,6 @@ export interface RemoveNodeInterface extends EscrowTransactionInterface {
     nodePublicKey: Buffer;
 }
 export declare function removeNodeBuilder(data: RemoveNodeInterface, seed?: BIP32Interface): Buffer;
-export declare function readRemoveNodeRegistrationBytes(txBytes: Buffer): {
+export declare function readRemoveNodeBytes(txBytes: Buffer, offset: number): {
     nodepublickey: string;
 };

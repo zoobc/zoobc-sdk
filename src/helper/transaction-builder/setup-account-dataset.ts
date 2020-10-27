@@ -58,21 +58,16 @@ export function setupDatasetBuilder(data: SetupDatasetInterface, seed?: BIP32Int
   } else return bytes;
 }
 
-export function readSetupAccountDatasetBytes(txBytes: Buffer) {
-  const bodyBytesSetupDatasetLength = txBytes.slice(161, 165).readInt32LE(0);
-  const bodyBytesSetup = txBytes.slice(165, 165 + bodyBytesSetupDatasetLength);
-  const propertyLength = bodyBytesSetup.slice(0, 4).readInt32LE(0);
-  const porpertyValueLength = 4 + propertyLength;
-  const propertyValue = bodyBytesSetup.slice(4, porpertyValueLength);
-  const startLengthValue = 4 + propertyLength;
-  const endLengthValue = startLengthValue + 4;
-  const valueLength = bodyBytesSetup.slice(startLengthValue, endLengthValue).readInt32LE(0);
-  const value = bodyBytesSetup.slice(endLengthValue, endLengthValue + valueLength);
-  const bodyBytes = {
-    propertyLength: propertyLength,
-    property: propertyValue.toString(),
-    valueLength: valueLength,
-    value: value.toString(),
-  };
-  return bodyBytes;
+export function readSetupDatasetBytes(txBytes: Buffer, offset: number) {
+  const propertyLength = txBytes.readInt32LE(offset);
+  offset += 4;
+
+  const property = txBytes.slice(offset, offset + propertyLength).toString('utf-8');
+  offset += propertyLength;
+
+  const valueLength = txBytes.readInt32LE(offset);
+  offset += 4;
+
+  const value = txBytes.slice(offset, offset + valueLength).toString('utf-8');
+  return { property, value };
 }

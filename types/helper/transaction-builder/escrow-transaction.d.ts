@@ -9,7 +9,7 @@ export interface EscrowApprovalInterface extends EscrowTransactionInterface {
     transactionId: string;
 }
 export declare function escrowBuilder(data: EscrowApprovalInterface, seed?: BIP32Interface): Buffer;
-export declare function readApprovalEscrowBytes(txBytes: Buffer): {
+export declare function readApprovalEscrowBytes(txBytes: Buffer, offset: number): {
     approval: number;
     transactionid: string;
 };

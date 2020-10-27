@@ -1,5 +1,5 @@
 import { writeInt64, writeInt32, getZBCAddress, readInt64, ZBCAddressToBytes, accountToBytes, parseAccountAddress } from '../utils';
-import { VERSION } from './constant';
+import { ADDRESS_LENGTH, ADDRESS_WITH_TYPE, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 import { generateTransactionHash } from '../wallet/MultiSignature';
 import { EscrowTransactionInterface } from './send-money';
@@ -45,16 +45,13 @@ export function registerNodeBuilder(data: RegisterNodeInterface, poown: Buffer, 
   } else return bytes;
 }
 
-export function readNodeRegistrationBytes(txBytes: Buffer) {
-  const bodyBytesRegisterNodeLength = txBytes.slice(161, 165).readInt32LE(0);
-  const bodyBytesRegister = txBytes.slice(165, 165 + bodyBytesRegisterNodeLength);
-  const pubkeyRegister = bodyBytesRegister.slice(0, 32);
-  const accountaddress = bodyBytesRegister.slice(36, 102).toString();
-  const lockedBalance = bodyBytesRegister.slice(102, 110);
-  const txBody = {
-    nodepublickey: getZBCAddress(pubkeyRegister, 'ZNK'),
-    accountaddress: parseAccountAddress(accountaddress),
-    lockedbalance: readInt64(lockedBalance, 0),
-  };
-  return txBody;
+export function readRegisterNodeBytes(txBytes: Buffer, offset: number) {
+  const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
+  offset += ADDRESS_LENGTH;
+
+  const accountaddress = parseAccountAddress(txBytes.slice(offset, offset + ADDRESS_WITH_TYPE));
+  offset += ADDRESS_WITH_TYPE;
+
+  const lockedbalance = parseInt(readInt64(txBytes, offset));
+  return { nodepublickey, accountaddress, lockedbalance };
 }
