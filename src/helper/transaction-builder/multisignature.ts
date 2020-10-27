@@ -1,11 +1,13 @@
 import { BIP32Interface } from 'bip32';
+import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { Account } from '../interfaces';
-import { writeInt64, writeInt32, ZBCAddressToBytes, hasEscrowTransaction, accountToBytes } from '../utils';
+import { writeInt64, writeInt32, ZBCAddressToBytes, accountToBytes } from '../utils';
 import { generateTransactionHash } from '../wallet/MultiSignature';
 import { VERSION } from './constant';
+import { addEscrowBytes } from './escrow-transaction';
 import { EscrowTransactionInterface } from './send-money';
 
-const TRANSACTION_TYPE = new Buffer([5, 0, 0, 0]);
+const TRANSACTION_TYPE = writeInt32(TransactionType.MULTISIGNATURETRANSACTION);
 
 export interface MultiSigInterface extends EscrowTransactionInterface {
   accountAddress: Account;
@@ -101,14 +103,8 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
     signaturesInfoBytes,
   ]);
 
-  if (data.approverAddress && data.commission && data.timeout && data.instruction) {
-    // escrow bytes
-    bytes = hasEscrowTransaction(bytes, data);
-  } else {
-    // escrow bytes default value
-    const approverAddress = writeInt32(2);
-    bytes = Buffer.concat([bytes, approverAddress]);
-  }
+  // Add Escrow Bytes
+  bytes = addEscrowBytes(bytes, data);
 
   const message = writeInt32(0);
   bytes = Buffer.concat([bytes, message]);
@@ -122,6 +118,5 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
 
 export function signTransactionHash(txHash: string, seed: BIP32Interface) {
   const txHashBytes = ZBCAddressToBytes(txHash);
-  const signature = seed.sign(txHashBytes);
-  return Buffer.concat([signature]);
+  return seed.sign(txHashBytes);
 }

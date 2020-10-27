@@ -1,11 +1,14 @@
-import { writeInt64, writeInt32, getZBCAddress, ZBCAddressToBytes, hasEscrowTransaction, accountToBytes } from '../utils';
+import { writeInt64, writeInt32, getZBCAddress, ZBCAddressToBytes, accountToBytes } from '../utils';
 import { VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 import { generateTransactionHash } from '../wallet/MultiSignature';
 import { EscrowTransactionInterface } from './send-money';
 import { Account } from '../interfaces';
+import { TransactionType } from '../../../grpc/model/transaction_pb';
+import { AccountType } from '../../../grpc/model/accountType_pb';
+import { addEscrowBytes } from './escrow-transaction';
 
-const TRANSACTION_TYPE = new Buffer([2, 3, 0, 0]);
+const TRANSACTION_TYPE = writeInt32(TransactionType.CLAIMNODEREGISTRATIONTRANSACTION);
 
 export interface ClaimNodeInterface extends EscrowTransactionInterface {
   accountAddress: Account;
@@ -19,7 +22,7 @@ export function claimNodeBuilder(data: ClaimNodeInterface, poown: Buffer, seed?:
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
   const sender = accountToBytes(data.accountAddress);
-  const recipient = writeInt32(2);
+  const recipient = writeInt32(AccountType.EMPTYACCOUNTTYPE);
 
   const fee = writeInt64(data.fee * 1e8);
 
@@ -28,14 +31,8 @@ export function claimNodeBuilder(data: ClaimNodeInterface, poown: Buffer, seed?:
 
   bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, sender, recipient, fee, bodyLength, nodePublicKey, poown]);
 
-  if (data.approverAddress && data.commission && data.timeout && data.instruction) {
-    // escrow bytes
-    bytes = hasEscrowTransaction(bytes, data);
-  } else {
-    // escrow bytes default value
-    const approverAddress = writeInt32(2);
-    bytes = Buffer.concat([bytes, approverAddress]);
-  }
+  // Add Escrow Bytes
+  bytes = addEscrowBytes(bytes, data);
 
   const message = writeInt32(0);
   bytes = Buffer.concat([bytes, message]);

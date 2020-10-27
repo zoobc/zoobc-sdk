@@ -13,3 +13,4 @@ export declare function readApprovalEscrowBytes(txBytes: Buffer): {
     approval: number;
     transactionid: string;
 };
+export declare function addEscrowBytes(bytes: Buffer, data: any): Buffer;
