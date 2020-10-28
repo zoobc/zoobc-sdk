@@ -18,11 +18,10 @@ import FeeVoting from './FeeVoting';
 export { ZooKeyring } from './Keyring';
 export { Ledger } from './Ledger';
 export { BIP32Interface } from 'bip32';
-export { RequestType } from '../grpc/model/auth_pb';
 
 export { Subscription } from 'rxjs';
 
-// EXPORT INTERFACE
+// INTERFACE
 export { EscrowListParams, ApprovalEscrowTransactionResponse } from './Escrows';
 export {
   NodeListParams,
@@ -48,8 +47,12 @@ export {
 } from './MultiSignature';
 export { AccountLedgerListParams } from './AccountLedger';
 export { AccountDatasetListParams, SetupDatasetResponse, RemoveAccountDatasetResponse } from './AccountDataset';
-// EXPORT HELPER INTERFACE
+export { AccountBalance } from './Account';
+export { HostInfoResponse } from './Host';
+export { ParticipationScoreResponse } from './ParticipationScore';
 export { HostInterface } from './Network';
+
+// HELPER INTERFACE
 export { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
 export { UpdateNodeInterface, updateNodeBuilder, readUpdateNodeBytes } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface, claimNodeBuilder, readClaimNodeBytes } from './helper/transaction-builder/claim-node';
@@ -68,24 +71,19 @@ export {
   MultiSigInfo,
   SignatureInfo,
 } from './helper/transaction-builder/multisignature';
-export { AccountBalance } from './Account';
-export { HostInfoResponse } from './Host';
-export { ParticipationScoreResponse } from './ParticipationScore';
-// Export type
+
+// TYPE
 export { AccountDatasetProperty } from '../grpc/model/accountDataset_pb';
 export { EscrowStatus, EscrowApproval } from '../grpc/model/escrow_pb';
 export { EventType } from '../grpc/model/event_pb';
 export { PendingTransactionStatus } from '../grpc/model/multiSignature_pb';
 export { NodeRegistrationState } from '../grpc/model/nodeRegistration_pb';
 export { OrderBy } from '../grpc/model/pagination_pb';
-export { SignatureType, PrivateKeyBytesLength, BitcoinPublicKeyFormat } from '../grpc/model/signature_pb';
-export { SpinePublicKeyAction } from '../grpc/model/spine_pb';
-export { SpineBlockManifestType } from '../grpc/model/spineBlockManifest_pb';
 export { TransactionType } from '../grpc/model/transaction_pb';
+export { RequestType } from '../grpc/model/auth_pb';
 
 // WALLET FORMATTER
-export { toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
-export { toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
+export { ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
 export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
 export { AccountDataset, AccountDatasets } from './helper/wallet/AccountDataset';
 export { AccountLedger, AccountLedgerList } from './helper/wallet/AccountLedger';
