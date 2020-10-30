@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { GetPendingTransactionsResponse, GetPendingTransactionDetailByTransactionHashResponse, GetMultisignatureInfoResponse, GetMultisigAddressByParticipantAddressResponse } from '../grpc/model/multiSignature_pb';
-import { MultiSigInterface, MultiSigAddress } from './helper/transaction-builder/multisignature';
+import { MultiSigInfo, MultiSigInterface } from './helper/transaction-builder/multisignature';
 import { BIP32Interface } from 'bip32';
 import { PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { Account } from './helper/interfaces';
@@ -26,8 +26,8 @@ export interface MultisigInfoParams {
         orderBy?: 0 | 1;
     };
 }
-declare function generateMultiSigInfo(multiSigAddress: MultiSigAddress): Buffer;
-declare function createMultiSigAddress(multiSigAddress: MultiSigAddress): string;
+declare function generateMultiSigInfo(multiSigAddress: MultiSigInfo): Buffer;
+declare function createMultiSigAddress(multiSigAddress: MultiSigInfo): string;
 declare function getPendingList(params: MultisigPendingListParams): Promise<MultisigPendingTxResponse>;
 declare function getPendingByTxHash(txHash: string): Promise<MultisigPendingTxDetailResponse>;
 declare function getMultisigInfo(params: MultisigInfoParams): Promise<MultisigInfoResponse>;

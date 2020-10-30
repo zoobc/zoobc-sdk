@@ -64,13 +64,7 @@ export { SetupDatasetInterface, setupDatasetBuilder } from './helper/transaction
 export { feeVoteInterface, feeVoteCommitBuilder, feeVoteRevealBuilder } from './helper/transaction-builder/fee-vote';
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
 export { bufferToBase64, toBase64Url } from './helper/converters';
-export {
-  MultiSigInterface,
-  signTransactionHash,
-  MultiSigAddress,
-  MultiSigInfo,
-  SignatureInfo,
-} from './helper/transaction-builder/multisignature';
+export { MultiSigInterface, signTransactionHash, MultiSigInfo, SignatureInfo } from './helper/transaction-builder/multisignature';
 
 // TYPE
 export { AccountDatasetProperty } from '../grpc/model/accountDataset_pb';

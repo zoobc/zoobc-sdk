@@ -9,11 +9,6 @@ export interface MultiSigInterface extends EscrowTransactionInterface {
     unisgnedTransactions?: Buffer;
     signaturesInfo?: SignatureInfo;
 }
-export interface MultiSigAddress {
-    participants: string[];
-    nonce: number;
-    minSigs: number;
-}
 export interface MultiSigInfo {
     participants: Account[];
     nonce: number;

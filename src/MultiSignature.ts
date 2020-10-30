@@ -1,4 +1,4 @@
-import { writeInt32, getZBCAddress, validationTimestamp, errorDateMessage, accountToBytes } from './helper/utils';
+import { writeInt32, getZBCAddress, validationTimestamp, errorDateMessage, accountToBytes, parseAccountAddress } from './helper/utils';
 import { sha3_256 } from 'js-sha3';
 import Network from './Network';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
@@ -13,7 +13,7 @@ import {
   GetMultisigAddressByParticipantAddressResponse,
 } from '../grpc/model/multiSignature_pb';
 import { MultisigServiceClient } from '../grpc/service/multiSignature_pb_service';
-import { MultiSigInterface, multisignatureBuilder, MultiSigAddress } from './helper/transaction-builder/multisignature';
+import { MultiSigInfo, MultiSigInterface, multisignatureBuilder } from './helper/transaction-builder/multisignature';
 import { BIP32Interface } from 'bip32';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
@@ -44,7 +44,7 @@ export interface MultisigInfoParams {
   };
 }
 
-function generateMultiSigInfo(multiSigAddress: MultiSigAddress): Buffer {
+function generateMultiSigInfo(multiSigAddress: MultiSigInfo): Buffer {
   const { nonce, minSigs } = multiSigAddress;
   let { participants } = multiSigAddress;
 
@@ -54,16 +54,14 @@ function generateMultiSigInfo(multiSigAddress: MultiSigAddress): Buffer {
   const minSigB = writeInt32(minSigs);
   const lengthParticipants = writeInt32(participants.length);
 
-  let participantsB = new Buffer([]);
-  participants.forEach((p: string) => {
-    const lengthAddress = writeInt32(p.length);
-    const address = Buffer.from(p, 'utf-8');
-    participantsB = Buffer.concat([participantsB, lengthAddress, address]);
+  let participantsB = Buffer.from([]);
+  participants.forEach((acc: Account) => {
+    participantsB = Buffer.concat([participantsB, accountToBytes(acc)]);
   });
   return Buffer.concat([minSigB, nonceB, lengthParticipants, participantsB]);
 }
 
-function createMultiSigAddress(multiSigAddress: MultiSigAddress): string {
+function createMultiSigAddress(multiSigAddress: MultiSigInfo): string {
   const buffer = generateMultiSigInfo(multiSigAddress);
   const hashed = Buffer.from(sha3_256(buffer), 'hex');
   return getZBCAddress(hashed);
