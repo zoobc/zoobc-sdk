@@ -24,9 +24,10 @@ export { SendMoneyInterface, sendMoneyBuilder, readSendMoneyBytes } from './help
 export { RemoveDatasetInterface, removeDatasetBuilder, readRemoveDatasetBytes } from './helper/transaction-builder/remove-account-dataset';
 export { SetupDatasetInterface, setupDatasetBuilder } from './helper/transaction-builder/setup-account-dataset';
 export { feeVoteInterface, feeVoteCommitBuilder, feeVoteRevealBuilder } from './helper/transaction-builder/fee-vote';
-export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
+export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash, parseAccountAddress, accountToBytes, } from './helper/utils';
 export { bufferToBase64, toBase64Url } from './helper/converters';
 export { MultiSigInterface, signTransactionHash, MultiSigInfo, SignatureInfo } from './helper/transaction-builder/multisignature';
+export { Account } from './helper/interfaces';
 export { AccountDatasetProperty } from '../grpc/model/accountDataset_pb';
 export { EscrowStatus, EscrowApproval } from '../grpc/model/escrow_pb';
 export { EventType } from '../grpc/model/event_pb';
