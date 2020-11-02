@@ -1,10 +1,10 @@
 import { Escrow as EscrowResponse, GetEscrowTransactionsResponse } from '../../../grpc/model/escrow_pb';
-import { Account } from '../interfaces';
+import { Address } from '../interfaces';
 export interface Escrow {
     id: string;
-    sender: Account;
-    recipient: Account;
-    approver: Account;
+    sender: Address;
+    recipient: Address;
+    approver: Address;
     amount: number;
     commission: number;
     timeout: number;

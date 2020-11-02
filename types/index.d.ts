@@ -2,44 +2,41 @@
 export { ZooKeyring } from './Keyring';
 export { Ledger } from './Ledger';
 export { BIP32Interface } from 'bip32';
-export { RequestType } from '../grpc/model/auth_pb';
 export { Subscription } from 'rxjs';
 export { EscrowListParams, ApprovalEscrowTransactionResponse } from './Escrows';
 export { NodeListParams, NodeParams, NodeHardwareResponse, GenerateNodeKeyResponses, NodePostTransactionResponse, GetPendingNodeRegistrationResponse, GetMyNodePublicKeyResponses, GetNodeTimeResponses, } from './Node';
-export { MempoolListParams, MempoolTransactionsResponse, MempoolTransactionResponse } from './Mempool';
+export { MempoolListParams } from './Mempool';
 export { TransactionListParams, PostTransactionResponses, TransactionMinimumFeeResponse } from './Transactions';
 export { BlocksResponse, BlockResponse } from './Block';
 export { MultisigPendingListParams, MultisigInfoParams, MultisigPendingTxResponse, MultisigPendingTxDetailResponse, MultisigInfoResponse, MultisigPostTransactionResponse, GetMultisigAddressResponse, } from './MultiSignature';
 export { AccountLedgerListParams } from './AccountLedger';
 export { AccountDatasetListParams, SetupDatasetResponse, RemoveAccountDatasetResponse } from './AccountDataset';
-export { HostInterface } from './Network';
-export { RegisterNodeInterface, registerNodeBuilder, readNodeRegistrationBytes } from './helper/transaction-builder/register-node';
-export { UpdateNodeInterface, updateNodeBuilder, readUpdateNodeBytes } from './helper/transaction-builder/update-node';
-export { ClaimNodeInterface, claimNodeBuilder, readClaimNodeBytes } from './helper/transaction-builder/claim-node';
-export { RemoveNodeInterface, removeNodeBuilder, readRemoveNodeRegistrationBytes } from './helper/transaction-builder/remove-node';
-export { EscrowApprovalInterface, escrowBuilder, readApprovalEscrowBytes } from './helper/transaction-builder/escrow-transaction';
-export { SendMoneyInterface, sendMoneyBuilder, readPostTransactionBytes, readSendMoneyBytes, } from './helper/transaction-builder/send-money';
-export { RemoveDatasetInterface, removeDatasetBuilder, readRemoveDatasetBytes } from './helper/transaction-builder/remove-account-dataset';
-export { SetupDatasetInterface, setupDatasetBuilder, readSetupAccountDatasetBytes, } from './helper/transaction-builder/setup-account-dataset';
-export { feeVoteInterface, feeVoteCommitBuilder, feeVoteRevealBuilder } from './helper/transaction-builder/fee-vote';
-export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash } from './helper/utils';
-export { bufferToBase64, toBase64Url } from './helper/converters';
-export { MultiSigInterface, signTransactionHash, MultiSigAddress, MultiSigInfo, SignatureInfo, } from './helper/transaction-builder/multisignature';
 export { AccountBalance } from './Account';
 export { HostInfoResponse } from './Host';
 export { ParticipationScoreResponse } from './ParticipationScore';
+export { HostInterface } from './Network';
+export { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';
+export { UpdateNodeInterface, updateNodeBuilder, readUpdateNodeBytes } from './helper/transaction-builder/update-node';
+export { ClaimNodeInterface, claimNodeBuilder, readClaimNodeBytes } from './helper/transaction-builder/claim-node';
+export { RemoveNodeInterface, removeNodeBuilder } from './helper/transaction-builder/remove-node';
+export { EscrowApprovalInterface, escrowBuilder, readApprovalEscrowBytes } from './helper/transaction-builder/escrow-transaction';
+export { SendMoneyInterface, sendMoneyBuilder, readSendMoneyBytes } from './helper/transaction-builder/send-money';
+export { RemoveDatasetInterface, removeDatasetBuilder, readRemoveDatasetBytes } from './helper/transaction-builder/remove-account-dataset';
+export { SetupDatasetInterface, setupDatasetBuilder } from './helper/transaction-builder/setup-account-dataset';
+export { feeVoteInterface, feeVoteCommitBuilder, feeVoteRevealBuilder } from './helper/transaction-builder/fee-vote';
+export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash, parseAddress, addressToBytes } from './helper/utils';
+export { bufferToBase64, toBase64Url } from './helper/converters';
+export { MultiSigInterface, signTransactionHash, MultiSigInfo, SignatureInfo } from './helper/transaction-builder/multisignature';
+export { Address } from './helper/interfaces';
 export { AccountDatasetProperty } from '../grpc/model/accountDataset_pb';
 export { EscrowStatus, EscrowApproval } from '../grpc/model/escrow_pb';
 export { EventType } from '../grpc/model/event_pb';
 export { PendingTransactionStatus } from '../grpc/model/multiSignature_pb';
 export { NodeRegistrationState } from '../grpc/model/nodeRegistration_pb';
 export { OrderBy } from '../grpc/model/pagination_pb';
-export { SignatureType, PrivateKeyBytesLength, BitcoinPublicKeyFormat } from '../grpc/model/signature_pb';
-export { SpinePublicKeyAction } from '../grpc/model/spine_pb';
-export { SpineBlockManifestType } from '../grpc/model/spineBlockManifest_pb';
 export { TransactionType } from '../grpc/model/transaction_pb';
-export { toUnconfirmedSendMoneyWallet, toUnconfirmTransactionNodeWallet, toZBCPendingTransactions } from './helper/wallet/Mempool';
-export { toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
+export { RequestType } from '../grpc/model/auth_pb';
+export { ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
 export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
 export { AccountDataset, AccountDatasets } from './helper/wallet/AccountDataset';
 export { AccountLedger, AccountLedgerList } from './helper/wallet/AccountLedger';
@@ -62,8 +59,8 @@ declare const zoobc: {
         decryptPassphrase: (encPassphrase: string, password: string, salt?: string) => string;
     };
     Account: {
-        getBalance: (account: import("./helper/interfaces").Account) => Promise<import("./Account").AccountBalance>;
-        getBalances: (accounts: import("./helper/interfaces").Account[]) => Promise<import("./Account").AccountBalance[]>;
+        getBalance: (address: import("./helper/interfaces").Address) => Promise<import("./Account").AccountBalance>;
+        getBalances: (addresses: import("./helper/interfaces").Address[]) => Promise<import("./Account").AccountBalance[]>;
     };
     Host: {
         getInfo: () => Promise<import("../grpc/model/host_pb").HostInfo.AsObject>;
@@ -91,8 +88,8 @@ declare const zoobc: {
         getList: (params?: import("./Escrows").EscrowListParams | undefined) => Promise<import("./helper/wallet/Escrows").Escrows>;
     };
     Mempool: {
-        get: (id: string) => Promise<import("../grpc/model/mempool_pb").MempoolTransaction.AsObject>;
-        getList: (params?: import("./Mempool").MempoolListParams | undefined) => Promise<import("../grpc/model/mempool_pb").GetMempoolTransactionsResponse.AsObject>;
+        get: (id: string) => Promise<import("./helper/wallet/Transaction").ZBCTransaction>;
+        getList: (params?: import("./Mempool").MempoolListParams | undefined) => Promise<import("./helper/wallet/Transaction").ZBCTransactions>;
     };
     Block: {
         getBlocks: (height: number, limit?: number | undefined) => Promise<import("../grpc/model/block_pb").GetBlocksResponse.AsObject>;
@@ -102,8 +99,8 @@ declare const zoobc: {
     MultiSignature: {
         getPendingByTxHash: (txHash: string) => Promise<import("../grpc/model/multiSignature_pb").GetPendingTransactionDetailByTransactionHashResponse.AsObject>;
         getPendingList: (params: import("./MultiSignature").MultisigPendingListParams) => Promise<import("../grpc/model/multiSignature_pb").GetPendingTransactionsResponse.AsObject>;
-        createMultiSigAddress: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigAddress, typeAccount?: number) => import("./helper/interfaces").Account;
-        generateMultiSigInfo: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigAddress) => Buffer;
+        createMultiSigAddress: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigInfo) => string;
+        generateMultiSigInfo: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigInfo) => Buffer;
         getMultisigInfo: (params: import("./MultiSignature").MultisigInfoParams) => Promise<import("../grpc/model/multiSignature_pb").GetMultisignatureInfoResponse.AsObject>;
         postTransaction: (data: import("./helper/transaction-builder/multisignature").MultiSigInterface, childSeed: import("bip32").BIP32Interface) => Promise<import("../grpc/model/transaction_pb").PostTransactionResponse.AsObject>;
         getMultisigAddress: (participantsAddress: string) => Promise<import("../grpc/model/multiSignature_pb").GetMultisigAddressByParticipantAddressResponse.AsObject>;

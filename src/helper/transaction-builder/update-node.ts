@@ -1,9 +1,9 @@
-import { accountToBytes, getZBCAddress, readInt64, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
-import { VERSION } from './constant';
+import { addressToBytes, getZBCAddress, readInt64, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
+import { ADDRESS_LENGTH, POOWN_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 import { generateTransactionHash } from '../wallet/MultiSignature';
 import { EscrowTransactionInterface } from './send-money';
-import { Account } from '../interfaces';
+import { Address } from '../interfaces';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { AccountType } from '../../../grpc/model/accountType_pb';
 import { addEscrowBytes } from './escrow-transaction';
@@ -11,7 +11,7 @@ import { addEscrowBytes } from './escrow-transaction';
 const TRANSACTION_TYPE = writeInt32(TransactionType.UPDATENODEREGISTRATIONTRANSACTION);
 
 export interface UpdateNodeInterface extends EscrowTransactionInterface {
-  accountAddress: Account;
+  accountAddress: Address;
   fee: number;
   nodePublicKey: Buffer;
   nodeAddress: string;
@@ -22,7 +22,7 @@ export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-  const sender = accountToBytes(data.accountAddress);
+  const sender = addressToBytes(data.accountAddress);
   const recipient = writeInt32(AccountType.EMPTYACCOUNTTYPE);
   const fee = writeInt64(data.fee * 1e8);
 
@@ -45,16 +45,13 @@ export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed
   } else return bytes;
 }
 
-export function readUpdateNodeBytes(txBytes: Buffer) {
-  const bodyBytesUpdateNodeLength = txBytes.slice(161, 165).readInt32LE(0);
-  const bodyBytes = txBytes.slice(165, 165 + bodyBytesUpdateNodeLength);
-  const pubkey = bodyBytes.slice(0, 32);
-  const lockAmount = bodyBytes.slice(32, 40);
-  const poown = bodyBytes.slice(40, 206);
-  const txBody = {
-    nodepublickey: getZBCAddress(pubkey, 'ZNK'),
-    lockedbalance: readInt64(lockAmount, 0),
-    poown: poown,
-  };
-  return txBody;
+export function readUpdateNodeBytes(txBytes: Buffer, offset: number) {
+  const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
+  offset += ADDRESS_LENGTH;
+
+  const lockedbalance = parseInt(readInt64(txBytes, offset));
+  offset += 8;
+
+  const poown = txBytes.slice(offset, offset + POOWN_LENGTH);
+  return { nodepublickey, lockedbalance, poown };
 }

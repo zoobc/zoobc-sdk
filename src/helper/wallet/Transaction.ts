@@ -1,6 +1,6 @@
-import { getZBCAddress, parseAccountAddress } from '../utils';
+import { getZBCAddress, parseAddress } from '../utils';
 import { GetTransactionsResponse, Transaction } from '../../../grpc/model/transaction_pb';
-import { Account } from '../interfaces';
+import { Address } from '../interfaces';
 
 export interface ZBCTransactions {
   total: number;
@@ -9,9 +9,9 @@ export interface ZBCTransactions {
 
 export interface ZBCTransaction {
   id?: string;
-  sender: Account;
+  sender: Address;
   senderAlias?: string;
-  recipient: Account;
+  recipient: Address;
   recipientAlias?: string;
   timestamp: number;
   fee: number;
@@ -24,7 +24,7 @@ export interface ZBCTransaction {
   escrow?: boolean;
   escrowStatus?: number;
   multisig?: boolean;
-  approverAddress?: Account;
+  approverAddress?: Address;
   commission?: number;
   timeout?: number;
   instruction?: string;
@@ -34,8 +34,8 @@ export function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransact
   const txBody = getBodyBytes(transaction);
   return {
     id: transaction.id,
-    sender: parseAccountAddress(transaction.senderaccountaddress),
-    recipient: parseAccountAddress(transaction.recipientaccountaddress),
+    sender: parseAddress(transaction.senderaccountaddress),
+    recipient: parseAddress(transaction.recipientaccountaddress),
     timestamp: parseInt(transaction.timestamp) * 1000,
     fee: parseInt(transaction.fee),
     blockId: transaction.blockid,

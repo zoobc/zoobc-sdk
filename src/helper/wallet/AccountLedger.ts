@@ -1,9 +1,9 @@
 import { GetAccountLedgersResponse } from '../../../grpc/model/accountLedger_pb';
-import { Account } from '../interfaces';
-import { parseAccountAddress } from '../utils';
+import { Address } from '../interfaces';
+import { parseAddress } from '../utils';
 
 export interface AccountLedger {
-  accountAddress: Account;
+  accountAddress: Address;
   balanceChange: number;
   blockHeight: number;
   transactionId: string;
@@ -19,7 +19,7 @@ export interface AccountLedgerList {
 export function toZBCAccountLedger(accountLedger: GetAccountLedgersResponse.AsObject): AccountLedgerList {
   const list = accountLedger.accountledgersList.map(ledger => {
     return {
-      accountAddress: parseAccountAddress(ledger.accountaddress),
+      accountAddress: parseAddress(ledger.accountaddress),
       balanceChange: ledger.balancechange,
       blockHeight: ledger.blockheight,
       transactionId: ledger.transactionid,

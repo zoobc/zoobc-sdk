@@ -1,8 +1,8 @@
 import { AccountDataset as AccountDatasetResponse, GetAccountDatasetsResponse } from '../../../grpc/model/accountDataset_pb';
-import { Account } from '../interfaces';
+import { Address } from '../interfaces';
 export interface AccountDataset {
-    setter: Account;
-    recipient: Account;
+    setter: Address;
+    recipient: Address;
     property: string;
     value: string;
     isActive: boolean;

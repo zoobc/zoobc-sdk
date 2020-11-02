@@ -1,17 +1,17 @@
 /// <reference types="node" />
 import { BIP32Interface } from 'bip32';
 import { EscrowTransactionInterface } from './send-money';
-import { Account } from '../interfaces';
+import { Address } from '../interfaces';
 export interface RegisterNodeInterface extends EscrowTransactionInterface {
-    accountAddress: Account;
+    accountAddress: Address;
     fee: number;
     nodePublicKey: Buffer;
     nodeAddress: string;
     funds: number;
 }
 export declare function registerNodeBuilder(data: RegisterNodeInterface, poown: Buffer, seed?: BIP32Interface): Buffer;
-export declare function readNodeRegistrationBytes(txBytes: Buffer): {
+export declare function readRegisterNodeBytes(txBytes: Buffer, offset: number): {
     nodepublickey: string;
-    accountaddress: Account;
-    lockedbalance: string;
+    accountaddress: Address;
+    lockedbalance: number;
 };

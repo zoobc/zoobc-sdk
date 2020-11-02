@@ -1,9 +1,9 @@
 import { GetNodeRegistrationsResponse, NodeRegistration as NodeResponse } from '../../../grpc/model/nodeRegistration_pb';
-import { Account } from '../interfaces';
+import { Address } from '../interfaces';
 export interface NodeRegistration {
     nodeId: string;
     nodePublicKey: string;
-    accountAddress: Account;
+    accountAddress: Address;
     registrationHeight: number;
     lockedBalance: string;
     registrationStatus: number;

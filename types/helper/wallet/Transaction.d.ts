@@ -1,14 +1,14 @@
 import { GetTransactionsResponse, Transaction } from '../../../grpc/model/transaction_pb';
-import { Account } from '../interfaces';
+import { Address } from '../interfaces';
 export interface ZBCTransactions {
     total: number;
     transactions: ZBCTransaction[];
 }
 export interface ZBCTransaction {
     id?: string;
-    sender: Account;
+    sender: Address;
     senderAlias?: string;
-    recipient: Account;
+    recipient: Address;
     recipientAlias?: string;
     timestamp: number;
     fee: number;
@@ -21,7 +21,7 @@ export interface ZBCTransaction {
     escrow?: boolean;
     escrowStatus?: number;
     multisig?: boolean;
-    approverAddress?: Account;
+    approverAddress?: Address;
     commission?: number;
     timeout?: number;
     instruction?: string;
