@@ -1,7 +1,7 @@
-import { Account } from './helper/interfaces';
+import { Address } from './helper/interfaces';
 import { AccountLedgerList } from './helper/wallet/AccountLedger';
 export interface AccountLedgerListParams {
-    account?: Account;
+    address?: Address;
     eventType?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16;
     transactionId?: string;
     timeStampStart?: number;

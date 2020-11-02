@@ -6,16 +6,16 @@ import { GetEscrowTransactionsRequest, GetEscrowTransactionRequest } from '../gr
 import { EscrowTransactionServiceClient } from '../grpc/service/escrow_pb_service';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
-import { accountToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
-import { Account } from './helper/interfaces';
+import { addressToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
+import { Address } from './helper/interfaces';
 import { Escrows, toZBCEscrows, Escrow, toZBCEscrow } from './helper/wallet/Escrows';
 
 export type ApprovalEscrowTransactionResponse = PostTransactionResponse.AsObject;
 
 export interface EscrowListParams {
-  approverAddress?: Account;
-  sender?: Account;
-  recipient?: Account;
+  approverAddress?: Address;
+  sender?: Address;
+  recipient?: Address;
   blockHeightStart?: number;
   blockHeightEnd?: number;
   id?: string;
@@ -36,13 +36,13 @@ function getList(params?: EscrowListParams): Promise<Escrows> {
 
     if (params) {
       const { approverAddress, blockHeightStart, blockHeightEnd, id, statusList, pagination, sender, recipient, latest } = params;
-      if (approverAddress) request.setApproveraddress(accountToBytes(approverAddress));
+      if (approverAddress) request.setApproveraddress(addressToBytes(approverAddress));
       if (blockHeightStart) request.setBlockheightstart(blockHeightStart);
       if (blockHeightEnd) request.setBlockheightend(blockHeightEnd);
       if (id) request.setId(id);
       if (statusList) request.setStatusesList(statusList);
-      if (sender) request.setSenderaddress(accountToBytes(sender));
-      if (recipient) request.setRecipientaddress(accountToBytes(recipient));
+      if (sender) request.setSenderaddress(addressToBytes(sender));
+      if (recipient) request.setRecipientaddress(addressToBytes(recipient));
       if (latest) request.setLatest(latest);
       if (pagination) {
         const reqPagination = new Pagination();

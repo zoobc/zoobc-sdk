@@ -3,14 +3,14 @@ import { GetPendingTransactionsResponse, GetPendingTransactionDetailByTransactio
 import { MultiSigInfo, MultiSigInterface } from './helper/transaction-builder/multisignature';
 import { BIP32Interface } from 'bip32';
 import { PostTransactionResponse } from '../grpc/model/transaction_pb';
-import { Account } from './helper/interfaces';
+import { Address } from './helper/interfaces';
 export declare type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export declare type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
 export declare type MultisigInfoResponse = GetMultisignatureInfoResponse.AsObject;
 export declare type MultisigPostTransactionResponse = PostTransactionResponse.AsObject;
 export declare type GetMultisigAddressResponse = GetMultisigAddressByParticipantAddressResponse.AsObject;
 export interface MultisigPendingListParams {
-    address?: Account;
+    address?: Address;
     status?: 0 | 1 | 2 | 3;
     pagination: {
         limit?: number;
@@ -19,7 +19,7 @@ export interface MultisigPendingListParams {
     };
 }
 export interface MultisigInfoParams {
-    address: string;
+    address: Address;
     pagination: {
         limit?: number;
         page: number;

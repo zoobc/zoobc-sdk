@@ -1,4 +1,4 @@
-export interface Account {
-  address: string;
+export interface Address {
+  value: string;
   type: number;
 }

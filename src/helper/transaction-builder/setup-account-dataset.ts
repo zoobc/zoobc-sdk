@@ -1,9 +1,9 @@
-import { accountToBytes, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
+import { addressToBytes, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
 import { VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 import { generateTransactionHash } from '../wallet/MultiSignature';
 import { EscrowTransactionInterface } from './send-money';
-import { Account } from '../interfaces';
+import { Address } from '../interfaces';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { addEscrowBytes } from './escrow-transaction';
 
@@ -12,8 +12,8 @@ const TRANSACTION_TYPE = writeInt32(TransactionType.SETUPACCOUNTDATASETTRANSACTI
 export interface SetupDatasetInterface extends EscrowTransactionInterface {
   property: string;
   value: string;
-  setterAccountAddress: Account;
-  recipientAccountAddress: Account;
+  setterAccountAddress: Address;
+  recipientAccountAddress: Address;
   fee: number;
 }
 
@@ -21,8 +21,8 @@ export function setupDatasetBuilder(data: SetupDatasetInterface, seed?: BIP32Int
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-  const sender = accountToBytes(data.setterAccountAddress);
-  const recipient = accountToBytes(data.recipientAccountAddress);
+  const sender = addressToBytes(data.setterAccountAddress);
+  const recipient = addressToBytes(data.recipientAccountAddress);
   const fee = writeInt64(data.fee * 1e8);
 
   const property = Buffer.from(data.property, 'utf-8');

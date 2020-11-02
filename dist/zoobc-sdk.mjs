@@ -32205,7 +32205,7 @@ const TRANSACTION_TYPE = writeInt32(transaction_pb_5.APPROVALESCROWTRANSACTION);
 function escrowBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const approvalAddress = accountToBytes(data.approvalAddress);
+    const approvalAddress = addressToBytes(data.approvalAddress);
     const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
     const fee = writeInt64(data.fee * 1e8);
     const approvalCode = writeInt32(data.approvalCode);
@@ -32233,7 +32233,7 @@ function readApprovalEscrowBytes(txBytes, offset) {
 function addEscrowBytes(bytes, data) {
     if (data.approverAddress && data.commission && data.timeout && data.instruction) {
         // escrow bytes
-        const approverAddress = accountToBytes(data.approverAddress);
+        const approverAddress = addressToBytes(data.approverAddress);
         const commission = writeInt64(data.commission * 1e8);
         const timeout = writeInt64(data.timeout);
         const instruction = Buffer.from(data.instruction, 'utf-8');
@@ -32252,7 +32252,7 @@ const TRANSACTION_TYPE$1 = writeInt32(transaction_pb_5.CLAIMNODEREGISTRATIONTRAN
 function claimNodeBuilder(data, poown, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = accountToBytes(data.accountAddress);
+    const sender = addressToBytes(data.accountAddress);
     const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
     const fee = writeInt64(data.fee * 1e8);
     const nodePublicKey = data.nodePublicKey;
@@ -32281,7 +32281,7 @@ const TRANSACTION_TYPE$2 = writeInt32(transaction_pb_5.NODEREGISTRATIONTRANSACTI
 function registerNodeBuilder(data, poown, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = accountToBytes(data.accountAddress);
+    const sender = addressToBytes(data.accountAddress);
     const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
     const fee = writeInt64(data.fee * 1e8);
     const nodePublicKey = data.nodePublicKey;
@@ -32303,7 +32303,7 @@ function registerNodeBuilder(data, poown, seed) {
 function readRegisterNodeBytes(txBytes, offset) {
     const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
     offset += ADDRESS_LENGTH;
-    const accountaddress = parseAccountAddress(txBytes.slice(offset, offset + ADDRESS_WITH_TYPE));
+    const accountaddress = parseAddress(txBytes.slice(offset, offset + ADDRESS_WITH_TYPE));
     offset += ADDRESS_WITH_TYPE;
     const lockedbalance = parseInt(readInt64(txBytes, offset));
     return { nodepublickey, accountaddress, lockedbalance };
@@ -32313,7 +32313,7 @@ const TRANSACTION_TYPE$3 = writeInt32(transaction_pb_5.REMOVENODEREGISTRATIONTRA
 function removeNodeBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = accountToBytes(data.accountAddress);
+    const sender = addressToBytes(data.accountAddress);
     const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
     const fee = writeInt64(data.fee * 1e8);
     const nodePublicKey = data.nodePublicKey;
@@ -32340,8 +32340,8 @@ const TRANSACTION_TYPE$4 = writeInt32(transaction_pb_5.SETUPACCOUNTDATASETTRANSA
 function setupDatasetBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = accountToBytes(data.setterAccountAddress);
-    const recipient = accountToBytes(data.recipientAccountAddress);
+    const sender = addressToBytes(data.setterAccountAddress);
+    const recipient = addressToBytes(data.recipientAccountAddress);
     const fee = writeInt64(data.fee * 1e8);
     const property = Buffer.from(data.property, 'utf-8');
     const propertyLength = writeInt32(property.length);
@@ -32388,7 +32388,7 @@ const TRANSACTION_TYPE$5 = writeInt32(transaction_pb_5.UPDATENODEREGISTRATIONTRA
 function updateNodeBuilder(data, poown, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = accountToBytes(data.accountAddress);
+    const sender = addressToBytes(data.accountAddress);
     const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
     const fee = writeInt64(data.fee * 1e8);
     const nodePublicKey = data.nodePublicKey;
@@ -32430,10 +32430,10 @@ function toZBCPendingTransaction(mempool) {
     const timestamp = readInt64(txBytes, offset);
     offset += 8;
     const senderBytes = readAddress(txBytes, offset);
-    const sender = parseAccountAddress(senderBytes);
+    const sender = parseAddress(senderBytes);
     offset += senderBytes.length;
     const recipientBytes = readAddress(txBytes, offset);
-    const recipient = parseAccountAddress(recipientBytes);
+    const recipient = parseAddress(recipientBytes);
     offset += recipientBytes.length;
     const txFee = readInt64(txBytes, offset);
     offset += 8;
@@ -32451,7 +32451,7 @@ function toZBCPendingTransaction(mempool) {
         txBody,
     };
     const approverBytes = readAddress(txBytes, offset);
-    const approver = parseAccountAddress(approverBytes);
+    const approver = parseAddress(approverBytes);
     offset += senderBytes.length;
     if (approver.type != 2) {
         transaction.escrow = true;
@@ -32502,7 +32502,7 @@ function getList(params) {
         if (params) {
             const { address, timestampEnd, timestampStart, pagination } = params;
             if (address)
-                request.setAddress(accountToBytes(address));
+                request.setAddress(addressToBytes(address));
             if (timestampStart)
                 request.setTimestampstart(timestampStart);
             if (timestampEnd)
@@ -33756,12 +33756,11 @@ AccountBalanceServiceClient.prototype.getAccountBalance = function getAccountBal
 
 var AccountBalanceServiceClient_1 = AccountBalanceServiceClient;
 
-function getBalance(account) {
+function getBalance(address) {
     return new Promise((resolve, reject) => {
         const networkIP = Network$1.selected();
         const request = new accountBalance_pb_1();
-        const { type, address } = account;
-        const addressBytes = accountToBytes(account);
+        const addressBytes = addressToBytes(address);
         request.setAccountaddress(addressBytes);
         const client = new AccountBalanceServiceClient_1(networkIP.host);
         client.getAccountBalance(request, (err, res) => {
@@ -33771,7 +33770,7 @@ function getBalance(account) {
                     return resolve({
                         spendableBalance: 0,
                         balance: 0,
-                        account: { address, type },
+                        address,
                         blockHeight: 0,
                         popRevenue: '0',
                         latest: true,
@@ -33782,14 +33781,11 @@ function getBalance(account) {
             }
             const account = res && res.toObject().accountbalance;
             if (account) {
-                const parsedAddress = parseAccountAddress(account.accountaddress);
+                const parsedAddress = parseAddress(account.accountaddress);
                 resolve({
                     spendableBalance: parseInt(account.spendablebalance),
                     balance: parseInt(account.balance),
-                    account: {
-                        address: parsedAddress.address,
-                        type: parsedAddress.type,
-                    },
+                    address: parsedAddress,
                     blockHeight: account.blockheight,
                     popRevenue: account.poprevenue,
                     latest: account.latest,
@@ -33798,9 +33794,9 @@ function getBalance(account) {
         });
     });
 }
-function getBalances(accounts) {
+function getBalances(addresses) {
     return new Promise((resolve, reject) => {
-        const addressesBytes = accounts.map(account => accountToBytes(account));
+        const addressesBytes = addresses.map(address => addressToBytes(address));
         const networkIP = Network$1.selected();
         const request = new accountBalance_pb_2();
         request.setAccountaddressesList(addressesBytes);
@@ -33813,14 +33809,11 @@ function getBalances(accounts) {
             const accounts = res && res.toObject().accountbalancesList;
             if (accounts) {
                 const zbcAccounts = accounts.map(account => {
-                    const parsedAddress = parseAccountAddress(account.accountaddress);
+                    const parsedAddress = parseAddress(account.accountaddress);
                     return {
                         spendableBalance: parseInt(account.spendablebalance),
                         balance: parseInt(account.balance),
-                        account: {
-                            address: parsedAddress.address,
-                            type: parsedAddress.type,
-                        },
+                        address: parsedAddress,
                         blockHeight: account.blockheight,
                         popRevenue: account.poprevenue,
                         latest: account.latest,
@@ -46060,7 +46053,7 @@ function toZBCNodeRegistration(node) {
     return {
         nodeId: node.nodeid,
         nodePublicKey: getZBCAddress(Buffer.from(node.nodepublickey.toString(), 'base64'), 'ZNK'),
-        accountAddress: parseAccountAddress(node.accountaddress),
+        accountAddress: parseAddress(node.accountaddress),
         registrationHeight: node.registrationheight,
         lockedBalance: node.lockedbalance,
         registrationStatus: node.registrationstatus,
@@ -46146,7 +46139,7 @@ function get$1(params) {
         if (params) {
             const { height, owner, publicKey } = params;
             if (owner)
-                request.setAccountaddress(accountToBytes(owner));
+                request.setAccountaddress(addressToBytes(owner));
             if (publicKey)
                 request.setNodepublickey(publicKey);
             if (height)
@@ -46461,9 +46454,9 @@ var EscrowTransactionServiceClient_1 = EscrowTransactionServiceClient;
 function toZBCEscrow(escrow) {
     return {
         id: escrow.id,
-        sender: parseAccountAddress(escrow.senderaddress),
-        recipient: parseAccountAddress(escrow.recipientaddress),
-        approver: parseAccountAddress(escrow.approveraddress),
+        sender: parseAddress(escrow.senderaddress),
+        recipient: parseAddress(escrow.recipientaddress),
+        approver: parseAddress(escrow.approveraddress),
         amount: parseInt(escrow.amount),
         commission: parseInt(escrow.commission),
         timeout: parseInt(escrow.timeout),
@@ -46488,7 +46481,7 @@ function getList$2(params) {
         if (params) {
             const { approverAddress, blockHeightStart, blockHeightEnd, id, statusList, pagination, sender, recipient, latest } = params;
             if (approverAddress)
-                request.setApproveraddress(accountToBytes(approverAddress));
+                request.setApproveraddress(addressToBytes(approverAddress));
             if (blockHeightStart)
                 request.setBlockheightstart(blockHeightStart);
             if (blockHeightEnd)
@@ -46498,9 +46491,9 @@ function getList$2(params) {
             if (statusList)
                 request.setStatusesList(statusList);
             if (sender)
-                request.setSenderaddress(accountToBytes(sender));
+                request.setSenderaddress(addressToBytes(sender));
             if (recipient)
-                request.setRecipientaddress(accountToBytes(recipient));
+                request.setRecipientaddress(addressToBytes(recipient));
             if (latest)
                 request.setLatest(latest);
             if (pagination) {
@@ -47058,7 +47051,7 @@ function multisignatureBuilder(data, seed) {
     const { multisigInfo, unisgnedTransactions, signaturesInfo } = data;
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = accountToBytes(data.accountAddress);
+    const sender = addressToBytes(data.accountAddress);
     const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
     const fee = writeInt64(data.fee * 1e8);
     // MULTISIG INFO
@@ -47069,7 +47062,7 @@ function multisignatureBuilder(data, seed) {
         const nonce = writeInt64(multisigInfo.nonce);
         let participants = Buffer.from([]);
         multisigInfo.participants.forEach(participant => {
-            const address = accountToBytes(participant);
+            const address = addressToBytes(participant);
             participants = Buffer.concat([participants, address]);
         });
         const totalParticipants = writeInt32(multisigInfo.participants.length);
@@ -47089,7 +47082,7 @@ function multisignatureBuilder(data, seed) {
         const totalParticipants = writeInt32(signaturesInfo.participants.length);
         let participants = Buffer.from([]);
         signaturesInfo.participants.forEach(participant => {
-            const address = accountToBytes(participant.address);
+            const address = addressToBytes(participant.address);
             const signatureLen = writeInt32(participant.signature.length);
             participants = Buffer.concat([participants, address, signatureLen, participant.signature]);
         });
@@ -47134,7 +47127,7 @@ function generateMultiSigInfo(multiSigAddress) {
     const lengthParticipants = writeInt32(participants.length);
     let participantsB = Buffer.from([]);
     participants.forEach((acc) => {
-        participantsB = Buffer.concat([participantsB, accountToBytes(acc)]);
+        participantsB = Buffer.concat([participantsB, addressToBytes(acc)]);
     });
     return Buffer.concat([minSigB, nonceB, lengthParticipants, participantsB]);
 }
@@ -47149,7 +47142,7 @@ function getPendingList(params) {
         const networkIP = Network$1.selected();
         const { address, pagination, status } = params;
         if (address)
-            request.setSenderaddress(accountToBytes(address));
+            request.setSenderaddress(addressToBytes(address));
         if (status)
             request.setStatus(status);
         if (pagination) {
@@ -47191,7 +47184,7 @@ function getMultisigInfo(params) {
         const request = new multiSignature_pb_3();
         const networkIP = Network$1.selected();
         const { address, pagination } = params;
-        request.setMultisigaddress(address);
+        request.setMultisigaddress(addressToBytes(address));
         if (pagination) {
             const reqPagination = new pagination_pb_1();
             reqPagination.setLimit(pagination.limit || 10);
@@ -48530,8 +48523,8 @@ const TRANSACTION_TYPE$7 = writeInt32(transaction_pb_5.REMOVEACCOUNTDATASETTRANS
 function removeDatasetBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = accountToBytes(data.setterAccountAddress);
-    const recipient = accountToBytes(data.recipientAccountAddress);
+    const sender = addressToBytes(data.setterAccountAddress);
+    const recipient = addressToBytes(data.recipientAccountAddress);
     const fee = writeInt64(data.fee * 1e8);
     const property = Buffer.from(data.property, 'utf-8');
     const propertyLength = writeInt32(property.length);
@@ -48584,8 +48577,8 @@ function readRemoveDatasetBytes(txBytes) {
 
 function toZBCDataset(dataset) {
     return {
-        setter: parseAccountAddress(dataset.setteraccountaddress),
-        recipient: parseAccountAddress(dataset.recipientaccountaddress),
+        setter: parseAddress(dataset.setteraccountaddress),
+        recipient: parseAddress(dataset.recipientaccountaddress),
         property: dataset.property,
         value: dataset.value,
         isActive: dataset.isactive,
@@ -48612,9 +48605,9 @@ function getList$3(params) {
             if (value)
                 request.setValue(value);
             if (setter)
-                request.setSetteraccountaddress(accountToBytes(setter));
+                request.setSetteraccountaddress(addressToBytes(setter));
             if (recipient)
-                request.setRecipientaccountaddress(accountToBytes(recipient));
+                request.setRecipientaccountaddress(addressToBytes(recipient));
             if (height)
                 request.setHeight(height);
             if (pagination) {
@@ -48641,7 +48634,7 @@ function get$3(property, recipient) {
         const networkIP = Network$1.selected();
         const request = new accountDataset_pb_2();
         request.setProperty(property);
-        request.setRecipientaccountaddress(accountToBytes(recipient));
+        request.setRecipientaccountaddress(addressToBytes(recipient));
         const client = new AccountDatasetServiceClient_1(networkIP.host);
         client.getAccountDataset(request, (err, res) => {
             if (err) {
@@ -49692,7 +49685,7 @@ var AccountLedgerServiceClient_1 = AccountLedgerServiceClient;
 function toZBCAccountLedger(accountLedger) {
     const list = accountLedger.accountledgersList.map(ledger => {
         return {
-            accountAddress: parseAccountAddress(ledger.accountaddress),
+            accountAddress: parseAddress(ledger.accountaddress),
             balanceChange: ledger.balancechange,
             blockHeight: ledger.blockheight,
             transactionId: ledger.transactionid,
@@ -49711,9 +49704,9 @@ function getList$4(params) {
         const networkIP = Network$1.selected();
         const request = new accountLedger_pb_1();
         if (params) {
-            const { account, eventType, transactionId, timeStampStart, timeStampEnd, pagination } = params;
-            if (account)
-                request.setAccountaddress(accountToBytes(account));
+            const { address, eventType, transactionId, timeStampStart, timeStampEnd, pagination } = params;
+            if (address)
+                request.setAccountaddress(addressToBytes(address));
             if (eventType)
                 request.setEventtype(eventType);
             if (transactionId)
@@ -51891,7 +51884,7 @@ const TRANSACTION_TYPE_FEE_VOTE_REVEAL = writeInt32(transaction_pb_5.FEEVOTEREVE
 function feeVoteCommitBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = accountToBytes(data.accountAddress);
+    const sender = addressToBytes(data.accountAddress);
     const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
     const fee = writeInt64(data.fee * 1e8);
     const recentBlockHash = Buffer.from(data.recentBlockHash.toString(), 'base64');
@@ -51912,7 +51905,7 @@ function feeVoteCommitBuilder(data, seed) {
 function feeVoteRevealBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = accountToBytes(data.accountAddress);
+    const sender = addressToBytes(data.accountAddress);
     const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
     const fee = writeInt64(data.fee * 1e8);
     const recentBlockHash = Buffer.from(data.recentBlockHash.toString(), 'base64');
@@ -52091,9 +52084,9 @@ function validationTimestamp(txBytes) {
             return false;
     });
 }
-function parseAccountAddress(account) {
+function parseAddress(account) {
     if (account == '')
-        return { address: '', type: 2 };
+        return { value: '', type: 2 };
     // convert to bytes
     let accountBytes;
     if (typeof account == 'string')
@@ -52101,22 +52094,22 @@ function parseAccountAddress(account) {
     else
         accountBytes = Buffer.from(account);
     const type = accountBytes.readInt32LE(0);
-    let address = '';
+    let value = '';
     switch (type) {
         case accountType_pb_1.ZBCACCOUNTTYPE:
-            address = getZBCAddress(accountBytes.slice(4, 36));
-            return { address, type };
+            value = getZBCAddress(accountBytes.slice(4, 36));
+            return { value, type };
         case accountType_pb_1.BTCACCOUNTTYPE:
-            return { address, type };
+            return { value, type };
         default:
-            return { address, type };
+            return { value, type };
     }
 }
-function accountToBytes(account) {
+function addressToBytes(account) {
     const type = account.type;
     switch (type) {
         case accountType_pb_1.ZBCACCOUNTTYPE:
-            const bytes = ZBCAddressToBytes(account.address);
+            const bytes = ZBCAddressToBytes(account.value);
             const typeBytes = writeInt32(account.type);
             return Buffer.from([...typeBytes, ...bytes]);
         case accountType_pb_1.BTCACCOUNTTYPE:
@@ -52130,8 +52123,8 @@ const TRANSACTION_TYPE$8 = writeInt32(transaction_pb_5.SENDMONEYTRANSACTION);
 function sendMoneyBuilder(data, seed) {
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = accountToBytes(data.sender);
-    const recipient = accountToBytes(data.recipient);
+    const sender = addressToBytes(data.sender);
+    const recipient = addressToBytes(data.recipient);
     const fee = writeInt64(data.fee * 1e8);
     const amount = writeInt64(data.amount * 1e8);
     const bodyLength = writeInt32(amount.length);
@@ -52157,8 +52150,8 @@ function toZBCTransaction(transaction) {
     const txBody = getBodyBytes(transaction);
     return {
         id: transaction.id,
-        sender: parseAccountAddress(transaction.senderaccountaddress),
-        recipient: parseAccountAddress(transaction.recipientaccountaddress),
+        sender: parseAddress(transaction.senderaccountaddress),
+        recipient: parseAddress(transaction.recipientaccountaddress),
         timestamp: parseInt(transaction.timestamp) * 1000,
         fee: parseInt(transaction.fee),
         blockId: transaction.blockid,
@@ -52202,7 +52195,7 @@ function getList$5(params) {
         if (params) {
             const { address, height, transactionType, timestampStart, timestampEnd, pagination } = params;
             if (address)
-                request.setAccountaddress(accountToBytes(address));
+                request.setAccountaddress(addressToBytes(address));
             if (height)
                 request.setHeight(height);
             if (transactionType)
@@ -52292,5 +52285,5 @@ const zoobc$1 = {
 };
 
 export default zoobc$1;
-export { accountDataset_pb_3 as AccountDatasetProperty, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, Ledger, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, auth_pb_1 as RequestType, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, accountToBytes, bufferToBase64, claimNodeBuilder, escrowBuilder, feeVoteCommitBuilder, feeVoteRevealBuilder, generateTransactionHash, getZBCAddress, isZBCAddressValid, parseAccountAddress, readApprovalEscrowBytes, readClaimNodeBytes, readInt64, readRemoveDatasetBytes, readSendMoneyBytes, readUpdateNodeBytes, registerNodeBuilder, removeDatasetBuilder, removeNodeBuilder, sendMoneyBuilder, setupDatasetBuilder, shortenHash, signTransactionHash, toBase64Url, toGetPendingList, updateNodeBuilder };
+export { accountDataset_pb_3 as AccountDatasetProperty, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, Ledger, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, auth_pb_1 as RequestType, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, addressToBytes, bufferToBase64, claimNodeBuilder, escrowBuilder, feeVoteCommitBuilder, feeVoteRevealBuilder, generateTransactionHash, getZBCAddress, isZBCAddressValid, parseAddress, readApprovalEscrowBytes, readClaimNodeBytes, readInt64, readRemoveDatasetBytes, readSendMoneyBytes, readUpdateNodeBytes, registerNodeBuilder, removeDatasetBuilder, removeNodeBuilder, sendMoneyBuilder, setupDatasetBuilder, shortenHash, signTransactionHash, toBase64Url, toGetPendingList, updateNodeBuilder };
 //# sourceMappingURL=zoobc-sdk.mjs.map

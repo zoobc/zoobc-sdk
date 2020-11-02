@@ -1,7 +1,7 @@
-import { Account } from './helper/interfaces';
+import { Address } from './helper/interfaces';
 import { ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
 export interface MempoolListParams {
-    address?: Account;
+    address?: Address;
     timestampStart?: string;
     timestampEnd?: string;
     pagination?: {

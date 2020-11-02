@@ -24,8 +24,8 @@ import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/t
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { Empty } from '../grpc/model/empty_pb';
-import { accountToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
-import { Account } from './helper/interfaces';
+import { addressToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
+import { Address } from './helper/interfaces';
 import { NodeRegistration, NodeRegistrations, toZBCNodeRegistration, toZBCNodeRegistrations } from './helper/wallet/Node';
 
 export type NodeHardwareResponse = GetNodeHardwareResponse.AsObject;
@@ -47,7 +47,7 @@ export interface NodeListParams {
 }
 
 export interface NodeParams {
-  owner?: Account;
+  owner?: Address;
   publicKey?: Buffer;
   height?: number;
 }
@@ -125,7 +125,7 @@ function get(params: NodeParams): Promise<NodeRegistration> {
     if (params) {
       const { height, owner, publicKey } = params;
 
-      if (owner) request.setAccountaddress(accountToBytes(owner));
+      if (owner) request.setAccountaddress(addressToBytes(owner));
       if (publicKey) request.setNodepublickey(publicKey);
       if (height) request.setRegistrationheight(height);
     }

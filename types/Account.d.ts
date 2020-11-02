@@ -1,14 +1,14 @@
-import { Account } from './helper/interfaces';
+import { Address } from './helper/interfaces';
 export interface AccountBalance {
-    account: Account;
+    address: Address;
     blockHeight: number;
     spendableBalance: number;
     balance: number;
     popRevenue: string;
     latest: boolean;
 }
-declare function getBalance(account: Account): Promise<AccountBalance>;
-declare function getBalances(accounts: Account[]): Promise<AccountBalance[]>;
+declare function getBalance(address: Address): Promise<AccountBalance>;
+declare function getBalances(addresses: Address[]): Promise<AccountBalance[]>;
 declare const _default: {
     getBalance: typeof getBalance;
     getBalances: typeof getBalances;

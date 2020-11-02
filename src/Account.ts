@@ -2,11 +2,11 @@ import { GetAccountBalanceRequest, GetAccountBalancesRequest } from '../grpc/mod
 import { AccountBalanceServiceClient } from '../grpc/service/accountBalance_pb_service';
 import Network from './Network';
 import { grpc } from '@improbable-eng/grpc-web';
-import { accountToBytes, parseAccountAddress } from './helper/utils';
-import { Account } from './helper/interfaces';
+import { addressToBytes, parseAddress } from './helper/utils';
+import { Address } from './helper/interfaces';
 
 export interface AccountBalance {
-  account: Account;
+  address: Address;
   blockHeight: number;
   spendableBalance: number;
   balance: number;
@@ -14,13 +14,12 @@ export interface AccountBalance {
   latest: boolean;
 }
 
-function getBalance(account: Account): Promise<AccountBalance> {
+function getBalance(address: Address): Promise<AccountBalance> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetAccountBalanceRequest();
 
-    const { type, address } = account;
-    const addressBytes = accountToBytes(account);
+    const addressBytes = addressToBytes(address);
     request.setAccountaddress(addressBytes);
     const client = new AccountBalanceServiceClient(networkIP.host);
     client.getAccountBalance(request, (err, res) => {
@@ -30,7 +29,7 @@ function getBalance(account: Account): Promise<AccountBalance> {
           return resolve({
             spendableBalance: 0,
             balance: 0,
-            account: { address, type },
+            address,
             blockHeight: 0,
             popRevenue: '0',
             latest: true,
@@ -40,14 +39,11 @@ function getBalance(account: Account): Promise<AccountBalance> {
 
       const account = res && res.toObject().accountbalance;
       if (account) {
-        const parsedAddress = parseAccountAddress(account.accountaddress);
+        const parsedAddress = parseAddress(account.accountaddress);
         resolve({
           spendableBalance: parseInt(account.spendablebalance),
           balance: parseInt(account.balance),
-          account: {
-            address: parsedAddress.address,
-            type: parsedAddress.type,
-          },
+          address: parsedAddress,
           blockHeight: account.blockheight,
           popRevenue: account.poprevenue,
           latest: account.latest,
@@ -57,9 +53,9 @@ function getBalance(account: Account): Promise<AccountBalance> {
   });
 }
 
-function getBalances(accounts: Account[]): Promise<AccountBalance[]> {
+function getBalances(addresses: Address[]): Promise<AccountBalance[]> {
   return new Promise((resolve, reject) => {
-    const addressesBytes: Buffer[] = accounts.map(account => accountToBytes(account));
+    const addressesBytes: Buffer[] = addresses.map(address => addressToBytes(address));
     const networkIP = Network.selected();
     const request = new GetAccountBalancesRequest();
 
@@ -72,16 +68,14 @@ function getBalances(accounts: Account[]): Promise<AccountBalance[]> {
       }
 
       const accounts = res && res.toObject().accountbalancesList;
+
       if (accounts) {
         const zbcAccounts = accounts.map(account => {
-          const parsedAddress = parseAccountAddress(account.accountaddress);
+          const parsedAddress = parseAddress(account.accountaddress);
           return {
             spendableBalance: parseInt(account.spendablebalance),
             balance: parseInt(account.balance),
-            account: {
-              address: parsedAddress.address,
-              type: parsedAddress.type,
-            },
+            address: parsedAddress,
             blockHeight: account.blockheight,
             popRevenue: account.poprevenue,
             latest: account.latest,

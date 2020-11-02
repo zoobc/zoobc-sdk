@@ -9,7 +9,7 @@ import { readRemoveNodeBytes } from '../transaction-builder/remove-node';
 import { readSendMoneyBytes } from '../transaction-builder/send-money';
 import { readSetupDatasetBytes } from '../transaction-builder/setup-account-dataset';
 import { readUpdateNodeBytes } from '../transaction-builder/update-node';
-import { parseAccountAddress } from '../utils';
+import { parseAddress } from '../utils';
 
 export function toUnconfirmTransactionNodeWallet(res: GetMempoolTransactionsResponse.AsObject) {
   let mempoolTx = res.mempooltransactionsList;
@@ -62,11 +62,11 @@ export function toZBCPendingTransaction(mempool: MempoolTransaction.AsObject): Z
   offset += 8;
 
   const senderBytes = readAddress(txBytes, offset);
-  const sender = parseAccountAddress(senderBytes);
+  const sender = parseAddress(senderBytes);
   offset += senderBytes.length;
 
   const recipientBytes = readAddress(txBytes, offset);
-  const recipient = parseAccountAddress(recipientBytes);
+  const recipient = parseAddress(recipientBytes);
   offset += recipientBytes.length;
 
   const txFee = readInt64(txBytes, offset);
@@ -89,7 +89,7 @@ export function toZBCPendingTransaction(mempool: MempoolTransaction.AsObject): Z
   };
 
   const approverBytes = readAddress(txBytes, offset);
-  const approver = parseAccountAddress(approverBytes);
+  const approver = parseAddress(approverBytes);
   offset += senderBytes.length;
 
   if (approver.type != 2) {

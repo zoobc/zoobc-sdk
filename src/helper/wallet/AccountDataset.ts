@@ -1,10 +1,10 @@
 import { AccountDataset as AccountDatasetResponse, GetAccountDatasetsResponse } from '../../../grpc/model/accountDataset_pb';
-import { Account } from '../interfaces';
-import { parseAccountAddress } from '../utils';
+import { Address } from '../interfaces';
+import { parseAddress } from '../utils';
 
 export interface AccountDataset {
-  setter: Account;
-  recipient: Account;
+  setter: Address;
+  recipient: Address;
   property: string;
   value: string;
   isActive: boolean;
@@ -19,8 +19,8 @@ export interface AccountDatasets {
 
 export function toZBCDataset(dataset: AccountDatasetResponse.AsObject): AccountDataset {
   return {
-    setter: parseAccountAddress(dataset.setteraccountaddress),
-    recipient: parseAccountAddress(dataset.recipientaccountaddress),
+    setter: parseAddress(dataset.setteraccountaddress),
+    recipient: parseAddress(dataset.recipientaccountaddress),
     property: dataset.property,
     value: dataset.value,
     isActive: dataset.isactive,

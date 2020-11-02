@@ -1,13 +1,13 @@
 import { AccountType } from '../../../grpc/model/accountType_pb';
 import { Escrow as EscrowResponse, GetEscrowTransactionsResponse } from '../../../grpc/model/escrow_pb';
-import { Account } from '../interfaces';
-import { accountToBytes, parseAccountAddress, writeInt32, writeInt64 } from '../utils';
+import { Address } from '../interfaces';
+import { addressToBytes, parseAddress, writeInt32, writeInt64 } from '../utils';
 
 export interface Escrow {
   id: string;
-  sender: Account;
-  recipient: Account;
-  approver: Account;
+  sender: Address;
+  recipient: Address;
+  approver: Address;
   amount: number;
   commission: number;
   timeout: number;
@@ -25,9 +25,9 @@ export interface Escrows {
 export function toZBCEscrow(escrow: EscrowResponse.AsObject): Escrow {
   return {
     id: escrow.id,
-    sender: parseAccountAddress(escrow.senderaddress),
-    recipient: parseAccountAddress(escrow.recipientaddress),
-    approver: parseAccountAddress(escrow.approveraddress),
+    sender: parseAddress(escrow.senderaddress),
+    recipient: parseAddress(escrow.recipientaddress),
+    approver: parseAddress(escrow.approveraddress),
     amount: parseInt(escrow.amount),
     commission: parseInt(escrow.commission),
     timeout: parseInt(escrow.timeout),

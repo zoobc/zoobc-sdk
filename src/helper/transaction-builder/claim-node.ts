@@ -1,9 +1,9 @@
-import { writeInt64, writeInt32, getZBCAddress, ZBCAddressToBytes, accountToBytes } from '../utils';
+import { writeInt64, writeInt32, getZBCAddress, ZBCAddressToBytes, addressToBytes } from '../utils';
 import { ADDRESS_LENGTH, POOWN_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 import { generateTransactionHash } from '../wallet/MultiSignature';
 import { EscrowTransactionInterface } from './send-money';
-import { Account } from '../interfaces';
+import { Address } from '../interfaces';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { AccountType } from '../../../grpc/model/accountType_pb';
 import { addEscrowBytes } from './escrow-transaction';
@@ -11,7 +11,7 @@ import { addEscrowBytes } from './escrow-transaction';
 const TRANSACTION_TYPE = writeInt32(TransactionType.CLAIMNODEREGISTRATIONTRANSACTION);
 
 export interface ClaimNodeInterface extends EscrowTransactionInterface {
-  accountAddress: Account;
+  accountAddress: Address;
   fee: number;
   nodePublicKey: Buffer;
   nodeAddress: string;
@@ -21,7 +21,7 @@ export function claimNodeBuilder(data: ClaimNodeInterface, poown: Buffer, seed?:
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-  const sender = accountToBytes(data.accountAddress);
+  const sender = addressToBytes(data.accountAddress);
   const recipient = writeInt32(AccountType.EMPTYACCOUNTTYPE);
 
   const fee = writeInt64(data.fee * 1e8);

@@ -9,7 +9,7 @@ import { UpdateNodeInterface } from './helper/transaction-builder/update-node';
 import { RemoveNodeInterface } from './helper/transaction-builder/remove-node';
 import { ClaimNodeInterface } from './helper/transaction-builder/claim-node';
 import { PostTransactionResponse } from '../grpc/model/transaction_pb';
-import { Account } from './helper/interfaces';
+import { Address } from './helper/interfaces';
 import { NodeRegistration, NodeRegistrations } from './helper/wallet/Node';
 export declare type NodeHardwareResponse = GetNodeHardwareResponse.AsObject;
 export declare type GenerateNodeKeyResponses = GenerateNodeKeyResponse.AsObject;
@@ -28,7 +28,7 @@ export interface NodeListParams {
     };
 }
 export interface NodeParams {
-    owner?: Account;
+    owner?: Address;
     publicKey?: Buffer;
     height?: number;
 }

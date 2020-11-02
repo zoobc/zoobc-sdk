@@ -1,4 +1,4 @@
-import { writeInt32, getZBCAddress, validationTimestamp, errorDateMessage, accountToBytes, parseAccountAddress } from './helper/utils';
+import { writeInt32, getZBCAddress, validationTimestamp, errorDateMessage, addressToBytes } from './helper/utils';
 import { sha3_256 } from 'js-sha3';
 import Network from './Network';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
@@ -17,7 +17,7 @@ import { MultiSigInfo, MultiSigInterface, multisignatureBuilder } from './helper
 import { BIP32Interface } from 'bip32';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
-import { Account } from './helper/interfaces';
+import { Address } from './helper/interfaces';
 
 export type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
@@ -26,7 +26,7 @@ export type MultisigPostTransactionResponse = PostTransactionResponse.AsObject;
 export type GetMultisigAddressResponse = GetMultisigAddressByParticipantAddressResponse.AsObject;
 
 export interface MultisigPendingListParams {
-  address?: Account;
+  address?: Address;
   status?: 0 | 1 | 2 | 3;
   pagination: {
     limit?: number;
@@ -36,7 +36,7 @@ export interface MultisigPendingListParams {
 }
 
 export interface MultisigInfoParams {
-  address: string;
+  address: Address;
   pagination: {
     limit?: number;
     page: number;
@@ -55,8 +55,8 @@ function generateMultiSigInfo(multiSigAddress: MultiSigInfo): Buffer {
   const lengthParticipants = writeInt32(participants.length);
 
   let participantsB = Buffer.from([]);
-  participants.forEach((acc: Account) => {
-    participantsB = Buffer.concat([participantsB, accountToBytes(acc)]);
+  participants.forEach((acc: Address) => {
+    participantsB = Buffer.concat([participantsB, addressToBytes(acc)]);
   });
   return Buffer.concat([minSigB, nonceB, lengthParticipants, participantsB]);
 }
@@ -73,7 +73,7 @@ function getPendingList(params: MultisigPendingListParams): Promise<MultisigPend
     const networkIP = Network.selected();
 
     const { address, pagination, status } = params;
-    if (address) request.setSenderaddress(accountToBytes(address));
+    if (address) request.setSenderaddress(addressToBytes(address));
     if (status) request.setStatus(status);
     if (pagination) {
       const reqPagination = new Pagination();
@@ -117,7 +117,7 @@ function getMultisigInfo(params: MultisigInfoParams): Promise<MultisigInfoRespon
     const networkIP = Network.selected();
 
     const { address, pagination } = params;
-    request.setMultisigaddress(address);
+    request.setMultisigaddress(addressToBytes(address));
     if (pagination) {
       const reqPagination = new Pagination();
       reqPagination.setLimit(pagination.limit || 10);

@@ -1,11 +1,11 @@
 import { GetNodeRegistrationsResponse, NodeRegistration as NodeResponse } from '../../../grpc/model/nodeRegistration_pb';
-import { Account } from '../interfaces';
-import { getZBCAddress, parseAccountAddress } from '../utils';
+import { Address } from '../interfaces';
+import { getZBCAddress, parseAddress } from '../utils';
 
 export interface NodeRegistration {
   nodeId: string;
   nodePublicKey: string;
-  accountAddress: Account;
+  accountAddress: Address;
   registrationHeight: number;
   lockedBalance: string;
   registrationStatus: number;
@@ -22,7 +22,7 @@ export function toZBCNodeRegistration(node: NodeResponse.AsObject): NodeRegistra
   return {
     nodeId: node.nodeid,
     nodePublicKey: getZBCAddress(Buffer.from(node.nodepublickey.toString(), 'base64'), 'ZNK'),
-    accountAddress: parseAccountAddress(node.accountaddress),
+    accountAddress: parseAddress(node.accountaddress),
     registrationHeight: node.registrationheight,
     lockedBalance: node.lockedbalance,
     registrationStatus: node.registrationstatus,

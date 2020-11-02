@@ -1,9 +1,9 @@
-import { writeInt64, writeInt32, getZBCAddress, readInt64, ZBCAddressToBytes, accountToBytes, parseAccountAddress } from '../utils';
+import { writeInt64, writeInt32, getZBCAddress, readInt64, ZBCAddressToBytes, addressToBytes, parseAddress } from '../utils';
 import { ADDRESS_LENGTH, ADDRESS_WITH_TYPE, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 import { generateTransactionHash } from '../wallet/MultiSignature';
 import { EscrowTransactionInterface } from './send-money';
-import { Account } from '../interfaces';
+import { Address } from '../interfaces';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { AccountType } from '../../../grpc/model/accountType_pb';
 import { addEscrowBytes } from './escrow-transaction';
@@ -11,7 +11,7 @@ import { addEscrowBytes } from './escrow-transaction';
 const TRANSACTION_TYPE = writeInt32(TransactionType.NODEREGISTRATIONTRANSACTION);
 
 export interface RegisterNodeInterface extends EscrowTransactionInterface {
-  accountAddress: Account;
+  accountAddress: Address;
   fee: number;
   nodePublicKey: Buffer;
   nodeAddress: string;
@@ -22,7 +22,7 @@ export function registerNodeBuilder(data: RegisterNodeInterface, poown: Buffer, 
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-  const sender = accountToBytes(data.accountAddress);
+  const sender = addressToBytes(data.accountAddress);
   const recipient = writeInt32(AccountType.EMPTYACCOUNTTYPE);
   const fee = writeInt64(data.fee * 1e8);
 
@@ -49,7 +49,7 @@ export function readRegisterNodeBytes(txBytes: Buffer, offset: number) {
   const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
   offset += ADDRESS_LENGTH;
 
-  const accountaddress = parseAccountAddress(txBytes.slice(offset, offset + ADDRESS_WITH_TYPE));
+  const accountaddress = parseAddress(txBytes.slice(offset, offset + ADDRESS_WITH_TYPE));
   offset += ADDRESS_WITH_TYPE;
 
   const lockedbalance = parseInt(readInt64(txBytes, offset));

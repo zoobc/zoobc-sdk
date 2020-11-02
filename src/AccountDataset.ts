@@ -7,8 +7,8 @@ import { TransactionServiceClient } from '../grpc/service/transaction_pb_service
 import { setupDatasetBuilder, SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
 import { BIP32Interface } from 'bip32';
 import { RemoveDatasetInterface, removeDatasetBuilder } from './helper/transaction-builder/remove-account-dataset';
-import { accountToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
-import { Account } from './helper/interfaces';
+import { addressToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
+import { Address } from './helper/interfaces';
 import { AccountDataset, AccountDatasets, toZBCDataset, toZBCDatasets } from './helper/wallet/AccountDataset';
 
 export type SetupDatasetResponse = PostTransactionResponse.AsObject;
@@ -17,8 +17,8 @@ export type RemoveAccountDatasetResponse = PostTransactionResponse.AsObject;
 export interface AccountDatasetListParams {
   property?: string;
   value?: string;
-  setter?: Account;
-  recipient?: Account;
+  setter?: Address;
+  recipient?: Address;
   height?: number;
   pagination?: {
     limit?: number;
@@ -35,8 +35,8 @@ export function getList(params?: AccountDatasetListParams): Promise<AccountDatas
       const { property, value, setter, recipient, height, pagination } = params;
       if (property) request.setProperty(property);
       if (value) request.setValue(value);
-      if (setter) request.setSetteraccountaddress(accountToBytes(setter));
-      if (recipient) request.setRecipientaccountaddress(accountToBytes(recipient));
+      if (setter) request.setSetteraccountaddress(addressToBytes(setter));
+      if (recipient) request.setRecipientaccountaddress(addressToBytes(recipient));
       if (height) request.setHeight(height);
       if (pagination) {
         const reqPagination = new Pagination();
@@ -57,12 +57,12 @@ export function getList(params?: AccountDatasetListParams): Promise<AccountDatas
   });
 }
 
-export function get(property: string, recipient: Account): Promise<AccountDataset> {
+export function get(property: string, recipient: Address): Promise<AccountDataset> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetAccountDatasetRequest();
     request.setProperty(property);
-    request.setRecipientaccountaddress(accountToBytes(recipient));
+    request.setRecipientaccountaddress(addressToBytes(recipient));
     const client = new AccountDatasetServiceClient(networkIP.host);
     client.getAccountDataset(request, (err, res) => {
       if (err) {

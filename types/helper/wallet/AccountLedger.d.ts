@@ -1,7 +1,7 @@
 import { GetAccountLedgersResponse } from '../../../grpc/model/accountLedger_pb';
-import { Account } from '../interfaces';
+import { Address } from '../interfaces';
 export interface AccountLedger {
-    accountAddress: Account;
+    accountAddress: Address;
     balanceChange: number;
     blockHeight: number;
     transactionId: string;

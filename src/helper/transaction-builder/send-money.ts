@@ -1,23 +1,22 @@
-import { accountToBytes, parseAccountAddress, readInt64, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
+import { addressToBytes, readInt64, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
 import { VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
-import { ZBCTransaction } from '../wallet/Transaction';
 import { generateTransactionHash } from '../wallet/MultiSignature';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
-import { Account } from '../interfaces';
+import { Address } from '../interfaces';
 import { addEscrowBytes } from './escrow-transaction';
 
 const TRANSACTION_TYPE = writeInt32(TransactionType.SENDMONEYTRANSACTION);
 
 export interface SendMoneyInterface extends EscrowTransactionInterface {
-  sender: Account;
-  recipient: Account;
+  sender: Address;
+  recipient: Address;
   fee: number;
   amount: number;
 }
 
 export interface EscrowTransactionInterface {
-  approverAddress?: Account;
+  approverAddress?: Address;
   commission?: number;
   timeout?: number;
   instruction?: string;
@@ -27,8 +26,8 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-  const sender = accountToBytes(data.sender);
-  const recipient = accountToBytes(data.recipient);
+  const sender = addressToBytes(data.sender);
+  const recipient = addressToBytes(data.recipient);
   const fee = writeInt64(data.fee * 1e8);
   const amount = writeInt64(data.amount * 1e8);
   const bodyLength = writeInt32(amount.length);

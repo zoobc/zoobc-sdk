@@ -10,15 +10,15 @@ import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
 import { BIP32Interface } from 'bip32';
-import { accountToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
-import { Account } from './helper/interfaces';
+import { addressToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
+import { Address } from './helper/interfaces';
 import { toZBCTransaction, toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
 
 export type PostTransactionResponses = PostTransactionResponse.AsObject;
 export type TransactionMinimumFeeResponse = GetTransactionMinimumFeeResponse.AsObject;
 
 export interface TransactionListParams {
-  address?: Account;
+  address?: Address;
   height?: number;
   transactionType?: number;
   timestampStart?: string;
@@ -38,7 +38,7 @@ function getList(params?: TransactionListParams): Promise<ZBCTransactions> {
     if (params) {
       const { address, height, transactionType, timestampStart, timestampEnd, pagination } = params;
 
-      if (address) request.setAccountaddress(accountToBytes(address));
+      if (address) request.setAccountaddress(addressToBytes(address));
       if (height) request.setHeight(height);
       if (transactionType) request.setTransactiontype(transactionType);
       if (timestampStart) request.setTimestampstart(timestampStart);

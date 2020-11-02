@@ -1,13 +1,13 @@
 import { BIP32Interface } from 'bip32';
 import { EscrowApprovalInterface } from './helper/transaction-builder/escrow-transaction';
 import { PostTransactionResponse } from '../grpc/model/transaction_pb';
-import { Account } from './helper/interfaces';
+import { Address } from './helper/interfaces';
 import { Escrows, Escrow } from './helper/wallet/Escrows';
 export declare type ApprovalEscrowTransactionResponse = PostTransactionResponse.AsObject;
 export interface EscrowListParams {
-    approverAddress?: Account;
-    sender?: Account;
-    recipient?: Account;
+    approverAddress?: Address;
+    sender?: Address;
+    recipient?: Address;
     blockHeightStart?: number;
     blockHeightEnd?: number;
     id?: string;

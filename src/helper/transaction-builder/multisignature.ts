@@ -1,8 +1,8 @@
 import { BIP32Interface } from 'bip32';
 import { AccountType } from '../../../grpc/model/accountType_pb';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
-import { Account } from '../interfaces';
-import { writeInt64, writeInt32, ZBCAddressToBytes, accountToBytes } from '../utils';
+import { Address } from '../interfaces';
+import { writeInt64, writeInt32, ZBCAddressToBytes, addressToBytes } from '../utils';
 import { generateTransactionHash } from '../wallet/MultiSignature';
 import { VERSION } from './constant';
 import { addEscrowBytes } from './escrow-transaction';
@@ -11,7 +11,7 @@ import { EscrowTransactionInterface } from './send-money';
 const TRANSACTION_TYPE = writeInt32(TransactionType.MULTISIGNATURETRANSACTION);
 
 export interface MultiSigInterface extends EscrowTransactionInterface {
-  accountAddress: Account;
+  accountAddress: Address;
   fee: number;
   multisigInfo?: MultiSigInfo;
   unisgnedTransactions?: Buffer;
@@ -19,7 +19,7 @@ export interface MultiSigInterface extends EscrowTransactionInterface {
 }
 
 export interface MultiSigInfo {
-  participants: Account[];
+  participants: Address[];
   nonce: number;
   minSigs: number;
 }
@@ -27,7 +27,7 @@ export interface MultiSigInfo {
 export interface SignatureInfo {
   txHash: string;
   participants: {
-    address: Account;
+    address: Address;
     signature: Buffer;
   }[];
 }
@@ -37,7 +37,7 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-  const sender = accountToBytes(data.accountAddress);
+  const sender = addressToBytes(data.accountAddress);
   const recipient = writeInt32(AccountType.EMPTYACCOUNTTYPE);
   const fee = writeInt64(data.fee * 1e8);
 
@@ -50,7 +50,7 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
 
     let participants = Buffer.from([]);
     multisigInfo.participants.forEach(participant => {
-      const address = accountToBytes(participant);
+      const address = addressToBytes(participant);
       participants = Buffer.concat([participants, address]);
     });
 
@@ -75,7 +75,7 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
 
     let participants = Buffer.from([]);
     signaturesInfo.participants.forEach(participant => {
-      const address = accountToBytes(participant.address);
+      const address = addressToBytes(participant.address);
       const signatureLen = writeInt32(participant.signature.length);
       participants = Buffer.concat([participants, address, signatureLen, participant.signature]);
     });

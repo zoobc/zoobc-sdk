@@ -2,13 +2,13 @@ import Network from './Network';
 import { GetMempoolTransactionRequest, GetMempoolTransactionsRequest } from '../grpc/model/mempool_pb';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { MempoolServiceClient } from '../grpc/service/mempool_pb_service';
-import { Account } from './helper/interfaces';
-import { accountToBytes } from './helper/utils';
+import { Address } from './helper/interfaces';
+import { addressToBytes } from './helper/utils';
 import { toZBCPendingTransaction, toZBCPendingTransactions } from './helper/wallet/Mempool';
 import { ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
 
 export interface MempoolListParams {
-  address?: Account;
+  address?: Address;
   timestampStart?: string;
   timestampEnd?: string;
   pagination?: {
@@ -26,7 +26,7 @@ function getList(params?: MempoolListParams): Promise<ZBCTransactions> {
     if (params) {
       const { address, timestampEnd, timestampStart, pagination } = params;
 
-      if (address) request.setAddress(accountToBytes(address));
+      if (address) request.setAddress(addressToBytes(address));
       if (timestampStart) request.setTimestampstart(timestampStart);
       if (timestampEnd) request.setTimestampend(timestampEnd);
       if (pagination) {
