@@ -97,7 +97,7 @@ declare const zoobc: {
         getBlockByHeight: (height: number) => Promise<import("../grpc/model/block_pb").GetBlockResponse.AsObject>;
     };
     MultiSignature: {
-        getPendingByTxHash: (txHash: string) => Promise<any>;
+        getPendingByTxHash: (txHash: string) => Promise<import("./helper/wallet/MultiSignature").MultiSigPendingDetailResponse>;
         getPendingList: (params: import("./MultiSignature").MultisigPendingListParams) => Promise<import("./helper/wallet/Transaction").ZBCTransactions>;
         createMultiSigAddress: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigInfo) => string;
         generateMultiSigInfo: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigInfo) => Buffer;
