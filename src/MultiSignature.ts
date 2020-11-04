@@ -1,4 +1,4 @@
-import { writeInt32, getZBCAddress, validationTimestamp, errorDateMessage, addressToBytes } from './helper/utils';
+import { writeInt32, getZBCAddress, validationTimestamp, errorDateMessage, addressToBytes, ZBCAddressToBytes } from './helper/utils';
 import { sha3_256 } from 'js-sha3';
 import Network from './Network';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
@@ -101,10 +101,13 @@ function getPendingList(params: MultisigPendingListParams): Promise<ZBCTransacti
 
 function getPendingByTxHash(txHash: string): Promise<any> {
   return new Promise((resolve, reject) => {
+    const hashHex = ZBCAddressToBytes(txHash)
+      .toString('hex')
+      .toUpperCase();
     const request = new GetPendingTransactionDetailByTransactionHashRequest();
     const networkIP = Network.selected();
 
-    request.setTransactionhashhex(txHash);
+    request.setTransactionhashhex(hashHex);
     const client = new MultisigServiceClient(networkIP.host);
     client.getPendingTransactionDetailByTransactionHash(request, (err, res) => {
       if (err) {

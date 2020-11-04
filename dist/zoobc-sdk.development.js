@@ -45436,7 +45436,7 @@ function toGetPending(tx) {
         escrow: false,
         transactionType,
         txBody,
-        transactionHash: tx.transactionhash,
+        transactionHash: getZBCAddress(Buffer.from(tx.transactionhash.toString(), 'base64'), 'ZTX'),
         height: tx.blockheight,
     };
     const approverBytes = readAddress(txBytes, offset);
@@ -47090,9 +47090,12 @@ function getPendingList(params) {
 }
 function getPendingByTxHash(txHash) {
     return new Promise((resolve, reject) => {
+        const hashHex = ZBCAddressToBytes(txHash)
+            .toString('hex')
+            .toUpperCase();
         const request = new multiSignature_pb_2();
         const networkIP = Network$1.selected();
-        request.setTransactionhashhex(txHash);
+        request.setTransactionhashhex(hashHex);
         const client = new MultisigServiceClient_1(networkIP.host);
         client.getPendingTransactionDetailByTransactionHash(request, (err, res) => {
             if (err) {

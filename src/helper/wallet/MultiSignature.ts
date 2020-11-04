@@ -62,7 +62,7 @@ export function toGetPending(tx: any): ZBCTransaction {
     escrow: false,
     transactionType,
     txBody,
-    transactionHash: tx.transactionhash,
+    transactionHash: getZBCAddress(Buffer.from(tx.transactionhash.toString(), 'base64'), 'ZTX'),
     height: tx.blockheight,
   };
 
