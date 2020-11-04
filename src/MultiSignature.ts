@@ -19,7 +19,7 @@ import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/t
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { Address } from './helper/interfaces';
 import { ZBCTransactions } from './helper/wallet/Transaction';
-import { toGetPendingList, toGetPendingDetail } from './helper/wallet/MultiSignature';
+import { toGetPendingList, toGetPendingDetail, MultiSigPendingDetailResponse } from './helper/wallet/MultiSignature';
 
 export type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
@@ -99,7 +99,7 @@ function getPendingList(params: MultisigPendingListParams): Promise<ZBCTransacti
   });
 }
 
-function getPendingByTxHash(txHash: string): Promise<any> {
+function getPendingByTxHash(txHash: string): Promise<MultiSigPendingDetailResponse> {
   return new Promise((resolve, reject) => {
     const hashHex = ZBCAddressToBytes(txHash)
       .toString('hex')
