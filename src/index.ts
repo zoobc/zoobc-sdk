@@ -81,7 +81,13 @@ export { RequestType } from '../grpc/model/auth_pb';
 
 // WALLET FORMATTER
 export { ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
-export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
+export {
+  toGetPendingList,
+  toGetPending,
+  toGetPendingDetail,
+  generateTransactionHash,
+  MultiSigPendingDetailResponse,
+} from './helper/wallet/MultiSignature';
 export { AccountDataset, AccountDatasets } from './helper/wallet/AccountDataset';
 export { AccountLedger, AccountLedgerList } from './helper/wallet/AccountLedger';
 export { Escrow, Escrows } from './helper/wallet/Escrows';

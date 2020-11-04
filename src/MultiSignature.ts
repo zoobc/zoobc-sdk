@@ -18,6 +18,8 @@ import { BIP32Interface } from 'bip32';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { Address } from './helper/interfaces';
+import { ZBCTransactions } from './helper/wallet/Transaction';
+import { toGetPendingList, toGetPendingDetail } from './helper/wallet/MultiSignature';
 
 export type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
@@ -67,7 +69,7 @@ function createMultiSigAddress(multiSigAddress: MultiSigInfo): string {
   return getZBCAddress(hashed);
 }
 
-function getPendingList(params: MultisigPendingListParams): Promise<MultisigPendingTxResponse> {
+function getPendingList(params: MultisigPendingListParams): Promise<ZBCTransactions> {
   return new Promise((resolve, reject) => {
     const request = new GetPendingTransactionsRequest();
     const networkIP = Network.selected();
@@ -89,12 +91,15 @@ function getPendingList(params: MultisigPendingListParams): Promise<MultisigPend
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      if (res) resolve(res.toObject());
+
+      if (res) {
+        resolve(toGetPendingList(res.toObject()));
+      }
     });
   });
 }
 
-function getPendingByTxHash(txHash: string): Promise<MultisigPendingTxDetailResponse> {
+function getPendingByTxHash(txHash: string): Promise<any> {
   return new Promise((resolve, reject) => {
     const request = new GetPendingTransactionDetailByTransactionHashRequest();
     const networkIP = Network.selected();
@@ -106,7 +111,8 @@ function getPendingByTxHash(txHash: string): Promise<MultisigPendingTxDetailResp
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      if (res) resolve(res.toObject());
+
+      if (res) resolve(toGetPendingDetail(res.toObject()));
     });
   });
 }

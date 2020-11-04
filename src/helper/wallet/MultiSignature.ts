@@ -1,30 +1,101 @@
-import { MultisigPendingTxResponse } from '../../MultiSignature';
-import { getZBCAddress, readInt64 } from '../utils';
+import { MultisigPendingTxResponse, MultisigPendingTxDetailResponse } from '../../MultiSignature';
+import { readInt64, ZBCTransaction, ZBCTransactions } from '../..';
+import { getZBCAddress, readAddress, readBodyBytes } from '../utils';
 import { sha3_256 } from 'js-sha3';
+import { parseAddress } from '../utils';
+import { MultiSignatureInfo, PendingSignature } from '../../../grpc/model/multiSignature_pb';
 
-export function toGetPendingList(res: MultisigPendingTxResponse) {
+export type multisignatureinfo = MultiSignatureInfo.AsObject;
+export type pendingsignaturesList = Array<PendingSignature.AsObject>;
+
+export interface MultiSigPendingDetailResponse {
+  pendingtransaction: ZBCTransaction;
+  pendingsignaturesList: pendingsignaturesList;
+  multisignatureinfo?: multisignatureinfo;
+}
+
+export function toGetPendingList(res: MultisigPendingTxResponse): ZBCTransactions {
   const list = res.pendingtransactionsList.map(tx => {
-    const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-    const amount = readInt64(bytes, 165);
-    const fee = readInt64(bytes, 153);
-    const timestamp = readInt64(bytes, 5);
-    const recipient = bytes.slice(87, 153);
-    return {
-      amount: amount,
-      blockheight: tx.blockheight,
-      fee: fee,
-      latest: tx.latest,
-      senderaddress: tx.senderaddress,
-      recipientaddress: recipient.toString(),
-      status: tx.status,
-      timestamp: timestamp,
-      transactionhash: tx.transactionhash,
-    };
+    return toGetPending(tx);
   });
   return {
-    count: res.count,
-    page: res.page,
-    pendingtransactionsList: list,
+    total: res.count,
+    transactions: list,
+  };
+}
+
+export function toGetPending(tx: any): ZBCTransaction {
+  const txBytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
+  let offset = 0;
+
+  const transactionType = txBytes.readUInt32LE(offset);
+  offset += 4;
+
+  const version = txBytes.readUInt8(offset);
+  offset += 1;
+
+  const timestamp = readInt64(txBytes, offset);
+  offset += 8;
+
+  const senderBytes = readAddress(txBytes, offset);
+  const sender = parseAddress(senderBytes);
+  offset += senderBytes.length;
+
+  const recipientBytes = readAddress(txBytes, offset);
+  const recipient = parseAddress(recipientBytes);
+  offset += recipientBytes.length;
+
+  const txFee = readInt64(txBytes, offset);
+  offset += 8;
+
+  const bodyBytesLength = txBytes.readUInt32LE(offset);
+  offset += 4;
+
+  const txBody = readBodyBytes(txBytes, transactionType, offset);
+  offset += bodyBytesLength;
+
+  let transaction: ZBCTransaction = {
+    timestamp: parseInt(timestamp) * 1000,
+    sender,
+    recipient,
+    fee: parseInt(txFee),
+    escrow: false,
+    transactionType,
+    txBody,
+    transactionHash: tx.transactionhash,
+    height: tx.blockheight,
+  };
+
+  const approverBytes = readAddress(txBytes, offset);
+  const approver = parseAddress(approverBytes);
+  offset += senderBytes.length;
+
+  if (approver.type != 2) {
+    transaction.escrow = true;
+    transaction.approverAddress = approver;
+
+    transaction.commission = parseInt(readInt64(txBytes, offset));
+    offset += 8;
+
+    transaction.timeout = parseInt(readInt64(txBytes, offset));
+    offset += 8;
+
+    const instructionLength = txBytes.readInt32LE(offset);
+    offset += 4;
+
+    transaction.instruction = txBytes.slice(offset, offset + instructionLength).toString('utf-8');
+    offset += instructionLength;
+  }
+
+  return transaction;
+}
+
+export function toGetPendingDetail(tx: MultisigPendingTxDetailResponse): MultiSigPendingDetailResponse {
+  const transction = toGetPending(tx.pendingtransaction);
+  return {
+    pendingtransaction: transction,
+    pendingsignaturesList: tx.pendingsignaturesList,
+    multisignatureinfo: tx.multisignatureinfo,
   };
 }
 
