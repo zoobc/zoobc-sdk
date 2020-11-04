@@ -1,3 +1,4 @@
+import { sha3_256 } from 'js-sha3';
 import { readInt64, ZBCTransaction, ZBCTransactions } from '../..';
 import { AccountType } from '../../../grpc/model/accountType_pb';
 import { GetMempoolTransactionsResponse, MempoolTransaction } from '../../../grpc/model/mempool_pb';
@@ -9,7 +10,7 @@ import { readRemoveNodeBytes } from '../transaction-builder/remove-node';
 import { readSendMoneyBytes } from '../transaction-builder/send-money';
 import { readSetupDatasetBytes } from '../transaction-builder/setup-account-dataset';
 import { readUpdateNodeBytes } from '../transaction-builder/update-node';
-import { parseAddress } from '../utils';
+import { getZBCAddress, parseAddress } from '../utils';
 
 export function toUnconfirmTransactionNodeWallet(res: GetMempoolTransactionsResponse.AsObject) {
   let mempoolTx = res.mempooltransactionsList;
@@ -78,6 +79,8 @@ export function toZBCPendingTransaction(mempool: MempoolTransaction.AsObject): Z
   const txBody = readBodyBytes(txBytes, transactionType, offset);
   offset += bodyBytesLength;
 
+  const transactionHash = Buffer.from(sha3_256(txBytes), 'hex');
+
   let transaction: ZBCTransaction = {
     timestamp: parseInt(timestamp) * 1000,
     sender,
@@ -85,6 +88,7 @@ export function toZBCPendingTransaction(mempool: MempoolTransaction.AsObject): Z
     fee: parseInt(txFee),
     escrow: false,
     transactionType,
+    transactionHash: getZBCAddress(transactionHash, 'ZTX'),
     txBody,
   };
 

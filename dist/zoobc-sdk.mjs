@@ -32441,6 +32441,7 @@ function toZBCPendingTransaction(mempool) {
     offset += 4;
     const txBody = readBodyBytes(txBytes, transactionType, offset);
     offset += bodyBytesLength;
+    const transactionHash = Buffer.from(sha3_256(txBytes), 'hex');
     let transaction = {
         timestamp: parseInt(timestamp) * 1000,
         sender,
@@ -32448,6 +32449,7 @@ function toZBCPendingTransaction(mempool) {
         fee: parseInt(txFee),
         escrow: false,
         transactionType,
+        transactionHash: getZBCAddress(transactionHash, 'ZTX'),
         txBody,
     };
     const approverBytes = readAddress(txBytes, offset);
@@ -51773,7 +51775,8 @@ class ZooKeyring {
         else {
             throw new Error(NOT_IMPLEMENTED);
         }
-        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey, sign(message, lowR) {
+        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey,
+            sign(message, lowR) {
                 if (curveName === 'secp256k1') {
                     return bip32ExtendedKey.sign(!Buffer.isBuffer(message) ? Buffer.from(message) : message, lowR);
                 }
