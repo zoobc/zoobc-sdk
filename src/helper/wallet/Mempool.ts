@@ -1,4 +1,5 @@
-import { readInt64, ZBCTransaction, ZBCTransactions } from '../..';
+import { sha3_256 } from 'js-sha3';
+import { getZBCAddress, readInt64, ZBCTransaction, ZBCTransactions } from '../..';
 import { GetMempoolTransactionsResponse, MempoolTransaction } from '../../../grpc/model/mempool_pb';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { parseAddress, readAddress, readBodyBytes } from '../utils';
@@ -70,6 +71,8 @@ export function toZBCPendingTransaction(mempool: MempoolTransaction.AsObject): Z
   const txBody = readBodyBytes(txBytes, transactionType, offset);
   offset += bodyBytesLength;
 
+  const transactionHash = Buffer.from(sha3_256(txBytes), 'hex');
+
   let transaction: ZBCTransaction = {
     timestamp: parseInt(timestamp) * 1000,
     sender,
@@ -77,6 +80,7 @@ export function toZBCPendingTransaction(mempool: MempoolTransaction.AsObject): Z
     fee: parseInt(txFee),
     escrow: false,
     transactionType,
+    transactionHash: getZBCAddress(transactionHash, 'ZTX'),
     txBody,
   };
 
