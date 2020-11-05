@@ -17,3 +17,5 @@ export declare function writeInt32(number: number): Buffer;
 export declare function validationTimestamp(txBytes: Buffer): Promise<boolean>;
 export declare function parseAddress(account: string | Uint8Array): Address;
 export declare function addressToBytes(account: Address): Buffer;
+export declare function readAddress(txBytes: Buffer, offset: number): Buffer;
+export declare function readBodyBytes(txBytes: Buffer, txType: number, offset: number): any;

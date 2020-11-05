@@ -5,9 +5,9 @@ import SHA3 from 'sha3';
 import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
 import { Int64LE } from 'int64-buffer';
-import { sha3_256 } from 'js-sha3';
 import { Observable } from 'rxjs';
 export { Subscription } from 'rxjs';
+import { sha3_256 } from 'js-sha3';
 import { sign } from 'tweetnacl';
 import { mnemonicToSeedSync, setDefaultWordlist, generateMnemonic, validateMnemonic } from 'bip39';
 import { fromSeed } from 'bip32';
@@ -4652,8 +4652,7 @@ proto.google.protobuf.FieldDescriptorProto.toObject = function(includeInstance, 
     defaultValue: (f = googleProtobuf.Message.getField(msg, 7)) == null ? undefined : f,
     oneofIndex: (f = googleProtobuf.Message.getField(msg, 9)) == null ? undefined : f,
     jsonName: (f = googleProtobuf.Message.getField(msg, 10)) == null ? undefined : f,
-    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f),
-    proto3Optional: (f = googleProtobuf.Message.getBooleanField(msg, 17)) == null ? undefined : f
+    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -4730,10 +4729,6 @@ proto.google.protobuf.FieldDescriptorProto.deserializeBinaryFromReader = functio
       var value = new proto.google.protobuf.FieldOptions;
       reader.readMessage(value,proto.google.protobuf.FieldOptions.deserializeBinaryFromReader);
       msg.setOptions(value);
-      break;
-    case 17:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setProto3Optional(value);
       break;
     default:
       reader.skipField();
@@ -4833,13 +4828,6 @@ proto.google.protobuf.FieldDescriptorProto.serializeBinaryToWriter = function(me
       8,
       f,
       proto.google.protobuf.FieldOptions.serializeBinaryToWriter
-    );
-  }
-  f = /** @type {boolean} */ (googleProtobuf.Message.getField(message, 17));
-  if (f != null) {
-    writer.writeBool(
-      17,
-      f
     );
   }
 };
@@ -5236,42 +5224,6 @@ proto.google.protobuf.FieldDescriptorProto.prototype.clearOptions = function() {
  */
 proto.google.protobuf.FieldDescriptorProto.prototype.hasOptions = function() {
   return googleProtobuf.Message.getField(this, 8) != null;
-};
-
-
-/**
- * optional bool proto3_optional = 17;
- * @return {boolean}
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.getProto3Optional = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 17, false));
-};
-
-
-/**
- * @param {boolean} value
- * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.setProto3Optional = function(value) {
-  return googleProtobuf.Message.setField(this, 17, value);
-};
-
-
-/**
- * Clears the field making it undefined.
- * @return {!proto.google.protobuf.FieldDescriptorProto} returns this
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.clearProto3Optional = function() {
-  return googleProtobuf.Message.setField(this, 17, undefined);
-};
-
-
-/**
- * Returns whether this field is set.
- * @return {boolean}
- */
-proto.google.protobuf.FieldDescriptorProto.prototype.hasProto3Optional = function() {
-  return googleProtobuf.Message.getField(this, 17) != null;
 };
 
 
@@ -6979,7 +6931,7 @@ proto.google.protobuf.FileOptions.toObject = function(includeInstance, msg) {
     pyGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 18, false),
     phpGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 42, false),
     deprecated: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 23, false),
-    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, true),
+    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, false),
     objcClassPrefix: (f = googleProtobuf.Message.getField(msg, 36)) == null ? undefined : f,
     csharpNamespace: (f = googleProtobuf.Message.getField(msg, 37)) == null ? undefined : f,
     swiftPrefix: (f = googleProtobuf.Message.getField(msg, 39)) == null ? undefined : f,
@@ -7744,7 +7696,7 @@ proto.google.protobuf.FileOptions.prototype.hasDeprecated = function() {
  * @return {boolean}
  */
 proto.google.protobuf.FileOptions.prototype.getCcEnableArenas = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, true));
+  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, false));
 };
 
 
@@ -31859,563 +31811,6 @@ MempoolServiceClient.prototype.getMempoolTransaction = function getMempoolTransa
 
 var MempoolServiceClient_1 = MempoolServiceClient;
 
-var accountType_pb = createCommonjsModule(function (module, exports) {
-// source: model/accountType.proto
-/**
- * @fileoverview
- * @enhanceable
- * @suppress {messageConventions} JS Compiler reports an error if a variable or
- *     field starts with 'MSG_' and isn't a translatable message.
- * @public
- */
-// GENERATED CODE -- DO NOT EDIT!
-
-
-var goog = googleProtobuf;
-var global = Function('return this')();
-
-goog.exportSymbol('proto.model.AccountAddress', null, global);
-goog.exportSymbol('proto.model.AccountType', null, global);
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.model.AccountAddress = function(opt_data) {
-  googleProtobuf.Message.initialize(this, opt_data, 0, -1, null, null);
-};
-goog.inherits(proto.model.AccountAddress, googleProtobuf.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.model.AccountAddress.displayName = 'proto.model.AccountAddress';
-}
-
-
-
-if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
-/**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.model.AccountAddress.prototype.toObject = function(opt_includeInstance) {
-  return proto.model.AccountAddress.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.model.AccountAddress} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.model.AccountAddress.toObject = function(includeInstance, msg) {
-  var obj = {
-    accountaddress: msg.getAccountaddress_asB64(),
-    accounttype: googleProtobuf.Message.getFieldWithDefault(msg, 2, 0),
-    accountpublickey: msg.getAccountpublickey_asB64(),
-    encodedaccount: googleProtobuf.Message.getFieldWithDefault(msg, 4, "")
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.model.AccountAddress}
- */
-proto.model.AccountAddress.deserializeBinary = function(bytes) {
-  var reader = new googleProtobuf.BinaryReader(bytes);
-  var msg = new proto.model.AccountAddress;
-  return proto.model.AccountAddress.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.model.AccountAddress} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.model.AccountAddress}
- */
-proto.model.AccountAddress.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    case 1:
-      var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setAccountaddress(value);
-      break;
-    case 2:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setAccounttype(value);
-      break;
-    case 3:
-      var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setAccountpublickey(value);
-      break;
-    case 4:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setEncodedaccount(value);
-      break;
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.model.AccountAddress.prototype.serializeBinary = function() {
-  var writer = new googleProtobuf.BinaryWriter();
-  proto.model.AccountAddress.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.model.AccountAddress} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.model.AccountAddress.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
-  f = message.getAccountaddress_asU8();
-  if (f.length > 0) {
-    writer.writeBytes(
-      1,
-      f
-    );
-  }
-  f = message.getAccounttype();
-  if (f !== 0) {
-    writer.writeInt32(
-      2,
-      f
-    );
-  }
-  f = message.getAccountpublickey_asU8();
-  if (f.length > 0) {
-    writer.writeBytes(
-      3,
-      f
-    );
-  }
-  f = message.getEncodedaccount();
-  if (f.length > 0) {
-    writer.writeString(
-      4,
-      f
-    );
-  }
-};
-
-
-/**
- * optional bytes AccountAddress = 1;
- * @return {!(string|Uint8Array)}
- */
-proto.model.AccountAddress.prototype.getAccountaddress = function() {
-  return /** @type {!(string|Uint8Array)} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, ""));
-};
-
-
-/**
- * optional bytes AccountAddress = 1;
- * This is a type-conversion wrapper around `getAccountaddress()`
- * @return {string}
- */
-proto.model.AccountAddress.prototype.getAccountaddress_asB64 = function() {
-  return /** @type {string} */ (googleProtobuf.Message.bytesAsB64(
-      this.getAccountaddress()));
-};
-
-
-/**
- * optional bytes AccountAddress = 1;
- * Note that Uint8Array is not supported on all browsers.
- * @see http://caniuse.com/Uint8Array
- * This is a type-conversion wrapper around `getAccountaddress()`
- * @return {!Uint8Array}
- */
-proto.model.AccountAddress.prototype.getAccountaddress_asU8 = function() {
-  return /** @type {!Uint8Array} */ (googleProtobuf.Message.bytesAsU8(
-      this.getAccountaddress()));
-};
-
-
-/** @param {!(string|Uint8Array)} value */
-proto.model.AccountAddress.prototype.setAccountaddress = function(value) {
-  googleProtobuf.Message.setProto3BytesField(this, 1, value);
-};
-
-
-/**
- * optional int32 AccountType = 2;
- * @return {number}
- */
-proto.model.AccountAddress.prototype.getAccounttype = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 2, 0));
-};
-
-
-/** @param {number} value */
-proto.model.AccountAddress.prototype.setAccounttype = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 2, value);
-};
-
-
-/**
- * optional bytes AccountPublicKey = 3;
- * @return {!(string|Uint8Array)}
- */
-proto.model.AccountAddress.prototype.getAccountpublickey = function() {
-  return /** @type {!(string|Uint8Array)} */ (googleProtobuf.Message.getFieldWithDefault(this, 3, ""));
-};
-
-
-/**
- * optional bytes AccountPublicKey = 3;
- * This is a type-conversion wrapper around `getAccountpublickey()`
- * @return {string}
- */
-proto.model.AccountAddress.prototype.getAccountpublickey_asB64 = function() {
-  return /** @type {string} */ (googleProtobuf.Message.bytesAsB64(
-      this.getAccountpublickey()));
-};
-
-
-/**
- * optional bytes AccountPublicKey = 3;
- * Note that Uint8Array is not supported on all browsers.
- * @see http://caniuse.com/Uint8Array
- * This is a type-conversion wrapper around `getAccountpublickey()`
- * @return {!Uint8Array}
- */
-proto.model.AccountAddress.prototype.getAccountpublickey_asU8 = function() {
-  return /** @type {!Uint8Array} */ (googleProtobuf.Message.bytesAsU8(
-      this.getAccountpublickey()));
-};
-
-
-/** @param {!(string|Uint8Array)} value */
-proto.model.AccountAddress.prototype.setAccountpublickey = function(value) {
-  googleProtobuf.Message.setProto3BytesField(this, 3, value);
-};
-
-
-/**
- * optional string EncodedAccount = 4;
- * @return {string}
- */
-proto.model.AccountAddress.prototype.getEncodedaccount = function() {
-  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, ""));
-};
-
-
-/** @param {string} value */
-proto.model.AccountAddress.prototype.setEncodedaccount = function(value) {
-  googleProtobuf.Message.setProto3StringField(this, 4, value);
-};
-
-
-/**
- * @enum {number}
- */
-proto.model.AccountType = {
-  ZBCACCOUNTTYPE: 0,
-  BTCACCOUNTTYPE: 1,
-  EMPTYACCOUNTTYPE: 2
-};
-
-goog.object.extend(exports, proto.model);
-});
-var accountType_pb_1 = accountType_pb.AccountType;
-
-const VERSION = Buffer.from([1]);
-const ADDRESS_LENGTH = 32;
-const ADDRESS_WITH_TYPE = 36;
-const POOWN_LENGTH = 136;
-
-function toGetPendingList(res) {
-    const list = res.pendingtransactionsList.map(tx => {
-        const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        const amount = readInt64(bytes, 165);
-        const fee = readInt64(bytes, 153);
-        const timestamp = readInt64(bytes, 5);
-        const recipient = bytes.slice(87, 153);
-        return {
-            amount: amount,
-            blockheight: tx.blockheight,
-            fee: fee,
-            latest: tx.latest,
-            senderaddress: tx.senderaddress,
-            recipientaddress: recipient.toString(),
-            status: tx.status,
-            timestamp: timestamp,
-            transactionhash: tx.transactionhash,
-        };
-    });
-    return {
-        count: res.count,
-        page: res.page,
-        pendingtransactionsList: list,
-    };
-}
-function generateTransactionHash(buffer) {
-    const hashed = Buffer.from(sha3_256(buffer), 'hex');
-    return getZBCAddress(hashed, 'ZTX');
-}
-
-const TRANSACTION_TYPE = writeInt32(transaction_pb_5.APPROVALESCROWTRANSACTION);
-function escrowBuilder(data, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const approvalAddress = addressToBytes(data.approvalAddress);
-    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
-    const fee = writeInt64(data.fee * 1e8);
-    const approvalCode = writeInt32(data.approvalCode);
-    const transactionId = writeInt64(data.transactionId);
-    const bodyLength = writeInt32(approvalCode.length + transactionId.length);
-    bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, approvalAddress, recipient, fee, bodyLength, approvalCode, transactionId]);
-    // Add Escrow Bytes
-    bytes = addEscrowBytes(bytes, data);
-    const message = writeInt32(0);
-    bytes = Buffer.concat([bytes, message]);
-    if (seed) {
-        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-        const signature = seed.sign(txHash);
-        return Buffer.concat([bytes, signature]);
-    }
-    else
-        return bytes;
-}
-function readApprovalEscrowBytes(txBytes, offset) {
-    const approval = txBytes.readInt32LE(offset);
-    offset += 4;
-    const transactionid = readInt64(txBytes, offset);
-    return { approval, transactionid };
-}
-function addEscrowBytes(bytes, data) {
-    if (data.approverAddress && data.commission && data.timeout && data.instruction) {
-        // escrow bytes
-        const approverAddress = addressToBytes(data.approverAddress);
-        const commission = writeInt64(data.commission * 1e8);
-        const timeout = writeInt64(data.timeout);
-        const instruction = Buffer.from(data.instruction, 'utf-8');
-        const instructionLength = writeInt32(instruction.length);
-        bytes = Buffer.concat([bytes, approverAddress, commission, timeout, instructionLength, instruction]);
-    }
-    else {
-        // escrow bytes default value
-        const approverAddress = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
-        bytes = Buffer.concat([bytes, approverAddress]);
-    }
-    return bytes;
-}
-
-const TRANSACTION_TYPE$1 = writeInt32(transaction_pb_5.CLAIMNODEREGISTRATIONTRANSACTION);
-function claimNodeBuilder(data, poown, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = addressToBytes(data.accountAddress);
-    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
-    const fee = writeInt64(data.fee * 1e8);
-    const nodePublicKey = data.nodePublicKey;
-    const bodyLength = writeInt32(nodePublicKey.length + poown.length);
-    bytes = Buffer.concat([TRANSACTION_TYPE$1, VERSION, timestamp, sender, recipient, fee, bodyLength, nodePublicKey, poown]);
-    // Add Escrow Bytes
-    bytes = addEscrowBytes(bytes, data);
-    const message = writeInt32(0);
-    bytes = Buffer.concat([bytes, message]);
-    if (seed) {
-        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-        const signature = seed.sign(txHash);
-        return Buffer.concat([bytes, signature]);
-    }
-    else
-        return bytes;
-}
-function readClaimNodeBytes(txBytes, offset) {
-    const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
-    offset += ADDRESS_LENGTH;
-    const poown = txBytes.slice(offset, offset + POOWN_LENGTH);
-    return { nodepublickey, poown };
-}
-
-const TRANSACTION_TYPE$2 = writeInt32(transaction_pb_5.NODEREGISTRATIONTRANSACTION);
-function registerNodeBuilder(data, poown, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = addressToBytes(data.accountAddress);
-    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
-    const fee = writeInt64(data.fee * 1e8);
-    const nodePublicKey = data.nodePublicKey;
-    const funds = writeInt64(data.funds * 1e8);
-    const bodyLength = writeInt32(nodePublicKey.length + sender.length + funds.length + poown.length);
-    bytes = Buffer.concat([TRANSACTION_TYPE$2, VERSION, timestamp, sender, recipient, fee, bodyLength, nodePublicKey, sender, funds, poown]);
-    // Add Escrow Bytes
-    bytes = addEscrowBytes(bytes, data);
-    const message = writeInt32(0);
-    bytes = Buffer.concat([bytes, message]);
-    if (seed) {
-        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-        const signature = seed.sign(txHash);
-        return Buffer.concat([bytes, signature]);
-    }
-    else
-        return bytes;
-}
-function readRegisterNodeBytes(txBytes, offset) {
-    const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
-    offset += ADDRESS_LENGTH;
-    const accountaddress = parseAddress(txBytes.slice(offset, offset + ADDRESS_WITH_TYPE));
-    offset += ADDRESS_WITH_TYPE;
-    const lockedbalance = parseInt(readInt64(txBytes, offset));
-    return { nodepublickey, accountaddress, lockedbalance };
-}
-
-const TRANSACTION_TYPE$3 = writeInt32(transaction_pb_5.REMOVENODEREGISTRATIONTRANSACTION);
-function removeNodeBuilder(data, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = addressToBytes(data.accountAddress);
-    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
-    const fee = writeInt64(data.fee * 1e8);
-    const nodePublicKey = data.nodePublicKey;
-    const bodyLength = writeInt32(nodePublicKey.length);
-    bytes = Buffer.concat([TRANSACTION_TYPE$3, VERSION, timestamp, sender, recipient, fee, bodyLength, nodePublicKey]);
-    // Add Escrow Bytes
-    bytes = addEscrowBytes(bytes, data);
-    const message = writeInt32(0);
-    bytes = Buffer.concat([bytes, message]);
-    if (seed) {
-        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-        const signature = seed.sign(txHash);
-        return Buffer.concat([bytes, signature]);
-    }
-    else
-        return bytes;
-}
-function readRemoveNodeBytes(txBytes, offset) {
-    const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
-    return { nodepublickey };
-}
-
-const TRANSACTION_TYPE$4 = writeInt32(transaction_pb_5.SETUPACCOUNTDATASETTRANSACTION);
-function setupDatasetBuilder(data, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = addressToBytes(data.setterAccountAddress);
-    const recipient = addressToBytes(data.recipientAccountAddress);
-    const fee = writeInt64(data.fee * 1e8);
-    const property = Buffer.from(data.property, 'utf-8');
-    const propertyLength = writeInt32(property.length);
-    const value = Buffer.from(data.value, 'utf-8');
-    const valueLength = writeInt32(value.length);
-    const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
-    bytes = Buffer.concat([
-        TRANSACTION_TYPE$4,
-        VERSION,
-        timestamp,
-        sender,
-        recipient,
-        fee,
-        bodyLength,
-        propertyLength,
-        property,
-        valueLength,
-        value,
-    ]);
-    // Add Escrow Bytes
-    bytes = addEscrowBytes(bytes, data);
-    const message = writeInt32(0);
-    bytes = Buffer.concat([bytes, message]);
-    if (seed) {
-        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-        const signature = seed.sign(txHash);
-        return Buffer.concat([bytes, signature]);
-    }
-    else
-        return bytes;
-}
-function readSetupDatasetBytes(txBytes, offset) {
-    const propertyLength = txBytes.readInt32LE(offset);
-    offset += 4;
-    const property = txBytes.slice(offset, offset + propertyLength).toString('utf-8');
-    offset += propertyLength;
-    const valueLength = txBytes.readInt32LE(offset);
-    offset += 4;
-    const value = txBytes.slice(offset, offset + valueLength).toString('utf-8');
-    return { property, value };
-}
-
-const TRANSACTION_TYPE$5 = writeInt32(transaction_pb_5.UPDATENODEREGISTRATIONTRANSACTION);
-function updateNodeBuilder(data, poown, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = addressToBytes(data.accountAddress);
-    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
-    const fee = writeInt64(data.fee * 1e8);
-    const nodePublicKey = data.nodePublicKey;
-    const funds = writeInt64(data.funds * 1e8);
-    const bodyLength = writeInt32(nodePublicKey.length + funds.length + poown.length);
-    bytes = Buffer.concat([TRANSACTION_TYPE$5, VERSION, timestamp, sender, recipient, fee, bodyLength, nodePublicKey, funds, poown]);
-    // Add Escrow Bytes
-    bytes = addEscrowBytes(bytes, data);
-    const message = writeInt32(0);
-    bytes = Buffer.concat([bytes, message]);
-    if (seed) {
-        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-        const signature = seed.sign(txHash);
-        return Buffer.concat([bytes, signature]);
-    }
-    else
-        return bytes;
-}
-function readUpdateNodeBytes(txBytes, offset) {
-    const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
-    offset += ADDRESS_LENGTH;
-    const lockedbalance = parseInt(readInt64(txBytes, offset));
-    offset += 8;
-    const poown = txBytes.slice(offset, offset + POOWN_LENGTH);
-    return { nodepublickey, lockedbalance, poown };
-}
-
 function toZBCPendingTransactions(mempools) {
     const transactions = mempools.mempooltransactionsList.map(mempool => toZBCPendingTransaction(mempool));
     return { total: mempools.total, transactions };
@@ -32466,33 +31861,6 @@ function toZBCPendingTransaction(mempool) {
         offset += instructionLength;
     }
     return transaction;
-}
-function readAddress(txBytes, offset) {
-    const type = txBytes.readUInt32LE(offset);
-    if (type == accountType_pb_1.EMPTYACCOUNTTYPE)
-        return txBytes.slice(offset, offset + 4);
-    else
-        return txBytes.slice(offset, offset + 36);
-}
-function readBodyBytes(txBytes, txType, offset) {
-    switch (txType) {
-        case transaction_pb_5.UPDATENODEREGISTRATIONTRANSACTION:
-            return readUpdateNodeBytes(txBytes, offset);
-        case transaction_pb_5.SENDMONEYTRANSACTION:
-            return readSendMoneyBytes(txBytes, offset);
-        case transaction_pb_5.REMOVENODEREGISTRATIONTRANSACTION:
-            return readRemoveNodeBytes(txBytes, offset);
-        case transaction_pb_5.NODEREGISTRATIONTRANSACTION:
-            return readRegisterNodeBytes(txBytes, offset);
-        case transaction_pb_5.CLAIMNODEREGISTRATIONTRANSACTION:
-            return readClaimNodeBytes(txBytes, offset);
-        case transaction_pb_5.SETUPACCOUNTDATASETTRANSACTION:
-            return readSetupDatasetBytes(txBytes, offset);
-        case transaction_pb_5.REMOVEACCOUNTDATASETTRANSACTION:
-            return readSetupDatasetBytes(txBytes, offset);
-        case transaction_pb_5.APPROVALESCROWTRANSACTION:
-            return readApprovalEscrowBytes(txBytes, offset);
-    }
 }
 
 function getList(params) {
@@ -46019,6 +45387,556 @@ goog.object.extend(exports, proto.model);
 });
 var auth_pb_1 = auth_pb.RequestType;
 
+const VERSION = Buffer.from([1]);
+const ADDRESS_LENGTH = 32;
+const ADDRESS_WITH_TYPE = 36;
+const POOWN_LENGTH = 136;
+
+function toGetPendingList(res) {
+    const list = res.pendingtransactionsList.map(tx => {
+        return toGetPending(tx);
+    });
+    return {
+        total: res.count,
+        transactions: list,
+    };
+}
+function toGetPending(tx) {
+    const txBytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
+    let offset = 0;
+    const transactionType = txBytes.readUInt32LE(offset);
+    offset += 4;
+    const version = txBytes.readUInt8(offset);
+    offset += 1;
+    const timestamp = readInt64(txBytes, offset);
+    offset += 8;
+    const senderBytes = readAddress(txBytes, offset);
+    const sender = parseAddress(senderBytes);
+    offset += senderBytes.length;
+    const recipientBytes = readAddress(txBytes, offset);
+    const recipient = parseAddress(recipientBytes);
+    offset += recipientBytes.length;
+    const txFee = readInt64(txBytes, offset);
+    offset += 8;
+    const bodyBytesLength = txBytes.readUInt32LE(offset);
+    offset += 4;
+    const txBody = readBodyBytes(txBytes, transactionType, offset);
+    offset += bodyBytesLength;
+    let transaction = {
+        timestamp: parseInt(timestamp) * 1000,
+        sender,
+        recipient,
+        fee: parseInt(txFee),
+        escrow: false,
+        transactionType,
+        txBody,
+        transactionHash: getZBCAddress(Buffer.from(tx.transactionhash.toString(), 'base64'), 'ZTX'),
+        height: tx.blockheight,
+    };
+    const approverBytes = readAddress(txBytes, offset);
+    const approver = parseAddress(approverBytes);
+    offset += senderBytes.length;
+    if (approver.type != 2) {
+        transaction.escrow = true;
+        transaction.approverAddress = approver;
+        transaction.commission = parseInt(readInt64(txBytes, offset));
+        offset += 8;
+        transaction.timeout = parseInt(readInt64(txBytes, offset));
+        offset += 8;
+        const instructionLength = txBytes.readInt32LE(offset);
+        offset += 4;
+        transaction.instruction = txBytes.slice(offset, offset + instructionLength).toString('utf-8');
+        offset += instructionLength;
+    }
+    return transaction;
+}
+function toGetPendingDetail(tx) {
+    const transction = toGetPending(tx.pendingtransaction);
+    return {
+        pendingtransaction: transction,
+        pendingsignaturesList: tx.pendingsignaturesList,
+        multisignatureinfo: tx.multisignatureinfo,
+    };
+}
+function generateTransactionHash(buffer) {
+    const hashed = Buffer.from(sha3_256(buffer), 'hex');
+    return getZBCAddress(hashed, 'ZTX');
+}
+
+var accountType_pb = createCommonjsModule(function (module, exports) {
+// source: model/accountType.proto
+/**
+ * @fileoverview
+ * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
+ * @public
+ */
+// GENERATED CODE -- DO NOT EDIT!
+
+
+var goog = googleProtobuf;
+var global = Function('return this')();
+
+goog.exportSymbol('proto.model.AccountAddress', null, global);
+goog.exportSymbol('proto.model.AccountType', null, global);
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.model.AccountAddress = function(opt_data) {
+  googleProtobuf.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.model.AccountAddress, googleProtobuf.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.model.AccountAddress.displayName = 'proto.model.AccountAddress';
+}
+
+
+
+if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.model.AccountAddress.prototype.toObject = function(opt_includeInstance) {
+  return proto.model.AccountAddress.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.model.AccountAddress} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.AccountAddress.toObject = function(includeInstance, msg) {
+  var obj = {
+    accountaddress: msg.getAccountaddress_asB64(),
+    accounttype: googleProtobuf.Message.getFieldWithDefault(msg, 2, 0),
+    accountpublickey: msg.getAccountpublickey_asB64(),
+    encodedaccount: googleProtobuf.Message.getFieldWithDefault(msg, 4, "")
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.model.AccountAddress}
+ */
+proto.model.AccountAddress.deserializeBinary = function(bytes) {
+  var reader = new googleProtobuf.BinaryReader(bytes);
+  var msg = new proto.model.AccountAddress;
+  return proto.model.AccountAddress.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.model.AccountAddress} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.model.AccountAddress}
+ */
+proto.model.AccountAddress.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setAccountaddress(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setAccounttype(value);
+      break;
+    case 3:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setAccountpublickey(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setEncodedaccount(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.model.AccountAddress.prototype.serializeBinary = function() {
+  var writer = new googleProtobuf.BinaryWriter();
+  proto.model.AccountAddress.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.model.AccountAddress} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.AccountAddress.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getAccountaddress_asU8();
+  if (f.length > 0) {
+    writer.writeBytes(
+      1,
+      f
+    );
+  }
+  f = message.getAccounttype();
+  if (f !== 0) {
+    writer.writeInt32(
+      2,
+      f
+    );
+  }
+  f = message.getAccountpublickey_asU8();
+  if (f.length > 0) {
+    writer.writeBytes(
+      3,
+      f
+    );
+  }
+  f = message.getEncodedaccount();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional bytes AccountAddress = 1;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.AccountAddress.prototype.getAccountaddress = function() {
+  return /** @type {!(string|Uint8Array)} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * optional bytes AccountAddress = 1;
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {string}
+ */
+proto.model.AccountAddress.prototype.getAccountaddress_asB64 = function() {
+  return /** @type {string} */ (googleProtobuf.Message.bytesAsB64(
+      this.getAccountaddress()));
+};
+
+
+/**
+ * optional bytes AccountAddress = 1;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.AccountAddress.prototype.getAccountaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (googleProtobuf.Message.bytesAsU8(
+      this.getAccountaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.AccountAddress.prototype.setAccountaddress = function(value) {
+  googleProtobuf.Message.setProto3BytesField(this, 1, value);
+};
+
+
+/**
+ * optional int32 AccountType = 2;
+ * @return {number}
+ */
+proto.model.AccountAddress.prototype.getAccounttype = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {number} value */
+proto.model.AccountAddress.prototype.setAccounttype = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional bytes AccountPublicKey = 3;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.AccountAddress.prototype.getAccountpublickey = function() {
+  return /** @type {!(string|Uint8Array)} */ (googleProtobuf.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * optional bytes AccountPublicKey = 3;
+ * This is a type-conversion wrapper around `getAccountpublickey()`
+ * @return {string}
+ */
+proto.model.AccountAddress.prototype.getAccountpublickey_asB64 = function() {
+  return /** @type {string} */ (googleProtobuf.Message.bytesAsB64(
+      this.getAccountpublickey()));
+};
+
+
+/**
+ * optional bytes AccountPublicKey = 3;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getAccountpublickey()`
+ * @return {!Uint8Array}
+ */
+proto.model.AccountAddress.prototype.getAccountpublickey_asU8 = function() {
+  return /** @type {!Uint8Array} */ (googleProtobuf.Message.bytesAsU8(
+      this.getAccountpublickey()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.AccountAddress.prototype.setAccountpublickey = function(value) {
+  googleProtobuf.Message.setProto3BytesField(this, 3, value);
+};
+
+
+/**
+ * optional string EncodedAccount = 4;
+ * @return {string}
+ */
+proto.model.AccountAddress.prototype.getEncodedaccount = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/** @param {string} value */
+proto.model.AccountAddress.prototype.setEncodedaccount = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 4, value);
+};
+
+
+/**
+ * @enum {number}
+ */
+proto.model.AccountType = {
+  ZBCACCOUNTTYPE: 0,
+  BTCACCOUNTTYPE: 1,
+  EMPTYACCOUNTTYPE: 2
+};
+
+goog.object.extend(exports, proto.model);
+});
+var accountType_pb_1 = accountType_pb.AccountType;
+
+const TRANSACTION_TYPE = writeInt32(transaction_pb_5.APPROVALESCROWTRANSACTION);
+function escrowBuilder(data, seed) {
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const approvalAddress = addressToBytes(data.approvalAddress);
+    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
+    const fee = writeInt64(data.fee * 1e8);
+    const approvalCode = writeInt32(data.approvalCode);
+    const transactionId = writeInt64(data.transactionId);
+    const bodyLength = writeInt32(approvalCode.length + transactionId.length);
+    bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, approvalAddress, recipient, fee, bodyLength, approvalCode, transactionId]);
+    // Add Escrow Bytes
+    bytes = addEscrowBytes(bytes, data);
+    const message = writeInt32(0);
+    bytes = Buffer.concat([bytes, message]);
+    if (seed) {
+        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
+        const signature = seed.sign(txHash);
+        return Buffer.concat([bytes, signature]);
+    }
+    else
+        return bytes;
+}
+function readApprovalEscrowBytes(txBytes, offset) {
+    const approval = txBytes.readInt32LE(offset);
+    offset += 4;
+    const transactionid = readInt64(txBytes, offset);
+    return { approval, transactionid };
+}
+function addEscrowBytes(bytes, data) {
+    if (data.approverAddress && data.commission && data.timeout && data.instruction) {
+        // escrow bytes
+        const approverAddress = addressToBytes(data.approverAddress);
+        const commission = writeInt64(data.commission * 1e8);
+        const timeout = writeInt64(data.timeout);
+        const instruction = Buffer.from(data.instruction, 'utf-8');
+        const instructionLength = writeInt32(instruction.length);
+        bytes = Buffer.concat([bytes, approverAddress, commission, timeout, instructionLength, instruction]);
+    }
+    else {
+        // escrow bytes default value
+        const approverAddress = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
+        bytes = Buffer.concat([bytes, approverAddress]);
+    }
+    return bytes;
+}
+
+const TRANSACTION_TYPE$1 = writeInt32(transaction_pb_5.NODEREGISTRATIONTRANSACTION);
+function registerNodeBuilder(data, poown, seed) {
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const sender = addressToBytes(data.accountAddress);
+    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
+    const fee = writeInt64(data.fee * 1e8);
+    const nodePublicKey = data.nodePublicKey;
+    const funds = writeInt64(data.funds * 1e8);
+    const bodyLength = writeInt32(nodePublicKey.length + sender.length + funds.length + poown.length);
+    bytes = Buffer.concat([TRANSACTION_TYPE$1, VERSION, timestamp, sender, recipient, fee, bodyLength, nodePublicKey, sender, funds, poown]);
+    // Add Escrow Bytes
+    bytes = addEscrowBytes(bytes, data);
+    const message = writeInt32(0);
+    bytes = Buffer.concat([bytes, message]);
+    if (seed) {
+        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
+        const signature = seed.sign(txHash);
+        return Buffer.concat([bytes, signature]);
+    }
+    else
+        return bytes;
+}
+function readRegisterNodeBytes(txBytes, offset) {
+    const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
+    offset += ADDRESS_LENGTH;
+    const accountaddress = parseAddress(txBytes.slice(offset, offset + ADDRESS_WITH_TYPE));
+    offset += ADDRESS_WITH_TYPE;
+    const lockedbalance = parseInt(readInt64(txBytes, offset));
+    return { nodepublickey, accountaddress, lockedbalance };
+}
+
+const TRANSACTION_TYPE$2 = writeInt32(transaction_pb_5.UPDATENODEREGISTRATIONTRANSACTION);
+function updateNodeBuilder(data, poown, seed) {
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const sender = addressToBytes(data.accountAddress);
+    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
+    const fee = writeInt64(data.fee * 1e8);
+    const nodePublicKey = data.nodePublicKey;
+    const funds = writeInt64(data.funds * 1e8);
+    const bodyLength = writeInt32(nodePublicKey.length + funds.length + poown.length);
+    bytes = Buffer.concat([TRANSACTION_TYPE$2, VERSION, timestamp, sender, recipient, fee, bodyLength, nodePublicKey, funds, poown]);
+    // Add Escrow Bytes
+    bytes = addEscrowBytes(bytes, data);
+    const message = writeInt32(0);
+    bytes = Buffer.concat([bytes, message]);
+    if (seed) {
+        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
+        const signature = seed.sign(txHash);
+        return Buffer.concat([bytes, signature]);
+    }
+    else
+        return bytes;
+}
+function readUpdateNodeBytes(txBytes, offset) {
+    const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
+    offset += ADDRESS_LENGTH;
+    const lockedbalance = parseInt(readInt64(txBytes, offset));
+    offset += 8;
+    const poown = txBytes.slice(offset, offset + POOWN_LENGTH);
+    return { nodepublickey, lockedbalance, poown };
+}
+
+const TRANSACTION_TYPE$3 = writeInt32(transaction_pb_5.REMOVENODEREGISTRATIONTRANSACTION);
+function removeNodeBuilder(data, seed) {
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const sender = addressToBytes(data.accountAddress);
+    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
+    const fee = writeInt64(data.fee * 1e8);
+    const nodePublicKey = data.nodePublicKey;
+    const bodyLength = writeInt32(nodePublicKey.length);
+    bytes = Buffer.concat([TRANSACTION_TYPE$3, VERSION, timestamp, sender, recipient, fee, bodyLength, nodePublicKey]);
+    // Add Escrow Bytes
+    bytes = addEscrowBytes(bytes, data);
+    const message = writeInt32(0);
+    bytes = Buffer.concat([bytes, message]);
+    if (seed) {
+        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
+        const signature = seed.sign(txHash);
+        return Buffer.concat([bytes, signature]);
+    }
+    else
+        return bytes;
+}
+function readRemoveNodeBytes(txBytes, offset) {
+    const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
+    return { nodepublickey };
+}
+
+const TRANSACTION_TYPE$4 = writeInt32(transaction_pb_5.CLAIMNODEREGISTRATIONTRANSACTION);
+function claimNodeBuilder(data, poown, seed) {
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const sender = addressToBytes(data.accountAddress);
+    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
+    const fee = writeInt64(data.fee * 1e8);
+    const nodePublicKey = data.nodePublicKey;
+    const bodyLength = writeInt32(nodePublicKey.length + poown.length);
+    bytes = Buffer.concat([TRANSACTION_TYPE$4, VERSION, timestamp, sender, recipient, fee, bodyLength, nodePublicKey, poown]);
+    // Add Escrow Bytes
+    bytes = addEscrowBytes(bytes, data);
+    const message = writeInt32(0);
+    bytes = Buffer.concat([bytes, message]);
+    if (seed) {
+        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
+        const signature = seed.sign(txHash);
+        return Buffer.concat([bytes, signature]);
+    }
+    else
+        return bytes;
+}
+function readClaimNodeBytes(txBytes, offset) {
+    const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
+    offset += ADDRESS_LENGTH;
+    const poown = txBytes.slice(offset, offset + POOWN_LENGTH);
+    return { nodepublickey, poown };
+}
+
 function createAuth(requestType, seed) {
     let bytes;
     const timestamp = writeInt64(Date.now());
@@ -47046,7 +46964,7 @@ MultisigServiceClient.prototype.getParticipantsByMultisigAddresses = function ge
 
 var MultisigServiceClient_1 = MultisigServiceClient;
 
-const TRANSACTION_TYPE$6 = writeInt32(transaction_pb_5.MULTISIGNATURETRANSACTION);
+const TRANSACTION_TYPE$5 = writeInt32(transaction_pb_5.MULTISIGNATURETRANSACTION);
 function multisignatureBuilder(data, seed) {
     const { multisigInfo, unisgnedTransactions, signaturesInfo } = data;
     let bytes;
@@ -47090,7 +47008,7 @@ function multisignatureBuilder(data, seed) {
     }
     const bodyLength = writeInt32(multisigInfoBytes.length + transactionBytes.length + signaturesInfoBytes.length);
     bytes = Buffer.concat([
-        TRANSACTION_TYPE$6,
+        TRANSACTION_TYPE$5,
         VERSION,
         timestamp,
         sender,
@@ -47158,16 +47076,20 @@ function getPendingList(params) {
                 const { code, message, metadata } = err;
                 reject({ code, message, metadata });
             }
-            if (res)
-                resolve(res.toObject());
+            if (res) {
+                resolve(toGetPendingList(res.toObject()));
+            }
         });
     });
 }
 function getPendingByTxHash(txHash) {
     return new Promise((resolve, reject) => {
+        const hashHex = ZBCAddressToBytes(txHash)
+            .toString('hex')
+            .toUpperCase();
         const request = new multiSignature_pb_2();
         const networkIP = Network$1.selected();
-        request.setTransactionhashhex(txHash);
+        request.setTransactionhashhex(hashHex);
         const client = new MultisigServiceClient_1(networkIP.host);
         client.getPendingTransactionDetailByTransactionHash(request, (err, res) => {
             if (err) {
@@ -47175,7 +47097,7 @@ function getPendingByTxHash(txHash) {
                 reject({ code, message, metadata });
             }
             if (res)
-                resolve(res.toObject());
+                resolve(toGetPendingDetail(res.toObject()));
         });
     });
 }
@@ -48518,6 +48440,54 @@ AccountDatasetServiceClient.prototype.getAccountDataset = function getAccountDat
 };
 
 var AccountDatasetServiceClient_1 = AccountDatasetServiceClient;
+
+const TRANSACTION_TYPE$6 = writeInt32(transaction_pb_5.SETUPACCOUNTDATASETTRANSACTION);
+function setupDatasetBuilder(data, seed) {
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const sender = addressToBytes(data.setterAccountAddress);
+    const recipient = addressToBytes(data.recipientAccountAddress);
+    const fee = writeInt64(data.fee * 1e8);
+    const property = Buffer.from(data.property, 'utf-8');
+    const propertyLength = writeInt32(property.length);
+    const value = Buffer.from(data.value, 'utf-8');
+    const valueLength = writeInt32(value.length);
+    const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
+    bytes = Buffer.concat([
+        TRANSACTION_TYPE$6,
+        VERSION,
+        timestamp,
+        sender,
+        recipient,
+        fee,
+        bodyLength,
+        propertyLength,
+        property,
+        valueLength,
+        value,
+    ]);
+    // Add Escrow Bytes
+    bytes = addEscrowBytes(bytes, data);
+    const message = writeInt32(0);
+    bytes = Buffer.concat([bytes, message]);
+    if (seed) {
+        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
+        const signature = seed.sign(txHash);
+        return Buffer.concat([bytes, signature]);
+    }
+    else
+        return bytes;
+}
+function readSetupDatasetBytes(txBytes, offset) {
+    const propertyLength = txBytes.readInt32LE(offset);
+    offset += 4;
+    const property = txBytes.slice(offset, offset + propertyLength).toString('utf-8');
+    offset += propertyLength;
+    const valueLength = txBytes.readInt32LE(offset);
+    offset += 4;
+    const value = txBytes.slice(offset, offset + valueLength).toString('utf-8');
+    return { property, value };
+}
 
 const TRANSACTION_TYPE$7 = writeInt32(transaction_pb_5.REMOVEACCOUNTDATASETTRANSACTION);
 function removeDatasetBuilder(data, seed) {
@@ -51773,7 +51743,8 @@ class ZooKeyring {
         else {
             throw new Error(NOT_IMPLEMENTED);
         }
-        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey, sign(message, lowR) {
+        bip32ExtendedKey = Object.assign(Object.assign({}, bip32ExtendedKey), { publicKey,
+            sign(message, lowR) {
                 if (curveName === 'secp256k1') {
                     return bip32ExtendedKey.sign(!Buffer.isBuffer(message) ? Buffer.from(message) : message, lowR);
                 }
@@ -52118,6 +52089,33 @@ function addressToBytes(account) {
             return Buffer.from([]);
     }
 }
+function readAddress(txBytes, offset) {
+    const type = txBytes.readUInt32LE(offset);
+    if (type == accountType_pb_1.EMPTYACCOUNTTYPE)
+        return txBytes.slice(offset, offset + 4);
+    else
+        return txBytes.slice(offset, offset + 36);
+}
+function readBodyBytes(txBytes, txType, offset) {
+    switch (txType) {
+        case transaction_pb_5.UPDATENODEREGISTRATIONTRANSACTION:
+            return readUpdateNodeBytes(txBytes, offset);
+        case transaction_pb_5.SENDMONEYTRANSACTION:
+            return readSendMoneyBytes(txBytes, offset);
+        case transaction_pb_5.REMOVENODEREGISTRATIONTRANSACTION:
+            return readRemoveNodeBytes(txBytes, offset);
+        case transaction_pb_5.NODEREGISTRATIONTRANSACTION:
+            return readRegisterNodeBytes(txBytes, offset);
+        case transaction_pb_5.CLAIMNODEREGISTRATIONTRANSACTION:
+            return readClaimNodeBytes(txBytes, offset);
+        case transaction_pb_5.SETUPACCOUNTDATASETTRANSACTION:
+            return readSetupDatasetBytes(txBytes, offset);
+        case transaction_pb_5.REMOVEACCOUNTDATASETTRANSACTION:
+            return readSetupDatasetBytes(txBytes, offset);
+        case transaction_pb_5.APPROVALESCROWTRANSACTION:
+            return readApprovalEscrowBytes(txBytes, offset);
+    }
+}
 
 const TRANSACTION_TYPE$8 = writeInt32(transaction_pb_5.SENDMONEYTRANSACTION);
 function sendMoneyBuilder(data, seed) {
@@ -52285,5 +52283,5 @@ const zoobc$1 = {
 };
 
 export default zoobc$1;
-export { accountDataset_pb_3 as AccountDatasetProperty, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, Ledger, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, auth_pb_1 as RequestType, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, addressToBytes, bufferToBase64, claimNodeBuilder, escrowBuilder, feeVoteCommitBuilder, feeVoteRevealBuilder, generateTransactionHash, getZBCAddress, isZBCAddressValid, parseAddress, readApprovalEscrowBytes, readClaimNodeBytes, readInt64, readRemoveDatasetBytes, readSendMoneyBytes, readUpdateNodeBytes, registerNodeBuilder, removeDatasetBuilder, removeNodeBuilder, sendMoneyBuilder, setupDatasetBuilder, shortenHash, signTransactionHash, toBase64Url, toGetPendingList, updateNodeBuilder };
+export { accountDataset_pb_3 as AccountDatasetProperty, escrow_pb_4 as EscrowApproval, escrow_pb_3 as EscrowStatus, event_pb_1 as EventType, Ledger, nodeRegistration_pb_4 as NodeRegistrationState, pagination_pb_2 as OrderBy, multiSignature_pb_4 as PendingTransactionStatus, auth_pb_1 as RequestType, transaction_pb_5 as TransactionType, ZBCAddressToBytes, ZooKeyring, addressToBytes, bufferToBase64, claimNodeBuilder, escrowBuilder, feeVoteCommitBuilder, feeVoteRevealBuilder, generateTransactionHash, getZBCAddress, isZBCAddressValid, parseAddress, readApprovalEscrowBytes, readClaimNodeBytes, readInt64, readRemoveDatasetBytes, readSendMoneyBytes, readUpdateNodeBytes, registerNodeBuilder, removeDatasetBuilder, removeNodeBuilder, sendMoneyBuilder, setupDatasetBuilder, shortenHash, signTransactionHash, toBase64Url, toGetPending, toGetPendingDetail, toGetPendingList, updateNodeBuilder };
 //# sourceMappingURL=zoobc-sdk.mjs.map

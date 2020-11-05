@@ -1,15 +1,7 @@
 import { readInt64, ZBCTransaction, ZBCTransactions } from '../..';
-import { AccountType } from '../../../grpc/model/accountType_pb';
 import { GetMempoolTransactionsResponse, MempoolTransaction } from '../../../grpc/model/mempool_pb';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
-import { readClaimNodeBytes } from '../transaction-builder/claim-node';
-import { readApprovalEscrowBytes } from '../transaction-builder/escrow-transaction';
-import { readRegisterNodeBytes } from '../transaction-builder/register-node';
-import { readRemoveNodeBytes } from '../transaction-builder/remove-node';
-import { readSendMoneyBytes } from '../transaction-builder/send-money';
-import { readSetupDatasetBytes } from '../transaction-builder/setup-account-dataset';
-import { readUpdateNodeBytes } from '../transaction-builder/update-node';
-import { parseAddress } from '../utils';
+import { parseAddress, readAddress, readBodyBytes } from '../utils';
 
 export function toUnconfirmTransactionNodeWallet(res: GetMempoolTransactionsResponse.AsObject) {
   let mempoolTx = res.mempooltransactionsList;
@@ -110,31 +102,4 @@ export function toZBCPendingTransaction(mempool: MempoolTransaction.AsObject): Z
   }
 
   return transaction;
-}
-
-function readAddress(txBytes: Buffer, offset: number): Buffer {
-  const type = txBytes.readUInt32LE(offset);
-  if (type == AccountType.EMPTYACCOUNTTYPE) return txBytes.slice(offset, offset + 4);
-  else return txBytes.slice(offset, offset + 36);
-}
-
-function readBodyBytes(txBytes: Buffer, txType: number, offset: number): any {
-  switch (txType) {
-    case TransactionType.UPDATENODEREGISTRATIONTRANSACTION:
-      return readUpdateNodeBytes(txBytes, offset);
-    case TransactionType.SENDMONEYTRANSACTION:
-      return readSendMoneyBytes(txBytes, offset);
-    case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
-      return readRemoveNodeBytes(txBytes, offset);
-    case TransactionType.NODEREGISTRATIONTRANSACTION:
-      return readRegisterNodeBytes(txBytes, offset);
-    case TransactionType.CLAIMNODEREGISTRATIONTRANSACTION:
-      return readClaimNodeBytes(txBytes, offset);
-    case TransactionType.SETUPACCOUNTDATASETTRANSACTION:
-      return readSetupDatasetBytes(txBytes, offset);
-    case TransactionType.REMOVEACCOUNTDATASETTRANSACTION:
-      return readSetupDatasetBytes(txBytes, offset);
-    case TransactionType.APPROVALESCROWTRANSACTION:
-      return readApprovalEscrowBytes(txBytes, offset);
-  }
 }

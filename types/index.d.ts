@@ -37,7 +37,7 @@ export { OrderBy } from '../grpc/model/pagination_pb';
 export { TransactionType } from '../grpc/model/transaction_pb';
 export { RequestType } from '../grpc/model/auth_pb';
 export { ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
-export { toGetPendingList, generateTransactionHash } from './helper/wallet/MultiSignature';
+export { toGetPendingList, toGetPending, toGetPendingDetail, generateTransactionHash, MultiSigPendingDetailResponse, } from './helper/wallet/MultiSignature';
 export { AccountDataset, AccountDatasets } from './helper/wallet/AccountDataset';
 export { AccountLedger, AccountLedgerList } from './helper/wallet/AccountLedger';
 export { Escrow, Escrows } from './helper/wallet/Escrows';
@@ -97,8 +97,8 @@ declare const zoobc: {
         getBlockByHeight: (height: number) => Promise<import("../grpc/model/block_pb").GetBlockResponse.AsObject>;
     };
     MultiSignature: {
-        getPendingByTxHash: (txHash: string) => Promise<import("../grpc/model/multiSignature_pb").GetPendingTransactionDetailByTransactionHashResponse.AsObject>;
-        getPendingList: (params: import("./MultiSignature").MultisigPendingListParams) => Promise<import("../grpc/model/multiSignature_pb").GetPendingTransactionsResponse.AsObject>;
+        getPendingByTxHash: (txHash: string) => Promise<import("./helper/wallet/MultiSignature").MultiSigPendingDetailResponse>;
+        getPendingList: (params: import("./MultiSignature").MultisigPendingListParams) => Promise<import("./helper/wallet/Transaction").ZBCTransactions>;
         createMultiSigAddress: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigInfo) => string;
         generateMultiSigInfo: (multiSigAddress: import("./helper/transaction-builder/multisignature").MultiSigInfo) => Buffer;
         getMultisigInfo: (params: import("./MultiSignature").MultisigInfoParams) => Promise<import("../grpc/model/multiSignature_pb").GetMultisignatureInfoResponse.AsObject>;
