@@ -1,4 +1,4 @@
-import { writeInt32, getZBCAddress, validationTimestamp, errorDateMessage, addressToBytes } from './helper/utils';
+import { writeInt32, getZBCAddress, validationTimestamp, errorDateMessage, addressToBytes, ZBCAddressToBytes } from './helper/utils';
 import { sha3_256 } from 'js-sha3';
 import Network from './Network';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
@@ -18,6 +18,8 @@ import { BIP32Interface } from 'bip32';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { Address } from './helper/interfaces';
+import { ZBCTransactions } from './helper/wallet/Transaction';
+import { toGetPendingList, toGetPendingDetail, MultiSigPendingDetailResponse } from './helper/wallet/MultiSignature';
 
 export type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
@@ -67,7 +69,7 @@ function createMultiSigAddress(multiSigAddress: MultiSigInfo): string {
   return getZBCAddress(hashed);
 }
 
-function getPendingList(params: MultisigPendingListParams): Promise<MultisigPendingTxResponse> {
+function getPendingList(params: MultisigPendingListParams): Promise<ZBCTransactions> {
   return new Promise((resolve, reject) => {
     const request = new GetPendingTransactionsRequest();
     const networkIP = Network.selected();
@@ -89,24 +91,31 @@ function getPendingList(params: MultisigPendingListParams): Promise<MultisigPend
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      if (res) resolve(res.toObject());
+
+      if (res) {
+        resolve(toGetPendingList(res.toObject()));
+      }
     });
   });
 }
 
-function getPendingByTxHash(txHash: string): Promise<MultisigPendingTxDetailResponse> {
+function getPendingByTxHash(txHash: string): Promise<MultiSigPendingDetailResponse> {
   return new Promise((resolve, reject) => {
+    const hashHex = ZBCAddressToBytes(txHash)
+      .toString('hex')
+      .toUpperCase();
     const request = new GetPendingTransactionDetailByTransactionHashRequest();
     const networkIP = Network.selected();
 
-    request.setTransactionhashhex(txHash);
+    request.setTransactionhashhex(hashHex);
     const client = new MultisigServiceClient(networkIP.host);
     client.getPendingTransactionDetailByTransactionHash(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      if (res) resolve(res.toObject());
+
+      if (res) resolve(toGetPendingDetail(res.toObject()));
     });
   });
 }

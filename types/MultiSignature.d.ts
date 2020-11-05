@@ -4,6 +4,8 @@ import { MultiSigInfo, MultiSigInterface } from './helper/transaction-builder/mu
 import { BIP32Interface } from 'bip32';
 import { PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { Address } from './helper/interfaces';
+import { ZBCTransactions } from './helper/wallet/Transaction';
+import { MultiSigPendingDetailResponse } from './helper/wallet/MultiSignature';
 export declare type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export declare type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
 export declare type MultisigInfoResponse = GetMultisignatureInfoResponse.AsObject;
@@ -28,8 +30,8 @@ export interface MultisigInfoParams {
 }
 declare function generateMultiSigInfo(multiSigAddress: MultiSigInfo): Buffer;
 declare function createMultiSigAddress(multiSigAddress: MultiSigInfo): string;
-declare function getPendingList(params: MultisigPendingListParams): Promise<MultisigPendingTxResponse>;
-declare function getPendingByTxHash(txHash: string): Promise<MultisigPendingTxDetailResponse>;
+declare function getPendingList(params: MultisigPendingListParams): Promise<ZBCTransactions>;
+declare function getPendingByTxHash(txHash: string): Promise<MultiSigPendingDetailResponse>;
 declare function getMultisigInfo(params: MultisigInfoParams): Promise<MultisigInfoResponse>;
 declare function postTransaction(data: MultiSigInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject>;
 declare function getMultisigAddress(participantsAddress: string): Promise<GetMultisigAddressResponse>;
