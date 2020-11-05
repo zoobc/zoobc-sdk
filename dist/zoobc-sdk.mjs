@@ -5,9 +5,9 @@ import SHA3 from 'sha3';
 import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
 import { Int64LE } from 'int64-buffer';
+import { sha3_256 } from 'js-sha3';
 import { Observable } from 'rxjs';
 export { Subscription } from 'rxjs';
-import { sha3_256 } from 'js-sha3';
 import { sign } from 'tweetnacl';
 import { mnemonicToSeedSync, setDefaultWordlist, generateMnemonic, validateMnemonic } from 'bip39';
 import { fromSeed } from 'bip32';
@@ -2702,7 +2702,6 @@ proto.google.protobuf.FileDescriptorProto.prototype.toObject = function(opt_incl
 proto.google.protobuf.FileDescriptorProto.toObject = function(includeInstance, msg) {
   var f, obj = {
     name: (f = googleProtobuf.Message.getField(msg, 1)) == null ? undefined : f,
-<<<<<<< HEAD
     pb_package: (f = googleProtobuf.Message.getField(msg, 2)) == null ? undefined : f,
     dependencyList: (f = googleProtobuf.Message.getRepeatedField(msg, 3)) == null ? undefined : f,
     publicDependencyList: (f = googleProtobuf.Message.getRepeatedField(msg, 10)) == null ? undefined : f,
@@ -2718,17 +2717,6 @@ proto.google.protobuf.FileDescriptorProto.toObject = function(includeInstance, m
     options: (f = msg.getOptions()) && proto.google.protobuf.FileOptions.toObject(includeInstance, f),
     sourceCodeInfo: (f = msg.getSourceCodeInfo()) && proto.google.protobuf.SourceCodeInfo.toObject(includeInstance, f),
     syntax: (f = googleProtobuf.Message.getField(msg, 12)) == null ? undefined : f
-=======
-    number: (f = googleProtobuf.Message.getField(msg, 3)) == null ? undefined : f,
-    label: (f = googleProtobuf.Message.getField(msg, 4)) == null ? undefined : f,
-    type: (f = googleProtobuf.Message.getField(msg, 5)) == null ? undefined : f,
-    typeName: (f = googleProtobuf.Message.getField(msg, 6)) == null ? undefined : f,
-    extendee: (f = googleProtobuf.Message.getField(msg, 2)) == null ? undefined : f,
-    defaultValue: (f = googleProtobuf.Message.getField(msg, 7)) == null ? undefined : f,
-    oneofIndex: (f = googleProtobuf.Message.getField(msg, 9)) == null ? undefined : f,
-    jsonName: (f = googleProtobuf.Message.getField(msg, 10)) == null ? undefined : f,
-    options: (f = msg.getOptions()) && proto.google.protobuf.FieldOptions.toObject(includeInstance, f)
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
   };
 
   if (includeInstance) {
@@ -2810,7 +2798,6 @@ proto.google.protobuf.FileDescriptorProto.deserializeBinaryFromReader = function
       reader.readMessage(value,proto.google.protobuf.FileOptions.deserializeBinaryFromReader);
       msg.setOptions(value);
       break;
-<<<<<<< HEAD
     case 9:
       var value = new proto.google.protobuf.SourceCodeInfo;
       reader.readMessage(value,proto.google.protobuf.SourceCodeInfo.deserializeBinaryFromReader);
@@ -2820,8 +2807,6 @@ proto.google.protobuf.FileDescriptorProto.deserializeBinaryFromReader = function
       var value = /** @type {string} */ (reader.readString());
       msg.setSyntax(value);
       break;
-=======
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
     default:
       reader.skipField();
       break;
@@ -2926,7 +2911,6 @@ proto.google.protobuf.FileDescriptorProto.serializeBinaryToWriter = function(mes
       proto.google.protobuf.FileOptions.serializeBinaryToWriter
     );
   }
-<<<<<<< HEAD
   f = message.getSourceCodeInfo();
   if (f != null) {
     writer.writeMessage(
@@ -2942,8 +2926,6 @@ proto.google.protobuf.FileDescriptorProto.serializeBinaryToWriter = function(mes
       f
     );
   }
-=======
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
 };
 
 
@@ -3356,7 +3338,6 @@ proto.google.protobuf.FileDescriptorProto.prototype.hasSourceCodeInfo = function
 };
 
 
-<<<<<<< HEAD
 /**
  * optional string syntax = 12;
  * @return {string}
@@ -3393,8 +3374,6 @@ proto.google.protobuf.FileDescriptorProto.prototype.hasSyntax = function() {
 };
 
 
-=======
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
 
 /**
  * List of repeated fields within this message type.
@@ -5328,33 +5307,8 @@ proto.google.protobuf.OneofDescriptorProto.prototype.toObject = function(opt_inc
  */
 proto.google.protobuf.OneofDescriptorProto.toObject = function(includeInstance, msg) {
   var f, obj = {
-<<<<<<< HEAD
     name: (f = googleProtobuf.Message.getField(msg, 1)) == null ? undefined : f,
     options: (f = msg.getOptions()) && proto.google.protobuf.OneofOptions.toObject(includeInstance, f)
-=======
-    javaPackage: (f = googleProtobuf.Message.getField(msg, 1)) == null ? undefined : f,
-    javaOuterClassname: (f = googleProtobuf.Message.getField(msg, 8)) == null ? undefined : f,
-    javaMultipleFiles: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 10, false),
-    javaGenerateEqualsAndHash: (f = googleProtobuf.Message.getBooleanField(msg, 20)) == null ? undefined : f,
-    javaStringCheckUtf8: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 27, false),
-    optimizeFor: googleProtobuf.Message.getFieldWithDefault(msg, 9, 1),
-    goPackage: (f = googleProtobuf.Message.getField(msg, 11)) == null ? undefined : f,
-    ccGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 16, false),
-    javaGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 17, false),
-    pyGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 18, false),
-    phpGenericServices: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 42, false),
-    deprecated: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 23, false),
-    ccEnableArenas: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 31, false),
-    objcClassPrefix: (f = googleProtobuf.Message.getField(msg, 36)) == null ? undefined : f,
-    csharpNamespace: (f = googleProtobuf.Message.getField(msg, 37)) == null ? undefined : f,
-    swiftPrefix: (f = googleProtobuf.Message.getField(msg, 39)) == null ? undefined : f,
-    phpClassPrefix: (f = googleProtobuf.Message.getField(msg, 40)) == null ? undefined : f,
-    phpNamespace: (f = googleProtobuf.Message.getField(msg, 41)) == null ? undefined : f,
-    phpMetadataNamespace: (f = googleProtobuf.Message.getField(msg, 44)) == null ? undefined : f,
-    rubyPackage: (f = googleProtobuf.Message.getField(msg, 45)) == null ? undefined : f,
-    uninterpretedOptionList: googleProtobuf.Message.toObjectList(msg.getUninterpretedOptionList(),
-    proto.google.protobuf.UninterpretedOption.toObject, includeInstance)
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
   };
 
   if (includeInstance) {
@@ -6044,13 +5998,8 @@ proto.google.protobuf.EnumDescriptorProto.prototype.clearReservedRangeList = fun
  * repeated string reserved_name = 5;
  * @return {!Array<string>}
  */
-<<<<<<< HEAD
 proto.google.protobuf.EnumDescriptorProto.prototype.getReservedNameList = function() {
   return /** @type {!Array<string>} */ (googleProtobuf.Message.getRepeatedField(this, 5));
-=======
-proto.google.protobuf.FileOptions.prototype.getCcEnableArenas = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 31, false));
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
 };
 
 
@@ -26949,259 +26898,7 @@ proto.model.SetupAccountDatasetTransactionBody.prototype.setValue = function(val
   googleProtobuf.Message.setProto3StringField(this, 2, value);
 };
 
-<<<<<<< HEAD
 
-=======
-var MempoolServiceClient_1 = MempoolServiceClient;
-
-function toZBCPendingTransactions(mempools) {
-    const transactions = mempools.mempooltransactionsList.map(mempool => toZBCPendingTransaction(mempool));
-    return { total: mempools.total, transactions };
-}
-function toZBCPendingTransaction(mempool) {
-    const txBytes = Buffer.from(mempool.transactionbytes.toString(), 'base64');
-    let offset = 0;
-    const transactionType = txBytes.readUInt32LE(offset);
-    offset += 4;
-    const version = txBytes.readUInt8(offset);
-    offset += 1;
-    const timestamp = readInt64(txBytes, offset);
-    offset += 8;
-    const senderBytes = readAddress(txBytes, offset);
-    const sender = parseAddress(senderBytes);
-    offset += senderBytes.length;
-    const recipientBytes = readAddress(txBytes, offset);
-    const recipient = parseAddress(recipientBytes);
-    offset += recipientBytes.length;
-    const txFee = readInt64(txBytes, offset);
-    offset += 8;
-    const bodyBytesLength = txBytes.readUInt32LE(offset);
-    offset += 4;
-    const txBody = readBodyBytes(txBytes, transactionType, offset);
-    offset += bodyBytesLength;
-    let transaction = {
-        timestamp: parseInt(timestamp) * 1000,
-        sender,
-        recipient,
-        fee: parseInt(txFee),
-        escrow: false,
-        transactionType,
-        txBody,
-    };
-    const approverBytes = readAddress(txBytes, offset);
-    const approver = parseAddress(approverBytes);
-    offset += senderBytes.length;
-    if (approver.type != 2) {
-        transaction.escrow = true;
-        transaction.approverAddress = approver;
-        transaction.commission = parseInt(readInt64(txBytes, offset));
-        offset += 8;
-        transaction.timeout = parseInt(readInt64(txBytes, offset));
-        offset += 8;
-        const instructionLength = txBytes.readInt32LE(offset);
-        offset += 4;
-        transaction.instruction = txBytes.slice(offset, offset + instructionLength).toString('utf-8');
-        offset += instructionLength;
-    }
-    return transaction;
-}
-
-function getList(params) {
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new mempool_pb_1();
-        if (params) {
-            const { address, timestampEnd, timestampStart, pagination } = params;
-            if (address)
-                request.setAddress(addressToBytes(address));
-            if (timestampStart)
-                request.setTimestampstart(timestampStart);
-            if (timestampEnd)
-                request.setTimestampend(timestampEnd);
-            if (pagination) {
-                const reqPagination = new pagination_pb_1();
-                reqPagination.setLimit(pagination.limit || 10);
-                reqPagination.setPage(pagination.page || 1);
-                reqPagination.setOrderby(pagination.orderBy || pagination_pb_2.DESC);
-                request.setPagination(reqPagination);
-            }
-        }
-        const client = new MempoolServiceClient_1(networkIP.host);
-        client.getMempoolTransactions(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(toZBCPendingTransactions(res.toObject()));
-        });
-    });
-}
-function get(id) {
-    return new Promise((resolve, reject) => {
-        const networkIP = Network$1.selected();
-        const request = new mempool_pb_2();
-        request.setId(id);
-        const client = new MempoolServiceClient_1(networkIP.host);
-        client.getMempoolTransaction(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res) {
-                const tx = res.toObject().transaction;
-                if (tx !== undefined)
-                    resolve(toZBCPendingTransaction(tx));
-            }
-        });
-    });
-}
-var Mempool = { get, getList };
-
-function encryptPassphrase(passphrase, password, salt = 'salt') {
-    const key = encryptPassword(password, salt);
-    return AES.encrypt(passphrase, key).toString();
-}
-function decryptPassphrase(encPassphrase, password, salt = 'salt') {
-    const key = encryptPassword(password, salt);
-    try {
-        const seed = AES.decrypt(encPassphrase, key).toString(enc.Utf8);
-        if (!seed)
-            throw 'not match';
-        return seed;
-    }
-    catch (e) {
-        return '';
-    }
-}
-var Wallet = { encryptPassphrase, decryptPassphrase };
-
-var accountBalance_pb = createCommonjsModule(function (module, exports) {
-// source: model/accountBalance.proto
-/**
- * @fileoverview
- * @enhanceable
- * @suppress {messageConventions} JS Compiler reports an error if a variable or
- *     field starts with 'MSG_' and isn't a translatable message.
- * @public
- */
-// GENERATED CODE -- DO NOT EDIT!
-
-
-var goog = googleProtobuf;
-var global = Function('return this')();
-
-goog.exportSymbol('proto.model.AccountBalance', null, global);
-goog.exportSymbol('proto.model.GetAccountBalanceRequest', null, global);
-goog.exportSymbol('proto.model.GetAccountBalanceResponse', null, global);
-goog.exportSymbol('proto.model.GetAccountBalancesRequest', null, global);
-goog.exportSymbol('proto.model.GetAccountBalancesResponse', null, global);
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.model.AccountBalance = function(opt_data) {
-  googleProtobuf.Message.initialize(this, opt_data, 0, -1, null, null);
-};
-goog.inherits(proto.model.AccountBalance, googleProtobuf.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.model.AccountBalance.displayName = 'proto.model.AccountBalance';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.model.GetAccountBalanceRequest = function(opt_data) {
-  googleProtobuf.Message.initialize(this, opt_data, 0, -1, null, null);
-};
-goog.inherits(proto.model.GetAccountBalanceRequest, googleProtobuf.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.model.GetAccountBalanceRequest.displayName = 'proto.model.GetAccountBalanceRequest';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.model.GetAccountBalanceResponse = function(opt_data) {
-  googleProtobuf.Message.initialize(this, opt_data, 0, -1, null, null);
-};
-goog.inherits(proto.model.GetAccountBalanceResponse, googleProtobuf.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.model.GetAccountBalanceResponse.displayName = 'proto.model.GetAccountBalanceResponse';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.model.GetAccountBalancesRequest = function(opt_data) {
-  googleProtobuf.Message.initialize(this, opt_data, 0, -1, proto.model.GetAccountBalancesRequest.repeatedFields_, null);
-};
-goog.inherits(proto.model.GetAccountBalancesRequest, googleProtobuf.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.model.GetAccountBalancesRequest.displayName = 'proto.model.GetAccountBalancesRequest';
-}
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.model.GetAccountBalancesResponse = function(opt_data) {
-  googleProtobuf.Message.initialize(this, opt_data, 0, -1, proto.model.GetAccountBalancesResponse.repeatedFields_, null);
-};
-goog.inherits(proto.model.GetAccountBalancesResponse, googleProtobuf.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.model.GetAccountBalancesResponse.displayName = 'proto.model.GetAccountBalancesResponse';
-}
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
 
 
 
@@ -27218,13 +26915,8 @@ if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
-<<<<<<< HEAD
 proto.model.RemoveAccountDatasetTransactionBody.prototype.toObject = function(opt_includeInstance) {
   return proto.model.RemoveAccountDatasetTransactionBody.toObject(opt_includeInstance, this);
-=======
-proto.model.AccountBalance.prototype.toObject = function(opt_includeInstance) {
-  return proto.model.AccountBalance.toObject(opt_includeInstance, this);
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
 };
 
 
@@ -27233,7 +26925,6 @@ proto.model.AccountBalance.prototype.toObject = function(opt_includeInstance) {
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
-<<<<<<< HEAD
  * @param {!proto.model.RemoveAccountDatasetTransactionBody} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
@@ -27242,20 +26933,6 @@ proto.model.RemoveAccountDatasetTransactionBody.toObject = function(includeInsta
   var obj = {
     property: googleProtobuf.Message.getFieldWithDefault(msg, 1, ""),
     value: googleProtobuf.Message.getFieldWithDefault(msg, 2, "")
-=======
- * @param {!proto.model.AccountBalance} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.model.AccountBalance.toObject = function(includeInstance, msg) {
-  var obj = {
-    accountaddress: msg.getAccountaddress_asB64(),
-    blockheight: googleProtobuf.Message.getFieldWithDefault(msg, 2, 0),
-    spendablebalance: googleProtobuf.Message.getFieldWithDefault(msg, 3, "0"),
-    balance: googleProtobuf.Message.getFieldWithDefault(msg, 4, "0"),
-    poprevenue: googleProtobuf.Message.getFieldWithDefault(msg, 5, "0"),
-    latest: googleProtobuf.Message.getBooleanFieldWithDefault(msg, 6, false)
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
   };
 
   if (includeInstance) {
@@ -27269,40 +26946,23 @@ proto.model.AccountBalance.toObject = function(includeInstance, msg) {
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
-<<<<<<< HEAD
  * @return {!proto.model.RemoveAccountDatasetTransactionBody}
  */
 proto.model.RemoveAccountDatasetTransactionBody.deserializeBinary = function(bytes) {
   var reader = new googleProtobuf.BinaryReader(bytes);
   var msg = new proto.model.RemoveAccountDatasetTransactionBody;
   return proto.model.RemoveAccountDatasetTransactionBody.deserializeBinaryFromReader(msg, reader);
-=======
- * @return {!proto.model.AccountBalance}
- */
-proto.model.AccountBalance.deserializeBinary = function(bytes) {
-  var reader = new googleProtobuf.BinaryReader(bytes);
-  var msg = new proto.model.AccountBalance;
-  return proto.model.AccountBalance.deserializeBinaryFromReader(msg, reader);
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
 };
 
 
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
-<<<<<<< HEAD
  * @param {!proto.model.RemoveAccountDatasetTransactionBody} msg The message object to deserialize into.
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
  * @return {!proto.model.RemoveAccountDatasetTransactionBody}
  */
 proto.model.RemoveAccountDatasetTransactionBody.deserializeBinaryFromReader = function(msg, reader) {
-=======
- * @param {!proto.model.AccountBalance} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.model.AccountBalance}
- */
-proto.model.AccountBalance.deserializeBinaryFromReader = function(msg, reader) {
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
@@ -27314,29 +26974,8 @@ proto.model.AccountBalance.deserializeBinaryFromReader = function(msg, reader) {
       msg.setProperty(value);
       break;
     case 2:
-<<<<<<< HEAD
       var value = /** @type {string} */ (reader.readString());
       msg.setValue(value);
-=======
-      var value = /** @type {number} */ (reader.readUint32());
-      msg.setBlockheight(value);
-      break;
-    case 3:
-      var value = /** @type {string} */ (reader.readInt64String());
-      msg.setSpendablebalance(value);
-      break;
-    case 4:
-      var value = /** @type {string} */ (reader.readInt64String());
-      msg.setBalance(value);
-      break;
-    case 5:
-      var value = /** @type {string} */ (reader.readInt64String());
-      msg.setPoprevenue(value);
-      break;
-    case 6:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setLatest(value);
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
       break;
     default:
       reader.skipField();
@@ -27351,15 +26990,9 @@ proto.model.AccountBalance.deserializeBinaryFromReader = function(msg, reader) {
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-<<<<<<< HEAD
 proto.model.RemoveAccountDatasetTransactionBody.prototype.serializeBinary = function() {
   var writer = new googleProtobuf.BinaryWriter();
   proto.model.RemoveAccountDatasetTransactionBody.serializeBinaryToWriter(this, writer);
-=======
-proto.model.AccountBalance.prototype.serializeBinary = function() {
-  var writer = new googleProtobuf.BinaryWriter();
-  proto.model.AccountBalance.serializeBinaryToWriter(this, writer);
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
   return writer.getResultBuffer();
 };
 
@@ -27367,19 +27000,11 @@ proto.model.AccountBalance.prototype.serializeBinary = function() {
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
-<<<<<<< HEAD
  * @param {!proto.model.RemoveAccountDatasetTransactionBody} message
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
 proto.model.RemoveAccountDatasetTransactionBody.serializeBinaryToWriter = function(message, writer) {
-=======
- * @param {!proto.model.AccountBalance} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.model.AccountBalance.serializeBinaryToWriter = function(message, writer) {
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
   var f = undefined;
   f = message.getProperty();
   if (f.length > 0) {
@@ -27388,45 +27013,10 @@ proto.model.AccountBalance.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-<<<<<<< HEAD
   f = message.getValue();
   if (f.length > 0) {
     writer.writeString(
       2,
-=======
-  f = message.getBlockheight();
-  if (f !== 0) {
-    writer.writeUint32(
-      2,
-      f
-    );
-  }
-  f = message.getSpendablebalance();
-  if (parseInt(f, 10) !== 0) {
-    writer.writeInt64String(
-      3,
-      f
-    );
-  }
-  f = message.getBalance();
-  if (parseInt(f, 10) !== 0) {
-    writer.writeInt64String(
-      4,
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
-      f
-    );
-  }
-  f = message.getPoprevenue();
-  if (parseInt(f, 10) !== 0) {
-    writer.writeInt64String(
-      5,
-      f
-    );
-  }
-  f = message.getLatest();
-  if (f) {
-    writer.writeBool(
-      6,
       f
     );
   }
@@ -27434,7 +27024,6 @@ proto.model.AccountBalance.serializeBinaryToWriter = function(message, writer) {
 
 
 /**
-<<<<<<< HEAD
  * optional string Property = 1;
  * @return {string}
  */
@@ -27446,78 +27035,10 @@ proto.model.RemoveAccountDatasetTransactionBody.prototype.getProperty = function
 /** @param {string} value */
 proto.model.RemoveAccountDatasetTransactionBody.prototype.setProperty = function(value) {
   googleProtobuf.Message.setProto3StringField(this, 1, value);
-=======
- * optional bytes AccountAddress = 1;
- * @return {!(string|Uint8Array)}
- */
-proto.model.AccountBalance.prototype.getAccountaddress = function() {
-  return /** @type {!(string|Uint8Array)} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
 /**
- * optional bytes AccountAddress = 1;
- * This is a type-conversion wrapper around `getAccountaddress()`
- * @return {string}
- */
-proto.model.AccountBalance.prototype.getAccountaddress_asB64 = function() {
-  return /** @type {string} */ (googleProtobuf.Message.bytesAsB64(
-      this.getAccountaddress()));
-};
-
-
-/**
- * optional bytes AccountAddress = 1;
- * Note that Uint8Array is not supported on all browsers.
- * @see http://caniuse.com/Uint8Array
- * This is a type-conversion wrapper around `getAccountaddress()`
- * @return {!Uint8Array}
- */
-proto.model.AccountBalance.prototype.getAccountaddress_asU8 = function() {
-  return /** @type {!Uint8Array} */ (googleProtobuf.Message.bytesAsU8(
-      this.getAccountaddress()));
-};
-
-
-/** @param {!(string|Uint8Array)} value */
-proto.model.AccountBalance.prototype.setAccountaddress = function(value) {
-  googleProtobuf.Message.setProto3BytesField(this, 1, value);
-};
-
-
-/**
- * optional uint32 BlockHeight = 2;
- * @return {number}
- */
-proto.model.AccountBalance.prototype.getBlockheight = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 2, 0));
-};
-
-
-/** @param {number} value */
-proto.model.AccountBalance.prototype.setBlockheight = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 2, value);
-};
-
-
-/**
- * optional int64 SpendableBalance = 3;
- * @return {string}
- */
-proto.model.AccountBalance.prototype.getSpendablebalance = function() {
-  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 3, "0"));
-};
-
-
-/** @param {string} value */
-proto.model.AccountBalance.prototype.setSpendablebalance = function(value) {
-  googleProtobuf.Message.setProto3StringIntField(this, 3, value);
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
-};
-
-
-/**
-<<<<<<< HEAD
  * optional string Value = 2;
  * @return {string}
  */
@@ -27532,41 +27053,11 @@ proto.model.RemoveAccountDatasetTransactionBody.prototype.setValue = function(va
 };
 
 
-=======
- * optional int64 Balance = 4;
- * @return {string}
- */
-proto.model.AccountBalance.prototype.getBalance = function() {
-  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, "0"));
-};
-
-
-/** @param {string} value */
-proto.model.AccountBalance.prototype.setBalance = function(value) {
-  googleProtobuf.Message.setProto3StringIntField(this, 4, value);
-};
-
-
-/**
- * optional int64 PopRevenue = 5;
- * @return {string}
- */
-proto.model.AccountBalance.prototype.getPoprevenue = function() {
-  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 5, "0"));
-};
-
-
-/** @param {string} value */
-proto.model.AccountBalance.prototype.setPoprevenue = function(value) {
-  googleProtobuf.Message.setProto3StringIntField(this, 5, value);
-};
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
 
 
 
 if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
 /**
-<<<<<<< HEAD
  * Creates an object representation of this proto.
  * Field names that are reserved in JavaScript and will be renamed to pb_name.
  * Optional fields that are not set will be set to undefined.
@@ -27580,28 +27071,10 @@ if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
  */
 proto.model.ApprovalEscrowTransactionBody.prototype.toObject = function(opt_includeInstance) {
   return proto.model.ApprovalEscrowTransactionBody.toObject(opt_includeInstance, this);
-=======
- * optional bool Latest = 6;
- * @return {boolean}
- */
-proto.model.AccountBalance.prototype.getLatest = function() {
-  return /** @type {boolean} */ (googleProtobuf.Message.getBooleanFieldWithDefault(this, 6, false));
 };
 
 
-/** @param {boolean} value */
-proto.model.AccountBalance.prototype.setLatest = function(value) {
-  googleProtobuf.Message.setProto3BooleanField(this, 6, value);
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
-};
-
-
-
-
-
-if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
 /**
-<<<<<<< HEAD
  * Static version of the {@see toObject} method.
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
@@ -28348,30 +27821,12 @@ proto.model.LiquidPaymentTransactionBody.prototype.toObject = function(opt_inclu
   return proto.model.LiquidPaymentTransactionBody.toObject(opt_includeInstance, this);
 };
 
-=======
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.model.GetAccountBalanceRequest.prototype.toObject = function(opt_includeInstance) {
-  return proto.model.GetAccountBalanceRequest.toObject(opt_includeInstance, this);
-};
-
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
 
 /**
  * Static version of the {@see toObject} method.
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
  *     the JSPB instance for transitional soy proto support:
  *     http://goto/soy-param-migration
-<<<<<<< HEAD
  * @param {!proto.model.LiquidPaymentTransactionBody} msg The msg instance to transform.
  * @return {!Object}
  * @suppress {unusedLocalVariables} f is only used for nested messages
@@ -28380,15 +27835,6 @@ proto.model.LiquidPaymentTransactionBody.toObject = function(includeInstance, ms
   var obj = {
     amount: googleProtobuf.Message.getFieldWithDefault(msg, 1, "0"),
     completeminutes: googleProtobuf.Message.getFieldWithDefault(msg, 2, "0")
-=======
- * @param {!proto.model.GetAccountBalanceRequest} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.model.GetAccountBalanceRequest.toObject = function(includeInstance, msg) {
-  var obj = {
-    accountaddress: msg.getAccountaddress_asB64()
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
   };
 
   if (includeInstance) {
@@ -32413,563 +31859,6 @@ MempoolServiceClient.prototype.getMempoolTransaction = function getMempoolTransa
 
 var MempoolServiceClient_1 = MempoolServiceClient;
 
-var accountType_pb = createCommonjsModule(function (module, exports) {
-// source: model/accountType.proto
-/**
- * @fileoverview
- * @enhanceable
- * @suppress {messageConventions} JS Compiler reports an error if a variable or
- *     field starts with 'MSG_' and isn't a translatable message.
- * @public
- */
-// GENERATED CODE -- DO NOT EDIT!
-
-
-var goog = googleProtobuf;
-var global = Function('return this')();
-
-goog.exportSymbol('proto.model.AccountAddress', null, global);
-goog.exportSymbol('proto.model.AccountType', null, global);
-/**
- * Generated by JsPbCodeGenerator.
- * @param {Array=} opt_data Optional initial data array, typically from a
- * server response, or constructed directly in Javascript. The array is used
- * in place and becomes part of the constructed object. It is not cloned.
- * If no data is provided, the constructed object will be empty, but still
- * valid.
- * @extends {jspb.Message}
- * @constructor
- */
-proto.model.AccountAddress = function(opt_data) {
-  googleProtobuf.Message.initialize(this, opt_data, 0, -1, null, null);
-};
-goog.inherits(proto.model.AccountAddress, googleProtobuf.Message);
-if (goog.DEBUG && !COMPILED) {
-  /**
-   * @public
-   * @override
-   */
-  proto.model.AccountAddress.displayName = 'proto.model.AccountAddress';
-}
-
-
-
-if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
-/**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.model.AccountAddress.prototype.toObject = function(opt_includeInstance) {
-  return proto.model.AccountAddress.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.model.AccountAddress} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.model.AccountAddress.toObject = function(includeInstance, msg) {
-  var obj = {
-    accountaddress: msg.getAccountaddress_asB64(),
-    accounttype: googleProtobuf.Message.getFieldWithDefault(msg, 2, 0),
-    accountpublickey: msg.getAccountpublickey_asB64(),
-    encodedaccount: googleProtobuf.Message.getFieldWithDefault(msg, 4, "")
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.model.AccountAddress}
- */
-proto.model.AccountAddress.deserializeBinary = function(bytes) {
-  var reader = new googleProtobuf.BinaryReader(bytes);
-  var msg = new proto.model.AccountAddress;
-  return proto.model.AccountAddress.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.model.AccountAddress} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.model.AccountAddress}
- */
-proto.model.AccountAddress.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    case 1:
-      var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setAccountaddress(value);
-      break;
-    case 2:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setAccounttype(value);
-      break;
-    case 3:
-      var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setAccountpublickey(value);
-      break;
-    case 4:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setEncodedaccount(value);
-      break;
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.model.AccountAddress.prototype.serializeBinary = function() {
-  var writer = new googleProtobuf.BinaryWriter();
-  proto.model.AccountAddress.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.model.AccountAddress} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.model.AccountAddress.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
-  f = message.getAccountaddress_asU8();
-  if (f.length > 0) {
-    writer.writeBytes(
-      1,
-      f
-    );
-  }
-  f = message.getAccounttype();
-  if (f !== 0) {
-    writer.writeInt32(
-      2,
-      f
-    );
-  }
-  f = message.getAccountpublickey_asU8();
-  if (f.length > 0) {
-    writer.writeBytes(
-      3,
-      f
-    );
-  }
-  f = message.getEncodedaccount();
-  if (f.length > 0) {
-    writer.writeString(
-      4,
-      f
-    );
-  }
-};
-
-
-/**
- * optional bytes AccountAddress = 1;
- * @return {!(string|Uint8Array)}
- */
-proto.model.AccountAddress.prototype.getAccountaddress = function() {
-  return /** @type {!(string|Uint8Array)} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, ""));
-};
-
-
-/**
- * optional bytes AccountAddress = 1;
- * This is a type-conversion wrapper around `getAccountaddress()`
- * @return {string}
- */
-proto.model.AccountAddress.prototype.getAccountaddress_asB64 = function() {
-  return /** @type {string} */ (googleProtobuf.Message.bytesAsB64(
-      this.getAccountaddress()));
-};
-
-
-/**
- * optional bytes AccountAddress = 1;
- * Note that Uint8Array is not supported on all browsers.
- * @see http://caniuse.com/Uint8Array
- * This is a type-conversion wrapper around `getAccountaddress()`
- * @return {!Uint8Array}
- */
-proto.model.AccountAddress.prototype.getAccountaddress_asU8 = function() {
-  return /** @type {!Uint8Array} */ (googleProtobuf.Message.bytesAsU8(
-      this.getAccountaddress()));
-};
-
-
-/** @param {!(string|Uint8Array)} value */
-proto.model.AccountAddress.prototype.setAccountaddress = function(value) {
-  googleProtobuf.Message.setProto3BytesField(this, 1, value);
-};
-
-
-/**
- * optional int32 AccountType = 2;
- * @return {number}
- */
-proto.model.AccountAddress.prototype.getAccounttype = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 2, 0));
-};
-
-
-/** @param {number} value */
-proto.model.AccountAddress.prototype.setAccounttype = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 2, value);
-};
-
-
-/**
- * optional bytes AccountPublicKey = 3;
- * @return {!(string|Uint8Array)}
- */
-proto.model.AccountAddress.prototype.getAccountpublickey = function() {
-  return /** @type {!(string|Uint8Array)} */ (googleProtobuf.Message.getFieldWithDefault(this, 3, ""));
-};
-
-
-/**
- * optional bytes AccountPublicKey = 3;
- * This is a type-conversion wrapper around `getAccountpublickey()`
- * @return {string}
- */
-proto.model.AccountAddress.prototype.getAccountpublickey_asB64 = function() {
-  return /** @type {string} */ (googleProtobuf.Message.bytesAsB64(
-      this.getAccountpublickey()));
-};
-
-
-/**
- * optional bytes AccountPublicKey = 3;
- * Note that Uint8Array is not supported on all browsers.
- * @see http://caniuse.com/Uint8Array
- * This is a type-conversion wrapper around `getAccountpublickey()`
- * @return {!Uint8Array}
- */
-proto.model.AccountAddress.prototype.getAccountpublickey_asU8 = function() {
-  return /** @type {!Uint8Array} */ (googleProtobuf.Message.bytesAsU8(
-      this.getAccountpublickey()));
-};
-
-
-/** @param {!(string|Uint8Array)} value */
-proto.model.AccountAddress.prototype.setAccountpublickey = function(value) {
-  googleProtobuf.Message.setProto3BytesField(this, 3, value);
-};
-
-
-/**
- * optional string EncodedAccount = 4;
- * @return {string}
- */
-proto.model.AccountAddress.prototype.getEncodedaccount = function() {
-  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, ""));
-};
-
-
-/** @param {string} value */
-proto.model.AccountAddress.prototype.setEncodedaccount = function(value) {
-  googleProtobuf.Message.setProto3StringField(this, 4, value);
-};
-
-
-/**
- * @enum {number}
- */
-proto.model.AccountType = {
-  ZBCACCOUNTTYPE: 0,
-  BTCACCOUNTTYPE: 1,
-  EMPTYACCOUNTTYPE: 2
-};
-
-goog.object.extend(exports, proto.model);
-});
-var accountType_pb_1 = accountType_pb.AccountType;
-
-const VERSION = Buffer.from([1]);
-const ADDRESS_LENGTH = 32;
-const ADDRESS_WITH_TYPE = 36;
-const POOWN_LENGTH = 136;
-
-function toGetPendingList(res) {
-    const list = res.pendingtransactionsList.map(tx => {
-        const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-        const amount = readInt64(bytes, 165);
-        const fee = readInt64(bytes, 153);
-        const timestamp = readInt64(bytes, 5);
-        const recipient = bytes.slice(87, 153);
-        return {
-            amount: amount,
-            blockheight: tx.blockheight,
-            fee: fee,
-            latest: tx.latest,
-            senderaddress: tx.senderaddress,
-            recipientaddress: recipient.toString(),
-            status: tx.status,
-            timestamp: timestamp,
-            transactionhash: tx.transactionhash,
-        };
-    });
-    return {
-        count: res.count,
-        page: res.page,
-        pendingtransactionsList: list,
-    };
-}
-function generateTransactionHash(buffer) {
-    const hashed = Buffer.from(sha3_256(buffer), 'hex');
-    return getZBCAddress(hashed, 'ZTX');
-}
-
-const TRANSACTION_TYPE = writeInt32(transaction_pb_5.APPROVALESCROWTRANSACTION);
-function escrowBuilder(data, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const approvalAddress = addressToBytes(data.approvalAddress);
-    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
-    const fee = writeInt64(data.fee * 1e8);
-    const approvalCode = writeInt32(data.approvalCode);
-    const transactionId = writeInt64(data.transactionId);
-    const bodyLength = writeInt32(approvalCode.length + transactionId.length);
-    bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, approvalAddress, recipient, fee, bodyLength, approvalCode, transactionId]);
-    // Add Escrow Bytes
-    bytes = addEscrowBytes(bytes, data);
-    const message = writeInt32(0);
-    bytes = Buffer.concat([bytes, message]);
-    if (seed) {
-        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-        const signature = seed.sign(txHash);
-        return Buffer.concat([bytes, signature]);
-    }
-    else
-        return bytes;
-}
-function readApprovalEscrowBytes(txBytes, offset) {
-    const approval = txBytes.readInt32LE(offset);
-    offset += 4;
-    const transactionid = readInt64(txBytes, offset);
-    return { approval, transactionid };
-}
-function addEscrowBytes(bytes, data) {
-    if (data.approverAddress && data.commission && data.timeout && data.instruction) {
-        // escrow bytes
-        const approverAddress = addressToBytes(data.approverAddress);
-        const commission = writeInt64(data.commission * 1e8);
-        const timeout = writeInt64(data.timeout);
-        const instruction = Buffer.from(data.instruction, 'utf-8');
-        const instructionLength = writeInt32(instruction.length);
-        bytes = Buffer.concat([bytes, approverAddress, commission, timeout, instructionLength, instruction]);
-    }
-    else {
-        // escrow bytes default value
-        const approverAddress = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
-        bytes = Buffer.concat([bytes, approverAddress]);
-    }
-    return bytes;
-}
-
-const TRANSACTION_TYPE$1 = writeInt32(transaction_pb_5.CLAIMNODEREGISTRATIONTRANSACTION);
-function claimNodeBuilder(data, poown, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = addressToBytes(data.accountAddress);
-    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
-    const fee = writeInt64(data.fee * 1e8);
-    const nodePublicKey = data.nodePublicKey;
-    const bodyLength = writeInt32(nodePublicKey.length + poown.length);
-    bytes = Buffer.concat([TRANSACTION_TYPE$1, VERSION, timestamp, sender, recipient, fee, bodyLength, nodePublicKey, poown]);
-    // Add Escrow Bytes
-    bytes = addEscrowBytes(bytes, data);
-    const message = writeInt32(0);
-    bytes = Buffer.concat([bytes, message]);
-    if (seed) {
-        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-        const signature = seed.sign(txHash);
-        return Buffer.concat([bytes, signature]);
-    }
-    else
-        return bytes;
-}
-function readClaimNodeBytes(txBytes, offset) {
-    const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
-    offset += ADDRESS_LENGTH;
-    const poown = txBytes.slice(offset, offset + POOWN_LENGTH);
-    return { nodepublickey, poown };
-}
-
-const TRANSACTION_TYPE$2 = writeInt32(transaction_pb_5.NODEREGISTRATIONTRANSACTION);
-function registerNodeBuilder(data, poown, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = addressToBytes(data.accountAddress);
-    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
-    const fee = writeInt64(data.fee * 1e8);
-    const nodePublicKey = data.nodePublicKey;
-    const funds = writeInt64(data.funds * 1e8);
-    const bodyLength = writeInt32(nodePublicKey.length + sender.length + funds.length + poown.length);
-    bytes = Buffer.concat([TRANSACTION_TYPE$2, VERSION, timestamp, sender, recipient, fee, bodyLength, nodePublicKey, sender, funds, poown]);
-    // Add Escrow Bytes
-    bytes = addEscrowBytes(bytes, data);
-    const message = writeInt32(0);
-    bytes = Buffer.concat([bytes, message]);
-    if (seed) {
-        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-        const signature = seed.sign(txHash);
-        return Buffer.concat([bytes, signature]);
-    }
-    else
-        return bytes;
-}
-function readRegisterNodeBytes(txBytes, offset) {
-    const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
-    offset += ADDRESS_LENGTH;
-    const accountaddress = parseAddress(txBytes.slice(offset, offset + ADDRESS_WITH_TYPE));
-    offset += ADDRESS_WITH_TYPE;
-    const lockedbalance = parseInt(readInt64(txBytes, offset));
-    return { nodepublickey, accountaddress, lockedbalance };
-}
-
-const TRANSACTION_TYPE$3 = writeInt32(transaction_pb_5.REMOVENODEREGISTRATIONTRANSACTION);
-function removeNodeBuilder(data, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = addressToBytes(data.accountAddress);
-    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
-    const fee = writeInt64(data.fee * 1e8);
-    const nodePublicKey = data.nodePublicKey;
-    const bodyLength = writeInt32(nodePublicKey.length);
-    bytes = Buffer.concat([TRANSACTION_TYPE$3, VERSION, timestamp, sender, recipient, fee, bodyLength, nodePublicKey]);
-    // Add Escrow Bytes
-    bytes = addEscrowBytes(bytes, data);
-    const message = writeInt32(0);
-    bytes = Buffer.concat([bytes, message]);
-    if (seed) {
-        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-        const signature = seed.sign(txHash);
-        return Buffer.concat([bytes, signature]);
-    }
-    else
-        return bytes;
-}
-function readRemoveNodeBytes(txBytes, offset) {
-    const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
-    return { nodepublickey };
-}
-
-const TRANSACTION_TYPE$4 = writeInt32(transaction_pb_5.SETUPACCOUNTDATASETTRANSACTION);
-function setupDatasetBuilder(data, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = addressToBytes(data.setterAccountAddress);
-    const recipient = addressToBytes(data.recipientAccountAddress);
-    const fee = writeInt64(data.fee * 1e8);
-    const property = Buffer.from(data.property, 'utf-8');
-    const propertyLength = writeInt32(property.length);
-    const value = Buffer.from(data.value, 'utf-8');
-    const valueLength = writeInt32(value.length);
-    const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
-    bytes = Buffer.concat([
-        TRANSACTION_TYPE$4,
-        VERSION,
-        timestamp,
-        sender,
-        recipient,
-        fee,
-        bodyLength,
-        propertyLength,
-        property,
-        valueLength,
-        value,
-    ]);
-    // Add Escrow Bytes
-    bytes = addEscrowBytes(bytes, data);
-    const message = writeInt32(0);
-    bytes = Buffer.concat([bytes, message]);
-    if (seed) {
-        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-        const signature = seed.sign(txHash);
-        return Buffer.concat([bytes, signature]);
-    }
-    else
-        return bytes;
-}
-function readSetupDatasetBytes(txBytes, offset) {
-    const propertyLength = txBytes.readInt32LE(offset);
-    offset += 4;
-    const property = txBytes.slice(offset, offset + propertyLength).toString('utf-8');
-    offset += propertyLength;
-    const valueLength = txBytes.readInt32LE(offset);
-    offset += 4;
-    const value = txBytes.slice(offset, offset + valueLength).toString('utf-8');
-    return { property, value };
-}
-
-const TRANSACTION_TYPE$5 = writeInt32(transaction_pb_5.UPDATENODEREGISTRATIONTRANSACTION);
-function updateNodeBuilder(data, poown, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = addressToBytes(data.accountAddress);
-    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
-    const fee = writeInt64(data.fee * 1e8);
-    const nodePublicKey = data.nodePublicKey;
-    const funds = writeInt64(data.funds * 1e8);
-    const bodyLength = writeInt32(nodePublicKey.length + funds.length + poown.length);
-    bytes = Buffer.concat([TRANSACTION_TYPE$5, VERSION, timestamp, sender, recipient, fee, bodyLength, nodePublicKey, funds, poown]);
-    // Add Escrow Bytes
-    bytes = addEscrowBytes(bytes, data);
-    const message = writeInt32(0);
-    bytes = Buffer.concat([bytes, message]);
-    if (seed) {
-        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-        const signature = seed.sign(txHash);
-        return Buffer.concat([bytes, signature]);
-    }
-    else
-        return bytes;
-}
-function readUpdateNodeBytes(txBytes, offset) {
-    const nodepublickey = getZBCAddress(txBytes.slice(offset, offset + ADDRESS_LENGTH), 'ZNK');
-    offset += ADDRESS_LENGTH;
-    const lockedbalance = parseInt(readInt64(txBytes, offset));
-    offset += 8;
-    const poown = txBytes.slice(offset, offset + POOWN_LENGTH);
-    return { nodepublickey, lockedbalance, poown };
-}
-
 function toZBCPendingTransactions(mempools) {
     const transactions = mempools.mempooltransactionsList.map(mempool => toZBCPendingTransaction(mempool));
     return { total: mempools.total, transactions };
@@ -33022,33 +31911,6 @@ function toZBCPendingTransaction(mempool) {
         offset += instructionLength;
     }
     return transaction;
-}
-function readAddress(txBytes, offset) {
-    const type = txBytes.readUInt32LE(offset);
-    if (type == accountType_pb_1.EMPTYACCOUNTTYPE)
-        return txBytes.slice(offset, offset + 4);
-    else
-        return txBytes.slice(offset, offset + 36);
-}
-function readBodyBytes(txBytes, txType, offset) {
-    switch (txType) {
-        case transaction_pb_5.UPDATENODEREGISTRATIONTRANSACTION:
-            return readUpdateNodeBytes(txBytes, offset);
-        case transaction_pb_5.SENDMONEYTRANSACTION:
-            return readSendMoneyBytes(txBytes, offset);
-        case transaction_pb_5.REMOVENODEREGISTRATIONTRANSACTION:
-            return readRemoveNodeBytes(txBytes, offset);
-        case transaction_pb_5.NODEREGISTRATIONTRANSACTION:
-            return readRegisterNodeBytes(txBytes, offset);
-        case transaction_pb_5.CLAIMNODEREGISTRATIONTRANSACTION:
-            return readClaimNodeBytes(txBytes, offset);
-        case transaction_pb_5.SETUPACCOUNTDATASETTRANSACTION:
-            return readSetupDatasetBytes(txBytes, offset);
-        case transaction_pb_5.REMOVEACCOUNTDATASETTRANSACTION:
-            return readSetupDatasetBytes(txBytes, offset);
-        case transaction_pb_5.APPROVALESCROWTRANSACTION:
-            return readApprovalEscrowBytes(txBytes, offset);
-    }
 }
 
 function getList(params) {
@@ -45578,7 +44440,6 @@ proto.model.MemoryInformation.prototype.toObject = function(opt_includeInstance)
 };
 
 
-<<<<<<< HEAD
 /**
  * Static version of the {@see toObject} method.
  * @param {boolean|undefined} includeInstance Deprecated. Whether to include
@@ -45770,7 +44631,289 @@ proto.model.MemoryInformation.prototype.setAvailable = function(value) {
 proto.model.MemoryInformation.prototype.getUsed = function() {
   return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, 0));
 };
-=======
+
+
+/** @param {number} value */
+proto.model.MemoryInformation.prototype.setUsed = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 4, value);
+};
+
+
+/**
+ * optional double UsedPercent = 5;
+ * @return {number}
+ */
+proto.model.MemoryInformation.prototype.getUsedpercent = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFloatingPointFieldWithDefault(this, 5, 0.0));
+};
+
+
+/** @param {number} value */
+proto.model.MemoryInformation.prototype.setUsedpercent = function(value) {
+  googleProtobuf.Message.setProto3FloatField(this, 5, value);
+};
+
+
+
+
+
+if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.model.StorageInformation.prototype.toObject = function(opt_includeInstance) {
+  return proto.model.StorageInformation.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.model.StorageInformation} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.StorageInformation.toObject = function(includeInstance, msg) {
+  var obj = {
+    fstype: googleProtobuf.Message.getFieldWithDefault(msg, 1, ""),
+    total: googleProtobuf.Message.getFieldWithDefault(msg, 2, 0),
+    free: googleProtobuf.Message.getFieldWithDefault(msg, 3, 0),
+    used: googleProtobuf.Message.getFieldWithDefault(msg, 4, 0),
+    usedpercent: googleProtobuf.Message.getFloatingPointFieldWithDefault(msg, 5, 0.0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.model.StorageInformation}
+ */
+proto.model.StorageInformation.deserializeBinary = function(bytes) {
+  var reader = new googleProtobuf.BinaryReader(bytes);
+  var msg = new proto.model.StorageInformation;
+  return proto.model.StorageInformation.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.model.StorageInformation} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.model.StorageInformation}
+ */
+proto.model.StorageInformation.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setFstype(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setTotal(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setFree(value);
+      break;
+    case 4:
+      var value = /** @type {number} */ (reader.readUint64());
+      msg.setUsed(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readDouble());
+      msg.setUsedpercent(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.model.StorageInformation.prototype.serializeBinary = function() {
+  var writer = new googleProtobuf.BinaryWriter();
+  proto.model.StorageInformation.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.model.StorageInformation} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.model.StorageInformation.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getFstype();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getTotal();
+  if (f !== 0) {
+    writer.writeUint64(
+      2,
+      f
+    );
+  }
+  f = message.getFree();
+  if (f !== 0) {
+    writer.writeUint64(
+      3,
+      f
+    );
+  }
+  f = message.getUsed();
+  if (f !== 0) {
+    writer.writeUint64(
+      4,
+      f
+    );
+  }
+  f = message.getUsedpercent();
+  if (f !== 0.0) {
+    writer.writeDouble(
+      5,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string FsType = 1;
+ * @return {string}
+ */
+proto.model.StorageInformation.prototype.getFstype = function() {
+  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/** @param {string} value */
+proto.model.StorageInformation.prototype.setFstype = function(value) {
+  googleProtobuf.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional uint64 Total = 2;
+ * @return {number}
+ */
+proto.model.StorageInformation.prototype.getTotal = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/** @param {number} value */
+proto.model.StorageInformation.prototype.setTotal = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional uint64 Free = 3;
+ * @return {number}
+ */
+proto.model.StorageInformation.prototype.getFree = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/** @param {number} value */
+proto.model.StorageInformation.prototype.setFree = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 3, value);
+};
+
+
+/**
+ * optional uint64 Used = 4;
+ * @return {number}
+ */
+proto.model.StorageInformation.prototype.getUsed = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/** @param {number} value */
+proto.model.StorageInformation.prototype.setUsed = function(value) {
+  googleProtobuf.Message.setProto3IntField(this, 4, value);
+};
+
+
+/**
+ * optional double UsedPercent = 5;
+ * @return {number}
+ */
+proto.model.StorageInformation.prototype.getUsedpercent = function() {
+  return /** @type {number} */ (googleProtobuf.Message.getFloatingPointFieldWithDefault(this, 5, 0.0));
+};
+
+
+/** @param {number} value */
+proto.model.StorageInformation.prototype.setUsedpercent = function(value) {
+  googleProtobuf.Message.setProto3FloatField(this, 5, value);
+};
+
+
+goog.object.extend(exports, proto.model);
+});
+var nodeHardware_pb_1 = nodeHardware_pb.GetNodeHardwareRequest;
+
+// source: service/nodeHardware.proto
+/**
+ * @fileoverview
+ * @enhanceable
+ * @suppress {messageConventions} JS Compiler reports an error if a variable or
+ *     field starts with 'MSG_' and isn't a translatable message.
+ * @public
+ */
+// GENERATED CODE -- DO NOT EDIT!
+
+
+var goog$5 = googleProtobuf;
+var global$5 = Function('return this')();
+
+
+goog$5.object.extend(proto, nodeHardware_pb);
+
+goog$5.object.extend(proto, annotations_pb);
+
+goog$5.object.extend(proto, empty_pb);
+
 // package: service
 // file: service/nodeHardware.proto
 
@@ -46843,885 +45986,6 @@ function readClaimNodeBytes(txBytes, offset) {
     const poown = txBytes.slice(offset, offset + POOWN_LENGTH);
     return { nodepublickey, poown };
 }
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
-
-
-/** @param {number} value */
-proto.model.MemoryInformation.prototype.setUsed = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 4, value);
-};
-
-
-/**
- * optional double UsedPercent = 5;
- * @return {number}
- */
-proto.model.MemoryInformation.prototype.getUsedpercent = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFloatingPointFieldWithDefault(this, 5, 0.0));
-};
-
-
-/** @param {number} value */
-proto.model.MemoryInformation.prototype.setUsedpercent = function(value) {
-  googleProtobuf.Message.setProto3FloatField(this, 5, value);
-};
-
-
-
-
-
-if (googleProtobuf.Message.GENERATE_TO_OBJECT) {
-/**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.model.StorageInformation.prototype.toObject = function(opt_includeInstance) {
-  return proto.model.StorageInformation.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.model.StorageInformation} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.model.StorageInformation.toObject = function(includeInstance, msg) {
-  var obj = {
-    fstype: googleProtobuf.Message.getFieldWithDefault(msg, 1, ""),
-    total: googleProtobuf.Message.getFieldWithDefault(msg, 2, 0),
-    free: googleProtobuf.Message.getFieldWithDefault(msg, 3, 0),
-    used: googleProtobuf.Message.getFieldWithDefault(msg, 4, 0),
-    usedpercent: googleProtobuf.Message.getFloatingPointFieldWithDefault(msg, 5, 0.0)
-  };
-
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
-}
-
-
-<<<<<<< HEAD
-/**
- * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
- * @return {!proto.model.StorageInformation}
- */
-proto.model.StorageInformation.deserializeBinary = function(bytes) {
-  var reader = new googleProtobuf.BinaryReader(bytes);
-  var msg = new proto.model.StorageInformation;
-  return proto.model.StorageInformation.deserializeBinaryFromReader(msg, reader);
-};
-
-
-/**
- * Deserializes binary data (in protobuf wire format) from the
- * given reader into the given message object.
- * @param {!proto.model.StorageInformation} msg The message object to deserialize into.
- * @param {!jspb.BinaryReader} reader The BinaryReader to use.
- * @return {!proto.model.StorageInformation}
- */
-proto.model.StorageInformation.deserializeBinaryFromReader = function(msg, reader) {
-  while (reader.nextField()) {
-    if (reader.isEndGroup()) {
-      break;
-    }
-    var field = reader.getFieldNumber();
-    switch (field) {
-    case 1:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setFstype(value);
-      break;
-    case 2:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setTotal(value);
-      break;
-    case 3:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setFree(value);
-      break;
-    case 4:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setUsed(value);
-      break;
-    case 5:
-      var value = /** @type {number} */ (reader.readDouble());
-      msg.setUsedpercent(value);
-      break;
-    default:
-      reader.skipField();
-      break;
-    }
-  }
-  return msg;
-};
-
-
-/**
- * Serializes the message to binary data (in protobuf wire format).
- * @return {!Uint8Array}
- */
-proto.model.StorageInformation.prototype.serializeBinary = function() {
-  var writer = new googleProtobuf.BinaryWriter();
-  proto.model.StorageInformation.serializeBinaryToWriter(this, writer);
-  return writer.getResultBuffer();
-};
-
-
-/**
- * Serializes the given message to binary data (in protobuf wire
- * format), writing to the given BinaryWriter.
- * @param {!proto.model.StorageInformation} message
- * @param {!jspb.BinaryWriter} writer
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.model.StorageInformation.serializeBinaryToWriter = function(message, writer) {
-  var f = undefined;
-  f = message.getFstype();
-  if (f.length > 0) {
-    writer.writeString(
-      1,
-      f
-    );
-  }
-  f = message.getTotal();
-  if (f !== 0) {
-    writer.writeUint64(
-      2,
-      f
-    );
-  }
-  f = message.getFree();
-  if (f !== 0) {
-    writer.writeUint64(
-      3,
-      f
-    );
-  }
-  f = message.getUsed();
-  if (f !== 0) {
-    writer.writeUint64(
-      4,
-      f
-    );
-  }
-  f = message.getUsedpercent();
-  if (f !== 0.0) {
-    writer.writeDouble(
-      5,
-      f
-    );
-  }
-};
-
-
-/**
- * optional string FsType = 1;
- * @return {string}
- */
-proto.model.StorageInformation.prototype.getFstype = function() {
-  return /** @type {string} */ (googleProtobuf.Message.getFieldWithDefault(this, 1, ""));
-};
-
-
-/** @param {string} value */
-proto.model.StorageInformation.prototype.setFstype = function(value) {
-  googleProtobuf.Message.setProto3StringField(this, 1, value);
-};
-
-
-/**
- * optional uint64 Total = 2;
- * @return {number}
- */
-proto.model.StorageInformation.prototype.getTotal = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 2, 0));
-};
-
-
-/** @param {number} value */
-proto.model.StorageInformation.prototype.setTotal = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 2, value);
-};
-
-
-/**
- * optional uint64 Free = 3;
- * @return {number}
- */
-proto.model.StorageInformation.prototype.getFree = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 3, 0));
-};
-
-
-/** @param {number} value */
-proto.model.StorageInformation.prototype.setFree = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 3, value);
-};
-
-
-/**
- * optional uint64 Used = 4;
- * @return {number}
- */
-proto.model.StorageInformation.prototype.getUsed = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFieldWithDefault(this, 4, 0));
-};
-
-
-/** @param {number} value */
-proto.model.StorageInformation.prototype.setUsed = function(value) {
-  googleProtobuf.Message.setProto3IntField(this, 4, value);
-};
-
-
-/**
- * optional double UsedPercent = 5;
- * @return {number}
- */
-proto.model.StorageInformation.prototype.getUsedpercent = function() {
-  return /** @type {number} */ (googleProtobuf.Message.getFloatingPointFieldWithDefault(this, 5, 0.0));
-};
-
-
-/** @param {number} value */
-proto.model.StorageInformation.prototype.setUsedpercent = function(value) {
-  googleProtobuf.Message.setProto3FloatField(this, 5, value);
-};
-
-
-goog.object.extend(exports, proto.model);
-});
-var nodeHardware_pb_1 = nodeHardware_pb.GetNodeHardwareRequest;
-
-// source: service/nodeHardware.proto
-/**
- * @fileoverview
- * @enhanceable
- * @suppress {messageConventions} JS Compiler reports an error if a variable or
- *     field starts with 'MSG_' and isn't a translatable message.
- * @public
- */
-// GENERATED CODE -- DO NOT EDIT!
-
-
-var goog$5 = googleProtobuf;
-var global$5 = Function('return this')();
-
-
-goog$5.object.extend(proto, nodeHardware_pb);
-
-goog$5.object.extend(proto, annotations_pb);
-
-goog$5.object.extend(proto, empty_pb);
-
-// package: service
-// file: service/nodeHardware.proto
-
-
-
-
-var grpc$5 = grpcWeb.grpc;
-
-var NodeHardwareService = (function () {
-  function NodeHardwareService() {}
-  NodeHardwareService.serviceName = "service.NodeHardwareService";
-  return NodeHardwareService;
-}());
-
-NodeHardwareService.GetNodeHardware = {
-  methodName: "GetNodeHardware",
-  service: NodeHardwareService,
-  requestStream: true,
-  responseStream: true,
-  requestType: nodeHardware_pb.GetNodeHardwareRequest,
-  responseType: nodeHardware_pb.GetNodeHardwareResponse
-};
-
-NodeHardwareService.GetNodeTime = {
-  methodName: "GetNodeTime",
-  service: NodeHardwareService,
-  requestStream: false,
-  responseStream: false,
-  requestType: empty_pb.Empty,
-  responseType: nodeHardware_pb.GetNodeTimeResponse
-};
-
-function NodeHardwareServiceClient(serviceHost, options) {
-  this.serviceHost = serviceHost;
-  this.options = options || {};
-=======
-const TRANSACTION_TYPE$5 = writeInt32(transaction_pb_5.MULTISIGNATURETRANSACTION);
-function multisignatureBuilder(data, seed) {
-    const { multisigInfo, unisgnedTransactions, signaturesInfo } = data;
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = addressToBytes(data.accountAddress);
-    const recipient = writeInt32(accountType_pb_1.EMPTYACCOUNTTYPE);
-    const fee = writeInt64(data.fee * 1e8);
-    // MULTISIG INFO
-    let multisigInfoBytes = writeInt32(0);
-    if (multisigInfo) {
-        const multisigPresent = writeInt32(1);
-        const minSign = writeInt32(multisigInfo.minSigs);
-        const nonce = writeInt64(multisigInfo.nonce);
-        let participants = Buffer.from([]);
-        multisigInfo.participants.forEach(participant => {
-            const address = addressToBytes(participant);
-            participants = Buffer.concat([participants, address]);
-        });
-        const totalParticipants = writeInt32(multisigInfo.participants.length);
-        multisigInfoBytes = Buffer.concat([multisigPresent, minSign, nonce, totalParticipants, participants]);
-    }
-    // UNSIGNED TRANSACTIONS
-    let transactionBytes = writeInt32(0);
-    if (unisgnedTransactions) {
-        const txBytesLen = writeInt32(unisgnedTransactions.length);
-        transactionBytes = Buffer.concat([txBytesLen, unisgnedTransactions]);
-    }
-    // SIGNATURES INFO
-    let signaturesInfoBytes = writeInt32(0);
-    if (signaturesInfo) {
-        const signatureInfoPresent = writeInt32(1);
-        const txHash = ZBCAddressToBytes(signaturesInfo.txHash);
-        const totalParticipants = writeInt32(signaturesInfo.participants.length);
-        let participants = Buffer.from([]);
-        signaturesInfo.participants.forEach(participant => {
-            const address = addressToBytes(participant.address);
-            const signatureLen = writeInt32(participant.signature.length);
-            participants = Buffer.concat([participants, address, signatureLen, participant.signature]);
-        });
-        signaturesInfoBytes = Buffer.concat([signatureInfoPresent, txHash, totalParticipants, participants]);
-    }
-    const bodyLength = writeInt32(multisigInfoBytes.length + transactionBytes.length + signaturesInfoBytes.length);
-    bytes = Buffer.concat([
-        TRANSACTION_TYPE$5,
-        VERSION,
-        timestamp,
-        sender,
-        recipient,
-        fee,
-        bodyLength,
-        multisigInfoBytes,
-        transactionBytes,
-        signaturesInfoBytes,
-    ]);
-    // Add Escrow Bytes
-    bytes = addEscrowBytes(bytes, data);
-    const message = writeInt32(0);
-    bytes = Buffer.concat([bytes, message]);
-    if (seed) {
-        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-        const signature = seed.sign(txHash);
-        return Buffer.concat([bytes, signature]);
-    }
-    else
-        return bytes;
-}
-function signTransactionHash(txHash, seed) {
-    const txHashBytes = ZBCAddressToBytes(txHash);
-    return seed.sign(txHashBytes);
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
-}
-
-NodeHardwareServiceClient.prototype.getNodeHardware = function getNodeHardware(metadata) {
-  var listeners = {
-    data: [],
-    end: [],
-    status: []
-  };
-  var client = grpc$5.client(NodeHardwareService.GetNodeHardware, {
-    host: this.serviceHost,
-    metadata: metadata,
-    transport: this.options.transport
-  });
-  client.onEnd(function (status, statusMessage, trailers) {
-    listeners.status.forEach(function (handler) {
-      handler({ code: status, details: statusMessage, metadata: trailers });
-    });
-    listeners.end.forEach(function (handler) {
-      handler({ code: status, details: statusMessage, metadata: trailers });
-    });
-    listeners = null;
-  });
-  client.onMessage(function (message) {
-    listeners.data.forEach(function (handler) {
-      handler(message);
-    });
-  });
-  client.start(metadata);
-  return {
-    on: function (type, handler) {
-      listeners[type].push(handler);
-      return this;
-    },
-    write: function (requestMessage) {
-      client.send(requestMessage);
-      return this;
-    },
-    end: function () {
-      client.finishSend();
-    },
-    cancel: function () {
-      listeners = null;
-      client.close();
-    }
-  };
-};
-
-NodeHardwareServiceClient.prototype.getNodeTime = function getNodeTime(requestMessage, metadata, callback) {
-  if (arguments.length === 2) {
-    callback = arguments[1];
-  }
-  var client = grpc$5.unary(NodeHardwareService.GetNodeTime, {
-    request: requestMessage,
-    host: this.serviceHost,
-    metadata: metadata,
-    transport: this.options.transport,
-    debug: this.options.debug,
-    onEnd: function (response) {
-      if (callback) {
-        if (response.status !== grpc$5.Code.OK) {
-          var err = new Error(response.statusMessage);
-          err.code = response.status;
-          err.metadata = response.trailers;
-          callback(err, null);
-        } else {
-          callback(null, response.message);
-        }
-      }
-    }
-  });
-  return {
-    cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
-};
-
-var NodeHardwareServiceClient_1 = NodeHardwareServiceClient;
-
-// source: service/nodeAdmin.proto
-/**
- * @fileoverview
- * @enhanceable
- * @suppress {messageConventions} JS Compiler reports an error if a variable or
- *     field starts with 'MSG_' and isn't a translatable message.
- * @public
- */
-// GENERATED CODE -- DO NOT EDIT!
-
-
-var goog$6 = googleProtobuf;
-var global$6 = Function('return this')();
-
-
-goog$6.object.extend(proto, proofOfOwnership_pb);
-
-goog$6.object.extend(proto, node_pb);
-
-goog$6.object.extend(proto, annotations_pb);
-
-// package: service
-// file: service/nodeAdmin.proto
-
-
-
-
-var grpc$6 = grpcWeb.grpc;
-
-var NodeAdminService = (function () {
-  function NodeAdminService() {}
-  NodeAdminService.serviceName = "service.NodeAdminService";
-  return NodeAdminService;
-}());
-
-NodeAdminService.GetProofOfOwnership = {
-  methodName: "GetProofOfOwnership",
-  service: NodeAdminService,
-  requestStream: false,
-  responseStream: false,
-  requestType: proofOfOwnership_pb.GetProofOfOwnershipRequest,
-  responseType: proofOfOwnership_pb.ProofOfOwnership
-};
-
-NodeAdminService.GenerateNodeKey = {
-  methodName: "GenerateNodeKey",
-  service: NodeAdminService,
-  requestStream: false,
-  responseStream: false,
-  requestType: node_pb.GenerateNodeKeyRequest,
-  responseType: node_pb.GenerateNodeKeyResponse
-};
-
-function NodeAdminServiceClient(serviceHost, options) {
-  this.serviceHost = serviceHost;
-  this.options = options || {};
-}
-
-NodeAdminServiceClient.prototype.getProofOfOwnership = function getProofOfOwnership(requestMessage, metadata, callback) {
-  if (arguments.length === 2) {
-    callback = arguments[1];
-  }
-  var client = grpc$6.unary(NodeAdminService.GetProofOfOwnership, {
-    request: requestMessage,
-    host: this.serviceHost,
-    metadata: metadata,
-    transport: this.options.transport,
-    debug: this.options.debug,
-    onEnd: function (response) {
-      if (callback) {
-        if (response.status !== grpc$6.Code.OK) {
-          var err = new Error(response.statusMessage);
-          err.code = response.status;
-          err.metadata = response.trailers;
-          callback(err, null);
-        } else {
-          callback(null, response.message);
-        }
-      }
-    }
-  });
-  return {
-    cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
-};
-
-NodeAdminServiceClient.prototype.generateNodeKey = function generateNodeKey(requestMessage, metadata, callback) {
-  if (arguments.length === 2) {
-    callback = arguments[1];
-  }
-  var client = grpc$6.unary(NodeAdminService.GenerateNodeKey, {
-    request: requestMessage,
-    host: this.serviceHost,
-    metadata: metadata,
-    transport: this.options.transport,
-    debug: this.options.debug,
-    onEnd: function (response) {
-      if (callback) {
-        if (response.status !== grpc$6.Code.OK) {
-          var err = new Error(response.statusMessage);
-          err.code = response.status;
-          err.metadata = response.trailers;
-          callback(err, null);
-        } else {
-          callback(null, response.message);
-        }
-      }
-    }
-  });
-  return {
-    cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
-};
-
-var NodeAdminServiceClient_1 = NodeAdminServiceClient;
-
-// source: service/nodeRegistration.proto
-/**
- * @fileoverview
- * @enhanceable
- * @suppress {messageConventions} JS Compiler reports an error if a variable or
- *     field starts with 'MSG_' and isn't a translatable message.
- * @public
- */
-// GENERATED CODE -- DO NOT EDIT!
-
-
-var goog$7 = googleProtobuf;
-var global$7 = Function('return this')();
-
-
-goog$7.object.extend(proto, empty_pb);
-
-goog$7.object.extend(proto, nodeRegistration_pb);
-
-goog$7.object.extend(proto, annotations_pb);
-
-// package: service
-// file: service/nodeRegistration.proto
-
-
-
-
-var grpc$7 = grpcWeb.grpc;
-
-var NodeRegistrationService = (function () {
-  function NodeRegistrationService() {}
-  NodeRegistrationService.serviceName = "service.NodeRegistrationService";
-  return NodeRegistrationService;
-}());
-
-NodeRegistrationService.GetNodeRegistrations = {
-  methodName: "GetNodeRegistrations",
-  service: NodeRegistrationService,
-  requestStream: false,
-  responseStream: false,
-  requestType: nodeRegistration_pb.GetNodeRegistrationsRequest,
-  responseType: nodeRegistration_pb.GetNodeRegistrationsResponse
-};
-
-NodeRegistrationService.GetNodeRegistration = {
-  methodName: "GetNodeRegistration",
-  service: NodeRegistrationService,
-  requestStream: false,
-  responseStream: false,
-  requestType: nodeRegistration_pb.GetNodeRegistrationRequest,
-  responseType: nodeRegistration_pb.GetNodeRegistrationResponse
-};
-
-NodeRegistrationService.GetNodeRegistrationsByNodePublicKeys = {
-  methodName: "GetNodeRegistrationsByNodePublicKeys",
-  service: NodeRegistrationService,
-  requestStream: false,
-  responseStream: false,
-  requestType: nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysRequest,
-  responseType: nodeRegistration_pb.GetNodeRegistrationsByNodePublicKeysResponse
-};
-
-NodeRegistrationService.GetPendingNodeRegistrations = {
-  methodName: "GetPendingNodeRegistrations",
-  service: NodeRegistrationService,
-  requestStream: true,
-  responseStream: true,
-  requestType: nodeRegistration_pb.GetPendingNodeRegistrationsRequest,
-  responseType: nodeRegistration_pb.GetPendingNodeRegistrationsResponse
-};
-
-NodeRegistrationService.GetMyNodePublicKey = {
-  methodName: "GetMyNodePublicKey",
-  service: NodeRegistrationService,
-  requestStream: false,
-  responseStream: false,
-  requestType: empty_pb.Empty,
-  responseType: nodeRegistration_pb.GetMyNodePublicKeyResponse
-};
-
-function NodeRegistrationServiceClient(serviceHost, options) {
-  this.serviceHost = serviceHost;
-  this.options = options || {};
-}
-
-NodeRegistrationServiceClient.prototype.getNodeRegistrations = function getNodeRegistrations(requestMessage, metadata, callback) {
-  if (arguments.length === 2) {
-    callback = arguments[1];
-  }
-  var client = grpc$7.unary(NodeRegistrationService.GetNodeRegistrations, {
-    request: requestMessage,
-    host: this.serviceHost,
-    metadata: metadata,
-    transport: this.options.transport,
-    debug: this.options.debug,
-    onEnd: function (response) {
-      if (callback) {
-        if (response.status !== grpc$7.Code.OK) {
-          var err = new Error(response.statusMessage);
-          err.code = response.status;
-          err.metadata = response.trailers;
-          callback(err, null);
-        } else {
-          callback(null, response.message);
-        }
-      }
-    }
-  });
-  return {
-    cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
-};
-
-NodeRegistrationServiceClient.prototype.getNodeRegistration = function getNodeRegistration(requestMessage, metadata, callback) {
-  if (arguments.length === 2) {
-    callback = arguments[1];
-  }
-  var client = grpc$7.unary(NodeRegistrationService.GetNodeRegistration, {
-    request: requestMessage,
-    host: this.serviceHost,
-    metadata: metadata,
-    transport: this.options.transport,
-    debug: this.options.debug,
-    onEnd: function (response) {
-      if (callback) {
-        if (response.status !== grpc$7.Code.OK) {
-          var err = new Error(response.statusMessage);
-          err.code = response.status;
-          err.metadata = response.trailers;
-          callback(err, null);
-        } else {
-          callback(null, response.message);
-        }
-      }
-    }
-  });
-  return {
-    cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
-};
-
-NodeRegistrationServiceClient.prototype.getNodeRegistrationsByNodePublicKeys = function getNodeRegistrationsByNodePublicKeys(requestMessage, metadata, callback) {
-  if (arguments.length === 2) {
-    callback = arguments[1];
-  }
-  var client = grpc$7.unary(NodeRegistrationService.GetNodeRegistrationsByNodePublicKeys, {
-    request: requestMessage,
-    host: this.serviceHost,
-    metadata: metadata,
-    transport: this.options.transport,
-    debug: this.options.debug,
-    onEnd: function (response) {
-      if (callback) {
-        if (response.status !== grpc$7.Code.OK) {
-          var err = new Error(response.statusMessage);
-          err.code = response.status;
-          err.metadata = response.trailers;
-          callback(err, null);
-        } else {
-          callback(null, response.message);
-        }
-      }
-    }
-  });
-  return {
-    cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
-};
-
-NodeRegistrationServiceClient.prototype.getPendingNodeRegistrations = function getPendingNodeRegistrations(metadata) {
-  var listeners = {
-    data: [],
-    end: [],
-    status: []
-  };
-  var client = grpc$7.client(NodeRegistrationService.GetPendingNodeRegistrations, {
-    host: this.serviceHost,
-    metadata: metadata,
-    transport: this.options.transport
-  });
-  client.onEnd(function (status, statusMessage, trailers) {
-    listeners.status.forEach(function (handler) {
-      handler({ code: status, details: statusMessage, metadata: trailers });
-    });
-    listeners.end.forEach(function (handler) {
-      handler({ code: status, details: statusMessage, metadata: trailers });
-    });
-    listeners = null;
-  });
-  client.onMessage(function (message) {
-    listeners.data.forEach(function (handler) {
-      handler(message);
-    });
-  });
-  client.start(metadata);
-  return {
-    on: function (type, handler) {
-      listeners[type].push(handler);
-      return this;
-    },
-    write: function (requestMessage) {
-      client.send(requestMessage);
-      return this;
-    },
-    end: function () {
-      client.finishSend();
-    },
-    cancel: function () {
-      listeners = null;
-      client.close();
-    }
-  };
-};
-
-NodeRegistrationServiceClient.prototype.getMyNodePublicKey = function getMyNodePublicKey(requestMessage, metadata, callback) {
-  if (arguments.length === 2) {
-    callback = arguments[1];
-  }
-  var client = grpc$7.unary(NodeRegistrationService.GetMyNodePublicKey, {
-    request: requestMessage,
-    host: this.serviceHost,
-    metadata: metadata,
-    transport: this.options.transport,
-    debug: this.options.debug,
-    onEnd: function (response) {
-      if (callback) {
-        if (response.status !== grpc$7.Code.OK) {
-          var err = new Error(response.statusMessage);
-          err.code = response.status;
-          err.metadata = response.trailers;
-          callback(err, null);
-        } else {
-          callback(null, response.message);
-        }
-      }
-    }
-  });
-  return {
-    cancel: function () {
-      callback = null;
-      client.close();
-    }
-  };
-};
-
-var NodeRegistrationServiceClient_1 = NodeRegistrationServiceClient;
-
-var auth_pb = createCommonjsModule(function (module, exports) {
-// source: model/auth.proto
-/**
- * @fileoverview
- * @enhanceable
- * @suppress {messageConventions} JS Compiler reports an error if a variable or
- *     field starts with 'MSG_' and isn't a translatable message.
- * @public
- */
-// GENERATED CODE -- DO NOT EDIT!
-
-
-var goog = googleProtobuf;
-var global = Function('return this')();
-
-goog.exportSymbol('proto.model.RequestType', null, global);
-/**
- * @enum {number}
- */
-proto.model.RequestType = {
-  GETNODEHARDWARE: 0,
-  GETPROOFOFOWNERSHIP: 1,
-  GENERATETNODEKEY: 2,
-  GETPENDINGNODEREGISTRATIONSSTREAM: 3
-};
-
-goog.object.extend(exports, proto.model);
-});
-var auth_pb_1 = auth_pb.RequestType;
 
 function createAuth(requestType, seed) {
     let bytes;
@@ -47742,20 +46006,15 @@ function request(auth, networkIp) {
                 reject({ code, message, metadata });
             }
             if (res) {
-<<<<<<< HEAD
                 const bytes = Buffer.concat([
                     Buffer.from(res.toObject().messagebytes.toString(), 'base64'),
                     Buffer.from(res.toObject().signature.toString(), 'base64'),
                 ]);
                 resolve(bytes);
-=======
-                resolve(toGetPendingList(res.toObject()));
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
             }
         });
     });
 }
-<<<<<<< HEAD
 var Poown = { request, createAuth };
 
 function toZBCNodeRegistration(node) {
@@ -47790,24 +46049,6 @@ function getHardwareInfo(networkIP, childSeed) {
         })
             .on('end', status => {
             observer.error(status);
-=======
-function getPendingByTxHash(txHash) {
-    return new Promise((resolve, reject) => {
-        const hashHex = ZBCAddressToBytes(txHash)
-            .toString('hex')
-            .toUpperCase();
-        const request = new multiSignature_pb_2();
-        const networkIP = Network$1.selected();
-        request.setTransactionhashhex(hashHex);
-        const client = new MultisigServiceClient_1(networkIP.host);
-        client.getPendingTransactionDetailByTransactionHash(request, (err, res) => {
-            if (err) {
-                const { code, message, metadata } = err;
-                reject({ code, message, metadata });
-            }
-            if (res)
-                resolve(toGetPendingDetail(res.toObject()));
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
         });
         client.end();
     });
@@ -48773,62 +47014,9 @@ MultisigServiceClient.prototype.getParticipantsByMultisigAddresses = function ge
 
 var MultisigServiceClient_1 = MultisigServiceClient;
 
-<<<<<<< HEAD
-const TRANSACTION_TYPE$6 = writeInt32(transaction_pb_5.MULTISIGNATURETRANSACTION);
+const TRANSACTION_TYPE$5 = writeInt32(transaction_pb_5.MULTISIGNATURETRANSACTION);
 function multisignatureBuilder(data, seed) {
     const { multisigInfo, unisgnedTransactions, signaturesInfo } = data;
-=======
-const TRANSACTION_TYPE$6 = writeInt32(transaction_pb_5.SETUPACCOUNTDATASETTRANSACTION);
-function setupDatasetBuilder(data, seed) {
-    let bytes;
-    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-    const sender = addressToBytes(data.setterAccountAddress);
-    const recipient = addressToBytes(data.recipientAccountAddress);
-    const fee = writeInt64(data.fee * 1e8);
-    const property = Buffer.from(data.property, 'utf-8');
-    const propertyLength = writeInt32(property.length);
-    const value = Buffer.from(data.value, 'utf-8');
-    const valueLength = writeInt32(value.length);
-    const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
-    bytes = Buffer.concat([
-        TRANSACTION_TYPE$6,
-        VERSION,
-        timestamp,
-        sender,
-        recipient,
-        fee,
-        bodyLength,
-        propertyLength,
-        property,
-        valueLength,
-        value,
-    ]);
-    // Add Escrow Bytes
-    bytes = addEscrowBytes(bytes, data);
-    const message = writeInt32(0);
-    bytes = Buffer.concat([bytes, message]);
-    if (seed) {
-        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
-        const signature = seed.sign(txHash);
-        return Buffer.concat([bytes, signature]);
-    }
-    else
-        return bytes;
-}
-function readSetupDatasetBytes(txBytes, offset) {
-    const propertyLength = txBytes.readInt32LE(offset);
-    offset += 4;
-    const property = txBytes.slice(offset, offset + propertyLength).toString('utf-8');
-    offset += propertyLength;
-    const valueLength = txBytes.readInt32LE(offset);
-    offset += 4;
-    const value = txBytes.slice(offset, offset + valueLength).toString('utf-8');
-    return { property, value };
-}
-
-const TRANSACTION_TYPE$7 = writeInt32(transaction_pb_5.REMOVEACCOUNTDATASETTRANSACTION);
-function removeDatasetBuilder(data, seed) {
->>>>>>> c0cf2eaad655253cf58bca0fb7c01d38f92c933f
     let bytes;
     const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
     const sender = addressToBytes(data.accountAddress);
@@ -48870,7 +47058,7 @@ function removeDatasetBuilder(data, seed) {
     }
     const bodyLength = writeInt32(multisigInfoBytes.length + transactionBytes.length + signaturesInfoBytes.length);
     bytes = Buffer.concat([
-        TRANSACTION_TYPE$6,
+        TRANSACTION_TYPE$5,
         VERSION,
         timestamp,
         sender,
@@ -48938,16 +47126,20 @@ function getPendingList(params) {
                 const { code, message, metadata } = err;
                 reject({ code, message, metadata });
             }
-            if (res)
-                resolve(res.toObject());
+            if (res) {
+                resolve(toGetPendingList(res.toObject()));
+            }
         });
     });
 }
 function getPendingByTxHash(txHash) {
     return new Promise((resolve, reject) => {
+        const hashHex = ZBCAddressToBytes(txHash)
+            .toString('hex')
+            .toUpperCase();
         const request = new multiSignature_pb_2();
         const networkIP = Network$1.selected();
-        request.setTransactionhashhex(txHash);
+        request.setTransactionhashhex(hashHex);
         const client = new MultisigServiceClient_1(networkIP.host);
         client.getPendingTransactionDetailByTransactionHash(request, (err, res) => {
             if (err) {
@@ -48955,7 +47147,7 @@ function getPendingByTxHash(txHash) {
                 reject({ code, message, metadata });
             }
             if (res)
-                resolve(res.toObject());
+                resolve(toGetPendingDetail(res.toObject()));
         });
     });
 }
@@ -50298,6 +48490,54 @@ AccountDatasetServiceClient.prototype.getAccountDataset = function getAccountDat
 };
 
 var AccountDatasetServiceClient_1 = AccountDatasetServiceClient;
+
+const TRANSACTION_TYPE$6 = writeInt32(transaction_pb_5.SETUPACCOUNTDATASETTRANSACTION);
+function setupDatasetBuilder(data, seed) {
+    let bytes;
+    const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+    const sender = addressToBytes(data.setterAccountAddress);
+    const recipient = addressToBytes(data.recipientAccountAddress);
+    const fee = writeInt64(data.fee * 1e8);
+    const property = Buffer.from(data.property, 'utf-8');
+    const propertyLength = writeInt32(property.length);
+    const value = Buffer.from(data.value, 'utf-8');
+    const valueLength = writeInt32(value.length);
+    const bodyLength = writeInt32(propertyLength.length + property.length + valueLength.length + value.length);
+    bytes = Buffer.concat([
+        TRANSACTION_TYPE$6,
+        VERSION,
+        timestamp,
+        sender,
+        recipient,
+        fee,
+        bodyLength,
+        propertyLength,
+        property,
+        valueLength,
+        value,
+    ]);
+    // Add Escrow Bytes
+    bytes = addEscrowBytes(bytes, data);
+    const message = writeInt32(0);
+    bytes = Buffer.concat([bytes, message]);
+    if (seed) {
+        const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
+        const signature = seed.sign(txHash);
+        return Buffer.concat([bytes, signature]);
+    }
+    else
+        return bytes;
+}
+function readSetupDatasetBytes(txBytes, offset) {
+    const propertyLength = txBytes.readInt32LE(offset);
+    offset += 4;
+    const property = txBytes.slice(offset, offset + propertyLength).toString('utf-8');
+    offset += propertyLength;
+    const valueLength = txBytes.readInt32LE(offset);
+    offset += 4;
+    const value = txBytes.slice(offset, offset + valueLength).toString('utf-8');
+    return { property, value };
+}
 
 const TRANSACTION_TYPE$7 = writeInt32(transaction_pb_5.REMOVEACCOUNTDATASETTRANSACTION);
 function removeDatasetBuilder(data, seed) {
