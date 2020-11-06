@@ -50085,11 +50085,13 @@ function encryptPassword(password, salt = 'salt') {
         iterations: 10000,
     }).toString();
 }
-function isZBCAddressValid(address) {
+function isZBCAddressValid(address, prefixAddress) {
     if (address.length != 66)
         return false;
     const segs = address.split('_');
     const prefix = segs[0];
+    if (prefix != prefixAddress)
+        return false;
     segs.shift();
     if (segs.length != 7)
         return false;
