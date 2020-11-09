@@ -50096,8 +50096,6 @@ function isZBCAddressValid(address, prefixAddress) {
         return false;
     const segs = address.split('_');
     const prefix = segs[0];
-    if (prefix != prefixAddress)
-        return false;
     segs.shift();
     if (segs.length != 7)
         return false;
@@ -50115,6 +50113,10 @@ function isZBCAddressValid(address, prefixAddress) {
     for (let i = 0; i < 3; i++)
         if (checksum[i] != inputChecksum[i])
             return false;
+    if (prefixAddress) {
+        if (prefix != prefixAddress)
+            return false;
+    }
     return true;
 }
 function ZBCAddressToBytes(address) {
