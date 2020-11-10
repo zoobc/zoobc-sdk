@@ -50085,7 +50085,7 @@ function encryptPassword(password, salt = 'salt') {
         iterations: 10000,
     }).toString();
 }
-function isZBCAddressValid(address) {
+function isZBCAddressValid(address, prefixAddress) {
     if (address.length != 66)
         return false;
     const segs = address.split('_');
@@ -50107,6 +50107,10 @@ function isZBCAddressValid(address) {
     for (let i = 0; i < 3; i++)
         if (checksum[i] != inputChecksum[i])
             return false;
+    if (prefixAddress) {
+        if (prefix != prefixAddress)
+            return false;
+    }
     return true;
 }
 function ZBCAddressToBytes(address) {
