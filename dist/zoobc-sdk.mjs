@@ -49799,7 +49799,7 @@ function toUnconfirmTransactionNodeWallet(res) {
     }
     return result;
 }
-function toZBCPendingTransactions(res) {
+function toZBCPendingTransactions(res, transactionType) {
     let mempoolTx = res.mempooltransactionsList;
     let transactions = [];
     let transaction;
@@ -49847,6 +49847,7 @@ function toZBCPendingTransactions(res) {
         }
         transactions.push(transaction);
     }
+    transactions = transactions.filter(txs => txs.transactionType == transactionType);
     return transactions;
 }
 
