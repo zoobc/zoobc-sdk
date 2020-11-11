@@ -36,8 +36,9 @@ export function toUnconfirmTransactionNodeWallet(res: GetMempoolTransactionsResp
   return result;
 }
 
-export function toZBCPendingTransactions(mempools: GetMempoolTransactionsResponse.AsObject): ZBCTransactions {
-  const transactions = mempools.mempooltransactionsList.map(mempool => toZBCPendingTransaction(mempool));
+export function toZBCPendingTransactions(mempools: GetMempoolTransactionsResponse.AsObject, transactionType: number): ZBCTransactions {
+  let transactions = mempools.mempooltransactionsList.map(mempool => toZBCPendingTransaction(mempool));
+  transactions = transactions.filter(txs => txs.transactionType == transactionType);
   return { total: mempools.total, transactions };
 }
 
