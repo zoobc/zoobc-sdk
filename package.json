@@ -1,6 +1,6 @@
 {
-  "name": "zoobc-sdk",
-  "version": "0.0.4-pre-release",
+  "name": "zbc-sdk",
+  "version": "0.0.5-pre-release",
   "description": "A small set of libraries to implement applications connect with the P2P API of the nodes in the blockchain",
   "author": "ZooBC SDK Team",
   "license": "Apache-2.0",
@@ -11,7 +11,8 @@
     "blockchain",
     "blockchain-zoo",
     "zoobc",
-    "zoobc-sdk-js"
+    "zoobc-sdk-js",
+    "zbc-sdk"
   ],
   "repository": {
     "type": "git",
