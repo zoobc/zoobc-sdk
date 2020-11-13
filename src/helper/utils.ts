@@ -3,6 +3,22 @@ import SHA3 from 'sha3';
 import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
 import { Int64LE } from 'int64-buffer';
+import zoobc from '..';
+import { Address } from './interfaces';
+import { AccountType } from '../../grpc/model/accountType_pb';
+import { TransactionType } from '../../grpc/model/transaction_pb';
+import { readClaimNodeBytes } from './transaction-builder/claim-node';
+import { readApprovalEscrowBytes } from './transaction-builder/escrow-transaction';
+import { readRegisterNodeBytes } from './transaction-builder/register-node';
+import { readRemoveNodeBytes } from './transaction-builder/remove-node';
+import { readSendMoneyBytes } from './transaction-builder/send-money';
+import { readSetupDatasetBytes } from './transaction-builder/setup-account-dataset';
+import { readUpdateNodeBytes } from './transaction-builder/update-node';
+export const errorDateMessage = {
+  code: '',
+  message: 'please fix your date and time',
+  metadata: '',
+};
 
 // getAddressFromPublicKey Get the formatted address from a raw public key
 export function getZBCAddress(publicKey: Uint8Array, prefix: string = 'ZBC'): string {
@@ -24,7 +40,7 @@ export function getZBCAddress(publicKey: Uint8Array, prefix: string = 'ZBC'): st
   }
 }
 
-export function hash(str: any, format: string = 'buffer') {
+export function hash(str: any, format: any = 'buffer') {
   const h = new SHA3(256);
   h.update(str);
   const b = h.digest();
@@ -39,11 +55,10 @@ export function encryptPassword(password: string, salt: string = 'salt'): string
   }).toString();
 }
 
-export function isZBCAddressValid(address: string, stdPrefix: string = 'ZBC'): boolean {
+export function isZBCAddressValid(address: string): boolean {
   if (address.length != 66) return false;
   const segs = address.split('_');
   const prefix = segs[0];
-  if (prefix != stdPrefix) return false;
   segs.shift();
   if (segs.length != 7) return false;
   for (let i = 0; i < segs.length; i++) if (!/[A-Z2-7]{8}/.test(segs[i])) return false;
@@ -91,7 +106,81 @@ export function readInt64(buff: Buffer, offset: number): string {
 }
 
 export function writeInt32(number: number): Buffer {
-  let byte = new Buffer(4);
+  let byte = Buffer.alloc(4);
   byte.writeUInt32LE(number, 0);
   return byte;
+}
+
+export async function validationTimestamp(txBytes: Buffer) {
+  let timestampPostTransactionBytes = txBytes.slice(5, 13);
+  let timestampPostTransaction = readInt64(timestampPostTransactionBytes, 0);
+  let timestampServer = await zoobc.Node.getNodeTime().then(res => {
+    return res.nodetime;
+  });
+  const deviation = parseInt(timestampPostTransaction) - parseInt(timestampServer);
+  if (deviation < 30 && deviation > -30) return true;
+  else return false;
+}
+
+export function parseAddress(account: string | Uint8Array): Address {
+  if (account == '') return { value: '', type: 2 };
+
+  // convert to bytes
+  let accountBytes: Buffer;
+  if (typeof account == 'string') accountBytes = Buffer.from(account.toString(), 'base64');
+  else accountBytes = Buffer.from(account);
+
+  const type = accountBytes.readInt32LE(0);
+
+  let value = '';
+  switch (type) {
+    case AccountType.ZBCACCOUNTTYPE:
+      value = getZBCAddress(accountBytes.slice(4, 36));
+      return { value, type };
+    case AccountType.BTCACCOUNTTYPE:
+      return { value, type };
+    default:
+      return { value, type };
+  }
+}
+
+export function addressToBytes(account: Address): Buffer {
+  const type = account.type;
+  switch (type) {
+    case AccountType.ZBCACCOUNTTYPE:
+      const bytes = ZBCAddressToBytes(account.value);
+      const typeBytes = writeInt32(account.type);
+      return Buffer.from([...typeBytes, ...bytes]);
+    case AccountType.BTCACCOUNTTYPE:
+      return Buffer.from([]);
+    default:
+      return Buffer.from([]);
+  }
+}
+
+export function readAddress(txBytes: Buffer, offset: number): Buffer {
+  const type = txBytes.readUInt32LE(offset);
+  if (type == AccountType.EMPTYACCOUNTTYPE) return txBytes.slice(offset, offset + 4);
+  else return txBytes.slice(offset, offset + 36);
+}
+
+export function readBodyBytes(txBytes: Buffer, txType: number, offset: number): any {
+  switch (txType) {
+    case TransactionType.UPDATENODEREGISTRATIONTRANSACTION:
+      return readUpdateNodeBytes(txBytes, offset);
+    case TransactionType.SENDMONEYTRANSACTION:
+      return readSendMoneyBytes(txBytes, offset);
+    case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
+      return readRemoveNodeBytes(txBytes, offset);
+    case TransactionType.NODEREGISTRATIONTRANSACTION:
+      return readRegisterNodeBytes(txBytes, offset);
+    case TransactionType.CLAIMNODEREGISTRATIONTRANSACTION:
+      return readClaimNodeBytes(txBytes, offset);
+    case TransactionType.SETUPACCOUNTDATASETTRANSACTION:
+      return readSetupDatasetBytes(txBytes, offset);
+    case TransactionType.REMOVEACCOUNTDATASETTRANSACTION:
+      return readSetupDatasetBytes(txBytes, offset);
+    case TransactionType.APPROVALESCROWTRANSACTION:
+      return readApprovalEscrowBytes(txBytes, offset);
+  }
 }

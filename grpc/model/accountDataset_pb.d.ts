@@ -5,11 +5,15 @@ import * as jspb from "google-protobuf";
 import * as model_pagination_pb from "../model/pagination_pb";
 
 export class AccountDataset extends jspb.Message {
-  getSetteraccountaddress(): string;
-  setSetteraccountaddress(value: string): void;
+  getSetteraccountaddress(): Uint8Array | string;
+  getSetteraccountaddress_asU8(): Uint8Array;
+  getSetteraccountaddress_asB64(): string;
+  setSetteraccountaddress(value: Uint8Array | string): void;
 
-  getRecipientaccountaddress(): string;
-  setRecipientaccountaddress(value: string): void;
+  getRecipientaccountaddress(): Uint8Array | string;
+  getRecipientaccountaddress_asU8(): Uint8Array;
+  getRecipientaccountaddress_asB64(): string;
+  setRecipientaccountaddress(value: Uint8Array | string): void;
 
   getProperty(): string;
   setProperty(value: string): void;
@@ -38,8 +42,8 @@ export class AccountDataset extends jspb.Message {
 
 export namespace AccountDataset {
   export type AsObject = {
-    setteraccountaddress: string,
-    recipientaccountaddress: string,
+    setteraccountaddress: Uint8Array | string,
+    recipientaccountaddress: Uint8Array | string,
     property: string,
     value: string,
     isactive: boolean,
@@ -55,11 +59,15 @@ export class GetAccountDatasetsRequest extends jspb.Message {
   getValue(): string;
   setValue(value: string): void;
 
-  getRecipientaccountaddress(): string;
-  setRecipientaccountaddress(value: string): void;
+  getRecipientaccountaddress(): Uint8Array | string;
+  getRecipientaccountaddress_asU8(): Uint8Array;
+  getRecipientaccountaddress_asB64(): string;
+  setRecipientaccountaddress(value: Uint8Array | string): void;
 
-  getSetteraccountaddress(): string;
-  setSetteraccountaddress(value: string): void;
+  getSetteraccountaddress(): Uint8Array | string;
+  getSetteraccountaddress_asU8(): Uint8Array;
+  getSetteraccountaddress_asB64(): string;
+  setSetteraccountaddress(value: Uint8Array | string): void;
 
   getHeight(): number;
   setHeight(value: number): void;
@@ -83,8 +91,8 @@ export namespace GetAccountDatasetsRequest {
   export type AsObject = {
     property: string,
     value: string,
-    recipientaccountaddress: string,
-    setteraccountaddress: string,
+    recipientaccountaddress: Uint8Array | string,
+    setteraccountaddress: Uint8Array | string,
     height: number,
     pagination?: model_pagination_pb.Pagination.AsObject,
   }
@@ -120,8 +128,10 @@ export class GetAccountDatasetRequest extends jspb.Message {
   getProperty(): string;
   setProperty(value: string): void;
 
-  getRecipientaccountaddress(): string;
-  setRecipientaccountaddress(value: string): void;
+  getRecipientaccountaddress(): Uint8Array | string;
+  getRecipientaccountaddress_asU8(): Uint8Array;
+  getRecipientaccountaddress_asB64(): string;
+  setRecipientaccountaddress(value: Uint8Array | string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetAccountDatasetRequest.AsObject;
@@ -136,7 +146,7 @@ export class GetAccountDatasetRequest extends jspb.Message {
 export namespace GetAccountDatasetRequest {
   export type AsObject = {
     property: string,
-    recipientaccountaddress: string,
+    recipientaccountaddress: Uint8Array | string,
   }
 }
 

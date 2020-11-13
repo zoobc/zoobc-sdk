@@ -1,61 +1,77 @@
-import { readInt64 } from '../utils';
+import { getZBCAddress, parseAddress } from '../utils';
 import { GetTransactionsResponse, Transaction } from '../../../grpc/model/transaction_pb';
+import { Address } from '../interfaces';
 
-export interface ZooTransactionsInterface {
+export interface ZBCTransactions {
   total: number;
-  transactions: ZooTransactionInterface[];
+  transactions: ZBCTransaction[];
 }
 
-export interface ZooTransactionInterface {
-  id: string;
-  address: string;
+export interface ZBCTransaction {
+  id?: string;
+  sender: Address;
+  senderAlias?: string;
+  recipient: Address;
+  recipientAlias?: string;
   timestamp: number;
   fee: number;
-  type: string;
-  amount: number;
-  blockId: string;
-  height: number;
-  transactionIndex: number;
+  blockId?: string;
+  height?: number;
+  transactionIndex?: number;
+  transactionHash?: string;
+  transactionType?: number;
+  txBody?: any;
+  escrow?: boolean;
+  escrowStatus?: number;
+  multisig?: boolean;
+  approverAddress?: Address;
+  commission?: number;
+  timeout?: number;
+  instruction?: string;
 }
 
-export function toTransactionListWallet(res: GetTransactionsResponse.AsObject, ownAddress: string): ZooTransactionsInterface {
-  let transactionList = res.transactionsList.map(tx => {
-    const bytes = Buffer.from(tx.transactionbodybytes.toString(), 'base64');
-    const amount = readInt64(bytes, 0);
-    const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
-    const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
-    return {
-      id: tx.id,
-      address: friendAddress,
-      type: type,
-      timestamp: parseInt(tx.timestamp) * 1000,
-      fee: parseInt(tx.fee),
-      amount: parseInt(amount),
-      blockId: tx.blockid,
-      height: tx.height,
-      transactionIndex: tx.transactionindex,
-    };
-  });
+export function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransaction {
+  const txBody = getBodyBytes(transaction);
   return {
-    total: parseInt(res.total),
-    transactions: transactionList,
+    id: transaction.id,
+    sender: parseAddress(transaction.senderaccountaddress),
+    recipient: parseAddress(transaction.recipientaccountaddress),
+    timestamp: parseInt(transaction.timestamp) * 1000,
+    fee: parseInt(transaction.fee),
+    blockId: transaction.blockid,
+    height: transaction.height,
+    transactionIndex: transaction.transactionindex,
+    transactionHash: getZBCAddress(Buffer.from(transaction.transactionhash.toString(), 'base64'), 'ZTX'),
+    transactionType: transaction.transactiontype,
+    txBody,
   };
 }
 
-export function toTransactionWallet(tx: Transaction.AsObject, ownAddress: string): ZooTransactionInterface {
-  const bytes = Buffer.from(tx.transactionbodybytes.toString(), 'base64');
-  const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
-  const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
-  const amount = readInt64(bytes, 0);
+export function toZBCTransactions(transactions: GetTransactionsResponse.AsObject): ZBCTransactions {
+  const list = transactions.transactionsList.map(tx => toZBCTransaction(tx));
   return {
-    id: tx.id,
-    address: friendAddress,
-    type: type,
-    timestamp: parseInt(tx.timestamp) * 1000,
-    fee: parseInt(tx.fee),
-    amount: parseInt(amount),
-    blockId: tx.blockid,
-    height: tx.height,
-    transactionIndex: tx.transactionindex,
+    total: parseInt(transactions.total),
+    transactions: list,
   };
+}
+
+function getBodyBytes(tx: Transaction.AsObject) {
+  return (
+    tx.approvalescrowtransactionbody ||
+    tx.claimnoderegistrationtransactionbody ||
+    tx.multisignaturetransactionbody ||
+    tx.noderegistrationtransactionbody ||
+    tx.setupaccountdatasettransactionbody ||
+    tx.removeaccountdatasettransactionbody ||
+    tx.feevotecommittransactionbody ||
+    tx.feevoterevealtransactionbody ||
+    tx.removenoderegistrationtransactionbody ||
+    tx.sendmoneytransactionbody ||
+    tx.feevotecommittransactionbody ||
+    tx.feevoterevealtransactionbody ||
+    tx.liquidpaymentstoptransactionbody ||
+    tx.liquidpaymenttransactionbody ||
+    tx.updatenoderegistrationtransactionbody ||
+    {}
+  );
 }

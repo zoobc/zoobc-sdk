@@ -1,24 +1,28 @@
-import { writeInt32, writeInt64 } from '../utils';
-import { ADDRESS_LENGTH, VERSION } from './constant';
+import { addressToBytes, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
+import { VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
+import { generateTransactionHash } from '../wallet/MultiSignature';
+import { EscrowTransactionInterface } from './send-money';
+import { Address } from '../interfaces';
+import { TransactionType } from '../../../grpc/model/transaction_pb';
+import { addEscrowBytes } from './escrow-transaction';
 
-const TRANSACTION_TYPE = new Buffer([3, 1, 0, 0]);
+const TRANSACTION_TYPE = writeInt32(TransactionType.REMOVEACCOUNTDATASETTRANSACTION);
 
-export interface RemoveDatasetInterface {
+export interface RemoveDatasetInterface extends EscrowTransactionInterface {
   property: string;
   value: string;
-  setterAccountAddress: string;
-  recipientAccountAddress: string;
+  setterAccountAddress: Address;
+  recipientAccountAddress: Address;
   fee: number;
 }
 
-export function removeDatasetBuilder(data: RemoveDatasetInterface, seed: BIP32Interface): Buffer {
+export function removeDatasetBuilder(data: RemoveDatasetInterface, seed?: BIP32Interface): Buffer {
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-  const setterAccountAddress = Buffer.from(data.setterAccountAddress, 'utf-8');
-  const recipient = Buffer.from(data.recipientAccountAddress, 'utf-8');
-  const addressLength = writeInt32(ADDRESS_LENGTH);
+  const sender = addressToBytes(data.setterAccountAddress);
+  const recipient = addressToBytes(data.recipientAccountAddress);
   const fee = writeInt64(data.fee * 1e8);
 
   const property = Buffer.from(data.property, 'utf-8');
@@ -31,9 +35,7 @@ export function removeDatasetBuilder(data: RemoveDatasetInterface, seed: BIP32In
     TRANSACTION_TYPE,
     VERSION,
     timestamp,
-    addressLength,
-    setterAccountAddress,
-    addressLength,
+    sender,
     recipient,
     fee,
     bodyLength,
@@ -42,18 +44,35 @@ export function removeDatasetBuilder(data: RemoveDatasetInterface, seed: BIP32In
     valueLength,
     value,
   ]);
-  // ========== NULLIFYING THE ESCROW ===========
-  const approverAddressLength = writeInt32(0);
-  const commission = writeInt64(0);
-  const timeout = writeInt64(0);
-  const instructionLength = writeInt32(0);
 
-  bytes = Buffer.concat([bytes, approverAddressLength, commission, timeout, instructionLength]);
+  // Add Escrow Bytes
+  bytes = addEscrowBytes(bytes, data);
 
-  // ========== END NULLIFYING THE ESCROW =========
+  const message = writeInt32(0);
+  bytes = Buffer.concat([bytes, message]);
 
-  const signatureType = writeInt32(0);
-  const signature = seed.sign(bytes);
-  const bodyLengthSignature = writeInt32(signatureType.length + signature.length);
-  return Buffer.concat([bytes, bodyLengthSignature, signatureType, signature]);
+  if (seed) {
+    const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
+    const signature = seed.sign(txHash);
+    return Buffer.concat([bytes, signature]);
+  } else return bytes;
+}
+
+export function readRemoveDatasetBytes(txBytes: Buffer) {
+  const bodyBytesRemoveDatasetLength = txBytes.slice(161, 165).readInt32LE(0);
+  const bodyBytesRemoveDataSet = txBytes.slice(165, 165 + bodyBytesRemoveDatasetLength);
+  const propertyLengthRemove = bodyBytesRemoveDataSet.slice(0, 4).readInt32LE(0);
+  const porpertyValueLengthRemove = 4 + propertyLengthRemove;
+  const propertyValueRemove = bodyBytesRemoveDataSet.slice(4, porpertyValueLengthRemove);
+  const startLengthValueRemove = 4 + propertyLengthRemove;
+  const endLengthValueRemove = startLengthValueRemove + 4;
+  const valueLengthRemove = bodyBytesRemoveDataSet.slice(startLengthValueRemove, endLengthValueRemove).readInt32LE(0);
+  const valueRemove = bodyBytesRemoveDataSet.slice(endLengthValueRemove, endLengthValueRemove + valueLengthRemove);
+  const txBody = {
+    propertyLength: porpertyValueLengthRemove,
+    property: propertyValueRemove.toString(),
+    valueLength: valueLengthRemove,
+    value: valueRemove.toString(),
+  };
+  return txBody;
 }

@@ -1,56 +1,88 @@
-import {
-  GetAccountBalanceRequest,
-  GetAccountBalanceResponse,
-  GetAccountBalancesResponse,
-  GetAccountBalancesRequest,
-} from '../grpc/model/accountBalance_pb';
+import { GetAccountBalanceRequest, GetAccountBalancesRequest } from '../grpc/model/accountBalance_pb';
 import { AccountBalanceServiceClient } from '../grpc/service/accountBalance_pb_service';
 import Network from './Network';
 import { grpc } from '@improbable-eng/grpc-web';
+import { addressToBytes, parseAddress } from './helper/utils';
+import { Address } from './helper/interfaces';
 
-export type AccountBalanceResponse = GetAccountBalanceResponse.AsObject;
-export type AccountBalancesResponse = GetAccountBalancesResponse.AsObject;
+export interface AccountBalance {
+  address: Address;
+  blockHeight: number;
+  spendableBalance: number;
+  balance: number;
+  popRevenue: string;
+  latest: boolean;
+}
 
-function getBalance(address: string): Promise<AccountBalanceResponse> {
+function getBalance(address: Address): Promise<AccountBalance> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetAccountBalanceRequest();
 
-    request.setAccountaddress(address);
+    const addressBytes = addressToBytes(address);
+    request.setAccountaddress(addressBytes);
     const client = new AccountBalanceServiceClient(networkIP.host);
     client.getAccountBalance(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         if (code == grpc.Code.NotFound) {
           return resolve({
-            accountbalance: {
-              spendablebalance: '0',
-              balance: '0',
-              accountaddress: address,
-              blockheight: 0,
-              poprevenue: '0',
-              latest: true,
-            },
+            spendableBalance: 0,
+            balance: 0,
+            address,
+            blockHeight: 0,
+            popRevenue: '0',
+            latest: true,
           });
         } else if (code != grpc.Code.OK) return reject({ code, message, metadata });
       }
-      if (res) resolve(res.toObject());
+
+      const account = res && res.toObject().accountbalance;
+      if (account) {
+        const parsedAddress = parseAddress(account.accountaddress);
+        resolve({
+          spendableBalance: parseInt(account.spendablebalance),
+          balance: parseInt(account.balance),
+          address: parsedAddress,
+          blockHeight: account.blockheight,
+          popRevenue: account.poprevenue,
+          latest: account.latest,
+        });
+      }
     });
   });
 }
 
-function getBalances(addresses: string[]): Promise<AccountBalancesResponse> {
+function getBalances(addresses: Address[]): Promise<AccountBalance[]> {
   return new Promise((resolve, reject) => {
+    const addressesBytes: Buffer[] = addresses.map(address => addressToBytes(address));
     const networkIP = Network.selected();
     const request = new GetAccountBalancesRequest();
-    request.setAccountaddressesList(addresses);
+
+    request.setAccountaddressesList(addressesBytes);
     const client = new AccountBalanceServiceClient(networkIP.host);
     client.getAccountBalances(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      if (res) resolve(res.toObject());
+
+      const accounts = res && res.toObject().accountbalancesList;
+
+      if (accounts) {
+        const zbcAccounts = accounts.map(account => {
+          const parsedAddress = parseAddress(account.accountaddress);
+          return {
+            spendableBalance: parseInt(account.spendablebalance),
+            balance: parseInt(account.balance),
+            address: parsedAddress,
+            blockHeight: account.blockheight,
+            popRevenue: account.poprevenue,
+            latest: account.latest,
+          };
+        });
+        resolve(zbcAccounts);
+      }
     });
   });
 }

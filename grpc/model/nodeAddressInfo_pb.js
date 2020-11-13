@@ -91,7 +91,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.model.SendNodeAddressInfoRequest = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.model.SendNodeAddressInfoRequest.repeatedFields_, null);
 };
 goog.inherits(proto.model.SendNodeAddressInfoRequest, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -746,6 +746,13 @@ proto.model.GetNodeAddressesInfoResponse.prototype.clearNodeaddressesinfoList = 
 
 
 
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.model.SendNodeAddressInfoRequest.repeatedFields_ = [1];
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -777,7 +784,8 @@ proto.model.SendNodeAddressInfoRequest.prototype.toObject = function(opt_include
  */
 proto.model.SendNodeAddressInfoRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    nodeaddressinfomessage: (f = msg.getNodeaddressinfomessage()) && proto.model.NodeAddressInfo.toObject(includeInstance, f)
+    nodeaddressinfomessageList: jspb.Message.toObjectList(msg.getNodeaddressinfomessageList(),
+    proto.model.NodeAddressInfo.toObject, includeInstance)
   };
 
   if (includeInstance) {
@@ -817,7 +825,7 @@ proto.model.SendNodeAddressInfoRequest.deserializeBinaryFromReader = function(ms
     case 1:
       var value = new proto.model.NodeAddressInfo;
       reader.readMessage(value,proto.model.NodeAddressInfo.deserializeBinaryFromReader);
-      msg.setNodeaddressinfomessage(value);
+      msg.addNodeaddressinfomessage(value);
       break;
     default:
       reader.skipField();
@@ -848,9 +856,9 @@ proto.model.SendNodeAddressInfoRequest.prototype.serializeBinary = function() {
  */
 proto.model.SendNodeAddressInfoRequest.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getNodeaddressinfomessage();
-  if (f != null) {
-    writer.writeMessage(
+  f = message.getNodeaddressinfomessageList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
       1,
       f,
       proto.model.NodeAddressInfo.serializeBinaryToWriter
@@ -860,35 +868,36 @@ proto.model.SendNodeAddressInfoRequest.serializeBinaryToWriter = function(messag
 
 
 /**
- * optional NodeAddressInfo NodeAddressInfoMessage = 1;
- * @return {?proto.model.NodeAddressInfo}
+ * repeated NodeAddressInfo NodeAddressInfoMessage = 1;
+ * @return {!Array<!proto.model.NodeAddressInfo>}
  */
-proto.model.SendNodeAddressInfoRequest.prototype.getNodeaddressinfomessage = function() {
-  return /** @type{?proto.model.NodeAddressInfo} */ (
-    jspb.Message.getWrapperField(this, proto.model.NodeAddressInfo, 1));
+proto.model.SendNodeAddressInfoRequest.prototype.getNodeaddressinfomessageList = function() {
+  return /** @type{!Array<!proto.model.NodeAddressInfo>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.model.NodeAddressInfo, 1));
 };
 
 
-/** @param {?proto.model.NodeAddressInfo|undefined} value */
-proto.model.SendNodeAddressInfoRequest.prototype.setNodeaddressinfomessage = function(value) {
-  jspb.Message.setWrapperField(this, 1, value);
-};
-
-
-/**
- * Clears the message field making it undefined.
- */
-proto.model.SendNodeAddressInfoRequest.prototype.clearNodeaddressinfomessage = function() {
-  this.setNodeaddressinfomessage(undefined);
+/** @param {!Array<!proto.model.NodeAddressInfo>} value */
+proto.model.SendNodeAddressInfoRequest.prototype.setNodeaddressinfomessageList = function(value) {
+  jspb.Message.setRepeatedWrapperField(this, 1, value);
 };
 
 
 /**
- * Returns whether this field is set.
- * @return {boolean}
+ * @param {!proto.model.NodeAddressInfo=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.model.NodeAddressInfo}
  */
-proto.model.SendNodeAddressInfoRequest.prototype.hasNodeaddressinfomessage = function() {
-  return jspb.Message.getField(this, 1) != null;
+proto.model.SendNodeAddressInfoRequest.prototype.addNodeaddressinfomessage = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.model.NodeAddressInfo, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ */
+proto.model.SendNodeAddressInfoRequest.prototype.clearNodeaddressinfomessageList = function() {
+  this.setNodeaddressinfomessageList([]);
 };
 
 

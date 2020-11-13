@@ -1,18 +1,30 @@
 import { GetTransactionsResponse, Transaction } from '../../../grpc/model/transaction_pb';
-export interface ZooTransactionsInterface {
+import { Address } from '../interfaces';
+export interface ZBCTransactions {
     total: number;
-    transactions: ZooTransactionInterface[];
+    transactions: ZBCTransaction[];
 }
-export interface ZooTransactionInterface {
-    id: string;
-    address: string;
+export interface ZBCTransaction {
+    id?: string;
+    sender: Address;
+    senderAlias?: string;
+    recipient: Address;
+    recipientAlias?: string;
     timestamp: number;
     fee: number;
-    type: string;
-    amount: number;
-    blockId: string;
-    height: number;
-    transactionIndex: number;
+    blockId?: string;
+    height?: number;
+    transactionIndex?: number;
+    transactionHash?: string;
+    transactionType?: number;
+    txBody?: any;
+    escrow?: boolean;
+    escrowStatus?: number;
+    multisig?: boolean;
+    approverAddress?: Address;
+    commission?: number;
+    timeout?: number;
+    instruction?: string;
 }
-export declare function toTransactionListWallet(res: GetTransactionsResponse.AsObject, ownAddress: string): ZooTransactionsInterface;
-export declare function toTransactionWallet(tx: Transaction.AsObject, ownAddress: string): ZooTransactionInterface;
+export declare function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransaction;
+export declare function toZBCTransactions(transactions: GetTransactionsResponse.AsObject): ZBCTransactions;

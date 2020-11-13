@@ -3,6 +3,7 @@
 
 import * as service_nodeHardware_pb from "../service/nodeHardware_pb";
 import * as model_nodeHardware_pb from "../model/nodeHardware_pb";
+import * as model_empty_pb from "../model/empty_pb";
 import {grpc} from "@improbable-eng/grpc-web";
 
 type NodeHardwareServiceGetNodeHardware = {
@@ -14,9 +15,19 @@ type NodeHardwareServiceGetNodeHardware = {
   readonly responseType: typeof model_nodeHardware_pb.GetNodeHardwareResponse;
 };
 
+type NodeHardwareServiceGetNodeTime = {
+  readonly methodName: string;
+  readonly service: typeof NodeHardwareService;
+  readonly requestStream: false;
+  readonly responseStream: false;
+  readonly requestType: typeof model_empty_pb.Empty;
+  readonly responseType: typeof model_nodeHardware_pb.GetNodeTimeResponse;
+};
+
 export class NodeHardwareService {
   static readonly serviceName: string;
   static readonly GetNodeHardware: NodeHardwareServiceGetNodeHardware;
+  static readonly GetNodeTime: NodeHardwareServiceGetNodeTime;
 }
 
 export type ServiceError = { message: string, code: number; metadata: grpc.Metadata }
@@ -52,5 +63,14 @@ export class NodeHardwareServiceClient {
 
   constructor(serviceHost: string, options?: grpc.RpcOptions);
   getNodeHardware(metadata?: grpc.Metadata): BidirectionalStream<model_nodeHardware_pb.GetNodeHardwareRequest, model_nodeHardware_pb.GetNodeHardwareResponse>;
+  getNodeTime(
+    requestMessage: model_empty_pb.Empty,
+    metadata: grpc.Metadata,
+    callback: (error: ServiceError|null, responseMessage: model_nodeHardware_pb.GetNodeTimeResponse|null) => void
+  ): UnaryResponse;
+  getNodeTime(
+    requestMessage: model_empty_pb.Empty,
+    callback: (error: ServiceError|null, responseMessage: model_nodeHardware_pb.GetNodeTimeResponse|null) => void
+  ): UnaryResponse;
 }
 

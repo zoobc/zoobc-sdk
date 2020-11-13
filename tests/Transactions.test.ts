@@ -10,7 +10,7 @@ import {
   PostTransactionResponse,
 } from '../grpc/model/transaction_pb';
 
-import zoobc, { ZooKeyring } from '../src';
+import zoobc, { feeVoteCommitPhaseBuilder, feeVoteInterface, feeVoteRevealPhaseBuilder, ZooKeyring } from '../src';
 
 const hosts = [{ host: 'http://85.90.246.90:8002', name: '168 Testnet' }];
 const passphare =
@@ -34,6 +34,28 @@ function mockTransaction(id: string) {
 
 function mockSendMoney(data: SendMoneyInterface) {
   const bytes = sendMoneyBuilder(data, childSeed);
+
+  const response = new PostTransactionResponse();
+  const transaction = new Transaction();
+
+  transaction.setTransactionbodybytes(bytes);
+  response.setTransaction(transaction);
+  return new FakeTransportBuilder().withMessages([transaction]).build();
+}
+
+function mockFeeVoteCommit(data: feeVoteInterface) {
+  const bytes = feeVoteCommitPhaseBuilder(data, childSeed);
+
+  const response = new PostTransactionResponse();
+  const transaction = new Transaction();
+
+  transaction.setTransactionbodybytes(bytes);
+  response.setTransaction(transaction);
+  return new FakeTransportBuilder().withMessages([transaction]).build();
+}
+
+function mockFeeVoteReveal(data: feeVoteInterface) {
+  const bytes = feeVoteRevealPhaseBuilder(data, childSeed);
 
   const response = new PostTransactionResponse();
   const transaction = new Transaction();
@@ -86,6 +108,42 @@ describe('Transactions Unit Testing :', () => {
       grpc.setDefaultTransport(transport);
 
       const result = await zoobc.Transactions.sendMoney(data, childSeed);
+      expect(result).to.be.have.property('transaction');
+    });
+  });
+
+  describe('feeVoteCommit', () => {
+    it('feeVoteCommit should return new transaction object', async () => {
+      const data: feeVoteInterface = {
+        accountAddress: 'ZBC_F5YUYDXD_WFDJSAV5_K3Y72RCM_GLQP32XI_QDVXOGGD_J7CGSSSK_5VKR7YML',
+        fee: 1,
+        recentBlockHash: '+UgWrNC5KrdqoBXXQ8lBOI6XYXnQ2bluuq6meSWIww=',
+        recentBlockHeight: 117845,
+        feeVote: 5,
+      };
+
+      const transport = mockFeeVoteCommit({ ...data });
+      grpc.setDefaultTransport(transport);
+
+      const result = await zoobc.Transactions.feeVoteCommitPhase(data, childSeed);
+      expect(result).to.be.have.property('transaction');
+    });
+  });
+
+  describe('feeVoteReveal', () => {
+    it('feeVoteReveal should return new transaction object', async () => {
+      const data: feeVoteInterface = {
+        accountAddress: 'ZBC_F5YUYDXD_WFDJSAV5_K3Y72RCM_GLQP32XI_QDVXOGGD_J7CGSSSK_5VKR7YML',
+        fee: 1,
+        recentBlockHash: '+UgWrNC5KrdqoBXXQ8lBOI6XYXnQ2bluuq6meSWIww=',
+        recentBlockHeight: 117845,
+        feeVote: 5,
+      };
+
+      const transport = mockFeeVoteReveal({ ...data });
+      grpc.setDefaultTransport(transport);
+
+      const result = await zoobc.Transactions.feeVoteRevealPhase(data, childSeed);
       expect(result).to.be.have.property('transaction');
     });
   });

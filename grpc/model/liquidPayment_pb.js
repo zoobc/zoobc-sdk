@@ -68,8 +68,8 @@ proto.model.LiquidPayment.prototype.toObject = function(opt_includeInstance) {
 proto.model.LiquidPayment.toObject = function(includeInstance, msg) {
   var f, obj = {
     id: jspb.Message.getFieldWithDefault(msg, 1, "0"),
-    senderaddress: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    recipientaddress: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    senderaddress: msg.getSenderaddress_asB64(),
+    recipientaddress: msg.getRecipientaddress_asB64(),
     amount: jspb.Message.getFieldWithDefault(msg, 4, "0"),
     appliedtime: jspb.Message.getFieldWithDefault(msg, 5, "0"),
     completeminutes: jspb.Message.getFieldWithDefault(msg, 6, "0"),
@@ -117,11 +117,11 @@ proto.model.LiquidPayment.deserializeBinaryFromReader = function(msg, reader) {
       msg.setId(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setSenderaddress(value);
       break;
     case 3:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setRecipientaddress(value);
       break;
     case 4:
@@ -184,16 +184,16 @@ proto.model.LiquidPayment.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getSenderaddress();
+  f = message.getSenderaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       2,
       f
     );
   }
-  f = message.getRecipientaddress();
+  f = message.getRecipientaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       3,
       f
     );
@@ -259,32 +259,80 @@ proto.model.LiquidPayment.prototype.setId = function(value) {
 
 
 /**
- * optional string SenderAddress = 2;
- * @return {string}
+ * optional bytes SenderAddress = 2;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.LiquidPayment.prototype.getSenderaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
-};
-
-
-/** @param {string} value */
-proto.model.LiquidPayment.prototype.setSenderaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /**
- * optional string RecipientAddress = 3;
+ * optional bytes SenderAddress = 2;
+ * This is a type-conversion wrapper around `getSenderaddress()`
  * @return {string}
  */
-proto.model.LiquidPayment.prototype.getRecipientaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+proto.model.LiquidPayment.prototype.getSenderaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getSenderaddress()));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes SenderAddress = 2;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getSenderaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.LiquidPayment.prototype.getSenderaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getSenderaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.LiquidPayment.prototype.setSenderaddress = function(value) {
+  jspb.Message.setProto3BytesField(this, 2, value);
+};
+
+
+/**
+ * optional bytes RecipientAddress = 3;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.LiquidPayment.prototype.getRecipientaddress = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * optional bytes RecipientAddress = 3;
+ * This is a type-conversion wrapper around `getRecipientaddress()`
+ * @return {string}
+ */
+proto.model.LiquidPayment.prototype.getRecipientaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getRecipientaddress()));
+};
+
+
+/**
+ * optional bytes RecipientAddress = 3;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getRecipientaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.LiquidPayment.prototype.getRecipientaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getRecipientaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.LiquidPayment.prototype.setRecipientaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  jspb.Message.setProto3BytesField(this, 3, value);
 };
 
 

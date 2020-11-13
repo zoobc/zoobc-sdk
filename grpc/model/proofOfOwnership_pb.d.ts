@@ -32,8 +32,10 @@ export namespace ProofOfOwnership {
 }
 
 export class ProofOfOwnershipMessage extends jspb.Message {
-  getAccountaddress(): string;
-  setAccountaddress(value: string): void;
+  getAccountaddress(): Uint8Array | string;
+  getAccountaddress_asU8(): Uint8Array;
+  getAccountaddress_asB64(): string;
+  setAccountaddress(value: Uint8Array | string): void;
 
   getBlockhash(): Uint8Array | string;
   getBlockhash_asU8(): Uint8Array;
@@ -55,7 +57,7 @@ export class ProofOfOwnershipMessage extends jspb.Message {
 
 export namespace ProofOfOwnershipMessage {
   export type AsObject = {
-    accountaddress: string,
+    accountaddress: Uint8Array | string,
     blockhash: Uint8Array | string,
     blockheight: number,
   }

@@ -47,6 +47,33 @@ MultisigService.GetMultisigAddressByParticipantAddress = {
   responseType: model_multiSignature_pb.GetMultisigAddressByParticipantAddressResponse
 };
 
+MultisigService.GetPendingTransactionsByHeight = {
+  methodName: "GetPendingTransactionsByHeight",
+  service: MultisigService,
+  requestStream: false,
+  responseStream: false,
+  requestType: model_multiSignature_pb.GetPendingTransactionsByHeightRequest,
+  responseType: model_multiSignature_pb.GetPendingTransactionsByHeightResponse
+};
+
+MultisigService.GetMultisigAddressesByBlockHeightRange = {
+  methodName: "GetMultisigAddressesByBlockHeightRange",
+  service: MultisigService,
+  requestStream: false,
+  responseStream: false,
+  requestType: model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeRequest,
+  responseType: model_multiSignature_pb.GetMultisigAddressesByBlockHeightRangeResponse
+};
+
+MultisigService.GetParticipantsByMultisigAddresses = {
+  methodName: "GetParticipantsByMultisigAddresses",
+  service: MultisigService,
+  requestStream: false,
+  responseStream: false,
+  requestType: model_multiSignature_pb.GetParticipantsByMultisigAddressesRequest,
+  responseType: model_multiSignature_pb.GetParticipantsByMultisigAddressesResponse
+};
+
 exports.MultisigService = MultisigService;
 
 function MultisigServiceClient(serviceHost, options) {
@@ -152,6 +179,99 @@ MultisigServiceClient.prototype.getMultisigAddressByParticipantAddress = functio
     callback = arguments[1];
   }
   var client = grpc.unary(MultisigService.GetMultisigAddressByParticipantAddress, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+MultisigServiceClient.prototype.getPendingTransactionsByHeight = function getPendingTransactionsByHeight(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(MultisigService.GetPendingTransactionsByHeight, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+MultisigServiceClient.prototype.getMultisigAddressesByBlockHeightRange = function getMultisigAddressesByBlockHeightRange(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(MultisigService.GetMultisigAddressesByBlockHeightRange, {
+    request: requestMessage,
+    host: this.serviceHost,
+    metadata: metadata,
+    transport: this.options.transport,
+    debug: this.options.debug,
+    onEnd: function (response) {
+      if (callback) {
+        if (response.status !== grpc.Code.OK) {
+          var err = new Error(response.statusMessage);
+          err.code = response.status;
+          err.metadata = response.trailers;
+          callback(err, null);
+        } else {
+          callback(null, response.message);
+        }
+      }
+    }
+  });
+  return {
+    cancel: function () {
+      callback = null;
+      client.close();
+    }
+  };
+};
+
+MultisigServiceClient.prototype.getParticipantsByMultisigAddresses = function getParticipantsByMultisigAddresses(requestMessage, metadata, callback) {
+  if (arguments.length === 2) {
+    callback = arguments[1];
+  }
+  var client = grpc.unary(MultisigService.GetParticipantsByMultisigAddresses, {
     request: requestMessage,
     host: this.serviceHost,
     metadata: metadata,

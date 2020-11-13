@@ -2,13 +2,13 @@
 // file: model/publishedReceipt.proto
 
 import * as jspb from "google-protobuf";
-import * as model_batchReceipt_pb from "../model/batchReceipt_pb";
+import * as model_receipt_pb from "../model/receipt_pb";
 
 export class PublishedReceipt extends jspb.Message {
-  hasBatchreceipt(): boolean;
-  clearBatchreceipt(): void;
-  getBatchreceipt(): model_batchReceipt_pb.BatchReceipt | undefined;
-  setBatchreceipt(value?: model_batchReceipt_pb.BatchReceipt): void;
+  hasReceipt(): boolean;
+  clearReceipt(): void;
+  getReceipt(): model_receipt_pb.Receipt | undefined;
+  setReceipt(value?: model_receipt_pb.Receipt): void;
 
   getIntermediatehashes(): Uint8Array | string;
   getIntermediatehashes_asU8(): Uint8Array;
@@ -36,7 +36,7 @@ export class PublishedReceipt extends jspb.Message {
 
 export namespace PublishedReceipt {
   export type AsObject = {
-    batchreceipt?: model_batchReceipt_pb.BatchReceipt.AsObject,
+    receipt?: model_receipt_pb.Receipt.AsObject,
     intermediatehashes: Uint8Array | string,
     blockheight: number,
     receiptindex: number,

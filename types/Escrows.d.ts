@@ -1,14 +1,13 @@
 import { BIP32Interface } from 'bip32';
 import { EscrowApprovalInterface } from './helper/transaction-builder/escrow-transaction';
-import { Escrow, GetEscrowTransactionsResponse } from '../grpc/model/escrow_pb';
 import { PostTransactionResponse } from '../grpc/model/transaction_pb';
-export declare type EscrowTransactionsResponse = GetEscrowTransactionsResponse.AsObject;
-export declare type EscrowTransactionResponse = Escrow.AsObject;
+import { Address } from './helper/interfaces';
+import { Escrows, Escrow } from './helper/wallet/Escrows';
 export declare type ApprovalEscrowTransactionResponse = PostTransactionResponse.AsObject;
 export interface EscrowListParams {
-    approverAddress?: string;
-    sender?: string;
-    recipient?: string;
+    approverAddress?: Address;
+    sender?: Address;
+    recipient?: Address;
     blockHeightStart?: number;
     blockHeightEnd?: number;
     id?: string;
@@ -21,8 +20,8 @@ export interface EscrowListParams {
     };
     latest?: boolean;
 }
-declare function getList(params?: EscrowListParams): Promise<EscrowTransactionsResponse>;
-declare function get(id: string): Promise<EscrowTransactionResponse>;
+declare function getList(params?: EscrowListParams): Promise<Escrows>;
+declare function get(id: string): Promise<Escrow>;
 declare function approval(data: EscrowApprovalInterface, seed: BIP32Interface): Promise<ApprovalEscrowTransactionResponse>;
 declare const _default: {
     approval: typeof approval;

@@ -312,7 +312,7 @@ proto.model.ProofOfOwnershipMessage.prototype.toObject = function(opt_includeIns
  */
 proto.model.ProofOfOwnershipMessage.toObject = function(includeInstance, msg) {
   var f, obj = {
-    accountaddress: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    accountaddress: msg.getAccountaddress_asB64(),
     blockhash: msg.getBlockhash_asB64(),
     blockheight: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
@@ -352,7 +352,7 @@ proto.model.ProofOfOwnershipMessage.deserializeBinaryFromReader = function(msg, 
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setAccountaddress(value);
       break;
     case 2:
@@ -392,9 +392,9 @@ proto.model.ProofOfOwnershipMessage.prototype.serializeBinary = function() {
  */
 proto.model.ProofOfOwnershipMessage.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getAccountaddress();
+  f = message.getAccountaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       1,
       f
     );
@@ -417,17 +417,41 @@ proto.model.ProofOfOwnershipMessage.serializeBinaryToWriter = function(message, 
 
 
 /**
- * optional string AccountAddress = 1;
- * @return {string}
+ * optional bytes AccountAddress = 1;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.ProofOfOwnershipMessage.prototype.getAccountaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes AccountAddress = 1;
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {string}
+ */
+proto.model.ProofOfOwnershipMessage.prototype.getAccountaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getAccountaddress()));
+};
+
+
+/**
+ * optional bytes AccountAddress = 1;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.ProofOfOwnershipMessage.prototype.getAccountaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getAccountaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.ProofOfOwnershipMessage.prototype.setAccountaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 1, value);
+  jspb.Message.setProto3BytesField(this, 1, value);
 };
 
 

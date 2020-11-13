@@ -1,18 +1,15 @@
-import { MultisigPendingTxResponse } from '../../MultiSignature';
-import { SendMoneyInterface } from '../transaction-builder/send-money';
-export declare function toGetPendingList(res: MultisigPendingTxResponse): {
-    count: number;
-    page: number;
-    pendingtransactionsList: {
-        amount: string;
-        blockheight: number;
-        fee: string;
-        latest: boolean;
-        senderaddress: string;
-        recipientaddress: string;
-        status: 0 | 1 | 2 | 3;
-        timestamp: string;
-        transactionhash: string | Uint8Array;
-    }[];
-};
-export declare function generateTransactionHash(data: SendMoneyInterface): string;
+/// <reference types="node" />
+import { MultisigPendingTxResponse, MultisigPendingTxDetailResponse } from '../../MultiSignature';
+import { ZBCTransaction, ZBCTransactions } from '../..';
+import { MultiSignatureInfo, PendingSignature } from '../../../grpc/model/multiSignature_pb';
+export declare type multisignatureinfo = MultiSignatureInfo.AsObject;
+export declare type pendingsignaturesList = Array<PendingSignature.AsObject>;
+export interface MultiSigPendingDetailResponse {
+    pendingtransaction: ZBCTransaction;
+    pendingsignaturesList: pendingsignaturesList;
+    multisignatureinfo?: multisignatureinfo;
+}
+export declare function toGetPendingList(res: MultisigPendingTxResponse): ZBCTransactions;
+export declare function toGetPending(tx: any): ZBCTransaction;
+export declare function toGetPendingDetail(tx: MultisigPendingTxDetailResponse): MultiSigPendingDetailResponse;
+export declare function generateTransactionHash(buffer: Buffer): string;

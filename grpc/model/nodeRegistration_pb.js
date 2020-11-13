@@ -293,7 +293,7 @@ proto.model.NodeRegistration.toObject = function(includeInstance, msg) {
   var f, obj = {
     nodeid: jspb.Message.getFieldWithDefault(msg, 1, "0"),
     nodepublickey: msg.getNodepublickey_asB64(),
-    accountaddress: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    accountaddress: msg.getAccountaddress_asB64(),
     registrationheight: jspb.Message.getFieldWithDefault(msg, 4, 0),
     lockedbalance: jspb.Message.getFieldWithDefault(msg, 5, "0"),
     registrationstatus: jspb.Message.getFieldWithDefault(msg, 6, 0),
@@ -345,7 +345,7 @@ proto.model.NodeRegistration.deserializeBinaryFromReader = function(msg, reader)
       msg.setNodepublickey(value);
       break;
     case 3:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setAccountaddress(value);
       break;
     case 4:
@@ -416,9 +416,9 @@ proto.model.NodeRegistration.serializeBinaryToWriter = function(message, writer)
       f
     );
   }
-  f = message.getAccountaddress();
+  f = message.getAccountaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       3,
       f
     );
@@ -524,17 +524,41 @@ proto.model.NodeRegistration.prototype.setNodepublickey = function(value) {
 
 
 /**
- * optional string AccountAddress = 3;
- * @return {string}
+ * optional bytes AccountAddress = 3;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.NodeRegistration.prototype.getAccountaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes AccountAddress = 3;
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {string}
+ */
+proto.model.NodeRegistration.prototype.getAccountaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getAccountaddress()));
+};
+
+
+/**
+ * optional bytes AccountAddress = 3;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.NodeRegistration.prototype.getAccountaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getAccountaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.NodeRegistration.prototype.setAccountaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 3, value);
+  jspb.Message.setProto3BytesField(this, 3, value);
 };
 
 
@@ -1114,7 +1138,7 @@ proto.model.GetNodeRegistrationRequest.prototype.toObject = function(opt_include
 proto.model.GetNodeRegistrationRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
     nodepublickey: msg.getNodepublickey_asB64(),
-    accountaddress: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    accountaddress: msg.getAccountaddress_asB64(),
     registrationheight: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
@@ -1157,7 +1181,7 @@ proto.model.GetNodeRegistrationRequest.deserializeBinaryFromReader = function(ms
       msg.setNodepublickey(value);
       break;
     case 2:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
       msg.setAccountaddress(value);
       break;
     case 3:
@@ -1200,9 +1224,9 @@ proto.model.GetNodeRegistrationRequest.serializeBinaryToWriter = function(messag
       f
     );
   }
-  f = message.getAccountaddress();
+  f = message.getAccountaddress_asU8();
   if (f.length > 0) {
-    writer.writeString(
+    writer.writeBytes(
       2,
       f
     );
@@ -1257,17 +1281,41 @@ proto.model.GetNodeRegistrationRequest.prototype.setNodepublickey = function(val
 
 
 /**
- * optional string AccountAddress = 2;
- * @return {string}
+ * optional bytes AccountAddress = 2;
+ * @return {!(string|Uint8Array)}
  */
 proto.model.GetNodeRegistrationRequest.prototype.getAccountaddress = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
-/** @param {string} value */
+/**
+ * optional bytes AccountAddress = 2;
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {string}
+ */
+proto.model.GetNodeRegistrationRequest.prototype.getAccountaddress_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getAccountaddress()));
+};
+
+
+/**
+ * optional bytes AccountAddress = 2;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getAccountaddress()`
+ * @return {!Uint8Array}
+ */
+proto.model.GetNodeRegistrationRequest.prototype.getAccountaddress_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getAccountaddress()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
 proto.model.GetNodeRegistrationRequest.prototype.setAccountaddress = function(value) {
-  jspb.Message.setProto3StringField(this, 2, value);
+  jspb.Message.setProto3BytesField(this, 2, value);
 };
 
 

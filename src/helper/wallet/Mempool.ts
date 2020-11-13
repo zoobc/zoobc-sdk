@@ -1,30 +1,8 @@
-import { readInt64 } from '../utils';
-import { GetMempoolTransactionsResponse } from '../../../grpc/model/mempool_pb';
+import { sha3_256 } from 'js-sha3';
+import { getZBCAddress, readInt64, ZBCTransaction, ZBCTransactions } from '../..';
+import { GetMempoolTransactionsResponse, MempoolTransaction } from '../../../grpc/model/mempool_pb';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
-
-export function toUnconfirmedSendMoneyWallet(res: GetMempoolTransactionsResponse.AsObject, ownAddress: string) {
-  let transactions: any = res.mempooltransactionsList.filter(tx => {
-    const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-    if (bytes.readInt32LE(0) == TransactionType.SENDMONEYTRANSACTION) return tx;
-  });
-  transactions = transactions.map((tx: any) => {
-    const bytes = Buffer.from(tx.transactionbytes.toString(), 'base64');
-
-    const amount = readInt64(bytes, 165);
-    const fee = readInt64(bytes, 153);
-    const friendAddress = tx.senderaccountaddress == ownAddress ? tx.recipientaccountaddress : tx.senderaccountaddress;
-    const type = tx.senderaccountaddress == ownAddress ? 'send' : 'receive';
-
-    return {
-      address: friendAddress,
-      type: type,
-      timestamp: parseInt(tx.arrivaltimestamp) * 1000,
-      fee: fee,
-      amount: amount,
-    };
-  });
-  return transactions;
-}
+import { parseAddress, readAddress, readBodyBytes } from '../utils';
 
 export function toUnconfirmTransactionNodeWallet(res: GetMempoolTransactionsResponse.AsObject) {
   let mempoolTx = res.mempooltransactionsList;
@@ -56,4 +34,76 @@ export function toUnconfirmTransactionNodeWallet(res: GetMempoolTransactionsResp
     if (found) break;
   }
   return result;
+}
+
+export function toZBCPendingTransactions(mempools: GetMempoolTransactionsResponse.AsObject): ZBCTransactions {
+  const transactions = mempools.mempooltransactionsList.map(mempool => toZBCPendingTransaction(mempool));
+  return { total: mempools.total, transactions };
+}
+
+export function toZBCPendingTransaction(mempool: MempoolTransaction.AsObject): ZBCTransaction {
+  const txBytes = Buffer.from(mempool.transactionbytes.toString(), 'base64');
+  let offset = 0;
+
+  const transactionType = txBytes.readUInt32LE(offset);
+  offset += 4;
+
+  const version = txBytes.readUInt8(offset);
+  offset += 1;
+
+  const timestamp = readInt64(txBytes, offset);
+  offset += 8;
+
+  const senderBytes = readAddress(txBytes, offset);
+  const sender = parseAddress(senderBytes);
+  offset += senderBytes.length;
+
+  const recipientBytes = readAddress(txBytes, offset);
+  const recipient = parseAddress(recipientBytes);
+  offset += recipientBytes.length;
+
+  const txFee = readInt64(txBytes, offset);
+  offset += 8;
+
+  const bodyBytesLength = txBytes.readUInt32LE(offset);
+  offset += 4;
+
+  const txBody = readBodyBytes(txBytes, transactionType, offset);
+  offset += bodyBytesLength;
+
+  const transactionHash = Buffer.from(sha3_256(txBytes), 'hex');
+
+  let transaction: ZBCTransaction = {
+    timestamp: parseInt(timestamp) * 1000,
+    sender,
+    recipient,
+    fee: parseInt(txFee),
+    escrow: false,
+    transactionType,
+    transactionHash: getZBCAddress(transactionHash, 'ZTX'),
+    txBody,
+  };
+
+  const approverBytes = readAddress(txBytes, offset);
+  const approver = parseAddress(approverBytes);
+  offset += senderBytes.length;
+
+  if (approver.type != 2) {
+    transaction.escrow = true;
+    transaction.approverAddress = approver;
+
+    transaction.commission = parseInt(readInt64(txBytes, offset));
+    offset += 8;
+
+    transaction.timeout = parseInt(readInt64(txBytes, offset));
+    offset += 8;
+
+    const instructionLength = txBytes.readInt32LE(offset);
+    offset += 4;
+
+    transaction.instruction = txBytes.slice(offset, offset + instructionLength).toString('utf-8');
+    offset += instructionLength;
+  }
+
+  return transaction;
 }

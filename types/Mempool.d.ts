@@ -1,8 +1,7 @@
-import { GetMempoolTransactionsResponse, MempoolTransaction } from '../grpc/model/mempool_pb';
-export declare type MempoolTransactionsResponse = GetMempoolTransactionsResponse.AsObject;
-export declare type MempoolTransactionResponse = MempoolTransaction.AsObject;
+import { Address } from './helper/interfaces';
+import { ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
 export interface MempoolListParams {
-    address?: string;
+    address?: Address;
     timestampStart?: string;
     timestampEnd?: string;
     pagination?: {
@@ -11,8 +10,8 @@ export interface MempoolListParams {
         orderBy?: 0 | 1;
     };
 }
-declare function getList(params?: MempoolListParams): Promise<MempoolTransactionsResponse>;
-declare function get(id: string): Promise<MempoolTransactionResponse>;
+declare function getList(params?: MempoolListParams): Promise<ZBCTransactions>;
+declare function get(id: string): Promise<ZBCTransaction>;
 declare const _default: {
     get: typeof get;
     getList: typeof getList;

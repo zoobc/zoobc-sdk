@@ -9,8 +9,10 @@ export class FeeVoteCommitmentVote extends jspb.Message {
   getVotehash_asB64(): string;
   setVotehash(value: Uint8Array | string): void;
 
-  getVoteraddress(): string;
-  setVoteraddress(value: string): void;
+  getVoteraddress(): Uint8Array | string;
+  getVoteraddress_asU8(): Uint8Array;
+  getVoteraddress_asB64(): string;
+  setVoteraddress(value: Uint8Array | string): void;
 
   getBlockheight(): number;
   setBlockheight(value: number): void;
@@ -28,7 +30,7 @@ export class FeeVoteCommitmentVote extends jspb.Message {
 export namespace FeeVoteCommitmentVote {
   export type AsObject = {
     votehash: Uint8Array | string,
-    voteraddress: string,
+    voteraddress: Uint8Array | string,
     blockheight: number,
   }
 }
@@ -74,8 +76,10 @@ export class FeeVoteRevealVote extends jspb.Message {
   getVotersignature_asB64(): string;
   setVotersignature(value: Uint8Array | string): void;
 
-  getVoteraddress(): string;
-  setVoteraddress(value: string): void;
+  getVoteraddress(): Uint8Array | string;
+  getVoteraddress_asU8(): Uint8Array;
+  getVoteraddress_asB64(): string;
+  setVoteraddress(value: Uint8Array | string): void;
 
   getBlockheight(): number;
   setBlockheight(value: number): void;
@@ -94,7 +98,7 @@ export namespace FeeVoteRevealVote {
   export type AsObject = {
     voteinfo?: FeeVoteInfo.AsObject,
     votersignature: Uint8Array | string,
-    voteraddress: string,
+    voteraddress: Uint8Array | string,
     blockheight: number,
   }
 }

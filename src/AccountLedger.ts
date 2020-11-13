@@ -1,13 +1,14 @@
-import { GetAccountLedgersRequest, GetAccountLedgersResponse } from '../grpc/model/accountLedger_pb';
+import { GetAccountLedgersRequest } from '../grpc/model/accountLedger_pb';
 import { AccountLedgerServiceClient } from '../grpc/service/accountLedger_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import Network from './Network';
-
-export type AccountLedgersResponse = GetAccountLedgersResponse.AsObject;
+import { addressToBytes } from './helper/utils';
+import { Address } from './helper/interfaces';
+import { AccountLedgerList, toZBCAccountLedger } from './helper/wallet/AccountLedger';
 
 export interface AccountLedgerListParams {
-  accountAddress?: string;
-  eventType?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15;
+  address?: Address;
+  eventType?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16;
   transactionId?: string;
   timeStampStart?: number;
   timeStampEnd?: number;
@@ -19,13 +20,13 @@ export interface AccountLedgerListParams {
   };
 }
 
-export function getList(params?: AccountLedgerListParams): Promise<AccountLedgersResponse> {
+export function getList(params?: AccountLedgerListParams): Promise<AccountLedgerList> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetAccountLedgersRequest();
     if (params) {
-      const { accountAddress, eventType, transactionId, timeStampStart, timeStampEnd, pagination } = params;
-      if (accountAddress) request.setAccountaddress(accountAddress);
+      const { address, eventType, transactionId, timeStampStart, timeStampEnd, pagination } = params;
+      if (address) request.setAccountaddress(addressToBytes(address));
       if (eventType) request.setEventtype(eventType);
       if (transactionId) request.setTransactionid(transactionId);
       if (timeStampStart) request.setTimestampstart(timeStampStart);
@@ -45,7 +46,8 @@ export function getList(params?: AccountLedgerListParams): Promise<AccountLedger
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      if (res) resolve(res.toObject());
+
+      if (res) resolve(toZBCAccountLedger(res.toObject()));
     });
   });
 }
