@@ -25,13 +25,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install Dependencies
+          name: Build SDK
           command: |
             sudo apt update && sudo apt install git
             npm install --no-audit
-      - run:
-          name: Build SDK
-          command: npm run build
+            npm run build
       - run:
           name: Release SDK
           command: npx semantic-release
@@ -46,14 +44,14 @@ workflows:
   version: 2
   test-publish:
     jobs:
-      - test:
-          filters:
-            branches:
-              only:
-                - develop
+      # - test:
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
       - publish:
-          requires:
-            - test
+          # requires:
+          #   - test
           filters:
             branches:
               only:
