@@ -28,3 +28,4 @@ size-plugin.json
 
 # Build
 /dist
+/types
