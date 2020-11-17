@@ -19,56 +19,21 @@ For instructions on how to use web and mobile for a project, please refer to the
 - [React Native](https://github.com/zoobc/zoobc-thumbwar.git)
 - [VueJs](examples/vue)
 
-## Start developing ZooBC-SDK
+## General Usage
 
-### Installing
-
-**Step 1**
+Add 'zbc-sdk' packages to your project by executing:
 
 ```bash
-# Clone this repository
-$ git clone https://github.com/zoobc/zoobc-sdk.git
-
-# Go to 'zoobc-sdk' directory
-$ cd zoobc-sdk
-
-# Install 'node_modules' packages
-$ npm install
+$ npm install zbc-sdk
 or
-$ yarn install
-```
-
-**Step 2**
-
-```bash
-# Run proto generator
-$ ./protogen.sh
-```
-
-**Step 3**
-
-```bash
-# Unit testing
-$ npm run test
-or
-$ yarn test
-```
-
-### General Usage
-
-Add 'zoobc' packages to your project by executing:
-
-```bash
-$ npm install zoobc
-or
-$ yarn add zoobc
+$ yarn add zbc-sdk
 ```
 
 Here's an example of basic usage for connection:
 
 ```bash
 import React, { useState, useEffect } from 'react';
-import zoobc from 'zoobc';
+import zoobc from 'zbc-sdk';
 
 const App = () => {
   const [blocks, setBlocks] = useState([])
