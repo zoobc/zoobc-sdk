@@ -86,7 +86,7 @@ export {
   toGetPending,
   toGetPendingDetail,
   generateTransactionHash,
-  MultiSigPendingDetailResponse,
+  multisigPendingDetail,
 } from './helper/wallet/MultiSignature';
 export { AccountDataset, AccountDatasets } from './helper/wallet/AccountDataset';
 export { AccountLedger, AccountLedgerList } from './helper/wallet/AccountLedger';
