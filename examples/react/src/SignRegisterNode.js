@@ -53,7 +53,7 @@ const SignRegisterNode = () => {
 
   const buildTransaction = () => {
     const data = {
-      accountAddress: publicKey,
+      accountAddress: { value: publicKey, type: 0 },
         fee: parseInt(fee),
         nodePublicKey: Buffer.from(toByteArray(nodePublicKey)),
         funds: parseInt(lockedBalance),

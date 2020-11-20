@@ -46,8 +46,8 @@ const SignSendMoney = () => {
 
   const buildTransaction = () => {
     const txBytes = sendMoneyBuilder({
-      sender: publicKey,
-      recipient,
+      sender: { value: publicKey, type: 0 },
+      recipient:{ value: recipient, type: 0 },
       fee: parseInt(fee),
       amount: parseInt(amount),
     });
