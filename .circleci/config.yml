@@ -55,7 +55,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - develop
             tags:
               only:
                 - /\d+\.\d+\.\d+/ # /^v*/
