@@ -43,6 +43,7 @@ export function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransact
     transactionIndex: transaction.transactionindex,
     transactionHash: getZBCAddress(Buffer.from(transaction.transactionhash.toString(), 'base64'), 'ZTX'),
     transactionType: transaction.transactiontype,
+    multisig: transaction.multisigchild,
     txBody,
   };
 }

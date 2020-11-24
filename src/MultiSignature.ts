@@ -19,7 +19,7 @@ import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/t
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { Address } from './helper/interfaces';
 import { ZBCTransactions } from './helper/wallet/Transaction';
-import { toGetPendingList, toGetPendingDetail, MultiSigPendingDetailResponse } from './helper/wallet/MultiSignature';
+import { toGetPendingList, toGetPendingDetail, multisigPendingDetail } from './helper/wallet/MultiSignature';
 
 export type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
@@ -49,21 +49,21 @@ export interface MultisigInfoParams {
 function generateMultiSigInfo(multiSigAddress: MultiSigInfo): Buffer {
   const { nonce, minSigs } = multiSigAddress;
   let { participants } = multiSigAddress;
-
-  participants = participants.sort();
-
   const nonceB = writeInt32(nonce);
   const minSigB = writeInt32(minSigs);
   const lengthParticipants = writeInt32(participants.length);
 
-  let participantsB = Buffer.from([]);
-  participants.forEach((acc: Address) => {
-    participantsB = Buffer.concat([participantsB, addressToBytes(acc)]);
+  let participantsB = participants.map(res => addressToBytes(res)).sort(Buffer.compare);
+
+  let resParticipant = Buffer.from([]);
+  participantsB.forEach((acc: any) => {
+    resParticipant = Buffer.concat([resParticipant, acc]);
   });
-  return Buffer.concat([minSigB, nonceB, lengthParticipants, participantsB]);
+
+  return Buffer.concat([minSigB, nonceB, lengthParticipants, resParticipant]);
 }
 
-function createMultiSigAddress(multiSigAddress: MultiSigInfo): string {
+function createMultiSigAddress(multiSigAddress: MultiSigInfo) {
   const buffer = generateMultiSigInfo(multiSigAddress);
   const hashed = Buffer.from(sha3_256(buffer), 'hex');
   return getZBCAddress(hashed);
@@ -99,7 +99,7 @@ function getPendingList(params: MultisigPendingListParams): Promise<ZBCTransacti
   });
 }
 
-function getPendingByTxHash(txHash: string): Promise<MultiSigPendingDetailResponse> {
+function getPendingByTxHash(txHash: string): Promise<multisigPendingDetail> {
   return new Promise((resolve, reject) => {
     const hashHex = ZBCAddressToBytes(txHash)
       .toString('hex')

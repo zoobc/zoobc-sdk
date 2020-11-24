@@ -4,14 +4,28 @@ import { getZBCAddress, readAddress, readBodyBytes } from '../utils';
 import { sha3_256 } from 'js-sha3';
 import { parseAddress } from '../utils';
 import { MultiSignatureInfo, PendingSignature } from '../../../grpc/model/multiSignature_pb';
+import { Address } from '../interfaces';
 
 export type multisignatureinfo = MultiSignatureInfo.AsObject;
 export type pendingsignaturesList = Array<PendingSignature.AsObject>;
 
-export interface MultiSigPendingDetailResponse {
+export interface multisigPendingDetail {
   pendingtransaction: ZBCTransaction;
-  pendingsignaturesList: pendingsignaturesList;
-  multisignatureinfo?: multisignatureinfo;
+  pendingsignaturesList: {
+    accountaddress: Address;
+    blockheight: number;
+    latest: boolean;
+    signature: string | Uint8Array;
+    transactionhash: string;
+  }[];
+  multisignatureinfo?: {
+    addressesList: Address[];
+    blockheight: number;
+    latest: boolean;
+    minimumsignatures: number;
+    multisigaddress: Address;
+    nonce: string;
+  };
 }
 
 export function toGetPendingList(res: MultisigPendingTxResponse): ZBCTransactions {
@@ -64,6 +78,7 @@ export function toGetPending(tx: any): ZBCTransaction {
     txBody,
     transactionHash: getZBCAddress(Buffer.from(tx.transactionhash.toString(), 'base64'), 'ZTX'),
     height: tx.blockheight,
+    multisig: true,
   };
 
   const approverBytes = readAddress(txBytes, offset);
@@ -90,12 +105,34 @@ export function toGetPending(tx: any): ZBCTransaction {
   return transaction;
 }
 
-export function toGetPendingDetail(tx: MultisigPendingTxDetailResponse): MultiSigPendingDetailResponse {
-  const transction = toGetPending(tx.pendingtransaction);
+export function toGetPendingDetail(tx: MultisigPendingTxDetailResponse): multisigPendingDetail {
+  const addressList = tx.multisignatureinfo?.addressesList.map(res => parseAddress(res));
+  const multisigAddress = parseAddress(tx.multisignatureinfo?.multisigaddress!);
+  const multisignatureinfo = {
+    addressesList: addressList!,
+    blockheight: tx.multisignatureinfo?.blockheight!,
+    latest: tx.multisignatureinfo?.latest!,
+    minimumsignatures: tx.multisignatureinfo?.minimumsignatures!,
+    multisigaddress: multisigAddress,
+    nonce: tx.multisignatureinfo?.nonce!,
+  };
+
+  const pendingsignaturesList = tx.pendingsignaturesList.map(res => {
+    const accountAddress = parseAddress(res.accountaddress);
+    const txHash = getZBCAddress(Buffer.from(res.transactionhash), 'ZTX');
+    return {
+      accountaddress: accountAddress,
+      blockheight: res.blockheight,
+      latest: res.latest,
+      signature: res.signature,
+      transactionhash: txHash,
+    };
+  });
+  const pendingtransaction = toGetPending(tx.pendingtransaction);
   return {
-    pendingtransaction: transction,
-    pendingsignaturesList: tx.pendingsignaturesList,
-    multisignatureinfo: tx.multisignatureinfo,
+    pendingtransaction,
+    pendingsignaturesList,
+    multisignatureinfo,
   };
 }
 
