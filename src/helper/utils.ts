@@ -2,7 +2,7 @@ import * as CryptoJS from 'crypto-js';
 import SHA3 from 'sha3';
 import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
-import { Int64LE } from 'int64-buffer';
+import { Int64LE, Uint64LE } from 'int64-buffer';
 import zoobc from '..';
 import { Address } from './interfaces';
 import { AccountType } from '../../grpc/model/accountType_pb';
@@ -109,6 +109,12 @@ export function writeInt32(number: number): Buffer {
   let byte = Buffer.alloc(4);
   byte.writeUInt32LE(number, 0);
   return byte;
+}
+
+export function writeUInt64(number: number | string, base?: number, endian?: any): Buffer {
+  number = number.toString();
+  const buffer = new Uint64LE(number);
+  return buffer.toBuffer();
 }
 
 export async function validationTimestamp(txBytes: Buffer) {

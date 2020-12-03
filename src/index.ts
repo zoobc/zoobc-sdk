@@ -14,6 +14,7 @@ import AccountLedger from './AccountLedger';
 import NodeAddress from './NodeAddress';
 import ParticipationScore from './ParticipationScore';
 import FeeVoting from './FeeVoting';
+import Liquid from './LiquidPayment';
 
 export { ZooKeyring } from './Keyring';
 export { Ledger } from './Ledger';
@@ -65,6 +66,12 @@ export { feeVoteInterface, feeVoteCommitBuilder, feeVoteRevealBuilder } from './
 export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash, parseAddress, addressToBytes } from './helper/utils';
 export { bufferToBase64, toBase64Url } from './helper/converters';
 export { MultiSigInterface, signTransactionHash, MultiSigInfo, SignatureInfo } from './helper/transaction-builder/multisignature';
+export {
+  LiquidPayment,
+  LiquidPaymentStop,
+  liquidPaymentBuilder,
+  liquidPaymentStopBuilder,
+} from './helper/transaction-builder/liquid-payment';
 
 // INTERFACE
 export { Address } from './helper/interfaces';
@@ -110,6 +117,7 @@ const zoobc = {
   NodeAddress,
   ParticipationScore,
   FeeVoting,
+  Liquid,
 };
 
 export default zoobc;
