@@ -68,21 +68,28 @@ function getBalances(addresses: Address[]): Promise<AccountBalance[]> {
       }
 
       const accounts = res && res.toObject().accountbalancesList;
-
-      if (accounts) {
-        const zbcAccounts = accounts.map(account => {
-          const parsedAddress = parseAddress(account.accountaddress);
+      const zbcAccounts = addresses.map((address, i) => {
+        if (accounts && accounts[i]) {
+          const account = accounts[i];
           return {
             spendableBalance: parseInt(account.spendablebalance),
             balance: parseInt(account.balance),
-            address: parsedAddress,
+            address,
             blockHeight: account.blockheight,
             popRevenue: account.poprevenue,
             latest: account.latest,
           };
-        });
-        resolve(zbcAccounts);
-      }
+        } else
+          return {
+            spendableBalance: 0,
+            balance: 0,
+            address,
+            blockHeight: 0,
+            popRevenue: '0',
+            latest: true,
+          };
+      });
+      resolve(zbcAccounts);
     });
   });
 }

@@ -44,7 +44,7 @@ function getList(params?: MempoolListParams): Promise<ZBCTransactions> {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      if (res) resolve(toZBCPendingTransactions(res.toObject()));
+      if (res) resolve(toZBCPendingTransactions(res.toObject(), 1));
     });
   });
 }
