@@ -67,10 +67,10 @@ function getBalances(addresses: Address[]): Promise<AccountBalance[]> {
         reject({ code, message, metadata });
       }
 
-      const accounts = res && res.toObject().accountbalancesList;
+      const accounts = (res && res.toObject().accountbalancesList) || [];
       const zbcAccounts = addresses.map((address, i) => {
-        if (accounts && accounts[i]) {
-          const account = accounts[i];
+        const account = accounts.find(acc => parseAddress(acc.accountaddress).value == address.value);
+        if (account) {
           return {
             spendableBalance: parseInt(account.spendablebalance),
             balance: parseInt(account.balance),
