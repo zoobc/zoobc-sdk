@@ -157,7 +157,7 @@ export function addressToBytes(account: Address): Buffer {
     case AccountType.BTCACCOUNTTYPE:
       return Buffer.from([]);
     default:
-      return Buffer.from([...writeInt32(account.type), ...account.value]);
+      return Buffer.from([]);
   }
 }
 
