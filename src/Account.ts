@@ -67,22 +67,29 @@ function getBalances(addresses: Address[]): Promise<AccountBalance[]> {
         reject({ code, message, metadata });
       }
 
-      const accounts = res && res.toObject().accountbalancesList;
-
-      if (accounts) {
-        const zbcAccounts = accounts.map(account => {
-          const parsedAddress = parseAddress(account.accountaddress);
+      const accounts = (res && res.toObject().accountbalancesList) || [];
+      const zbcAccounts = addresses.map((address, i) => {
+        const account = accounts.find(acc => parseAddress(acc.accountaddress).value == address.value);
+        if (account) {
           return {
             spendableBalance: parseInt(account.spendablebalance),
             balance: parseInt(account.balance),
-            address: parsedAddress,
+            address,
             blockHeight: account.blockheight,
             popRevenue: account.poprevenue,
             latest: account.latest,
           };
-        });
-        resolve(zbcAccounts);
-      }
+        } else
+          return {
+            spendableBalance: 0,
+            balance: 0,
+            address,
+            blockHeight: 0,
+            popRevenue: '0',
+            latest: true,
+          };
+      });
+      resolve(zbcAccounts);
     });
   });
 }
