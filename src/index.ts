@@ -17,6 +17,7 @@ import FeeVoting from './FeeVoting';
 
 export { ZooKeyring } from './Keyring';
 export { Ledger } from './Ledger';
+export { EstoniaEid } from './EstoniaEid';
 export { BIP32Interface } from 'bip32';
 
 export { Subscription } from 'rxjs';
@@ -57,7 +58,12 @@ export { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction
 export { UpdateNodeInterface, updateNodeBuilder, readUpdateNodeBytes } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface, claimNodeBuilder, readClaimNodeBytes } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface, removeNodeBuilder } from './helper/transaction-builder/remove-node';
-export { EscrowApprovalInterface, escrowBuilder, readApprovalEscrowBytes } from './helper/transaction-builder/escrow-transaction';
+export {
+  EscrowApprovalInterface,
+  escrowBuilder,
+  readApprovalEscrowBytes,
+  addEscrowBytes,
+} from './helper/transaction-builder/escrow-transaction';
 export { SendMoneyInterface, sendMoneyBuilder, readSendMoneyBytes } from './helper/transaction-builder/send-money';
 export { RemoveDatasetInterface, removeDatasetBuilder, readRemoveDatasetBytes } from './helper/transaction-builder/remove-account-dataset';
 export { SetupDatasetInterface, setupDatasetBuilder } from './helper/transaction-builder/setup-account-dataset';
