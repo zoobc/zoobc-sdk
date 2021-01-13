@@ -1,8 +1,9 @@
 import { sha3_256 } from 'js-sha3';
-import { getZBCAddress, readInt64, ZBCTransaction, ZBCTransactions } from '../..';
 import { GetMempoolTransactionsResponse, MempoolTransaction } from '../../../grpc/model/mempool_pb';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
-import { parseAddress, readAddress, readBodyBytes } from '../utils';
+import { readBodyBytes } from '../transaction-builder/post-transaction';
+import { getZBCAddress, parseAddress, readAddress, readInt64 } from '../utils';
+import { ZBCTransaction, ZBCTransactions } from './Transaction';
 
 export function toUnconfirmTransactionNodeWallet(res: GetMempoolTransactionsResponse.AsObject) {
   let mempoolTx = res.mempooltransactionsList;

@@ -1,8 +1,7 @@
-import { writeInt64, writeInt32, ZBCAddressToBytes, addressToBytes } from '../utils';
+import { writeInt64, writeInt32, ZBCAddressToBytes, addressToBytes, generateTransactionHash } from '../utils';
 import { VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
 import { sha3_256 } from 'js-sha3';
-import { generateTransactionHash } from '../wallet/MultiSignature';
 import { EscrowTransactionInterface } from './send-money';
 import { Address } from '../interfaces';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
