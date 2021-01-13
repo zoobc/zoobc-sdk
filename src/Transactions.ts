@@ -10,9 +10,10 @@ import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
 import { BIP32Interface } from 'bip32';
-import { addressToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
+import { addressToBytes, errorDateMessage } from './helper/utils';
 import { Address } from './helper/interfaces';
 import { toZBCTransaction, toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
+import { isTimestampValid } from './helper/timestamp-validation';
 
 export type PostTransactionResponses = PostTransactionResponse.AsObject;
 export type TransactionMinimumFeeResponse = GetTransactionMinimumFeeResponse.AsObject;
@@ -88,7 +89,7 @@ function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<Post
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(txBytes);
-    const validTimestamp = await validationTimestamp(txBytes);
+    const validTimestamp = await isTimestampValid(txBytes);
     if (validTimestamp) {
       const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
@@ -111,7 +112,7 @@ function post(txBytes: Buffer): Promise<PostTransactionResponses> {
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(txBytes);
-    const validTimestamp = await validationTimestamp(txBytes);
+    const validTimestamp = await isTimestampValid(txBytes);
     if (validTimestamp) {
       const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {

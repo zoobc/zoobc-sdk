@@ -1,4 +1,4 @@
-import { writeInt32, getZBCAddress, validationTimestamp, errorDateMessage, addressToBytes, ZBCAddressToBytes } from './helper/utils';
+import { writeInt32, getZBCAddress, errorDateMessage, addressToBytes, ZBCAddressToBytes } from './helper/utils';
 import { sha3_256 } from 'js-sha3';
 import Network from './Network';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
@@ -20,6 +20,7 @@ import { TransactionServiceClient } from '../grpc/service/transaction_pb_service
 import { Address } from './helper/interfaces';
 import { ZBCTransactions } from './helper/wallet/Transaction';
 import { toGetPendingList, toGetPendingDetail, multisigPendingDetail } from './helper/wallet/MultiSignature';
+import { isTimestampValid } from './helper/timestamp-validation';
 
 export type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
@@ -152,7 +153,7 @@ function postTransaction(data: MultiSigInterface, childSeed: BIP32Interface): Pr
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
     const networkIP = Network.selected();
-    const validTimestamp = await validationTimestamp(bytes);
+    const validTimestamp = await isTimestampValid(bytes);
     if (validTimestamp) {
       const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {

@@ -62,7 +62,16 @@ export { SendMoneyInterface, sendMoneyBuilder, readSendMoneyBytes } from './help
 export { RemoveDatasetInterface, removeDatasetBuilder, readRemoveDatasetBytes } from './helper/transaction-builder/remove-account-dataset';
 export { SetupDatasetInterface, setupDatasetBuilder } from './helper/transaction-builder/setup-account-dataset';
 export { feeVoteInterface, feeVoteCommitBuilder, feeVoteRevealBuilder } from './helper/transaction-builder/fee-vote';
-export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash, parseAddress, addressToBytes } from './helper/utils';
+export {
+  getZBCAddress,
+  isZBCAddressValid,
+  ZBCAddressToBytes,
+  readInt64,
+  shortenHash,
+  parseAddress,
+  addressToBytes,
+  generateTransactionHash,
+} from './helper/utils';
 export { bufferToBase64, toBase64Url } from './helper/converters';
 export { MultiSigInterface, signTransactionHash, MultiSigInfo, SignatureInfo } from './helper/transaction-builder/multisignature';
 
@@ -81,13 +90,7 @@ export { RequestType } from '../grpc/model/auth_pb';
 
 // WALLET FORMATTER
 export { ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
-export {
-  toGetPendingList,
-  toGetPending,
-  toGetPendingDetail,
-  generateTransactionHash,
-  multisigPendingDetail,
-} from './helper/wallet/MultiSignature';
+export { toGetPendingList, toGetPending, toGetPendingDetail, multisigPendingDetail } from './helper/wallet/MultiSignature';
 export { AccountDataset, AccountDatasets } from './helper/wallet/AccountDataset';
 export { AccountLedger, AccountLedgerList } from './helper/wallet/AccountLedger';
 export { Escrow, Escrows } from './helper/wallet/Escrows';

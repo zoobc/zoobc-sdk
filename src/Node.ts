@@ -24,9 +24,10 @@ import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/t
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { Empty } from '../grpc/model/empty_pb';
-import { addressToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
+import { addressToBytes, errorDateMessage, getZBCAddress } from './helper/utils';
 import { Address } from './helper/interfaces';
 import { NodeRegistration, NodeRegistrations, toZBCNodeRegistration, toZBCNodeRegistrations } from './helper/wallet/Node';
+import { isTimestampValid } from './helper/timestamp-validation';
 
 export type NodeHardwareResponse = GetNodeHardwareResponse.AsObject;
 export type GenerateNodeKeyResponses = GenerateNodeKeyResponse.AsObject;
@@ -134,7 +135,17 @@ function get(params: NodeParams): Promise<NodeRegistration> {
     client.getNodeRegistration(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
-        if (code == grpc.Code.NotFound) return resolve(undefined);
+        if (code == grpc.Code.NotFound)
+          return resolve({
+            nodeId: '',
+            nodePublicKey: getZBCAddress(params.publicKey || Buffer.from([]), 'ZNK'),
+            accountAddress: params.owner || { type: 0, value: '' },
+            registrationHeight: 0,
+            lockedBalance: '0',
+            registrationStatus: 0,
+            latest: true,
+            height: params.height || 0,
+          });
         else if (code != grpc.Code.OK) return reject({ code, message, metadata });
       }
       if (res) {
@@ -155,7 +166,7 @@ function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promi
       request.setTransactionbytes(bytes);
 
       const networkIP = Network.selected();
-      const validTimestamp = await validationTimestamp(bytes);
+      const validTimestamp = await isTimestampValid(bytes);
       if (validTimestamp) {
         const client = new TransactionServiceClient(networkIP.host);
         client.postTransaction(request, (err, res) => {
@@ -184,7 +195,7 @@ function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<N
         request.setTransactionbytes(bytes);
 
         const networkIP = Network.selected();
-        const validTimestamp = await validationTimestamp(bytes);
+        const validTimestamp = await isTimestampValid(bytes);
         if (validTimestamp) {
           const client = new TransactionServiceClient(networkIP.host);
           client.postTransaction(request, (err, res) => {
@@ -211,7 +222,7 @@ function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<N
     request.setTransactionbytes(bytes);
 
     const networkIP = Network.selected();
-    const validTimestamp = await validationTimestamp(bytes);
+    const validTimestamp = await isTimestampValid(bytes);
     if (validTimestamp) {
       const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
@@ -239,7 +250,7 @@ function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<Nod
         request.setTransactionbytes(bytes);
 
         const networkIP = Network.selected();
-        const validTimestamp = await validationTimestamp(bytes);
+        const validTimestamp = await isTimestampValid(bytes);
         if (validTimestamp) {
           const client = new TransactionServiceClient(networkIP.host);
           client.postTransaction(request, (err, res) => {
@@ -292,22 +303,6 @@ export function getMyNodePublicKey(networkIP: string): Promise<GetMyNodePublicKe
   });
 }
 
-export function getNodeTime(): Promise<GetNodeTimeResponses> {
-  return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
-    const request = new Empty();
-
-    const client = new NodeHardwareServiceClient(networkIP.host);
-    client.getNodeTime(request, (err, res) => {
-      if (err) {
-        const { code, message, metadata } = err;
-        reject({ code, message, metadata });
-      }
-      if (res) resolve(res.toObject());
-    });
-  });
-}
-
 export default {
   register,
   update,
@@ -319,5 +314,4 @@ export default {
   get,
   getPending,
   getMyNodePublicKey,
-  getNodeTime,
 };

@@ -3,17 +3,10 @@ import SHA3 from 'sha3';
 import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
 import { Int64LE } from 'int64-buffer';
-import zoobc from '..';
 import { Address } from './interfaces';
 import { AccountType } from '../../grpc/model/accountType_pb';
-import { TransactionType } from '../../grpc/model/transaction_pb';
-import { readClaimNodeBytes } from './transaction-builder/claim-node';
-import { readApprovalEscrowBytes } from './transaction-builder/escrow-transaction';
-import { readRegisterNodeBytes } from './transaction-builder/register-node';
-import { readRemoveNodeBytes } from './transaction-builder/remove-node';
-import { readSendMoneyBytes } from './transaction-builder/send-money';
-import { readSetupDatasetBytes } from './transaction-builder/setup-account-dataset';
-import { readUpdateNodeBytes } from './transaction-builder/update-node';
+import { sha3_256 } from 'js-sha3';
+
 export const errorDateMessage = {
   code: '',
   message: 'please fix your date and time',
@@ -114,17 +107,6 @@ export function writeInt32(number: number): Buffer {
   return byte;
 }
 
-export async function validationTimestamp(txBytes: Buffer) {
-  let timestampPostTransactionBytes = txBytes.slice(5, 13);
-  let timestampPostTransaction = readInt64(timestampPostTransactionBytes, 0);
-  let timestampServer = await zoobc.Node.getNodeTime().then(res => {
-    return res.nodetime;
-  });
-  const deviation = parseInt(timestampPostTransaction) - parseInt(timestampServer);
-  if (deviation < 30 && deviation > -30) return true;
-  else return false;
-}
-
 export function parseAddress(account: string | Uint8Array): Address {
   if (account == '') return { value: '', type: 2 };
 
@@ -167,23 +149,7 @@ export function readAddress(txBytes: Buffer, offset: number): Buffer {
   else return txBytes.slice(offset, offset + 36);
 }
 
-export function readBodyBytes(txBytes: Buffer, txType: number, offset: number): any {
-  switch (txType) {
-    case TransactionType.UPDATENODEREGISTRATIONTRANSACTION:
-      return readUpdateNodeBytes(txBytes, offset);
-    case TransactionType.SENDMONEYTRANSACTION:
-      return readSendMoneyBytes(txBytes, offset);
-    case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
-      return readRemoveNodeBytes(txBytes, offset);
-    case TransactionType.NODEREGISTRATIONTRANSACTION:
-      return readRegisterNodeBytes(txBytes, offset);
-    case TransactionType.CLAIMNODEREGISTRATIONTRANSACTION:
-      return readClaimNodeBytes(txBytes, offset);
-    case TransactionType.SETUPACCOUNTDATASETTRANSACTION:
-      return readSetupDatasetBytes(txBytes, offset);
-    case TransactionType.REMOVEACCOUNTDATASETTRANSACTION:
-      return readSetupDatasetBytes(txBytes, offset);
-    case TransactionType.APPROVALESCROWTRANSACTION:
-      return readApprovalEscrowBytes(txBytes, offset);
-  }
+export function generateTransactionHash(buffer: Buffer): string {
+  const hashed = Buffer.from(sha3_256(buffer), 'hex');
+  return getZBCAddress(hashed, 'ZTX');
 }

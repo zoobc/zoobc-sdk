@@ -7,9 +7,10 @@ import { TransactionServiceClient } from '../grpc/service/transaction_pb_service
 import { setupDatasetBuilder, SetupDatasetInterface } from './helper/transaction-builder/setup-account-dataset';
 import { BIP32Interface } from 'bip32';
 import { RemoveDatasetInterface, removeDatasetBuilder } from './helper/transaction-builder/remove-account-dataset';
-import { addressToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
+import { addressToBytes, errorDateMessage } from './helper/utils';
 import { Address } from './helper/interfaces';
 import { AccountDataset, AccountDatasets, toZBCDataset, toZBCDatasets } from './helper/wallet/AccountDataset';
+import { isTimestampValid } from './helper/timestamp-validation';
 
 export type SetupDatasetResponse = PostTransactionResponse.AsObject;
 export type RemoveAccountDatasetResponse = PostTransactionResponse.AsObject;
@@ -80,7 +81,7 @@ export function setupDataset(data: SetupDatasetInterface, childSeed: BIP32Interf
     const bytes = setupDatasetBuilder(data, childSeed);
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
-    const validTimestamp = await validationTimestamp(bytes);
+    const validTimestamp = await isTimestampValid(bytes);
     if (validTimestamp) {
       const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
@@ -104,7 +105,7 @@ export function removeDataset(data: RemoveDatasetInterface, childseed: BIP32Inte
     request.setTransactionbytes(bytes);
 
     const networkIP = Network.selected();
-    const validTimestamp = await validationTimestamp(bytes);
+    const validTimestamp = await isTimestampValid(bytes);
     if (validTimestamp) {
       const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {

@@ -1,8 +1,11 @@
-import { feeVoteInterface, BIP32Interface, PostTransactionResponses, feeVoteCommitBuilder, feeVoteRevealBuilder } from '.';
+import { BIP32Interface } from 'bip32';
 import { PostTransactionRequest } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
-import { validationTimestamp, errorDateMessage } from './helper/utils';
+import { isTimestampValid } from './helper/timestamp-validation';
+import { feeVoteCommitBuilder, feeVoteInterface, feeVoteRevealBuilder } from './helper/transaction-builder/fee-vote';
+import { errorDateMessage } from './helper/utils';
 import Network from './Network';
+import { PostTransactionResponses } from './Transactions';
 
 function feeVoteCommit(data: feeVoteInterface, seed: BIP32Interface): Promise<PostTransactionResponses> {
   const txBytes = feeVoteCommitBuilder(data, seed);
@@ -12,7 +15,7 @@ function feeVoteCommit(data: feeVoteInterface, seed: BIP32Interface): Promise<Po
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(txBytes);
-    const validTimestamp = await validationTimestamp(txBytes);
+    const validTimestamp = await isTimestampValid(txBytes);
     if (validTimestamp) {
       const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
@@ -37,7 +40,7 @@ function feeVoteReveal(data: feeVoteInterface, seed: BIP32Interface): Promise<Po
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(txBytes);
-    const validTimestamp = await validationTimestamp(txBytes);
+    const validTimestamp = await isTimestampValid(txBytes);
     if (validTimestamp) {
       const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {

@@ -1,10 +1,10 @@
 import { MultisigPendingTxResponse, MultisigPendingTxDetailResponse } from '../../MultiSignature';
-import { readInt64, ZBCTransaction, ZBCTransactions } from '../..';
-import { getZBCAddress, readAddress, readBodyBytes } from '../utils';
-import { sha3_256 } from 'js-sha3';
+import { getZBCAddress, readAddress, readInt64 } from '../utils';
 import { parseAddress } from '../utils';
 import { MultiSignatureInfo, PendingSignature } from '../../../grpc/model/multiSignature_pb';
 import { Address } from '../interfaces';
+import { ZBCTransaction, ZBCTransactions } from './Transaction';
+import { readBodyBytes } from '../transaction-builder/post-transaction';
 
 export type multisignatureinfo = MultiSignatureInfo.AsObject;
 export type pendingsignaturesList = Array<PendingSignature.AsObject>;
@@ -134,9 +134,4 @@ export function toGetPendingDetail(tx: MultisigPendingTxDetailResponse): multisi
     pendingsignaturesList,
     multisignatureinfo,
   };
-}
-
-export function generateTransactionHash(buffer: Buffer): string {
-  const hashed = Buffer.from(sha3_256(buffer), 'hex');
-  return getZBCAddress(hashed, 'ZTX');
 }
