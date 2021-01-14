@@ -6,9 +6,11 @@ import { Address } from './helper/interfaces';
 import { addressToBytes } from './helper/utils';
 import { toZBCPendingTransaction, toZBCPendingTransactions } from './helper/wallet/Mempool';
 import { ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
+import { TransactionType } from '../grpc/model/transaction_pb';
 
 export interface MempoolListParams {
   address?: Address;
+  txType?: number;
   timestampStart?: string;
   timestampEnd?: string;
   pagination?: {
@@ -44,7 +46,8 @@ function getList(params?: MempoolListParams): Promise<ZBCTransactions> {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      if (res) resolve(toZBCPendingTransactions(res.toObject(), 1));
+      const txType = params?.txType || TransactionType.SENDMONEYTRANSACTION;
+      if (res) resolve(toZBCPendingTransactions(res.toObject(), txType));
     });
   });
 }
