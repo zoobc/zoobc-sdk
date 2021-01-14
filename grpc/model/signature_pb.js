@@ -21,7 +21,8 @@ goog.exportSymbol('proto.model.SignatureType', null, global);
 proto.model.SignatureType = {
   DEFAULTSIGNATURE: 0,
   BITCOINSIGNATURE: 1,
-  MULTISIGSIGNATURE: 2
+  MULTISIGSIGNATURE: 2,
+  ESTONIAEIDSIGNATURE: 3
 };
 
 /**
