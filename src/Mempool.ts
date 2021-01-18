@@ -46,8 +46,7 @@ function getList(params?: MempoolListParams): Promise<ZBCTransactions> {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
-      const txType = params?.txType || TransactionType.SENDMONEYTRANSACTION;
-      if (res) resolve(toZBCPendingTransactions(res.toObject(), txType));
+      if (res) resolve(toZBCPendingTransactions(res.toObject(), params?.txType));
     });
   });
 }
