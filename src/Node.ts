@@ -119,7 +119,7 @@ function getList(params?: NodeListParams): Promise<NodeRegistrations> {
   });
 }
 
-function get(params: NodeParams): Promise<NodeRegistration> {
+function get(params: NodeParams): Promise<NodeRegistration | undefined> {
   return new Promise((resolve, reject) => {
     const networkIP = Network.selected();
     const request = new GetNodeRegistrationRequest();
@@ -135,17 +135,7 @@ function get(params: NodeParams): Promise<NodeRegistration> {
     client.getNodeRegistration(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
-        if (code == grpc.Code.NotFound)
-          return resolve({
-            nodeId: '',
-            nodePublicKey: getZBCAddress(params.publicKey || Buffer.from([]), 'ZNK'),
-            accountAddress: params.owner || { type: 0, value: '' },
-            registrationHeight: 0,
-            lockedBalance: '0',
-            registrationStatus: 0,
-            latest: true,
-            height: params.height || 0,
-          });
+        if (code == grpc.Code.NotFound) return resolve(undefined);
         else if (code != grpc.Code.OK) return reject({ code, message, metadata });
       }
       if (res) {
