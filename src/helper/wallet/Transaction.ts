@@ -28,6 +28,7 @@ export interface ZBCTransaction {
   commission?: number;
   timeout?: number;
   instruction?: string;
+  message?: string;
 }
 
 export function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransaction {
@@ -65,6 +66,7 @@ export function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransact
     transactionType: transaction.transactiontype,
     multisig: transaction.multisigchild,
     escrow: transaction.escrow,
+    message: Buffer.from(transaction.message.toString(), 'base64').toString(),
     txBody,
   };
 }

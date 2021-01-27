@@ -11,6 +11,7 @@ export interface SendMoneyInterface extends EscrowTransactionInterface {
   sender: Address;
   recipient: Address;
   fee: number;
+  message?: string;
   amount: number;
 }
 
@@ -36,8 +37,10 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface
   // Add Escrow Bytes
   bytes = addEscrowBytes(bytes, data);
 
-  const message = writeInt32(0);
-  bytes = Buffer.concat([bytes, message]);
+  const msgLength = writeInt32(data.message!.length);
+  const msgBytes = Buffer.from(data.message!);
+
+  bytes = Buffer.concat([bytes, msgLength, msgBytes]);
 
   if (seed) {
     const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
