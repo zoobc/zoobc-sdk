@@ -13,6 +13,7 @@ export interface EscrowApprovalInterface extends EscrowTransactionInterface {
   fee: number;
   approvalCode: number;
   transactionId: string;
+  message?: string;
 }
 
 export function escrowBuilder(data: EscrowApprovalInterface, seed?: BIP32Interface): Buffer {
