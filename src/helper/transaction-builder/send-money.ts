@@ -37,10 +37,14 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface
   // Add Escrow Bytes
   bytes = addEscrowBytes(bytes, data);
 
-  const msgLength = writeInt32(data.message!.length);
-  const msgBytes = Buffer.from(data.message!);
+  // Add message
+  let message = writeInt32(0);
+  if (data.message) {
+    message = writeInt32(data.message.length);
+    Buffer.concat([message, Buffer.from(data.message)]);
+  }
 
-  bytes = Buffer.concat([bytes, msgLength, msgBytes]);
+  bytes = Buffer.concat([bytes, message]);
 
   if (seed) {
     const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));

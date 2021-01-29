@@ -14,6 +14,7 @@ export interface ClaimNodeInterface extends EscrowTransactionInterface {
   fee: number;
   nodePublicKey: Buffer;
   nodeAddress: string;
+  message?: string;
 }
 
 export function claimNodeBuilder(data: ClaimNodeInterface, poown: Buffer, seed?: BIP32Interface) {
@@ -33,7 +34,13 @@ export function claimNodeBuilder(data: ClaimNodeInterface, poown: Buffer, seed?:
   // Add Escrow Bytes
   bytes = addEscrowBytes(bytes, data);
 
-  const message = writeInt32(0);
+  // Add message
+  let message = writeInt32(0);
+  if (data.message) {
+    message = writeInt32(data.message.length);
+    Buffer.concat([message, Buffer.from(data.message)]);
+  }
+
   bytes = Buffer.concat([bytes, message]);
 
   if (seed) {
