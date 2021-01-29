@@ -610,6 +610,12 @@ export class GetTransactionsRequest extends jspb.Message {
   getPagination(): model_pagination_pb.Pagination | undefined;
   setPagination(value?: model_pagination_pb.Pagination): void;
 
+  getFromblock(): number;
+  setFromblock(value: number): void;
+
+  getToblock(): number;
+  setToblock(value: number): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetTransactionsRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetTransactionsRequest): GetTransactionsRequest.AsObject;
@@ -628,6 +634,8 @@ export namespace GetTransactionsRequest {
     timestampend: string,
     transactiontype: number,
     pagination?: model_pagination_pb.Pagination.AsObject,
+    fromblock: number,
+    toblock: number,
   }
 }
 
