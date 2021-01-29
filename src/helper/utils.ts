@@ -6,6 +6,7 @@ import { Int64LE } from 'int64-buffer';
 import { Address } from './interfaces';
 import { AccountType } from '../../grpc/model/accountType_pb';
 import { sha3_256 } from 'js-sha3';
+import { TransactionType } from '../../grpc/model/transaction_pb';
 
 export const errorDateMessage = {
   code: '',
@@ -152,4 +153,28 @@ export function readAddress(txBytes: Buffer, offset: number): Buffer {
 export function generateTransactionHash(buffer: Buffer): string {
   const hashed = Buffer.from(sha3_256(buffer), 'hex');
   return getZBCAddress(hashed, 'ZTX');
+}
+
+export function getTxTypeString(txType: number): string {
+  switch (txType) {
+    case TransactionType.SENDMONEYTRANSACTION:
+      return 'transfer zoobc';
+    case TransactionType.NODEREGISTRATIONTRANSACTION:
+      return 'register node';
+    case TransactionType.UPDATENODEREGISTRATIONTRANSACTION:
+      return 'update node';
+    case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
+      return 'remove node';
+    case TransactionType.CLAIMNODEREGISTRATIONTRANSACTION:
+      return 'claim node';
+    case TransactionType.SETUPACCOUNTDATASETTRANSACTION:
+      return 'setup account dataset';
+    case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
+      return 'remove account dataset';
+    case TransactionType.APPROVALESCROWTRANSACTION:
+      return 'escrow approval';
+    case TransactionType.MULTISIGNATURETRANSACTION:
+      return 'multisignature';
+  }
+  return '';
 }

@@ -1,4 +1,4 @@
-import { getZBCAddress, parseAddress } from '../utils';
+import { getTxTypeString, getZBCAddress, parseAddress } from '../utils';
 import { GetTransactionsResponse, Transaction, TransactionType } from '../../../grpc/model/transaction_pb';
 import { Address } from '../interfaces';
 
@@ -20,6 +20,7 @@ export interface ZBCTransaction {
   transactionIndex?: number;
   transactionHash?: string;
   transactionType?: number;
+  transactionTypeString?: string;
   txBody?: any;
   escrow?: any;
   escrowStatus?: number;
@@ -64,6 +65,7 @@ export function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransact
     transactionIndex: transaction.transactionindex,
     transactionHash: getZBCAddress(Buffer.from(transaction.transactionhash.toString(), 'base64'), 'ZTX'),
     transactionType: transaction.transactiontype,
+    transactionTypeString: getTxTypeString(transaction.transactiontype),
     multisig: transaction.multisigchild,
     escrow: transaction.escrow,
     message: Buffer.from(transaction.message.toString(), 'base64').toString(),

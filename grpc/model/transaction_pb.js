@@ -4620,7 +4620,9 @@ proto.model.GetTransactionsRequest.toObject = function(includeInstance, msg) {
     timestampstart: jspb.Message.getFieldWithDefault(msg, 3, "0"),
     timestampend: jspb.Message.getFieldWithDefault(msg, 4, "0"),
     transactiontype: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    pagination: (f = msg.getPagination()) && model_pagination_pb.Pagination.toObject(includeInstance, f)
+    pagination: (f = msg.getPagination()) && model_pagination_pb.Pagination.toObject(includeInstance, f),
+    fromblock: jspb.Message.getFieldWithDefault(msg, 7, 0),
+    toblock: jspb.Message.getFieldWithDefault(msg, 8, 0)
   };
 
   if (includeInstance) {
@@ -4681,6 +4683,14 @@ proto.model.GetTransactionsRequest.deserializeBinaryFromReader = function(msg, r
       var value = new model_pagination_pb.Pagination;
       reader.readMessage(value,model_pagination_pb.Pagination.deserializeBinaryFromReader);
       msg.setPagination(value);
+      break;
+    case 7:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setFromblock(value);
+      break;
+    case 8:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setToblock(value);
       break;
     default:
       reader.skipField();
@@ -4752,6 +4762,20 @@ proto.model.GetTransactionsRequest.serializeBinaryToWriter = function(message, w
       6,
       f,
       model_pagination_pb.Pagination.serializeBinaryToWriter
+    );
+  }
+  f = message.getFromblock();
+  if (f !== 0) {
+    writer.writeUint32(
+      7,
+      f
+    );
+  }
+  f = message.getToblock();
+  if (f !== 0) {
+    writer.writeUint32(
+      8,
+      f
     );
   }
 };
@@ -4886,6 +4910,36 @@ proto.model.GetTransactionsRequest.prototype.clearPagination = function() {
  */
 proto.model.GetTransactionsRequest.prototype.hasPagination = function() {
   return jspb.Message.getField(this, 6) != null;
+};
+
+
+/**
+ * optional uint32 FromBlock = 7;
+ * @return {number}
+ */
+proto.model.GetTransactionsRequest.prototype.getFromblock = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 7, 0));
+};
+
+
+/** @param {number} value */
+proto.model.GetTransactionsRequest.prototype.setFromblock = function(value) {
+  jspb.Message.setProto3IntField(this, 7, value);
+};
+
+
+/**
+ * optional uint32 ToBlock = 8;
+ * @return {number}
+ */
+proto.model.GetTransactionsRequest.prototype.getToblock = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 8, 0));
+};
+
+
+/** @param {number} value */
+proto.model.GetTransactionsRequest.prototype.setToblock = function(value) {
+  jspb.Message.setProto3IntField(this, 8, value);
 };
 
 
