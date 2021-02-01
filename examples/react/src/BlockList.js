@@ -7,18 +7,41 @@ const BlockList = () => {
   const [detail, setDetail] = useState(null)
 
   useEffect(() => {
-    const hosts = [
-      { host: 'http://85.90.246.90:8002', name: '168 Testnet' },
+    /*const hosts = [
+      { host: 'http://n0.beta.proofofparticipation.network:7001', name: '168 Testnet' },
     ];
-    zoobc.Network.list(hosts)
+    zoobc.Network.list(hosts)*/
+
+    const groups = [{
+      label: 'Beta',
+      wkps: [
+        'http://n0.beta.proofofparticipation.network:7001',
+        'http://n1.beta.proofofparticipation.network:7001',
+        'http://n2.beta.proofofparticipation.network:7001',
+        'http://n3.beta.proofofparticipation.network:7001',
+        'http://n4.beta.proofofparticipation.network:7001',
+      ]
+    }];
+    zoobc.Network.load(groups);
+
     listBlocks();
+    setInterval(() => {
+      listBlocks();
+    }, 60 * 1000);
   }, [])
 
   const listBlocks = () => {
-    zoobc.Block
+    zoobc.Account.getBalance(({ value: 'ZBC_F5YUYDXD_WFDJSAV5_K3Y72RCM_GLQP32XI_QDVXOGGD_J7CGSSSK_5VKR7YML', type: 0 }))
+      .then(res => {
+        console.log(res);
+      })
+    /*zoobc.Block
       .getBlocks({height: 0})
       .then(res => setBlocks(res.blocksList))
-      .catch(err => setError(err))
+      .catch(err => {
+        console.log(err);
+        setError(err)
+      })*/
   };
 
   const onClickBlockId = (id) => {

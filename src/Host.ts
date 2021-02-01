@@ -7,17 +7,26 @@ export type HostInfoResponse = HostInfo.AsObject;
 
 function getInfo(): Promise<HostInfoResponse> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const request = new Empty();
 
-    const client = new HostServiceClient(networkIP.host);
+    Network.request(HostServiceClient, 'getHostInfo', request, true)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        if (res) resolve(res.toObject());
+      });
+
+    /*const client = new HostServiceClient(networkIP.host);
     client.getHostInfo(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
       if (res) resolve(res.toObject());
-    });
+    });*/
   });
 }
 

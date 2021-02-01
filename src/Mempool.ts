@@ -20,7 +20,7 @@ export interface MempoolListParams {
 
 function getList(params?: MempoolListParams): Promise<ZBCTransactions> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const request = new GetMempoolTransactionsRequest();
 
     if (params) {
@@ -38,25 +38,44 @@ function getList(params?: MempoolListParams): Promise<ZBCTransactions> {
       }
     }
 
-    const client = new MempoolServiceClient(networkIP.host);
+    Network.request(MempoolServiceClient, 'getMempoolTransactions', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toZBCPendingTransactions(res.toObject(), 1));
+      });
+
+    /*const client = new MempoolServiceClient(networkIP.host);
     client.getMempoolTransactions(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
       if (res) resolve(toZBCPendingTransactions(res.toObject(), 1));
-    });
+    });*/
   });
 }
 
 function get(id: string): Promise<ZBCTransaction> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const request = new GetMempoolTransactionRequest();
 
     request.setId(id);
 
-    const client = new MempoolServiceClient(networkIP.host);
+    Network.request(MempoolServiceClient, 'getMempoolTransaction', request, true)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        const tx = res.toObject().transaction;
+        if (tx !== undefined) resolve(toZBCPendingTransaction(tx));
+      });
+
+    /*const client = new MempoolServiceClient(networkIP.host);
     client.getMempoolTransaction(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
@@ -66,7 +85,7 @@ function get(id: string): Promise<ZBCTransaction> {
         const tx = res.toObject().transaction;
         if (tx !== undefined) resolve(toZBCPendingTransaction(tx));
       }
-    });
+    });*/
   });
 }
 

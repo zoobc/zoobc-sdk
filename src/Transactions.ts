@@ -33,7 +33,7 @@ export interface TransactionListParams {
 function getList(params?: TransactionListParams): Promise<ZBCTransactions> {
   return new Promise((resolve, reject) => {
     const request = new GetTransactionsRequest();
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
 
     if (params) {
       const { address, height, transactionType, timestampStart, timestampEnd, pagination } = params;
@@ -52,31 +52,49 @@ function getList(params?: TransactionListParams): Promise<ZBCTransactions> {
       }
     }
 
-    const client = new TransactionServiceClient(networkIP.host);
+    Network.request(TransactionServiceClient, 'getTransactions', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toZBCTransactions(res.toObject()));
+      });
+
+    /*const client = new TransactionServiceClient(networkIP.host);
     client.getTransactions(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
       if (res) resolve(toZBCTransactions(res.toObject()));
-    });
+    });*/
   });
 }
 
 function get(id: string): Promise<ZBCTransaction> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const request = new GetTransactionRequest();
     request.setId(id);
 
-    const client = new TransactionServiceClient(networkIP.host);
+    Network.request(TransactionServiceClient, 'getTransaction', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toZBCTransaction(res.toObject()));
+      });
+
+    /*const client = new TransactionServiceClient(networkIP.host);
     client.getTransaction(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
       if (res) resolve(toZBCTransaction(res.toObject()));
-    });
+    });*/
   });
 }
 
@@ -84,20 +102,29 @@ function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<Post
   const txBytes = sendMoneyBuilder(data, seed);
 
   return new Promise(async (resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(txBytes);
     const validTimestamp = await validationTimestamp(txBytes);
     if (validTimestamp) {
-      const client = new TransactionServiceClient(networkIP.host);
+      Network.request(TransactionServiceClient, 'postTransaction', request)
+        .catch(err => {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        })
+        .then(res => {
+          resolve(res.toObject());
+        });
+
+      /*const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
         if (err) {
           const { code, message, metadata } = err;
           reject({ code, message, metadata });
         }
         if (res) resolve(res.toObject());
-      });
+      });*/
     } else {
       const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });
@@ -107,20 +134,29 @@ function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<Post
 
 function post(txBytes: Buffer): Promise<PostTransactionResponses> {
   return new Promise(async (resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(txBytes);
     const validTimestamp = await validationTimestamp(txBytes);
     if (validTimestamp) {
-      const client = new TransactionServiceClient(networkIP.host);
+      Network.request(TransactionServiceClient, 'postTransaction', request)
+        .catch(err => {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        })
+        .then(res => {
+          resolve(res.toObject());
+        });
+
+      /*const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
         if (err) {
           const { code, message, metadata } = err;
           reject({ code, message, metadata });
         }
         if (res) resolve(res.toObject());
-      });
+      });*/
     } else {
       const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });

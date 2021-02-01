@@ -72,7 +72,7 @@ function createMultiSigAddress(multiSigAddress: MultiSigInfo) {
 function getPendingList(params: MultisigPendingListParams): Promise<ZBCTransactions> {
   return new Promise((resolve, reject) => {
     const request = new GetPendingTransactionsRequest();
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
 
     const { address, pagination, status } = params;
     if (address) request.setSenderaddress(addressToBytes(address));
@@ -85,7 +85,16 @@ function getPendingList(params: MultisigPendingListParams): Promise<ZBCTransacti
       request.setPagination(reqPagination);
     }
 
-    const client = new MultisigServiceClient(networkIP.host);
+    Network.request(MultisigServiceClient, 'getPendingTransactions', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toGetPendingList(res.toObject()));
+      });
+
+    /*const client = new MultisigServiceClient(networkIP.host);
     client.getPendingTransactions(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
@@ -95,7 +104,7 @@ function getPendingList(params: MultisigPendingListParams): Promise<ZBCTransacti
       if (res) {
         resolve(toGetPendingList(res.toObject()));
       }
-    });
+    });*/
   });
 }
 
@@ -105,10 +114,20 @@ function getPendingByTxHash(txHash: string): Promise<multisigPendingDetail> {
       .toString('hex')
       .toUpperCase();
     const request = new GetPendingTransactionDetailByTransactionHashRequest();
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
 
     request.setTransactionhashhex(hashHex);
-    const client = new MultisigServiceClient(networkIP.host);
+
+    Network.request(MultisigServiceClient, 'getPendingTransactionDetailByTransactionHash', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toGetPendingDetail(res.toObject()));
+      });
+
+    /*const client = new MultisigServiceClient(networkIP.host);
     client.getPendingTransactionDetailByTransactionHash(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
@@ -116,14 +135,14 @@ function getPendingByTxHash(txHash: string): Promise<multisigPendingDetail> {
       }
 
       if (res) resolve(toGetPendingDetail(res.toObject()));
-    });
+    });*/
   });
 }
 
 function getMultisigInfo(params: MultisigInfoParams): Promise<MultisigInfoResponse> {
   return new Promise((resolve, reject) => {
     const request = new GetMultisignatureInfoRequest();
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
 
     const { address, pagination } = params;
     request.setMultisigaddress(addressToBytes(address));
@@ -135,14 +154,23 @@ function getMultisigInfo(params: MultisigInfoParams): Promise<MultisigInfoRespon
       request.setPagination(reqPagination);
     }
 
-    const client = new MultisigServiceClient(networkIP.host);
+    Network.request(MultisigServiceClient, 'getMultisignatureInfo', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(res.toObject());
+      });
+
+    /*const client = new MultisigServiceClient(networkIP.host);
     client.getMultisignatureInfo(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
       if (res) resolve(res.toObject());
-    });
+    });*/
   });
 }
 
@@ -151,17 +179,26 @@ function postTransaction(data: MultiSigInterface, childSeed: BIP32Interface): Pr
     const bytes = multisignatureBuilder(data, childSeed);
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const validTimestamp = await validationTimestamp(bytes);
     if (validTimestamp) {
-      const client = new TransactionServiceClient(networkIP.host);
+      Network.request(TransactionServiceClient, 'postTransaction', request)
+        .catch(err => {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        })
+        .then(res => {
+          resolve(res.toObject());
+        });
+
+      /*const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
         if (err) {
           const { code, message, metadata } = err;
           reject({ code, message, metadata });
         }
         if (res) resolve(res.toObject());
-      });
+      });*/
     } else {
       const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });
@@ -173,15 +210,25 @@ function getMultisigAddress(participantsAddress: string): Promise<GetMultisigAdd
   return new Promise((resolve, reject) => {
     const request = new GetMultisigAddressByParticipantAddressRequest();
     request.setParticipantaddress(participantsAddress);
-    const networkIP = Network.selected();
-    const client = new MultisigServiceClient(networkIP.host);
+    // const networkIP = Network.selected();
+
+    Network.request(MultisigServiceClient, 'getMultisigAddressByParticipantAddress', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(res.toObject());
+      });
+
+    /*const client = new MultisigServiceClient(networkIP.host);
     client.getMultisigAddressByParticipantAddress(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
       if (res) resolve(res.toObject());
-    });
+    });*/
   });
 }
 
