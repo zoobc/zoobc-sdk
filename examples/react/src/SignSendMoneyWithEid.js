@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { sha3_256 } from 'js-sha3';
 
-import { sendMoneyBuilder } from '../../../';
-import { getCardInfo, signData } from './common/EstoniaEid';
+import { sendMoneyBuilder, EstoniaEid } from '../../../';
 
 const bytesToHexes = byteArr => {
   const a = [];
@@ -20,6 +19,7 @@ function hexToBytes(hex) {
 }
 
 const SignSendMoneyWithEid = () => {
+  const estoniaEidObj= new EstoniaEid()
   const [eidPublicKey, setEidPublicKey] = useState('');
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
@@ -61,7 +61,7 @@ const SignSendMoneyWithEid = () => {
 
   const getPublicKeyFromEid = async () => {
     try {
-      const { publicKey } = await getCardInfo();
+      const { publicKey } = await estoniaEidObj.getCardInfo();
       setEidPublicKey(bytesToHexes(publicKey));
     } catch (e) {
       console.error('getPublicKeyFromEid', e);
@@ -75,7 +75,7 @@ const SignSendMoneyWithEid = () => {
 
       const txHash = await sha3_256(txBytes);
 
-      const { signature } = await signData(txHash);
+      const { signature } = await estoniaEidObj.signData(txHash);
       const signatureString = signature;
 
       setSignature(signatureString);

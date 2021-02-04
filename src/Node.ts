@@ -24,9 +24,10 @@ import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/t
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { Empty } from '../grpc/model/empty_pb';
-import { addressToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
+import { addressToBytes, errorDateMessage, getZBCAddress } from './helper/utils';
 import { Address } from './helper/interfaces';
 import { NodeRegistration, NodeRegistrations, toZBCNodeRegistration, toZBCNodeRegistrations } from './helper/wallet/Node';
+import { isTimestampValid } from './helper/timestamp-validation';
 
 export type NodeHardwareResponse = GetNodeHardwareResponse.AsObject;
 export type GenerateNodeKeyResponses = GenerateNodeKeyResponse.AsObject;
@@ -127,7 +128,7 @@ function getList(params?: NodeListParams): Promise<NodeRegistrations> {
   });
 }
 
-function get(params: NodeParams): Promise<NodeRegistration> {
+function get(params: NodeParams): Promise<NodeRegistration | undefined> {
   return new Promise((resolve, reject) => {
     // const networkIP = Network.selected();
     const request = new GetNodeRegistrationRequest();
@@ -384,5 +385,4 @@ export default {
   get,
   getPending,
   getMyNodePublicKey,
-  getNodeTime,
 };

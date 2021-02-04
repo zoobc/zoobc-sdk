@@ -297,7 +297,8 @@ proto.model.AccountAddress.prototype.setEncodedaccount = function(value) {
 proto.model.AccountType = {
   ZBCACCOUNTTYPE: 0,
   BTCACCOUNTTYPE: 1,
-  EMPTYACCOUNTTYPE: 2
+  EMPTYACCOUNTTYPE: 2,
+  ESTONIAEIDACCOUNTTYPE: 3
 };
 
 goog.object.extend(exports, proto.model);

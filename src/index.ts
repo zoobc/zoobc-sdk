@@ -17,6 +17,7 @@ import FeeVoting from './FeeVoting';
 
 export { ZooKeyring } from './Keyring';
 export { Ledger } from './Ledger';
+export { EstoniaEid } from './EstoniaEid';
 export { BIP32Interface } from 'bip32';
 
 export { Subscription } from 'rxjs';
@@ -57,12 +58,26 @@ export { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction
 export { UpdateNodeInterface, updateNodeBuilder, readUpdateNodeBytes } from './helper/transaction-builder/update-node';
 export { ClaimNodeInterface, claimNodeBuilder, readClaimNodeBytes } from './helper/transaction-builder/claim-node';
 export { RemoveNodeInterface, removeNodeBuilder } from './helper/transaction-builder/remove-node';
-export { EscrowApprovalInterface, escrowBuilder, readApprovalEscrowBytes } from './helper/transaction-builder/escrow-transaction';
+export {
+  EscrowApprovalInterface,
+  escrowBuilder,
+  readApprovalEscrowBytes,
+  addEscrowBytes,
+} from './helper/transaction-builder/escrow-transaction';
 export { SendMoneyInterface, sendMoneyBuilder, readSendMoneyBytes } from './helper/transaction-builder/send-money';
 export { RemoveDatasetInterface, removeDatasetBuilder, readRemoveDatasetBytes } from './helper/transaction-builder/remove-account-dataset';
 export { SetupDatasetInterface, setupDatasetBuilder } from './helper/transaction-builder/setup-account-dataset';
 export { feeVoteInterface, feeVoteCommitBuilder, feeVoteRevealBuilder } from './helper/transaction-builder/fee-vote';
-export { getZBCAddress, isZBCAddressValid, ZBCAddressToBytes, readInt64, shortenHash, parseAddress, addressToBytes } from './helper/utils';
+export {
+  getZBCAddress,
+  isZBCAddressValid,
+  ZBCAddressToBytes,
+  readInt64,
+  shortenHash,
+  parseAddress,
+  addressToBytes,
+  generateTransactionHash,
+} from './helper/utils';
 export { bufferToBase64, toBase64Url } from './helper/converters';
 export { MultiSigInterface, signTransactionHash, MultiSigInfo, SignatureInfo } from './helper/transaction-builder/multisignature';
 
@@ -81,13 +96,7 @@ export { RequestType } from '../grpc/model/auth_pb';
 
 // WALLET FORMATTER
 export { ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
-export {
-  toGetPendingList,
-  toGetPending,
-  toGetPendingDetail,
-  generateTransactionHash,
-  multisigPendingDetail,
-} from './helper/wallet/MultiSignature';
+export { toGetPendingList, toGetPending, toGetPendingDetail, multisigPendingDetail } from './helper/wallet/MultiSignature';
 export { AccountDataset, AccountDatasets } from './helper/wallet/AccountDataset';
 export { AccountLedger, AccountLedgerList } from './helper/wallet/AccountLedger';
 export { Escrow, Escrows } from './helper/wallet/Escrows';

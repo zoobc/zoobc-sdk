@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
+    "build": "react-scripts build",
     "start-https": "HTTPS=true react-scripts start"
   },
   "dependencies": {

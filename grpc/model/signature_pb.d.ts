@@ -7,6 +7,7 @@ export interface SignatureTypeMap {
   DEFAULTSIGNATURE: 0;
   BITCOINSIGNATURE: 1;
   MULTISIGSIGNATURE: 2;
+  ESTONIAEIDSIGNATURE: 3;
 }
 
 export const SignatureType: SignatureTypeMap;

@@ -1,5 +1,5 @@
-import { getZBCAddress, parseAddress } from '../utils';
-import { GetTransactionsResponse, Transaction } from '../../../grpc/model/transaction_pb';
+import { getTxTypeString, getZBCAddress, parseAddress } from '../utils';
+import { GetTransactionsResponse, Transaction, TransactionType } from '../../../grpc/model/transaction_pb';
 import { Address } from '../interfaces';
 
 export interface ZBCTransactions {
@@ -20,18 +20,40 @@ export interface ZBCTransaction {
   transactionIndex?: number;
   transactionHash?: string;
   transactionType?: number;
+  transactionTypeString?: string;
   txBody?: any;
-  escrow?: boolean;
+  escrow?: any;
   escrowStatus?: number;
   multisig?: boolean;
   approverAddress?: Address;
   commission?: number;
   timeout?: number;
   instruction?: string;
+  message?: string;
 }
 
 export function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransaction {
-  const txBody = getBodyBytes(transaction);
+  let txBody = getBodyBytes(transaction);
+
+  const nodeManagementTxType =
+    transaction.transactiontype == TransactionType.NODEREGISTRATIONTRANSACTION ||
+    transaction.transactiontype == TransactionType.UPDATENODEREGISTRATIONTRANSACTION ||
+    transaction.transactiontype == TransactionType.REMOVENODEREGISTRATIONTRANSACTION ||
+    transaction.transactiontype == TransactionType.CLAIMNODEREGISTRATIONTRANSACTION;
+  if (nodeManagementTxType) {
+    const hasNodePublicKey = txBody.nodepublickey;
+    const hasAccountAddress = txBody.accountaddress;
+    if (hasNodePublicKey) {
+      const buffer = Buffer.from(txBody.nodepublickey.toString(), 'base64');
+      const pubkey = getZBCAddress(buffer, 'ZNK');
+      txBody.nodepublickey = pubkey;
+    }
+    if (hasAccountAddress) {
+      const accountAddress = parseAddress(txBody.accountaddress);
+      txBody.accountaddress = accountAddress.value;
+    }
+  }
+
   return {
     id: transaction.id,
     sender: parseAddress(transaction.senderaccountaddress),
@@ -43,7 +65,10 @@ export function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransact
     transactionIndex: transaction.transactionindex,
     transactionHash: getZBCAddress(Buffer.from(transaction.transactionhash.toString(), 'base64'), 'ZTX'),
     transactionType: transaction.transactiontype,
+    transactionTypeString: getTxTypeString(transaction.transactiontype),
     multisig: transaction.multisigchild,
+    escrow: transaction.escrow,
+    message: Buffer.from(transaction.message.toString(), 'base64').toString(),
     txBody,
   };
 }
@@ -56,7 +81,7 @@ export function toZBCTransactions(transactions: GetTransactionsResponse.AsObject
   };
 }
 
-function getBodyBytes(tx: Transaction.AsObject) {
+function getBodyBytes(tx: Transaction.AsObject): any {
   return (
     tx.approvalescrowtransactionbody ||
     tx.claimnoderegistrationtransactionbody ||
