@@ -17,6 +17,7 @@ export interface feeVoteInterface extends EscrowTransactionInterface {
   recentBlockHash: string;
   recentBlockHeight: number;
   feeVote: number;
+  message?: string;
 }
 
 export function feeVoteCommitBuilder(data: feeVoteInterface, seed: BIP32Interface) {
@@ -39,7 +40,13 @@ export function feeVoteCommitBuilder(data: feeVoteInterface, seed: BIP32Interfac
   // Add Escrow Bytes
   bytes = addEscrowBytes(bytes, data);
 
-  const message = writeInt32(0);
+  // Add message
+  let message = writeInt32(0);
+  if (data.message) {
+    message = writeInt32(data.message.length);
+    Buffer.concat([message, Buffer.from(data.message)]);
+  }
+
   bytes = Buffer.concat([bytes, message]);
 
   const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
@@ -83,7 +90,13 @@ export function feeVoteRevealBuilder(data: feeVoteInterface, seed: BIP32Interfac
   // Add Escrow Bytes
   bytes = addEscrowBytes(bytes, data);
 
-  const message = writeInt32(0);
+  // Add message
+  let message = writeInt32(0);
+  if (data.message) {
+    message = writeInt32(data.message.length);
+    Buffer.concat([message, Buffer.from(data.message)]);
+  }
+
   bytes = Buffer.concat([bytes, message]);
 
   const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));

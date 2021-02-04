@@ -14,6 +14,7 @@ export interface RemoveDatasetInterface extends EscrowTransactionInterface {
   setterAccountAddress: Address;
   recipientAccountAddress: Address;
   fee: number;
+  message?: string;
 }
 
 export function removeDatasetBuilder(data: RemoveDatasetInterface, seed?: BIP32Interface): Buffer {
@@ -47,7 +48,13 @@ export function removeDatasetBuilder(data: RemoveDatasetInterface, seed?: BIP32I
   // Add Escrow Bytes
   bytes = addEscrowBytes(bytes, data);
 
-  const message = writeInt32(0);
+  // Add message
+  let message = writeInt32(0);
+  if (data.message) {
+    message = writeInt32(data.message.length);
+    Buffer.concat([message, Buffer.from(data.message)]);
+  }
+
   bytes = Buffer.concat([bytes, message]);
 
   if (seed) {

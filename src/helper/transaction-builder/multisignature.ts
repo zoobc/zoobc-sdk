@@ -15,6 +15,7 @@ export interface MultiSigInterface extends EscrowTransactionInterface {
   multisigInfo?: MultiSigInfo;
   unisgnedTransactions?: Buffer;
   signaturesInfo?: SignatureInfo;
+  message?: string;
 }
 
 export interface MultiSigInfo {
@@ -100,7 +101,13 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
   // Add Escrow Bytes
   bytes = addEscrowBytes(bytes, data);
 
-  const message = writeInt32(0);
+  // Add message
+  let message = writeInt32(0);
+  if (data.message) {
+    message = writeInt32(data.message.length);
+    Buffer.concat([message, Buffer.from(data.message)]);
+  }
+
   bytes = Buffer.concat([bytes, message]);
 
   if (seed) {
