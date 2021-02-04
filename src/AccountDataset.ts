@@ -30,7 +30,7 @@ export interface AccountDatasetListParams {
 
 export function getList(params?: AccountDatasetListParams): Promise<AccountDatasets> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const request = new GetAccountDatasetsRequest();
     if (params) {
       const { property, value, setter, recipient, height, pagination } = params;
@@ -47,50 +47,79 @@ export function getList(params?: AccountDatasetListParams): Promise<AccountDatas
         request.setPagination(reqPagination);
       }
     }
-    const client = new AccountDatasetServiceClient(networkIP.host);
+
+    Network.request(AccountDatasetServiceClient, 'getAccountDatasets', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toZBCDatasets(res.toObject()));
+      });
+
+    /*const client = new AccountDatasetServiceClient(networkIP.host);
     client.getAccountDatasets(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
       if (res) resolve(toZBCDatasets(res.toObject()));
-    });
+    });*/
   });
 }
 
 export function get(property: string, recipient: Address): Promise<AccountDataset> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const request = new GetAccountDatasetRequest();
     request.setProperty(property);
     request.setRecipientaccountaddress(addressToBytes(recipient));
-    const client = new AccountDatasetServiceClient(networkIP.host);
-    client.getAccountDataset(request, (err, res) => {
+    // const client = new AccountDatasetServiceClient(networkIP.host);
+
+    Network.request(AccountDatasetServiceClient, 'getAccountDataset', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toZBCDataset(res.toObject()));
+      });
+
+    /*client.getAccountDataset(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
       if (res) resolve(toZBCDataset(res.toObject()));
-    });
+    });*/
   });
 }
 
 export function setupDataset(data: SetupDatasetInterface, childSeed: BIP32Interface): Promise<SetupDatasetResponse> {
   return new Promise(async (resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const bytes = setupDatasetBuilder(data, childSeed);
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
     const validTimestamp = await isTimestampValid(bytes);
     if (validTimestamp) {
-      const client = new TransactionServiceClient(networkIP.host);
+      Network.request(TransactionServiceClient, 'postTransaction', request)
+        .catch(err => {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        })
+        .then(res => {
+          resolve(res.toObject());
+        });
+
+      /*const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
         if (err) {
           const { code, message, metadata } = err;
           reject({ code, message, metadata });
         }
         if (res) resolve(res.toObject());
-      });
+      });*/
     } else {
       const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });
@@ -104,17 +133,26 @@ export function removeDataset(data: RemoveDatasetInterface, childseed: BIP32Inte
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
 
-    const networkIP = Network.selected();
-    const validTimestamp = await isTimestampValid(bytes);
+    // const networkIP = Network.selected();
+    const validTimestamp = await validationTimestamp(bytes);
     if (validTimestamp) {
-      const client = new TransactionServiceClient(networkIP.host);
+      Network.request(TransactionServiceClient, 'postTransaction', request)
+        .catch(err => {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        })
+        .then(res => {
+          resolve(res.toObject());
+        });
+
+      /*const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
         if (err) {
           const { code, message, metadata } = err;
           reject({ code, message, metadata });
         }
         if (res) resolve(res.toObject());
-      });
+      });*/
     } else {
       const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });

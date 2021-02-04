@@ -11,20 +11,29 @@ function feeVoteCommit(data: feeVoteInterface, seed: BIP32Interface): Promise<Po
   const txBytes = feeVoteCommitBuilder(data, seed);
 
   return new Promise(async (resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(txBytes);
     const validTimestamp = await isTimestampValid(txBytes);
     if (validTimestamp) {
-      const client = new TransactionServiceClient(networkIP.host);
+      Network.request(TransactionServiceClient, 'postTransaction', request)
+        .catch(err => {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        })
+        .then(res => {
+          resolve(res.toObject());
+        });
+
+      /*const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
         if (err) {
           const { code, message, metadata } = err;
           reject({ code, message, metadata });
         }
         if (res) resolve(res.toObject());
-      });
+      });*/
     } else {
       const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });
@@ -36,20 +45,29 @@ function feeVoteReveal(data: feeVoteInterface, seed: BIP32Interface): Promise<Po
   const txBytes = feeVoteRevealBuilder(data, seed);
 
   return new Promise(async (resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(txBytes);
     const validTimestamp = await isTimestampValid(txBytes);
     if (validTimestamp) {
-      const client = new TransactionServiceClient(networkIP.host);
+      Network.request(TransactionServiceClient, 'postTransaction', request)
+        .catch(err => {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        })
+        .then(res => {
+          resolve(res.toObject());
+        });
+
+      /*const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
         if (err) {
           const { code, message, metadata } = err;
           reject({ code, message, metadata });
         }
         if (res) resolve(res.toObject());
-      });
+      });*/
     } else {
       const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });
