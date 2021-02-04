@@ -181,6 +181,7 @@ function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promi
         Network.request(TransactionServiceClient, 'postTransaction', request)
           .catch(err => {
             const { code, message, metadata } = err;
+            if (code == grpc.Code.Internal) resolve({});
             reject({ code, message, metadata });
           })
           .then(res => {
@@ -219,6 +220,7 @@ function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<N
           Network.request(TransactionServiceClient, 'postTransaction', request)
             .catch(err => {
               const { code, message, metadata } = err;
+              if (code == grpc.Code.Internal) resolve({});
               reject({ code, message, metadata });
             })
             .then(res => {
@@ -255,6 +257,7 @@ function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<N
       Network.request(TransactionServiceClient, 'postTransaction', request)
         .catch(err => {
           const { code, message, metadata } = err;
+          if (code == grpc.Code.Internal) resolve({});
           reject({ code, message, metadata });
         })
         .then(res => {
@@ -292,6 +295,7 @@ function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<Nod
           Network.request(TransactionServiceClient, 'postTransaction', request)
             .catch(err => {
               const { code, message, metadata } = err;
+              if (code == grpc.Code.Internal) resolve({});
               reject({ code, message, metadata });
             })
             .then(res => {

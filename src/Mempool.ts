@@ -6,7 +6,6 @@ import { Address } from './helper/interfaces';
 import { addressToBytes } from './helper/utils';
 import { toZBCPendingTransaction, toZBCPendingTransactions } from './helper/wallet/Mempool';
 import { ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
-import { TransactionType } from '../grpc/model/transaction_pb';
 
 export interface MempoolListParams {
   address?: Address;
@@ -46,7 +45,7 @@ function getList(params?: MempoolListParams): Promise<ZBCTransactions> {
         reject({ code, message, metadata });
       })
       .then(res => {
-        resolve(toZBCPendingTransactions(res.toObject(), 1));
+        resolve(toZBCPendingTransactions(res.toObject(), params?.txType));
       });
 
     /*const client = new MempoolServiceClient(networkIP.host);

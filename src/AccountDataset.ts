@@ -11,6 +11,7 @@ import { addressToBytes, errorDateMessage } from './helper/utils';
 import { Address } from './helper/interfaces';
 import { AccountDataset, AccountDatasets, toZBCDataset, toZBCDatasets } from './helper/wallet/AccountDataset';
 import { isTimestampValid } from './helper/timestamp-validation';
+import { grpc } from '@improbable-eng/grpc-web';
 
 export type SetupDatasetResponse = PostTransactionResponse.AsObject;
 export type RemoveAccountDatasetResponse = PostTransactionResponse.AsObject;
@@ -106,6 +107,7 @@ export function setupDataset(data: SetupDatasetInterface, childSeed: BIP32Interf
       Network.request(TransactionServiceClient, 'postTransaction', request)
         .catch(err => {
           const { code, message, metadata } = err;
+          if (code == grpc.Code.Internal) resolve({});
           reject({ code, message, metadata });
         })
         .then(res => {
@@ -139,6 +141,7 @@ export function removeDataset(data: RemoveDatasetInterface, childseed: BIP32Inte
       Network.request(TransactionServiceClient, 'postTransaction', request)
         .catch(err => {
           const { code, message, metadata } = err;
+          if (code == grpc.Code.Internal) resolve({});
           reject({ code, message, metadata });
         })
         .then(res => {
