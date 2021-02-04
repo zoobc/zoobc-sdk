@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { GetAccountDatasetsRequest, GetAccountDatasetRequest } from '../grpc/model/accountDataset_pb';
 import { AccountDatasetServiceClient } from '../grpc/service/accountDataset_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';

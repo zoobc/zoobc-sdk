@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { getTxTypeString, getZBCAddress, parseAddress } from '../utils';
 import { GetTransactionsResponse, Transaction, TransactionType } from '../../../grpc/model/transaction_pb';
 import { Address } from '../interfaces';

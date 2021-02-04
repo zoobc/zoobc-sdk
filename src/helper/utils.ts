@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import * as CryptoJS from 'crypto-js';
 import SHA3 from 'sha3';
 import B32Enc from 'base32-encode';

@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { writeInt32, getZBCAddress, errorDateMessage, addressToBytes, ZBCAddressToBytes } from './helper/utils';
 import { sha3_256 } from 'js-sha3';
 import Network from './Network';
