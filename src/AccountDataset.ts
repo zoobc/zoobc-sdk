@@ -134,7 +134,7 @@ export function removeDataset(data: RemoveDatasetInterface, childseed: BIP32Inte
     request.setTransactionbytes(bytes);
 
     // const networkIP = Network.selected();
-    const validTimestamp = await validationTimestamp(bytes);
+    const validTimestamp = await isTimestampValid(bytes);
     if (validTimestamp) {
       Network.request(TransactionServiceClient, 'postTransaction', request)
         .catch(err => {
