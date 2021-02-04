@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@ledgerhq/hw-transport-webusb": "^5.22.0",
+    "ethereumjs-util": "^7.0.8",
+    "ethereumjs-wallet": "^1.0.1",
     "jsrsasign": "^10.1.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
