@@ -21,6 +21,7 @@ const SignSendMoneyWithEthereum = () => {
   const [txBytesAndSignature, setTxBytesAndSignature] = useState('');
 
   const publicKey = privateKey ? Wallet.fromPrivateKey(privateKey).getPublicKey() : null;
+  const address = publicKey ? Wallet.fromPublicKey(publicKey).getAddress(): null
 
   const resetDisplay = isKeepPublicKey => {
     if (!isKeepPublicKey) {
@@ -97,6 +98,12 @@ const SignSendMoneyWithEthereum = () => {
           <div>
             <h4>Public Key:</h4>
             <textarea style={{ width: '800px', textAlign: 'center' }} value={bytesToHexes(publicKey) || '--'} />
+          </div>
+        )}
+        {address && (
+          <div>
+            <h4>Ethereum Address:</h4>
+            <textarea style={{ width: '800px', textAlign: 'center' }} value={bytesToHexes(address) || '--'} />
           </div>
         )}
         <div>
