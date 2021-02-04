@@ -1,6 +1,6 @@
 import Transactions from './Transactions';
 import Mempool from './Mempool';
-import Network from './Network';
+import Network, { Group } from './Network';
 import Wallet from './Wallet';
 import Account from './Account';
 import Host from './Host';
@@ -51,7 +51,7 @@ export { AccountDatasetListParams, SetupDatasetResponse, RemoveAccountDatasetRes
 export { AccountBalance } from './Account';
 export { HostInfoResponse } from './Host';
 export { ParticipationScoreResponse } from './ParticipationScore';
-export { HostInterface } from './Network';
+export { HostInterface, GroupData } from './Network';
 
 // HELPER INTERFACE
 export { RegisterNodeInterface, registerNodeBuilder } from './helper/transaction-builder/register-node';

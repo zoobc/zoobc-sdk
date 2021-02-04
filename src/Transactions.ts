@@ -14,6 +14,7 @@ import { addressToBytes, errorDateMessage } from './helper/utils';
 import { Address } from './helper/interfaces';
 import { toZBCTransaction, toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
 import { isTimestampValid } from './helper/timestamp-validation';
+import { grpc } from '@improbable-eng/grpc-web';
 
 export type PostTransactionResponses = PostTransactionResponse.AsObject;
 export type TransactionMinimumFeeResponse = GetTransactionMinimumFeeResponse.AsObject;
@@ -112,6 +113,7 @@ function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<Post
       Network.request(TransactionServiceClient, 'postTransaction', request)
         .catch(err => {
           const { code, message, metadata } = err;
+          if (code == grpc.Code.Internal) resolve({});
           reject({ code, message, metadata });
         })
         .then(res => {
@@ -144,6 +146,7 @@ function post(txBytes: Buffer): Promise<PostTransactionResponses> {
       Network.request(TransactionServiceClient, 'postTransaction', request)
         .catch(err => {
           const { code, message, metadata } = err;
+          if (code == grpc.Code.Internal) resolve({});
           reject({ code, message, metadata });
         })
         .then(res => {

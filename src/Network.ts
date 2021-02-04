@@ -47,7 +47,7 @@ export interface NodeData {
 export interface GroupData {
   label: string;
   wkps: string[];
-  pool: NodeData[];
+  pool?: NodeData[];
 }
 
 class Node {
@@ -87,7 +87,7 @@ class Node {
   }
 }
 
-class Group {
+export class Group {
   private label: string = '';
   private wkps: string[] = [];
   private pool: Node[] = [];
@@ -103,7 +103,7 @@ class Group {
     const t = Date.now();
     if (t - this.lastCollect <= COLLECT_DELTA) return;
     this.clean();
-    console.log('SDK: collecting new nodes...');
+    // console.log('SDK: collecting new nodes...');
     this.lastCollect = Date.now();
     var needed = MIN_NODES - this.pool.length;
     for (var i = 0; i < this.wkps.length; i++) {
@@ -118,20 +118,20 @@ class Group {
     const attempt = () => {
       const node = itr.next();
       if (!node) {
-        console.log(
-          'SDK: BIG PROBLEM: ran out of nodes to try collecting peers from, either we are offline or we have no links to the live network :(',
-        );
+        // console.log(
+        //   'SDK: BIG PROBLEM: ran out of nodes to try collecting peers from, either we are offline or we have no links to the live network :(',
+        // );
         return;
       }
       new HostServiceClient(node.getAddress()).getHostPeers(new Empty(), (err, res) => {
         if (err) {
-          console.log('SDK: error collecting nodes from node', node.getAddress(), ':', err);
+          // console.log('SDK: error collecting nodes from node', node.getAddress(), ':', err);
           node.countFailure();
           attempt();
         } else {
           if (res == null) return;
           const peers = [...res.toObject().resolvedpeersMap.map(p => p[1].info)];
-          console.log('SDK: collected nodes from node', node.getAddress(), '(', peers.length, ')');
+          // console.log('SDK: collected nodes from node', node.getAddress(), '(', peers.length, ')');
           var added = 0;
           while (added < MAX_COLLECT && peers.length > 0 && this.pool.length < MAX_NODES) {
             const r = Math.floor(Math.random() * peers.length);
@@ -141,10 +141,10 @@ class Group {
             const hasPeer = this.pool.find(n => n.getAddress() == address);
             if (hasPeer) continue;
             this.pool.push(new Node({ address: address }));
-            console.log('SDK: added node', address);
+            // console.log('SDK: added node', address);
             added++;
           }
-          console.log('SDK: current pool:', this.pool);
+          // console.log('SDK: current pool:', this.pool);
         }
       });
     };
@@ -156,7 +156,7 @@ class Group {
     const bad = [];
     for (var i = 0; i < this.pool.length; i++) if (!this.pool[i].isGood()) bad.push(this.pool[i]);
     const n = Math.min(bad.length, MAX_CLEAN);
-    console.log('sdk: cleaning out bad nodes (', n, ')...');
+    // console.log('sdk: cleaning out bad nodes (', n, ')...');
     for (var i = 0; i < n; i++) this.pool.splice(this.pool.indexOf(bad[i], 1));
   }
 
@@ -168,7 +168,7 @@ class Group {
     return {
       next() {
         if (!pool.length) {
-          console.log('SDK: iterator has run out of nodes to try...');
+          // console.log('SDK: iterator has run out of nodes to try...');
           return null;
         }
         return pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
@@ -318,7 +318,7 @@ function request(clientClass: any, requestMethod: string, requestObject: any, si
     var errors: ErrorAccumulator[] = [];
     var totalErrors = 0;
     var totalAttempts = 0;
-    console.log('SDK: starting request...');
+    // console.log('SDK: starting request...');
     const handleResponse = (node: Node, err: any, res: any) => {
       var matched = false;
       const address = node.getAddress();
@@ -369,7 +369,7 @@ function request(clientClass: any, requestMethod: string, requestObject: any, si
       }
     };
     const giveUp = () => {
-      console.log('SDK: giving up on request...');
+      // console.log('SDK: giving up on request...');
       reject({
         code: null,
         message: 'Inconsistent network response.',
@@ -380,14 +380,14 @@ function request(clientClass: any, requestMethod: string, requestObject: any, si
       });
     };
     const reachConsensus = (err: any, res: any) => {
-      console.log('SDK: consensus reached on request:', {
-        err,
-        res,
-        responses: responses.map(r => {
-          return { nodes: r.nodes, res: r.res.toObject() };
-        }),
-        errors,
-      });
+      // console.log('SDK: consensus reached on request:', {
+      //   err,
+      //   res,
+      //   responses: responses.map(r => {
+      //     return { nodes: r.nodes, res: r.res.toObject() };
+      //   }),
+      //   errors,
+      // });
       if (err) {
         reject(err);
       } else {
@@ -395,7 +395,7 @@ function request(clientClass: any, requestMethod: string, requestObject: any, si
       }
     };
     const query = (n: number) => {
-      console.log('SDK: querying', n, 'nodes...');
+      // console.log('SDK: querying', n, 'nodes...');
       for (var i = 0; i < n; i++) {
         if (totalAttempts >= MAX_ATTEMPTS) {
           giveUp();
@@ -403,7 +403,7 @@ function request(clientClass: any, requestMethod: string, requestObject: any, si
         }
         const node = itr.next();
         if (!node) {
-          console.log('SDK: ran out of nodes to query...');
+          // console.log('SDK: ran out of nodes to query...');
           giveUp();
           break;
         }

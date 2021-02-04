@@ -10,6 +10,7 @@ import { addressToBytes, errorDateMessage } from './helper/utils';
 import { Address } from './helper/interfaces';
 import { Escrows, toZBCEscrows, Escrow, toZBCEscrow } from './helper/wallet/Escrows';
 import { isTimestampValid } from './helper/timestamp-validation';
+import { grpc } from '@improbable-eng/grpc-web';
 
 export type ApprovalEscrowTransactionResponse = PostTransactionResponse.AsObject;
 
@@ -114,6 +115,7 @@ function approval(data: EscrowApprovalInterface, seed: BIP32Interface): Promise<
       Network.request(TransactionServiceClient, 'postTransaction', request)
         .catch(err => {
           const { code, message, metadata } = err;
+          if (code == grpc.Code.Internal) resolve({});
           reject({ code, message, metadata });
         })
         .then(res => {

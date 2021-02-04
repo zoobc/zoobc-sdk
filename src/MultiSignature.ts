@@ -21,6 +21,7 @@ import { Address } from './helper/interfaces';
 import { ZBCTransactions } from './helper/wallet/Transaction';
 import { toGetPendingList, toGetPendingDetail, multisigPendingDetail } from './helper/wallet/MultiSignature';
 import { isTimestampValid } from './helper/timestamp-validation';
+import { grpc } from '@improbable-eng/grpc-web';
 
 export type MultisigPendingTxResponse = GetPendingTransactionsResponse.AsObject;
 export type MultisigPendingTxDetailResponse = GetPendingTransactionDetailByTransactionHashResponse.AsObject;
@@ -181,11 +182,12 @@ function postTransaction(data: MultiSigInterface, childSeed: BIP32Interface): Pr
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
     // const networkIP = Network.selected();
-    const validTimestamp = await validationTimestamp(bytes);
+    const validTimestamp = await isTimestampValid(bytes);
     if (validTimestamp) {
       Network.request(TransactionServiceClient, 'postTransaction', request)
         .catch(err => {
           const { code, message, metadata } = err;
+          if (code == grpc.Code.Internal) resolve({});
           reject({ code, message, metadata });
         })
         .then(res => {
