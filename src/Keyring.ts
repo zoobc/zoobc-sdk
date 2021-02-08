@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { sign as ed25519 } from 'tweetnacl';
 import * as bip39 from 'bip39';
 import { BIP32Interface, fromSeed } from 'bip32';

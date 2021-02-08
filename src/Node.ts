@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { NodeHardwareServiceClient } from '../grpc/service/nodeHardware_pb_service';
 import { NodeAdminServiceClient } from '../grpc/service/nodeAdmin_pb_service';
 import { NodeRegistrationServiceClient } from '../grpc/service/nodeRegistration_pb_service';

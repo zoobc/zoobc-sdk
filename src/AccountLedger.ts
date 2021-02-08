@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { GetAccountLedgersRequest } from '../grpc/model/accountLedger_pb';
 import { AccountLedgerServiceClient } from '../grpc/service/accountLedger_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';

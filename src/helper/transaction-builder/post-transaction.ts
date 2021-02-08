@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { readClaimNodeBytes } from './claim-node';
 import { readApprovalEscrowBytes } from './escrow-transaction';

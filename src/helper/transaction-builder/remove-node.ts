@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { writeInt64, writeInt32, getZBCAddress, ZBCAddressToBytes, addressToBytes, generateTransactionHash } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';

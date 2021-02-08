@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { GetBlocksResponse, GetBlocksRequest, GetBlockRequest, GetBlockResponse } from '../grpc/model/block_pb';
 import { BlockServiceClient } from '../grpc/service/block_pb_service';
 import Network from './Network';

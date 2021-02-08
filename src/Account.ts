@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { GetAccountBalanceRequest, GetAccountBalancesRequest, GetAccountBalancesResponse } from '../grpc/model/accountBalance_pb';
 import { AccountBalanceServiceClient } from '../grpc/service/accountBalance_pb_service';
 import Network from './Network';

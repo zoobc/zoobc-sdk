@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 export function base64ToBuffer(base64: string): Buffer {
   return new Buffer(base64, 'base64');
 }
@@ -7,8 +10,8 @@ export function bufferToBase64(bytes: ArrayBuffer | ArrayBufferView | Array<numb
     bytes instanceof ArrayBuffer
       ? Buffer.from(bytes)
       : ArrayBuffer.isView(bytes)
-      ? Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength)
-      : Buffer.from(bytes);
+        ? Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength)
+        : Buffer.from(bytes);
   return buf.toString('base64');
 }
 

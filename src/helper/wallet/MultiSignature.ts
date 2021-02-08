@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { MultisigPendingTxResponse, MultisigPendingTxDetailResponse } from '../../MultiSignature';
 import { getZBCAddress, readAddress, readInt64 } from '../utils';
 import { parseAddress } from '../utils';

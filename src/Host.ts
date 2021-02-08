@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import Network from './Network';
 import { HostServiceClient } from '../grpc/service/host_pb_service';
 import { Empty } from '../grpc/model/empty_pb';
