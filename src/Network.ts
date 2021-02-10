@@ -282,6 +282,10 @@ function load(nets: GroupData[]) {
   network.nets = nets.map(n => new Group(n));
 }
 
+function save(): GroupData[] {
+  return network.nets.map(n => n.save());
+}
+
 function getRandomAddress() {
   return network.getRandomAddress;
 }
@@ -323,6 +327,23 @@ function request(clientClass: any, requestMethod: string, requestObject: any, si
     var totalAttempts = 0;
     // console.log('SDK: starting request...');
     const handleResponse = (node: Node, err: any, res: any) => {
+      // Handle response for request to single node
+      if (single) {
+        if (!err) {
+          node.countSuccess();
+          reachConsensus(null, res);
+        } else {
+          node.countFailure();
+          if (totalAttempts >= MAX_ATTEMPTS / 3) {
+            reachConsensus(err, null);
+          } else {
+            query(1);
+          }
+        }
+        return;
+      }
+
+      // Handle response when we're querying multiple nodes
       var matched = false;
       const address = node.getAddress();
       if (!err) {
@@ -333,7 +354,7 @@ function request(clientClass: any, requestMethod: string, requestObject: any, si
           if (compare(res.toObject(), r.res.toObject())) {
             r.nodes.push(address);
             matched = true;
-            if (single || r.nodes.length > totalAttempts / 2) {
+            if (r.nodes.length > totalAttempts / 2) {
               reachConsensus(null, res);
               return;
             }
@@ -351,7 +372,7 @@ function request(clientClass: any, requestMethod: string, requestObject: any, si
           if (compare(err, e.err)) {
             e.nodes.push(address);
             matched = true;
-            if (!single && e.nodes.length > totalAttempts / 2) {
+            if (e.nodes.length > totalAttempts / 2) {
               reachConsensus(err, null);
               return;
             }
@@ -362,12 +383,14 @@ function request(clientClass: any, requestMethod: string, requestObject: any, si
           errors.push({ err: err, nodes: [address] });
         }
       }
+
+      // In multi-query case, count up responses and decide whether to give up or query more
       var total = totalResponses + totalErrors;
       if (total >= totalAttempts) {
         if (total >= MAX_ATTEMPTS) {
           giveUp();
         } else {
-          query(single ? 1 : 2);
+          query(2);
         }
       }
     };
@@ -421,4 +444,4 @@ function request(clientClass: any, requestMethod: string, requestObject: any, si
   });
 }
 
-export default { list, set, selected, ping, request, load, getRandomAddress };
+export default { list, set, selected, ping, request, load, save, getRandomAddress };
