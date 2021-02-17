@@ -80,6 +80,8 @@ export {
   parseAddress,
   addressToBytes,
   generateTransactionHash,
+  transactionFees,
+  uniqueNonce,
 } from './helper/utils';
 export { bufferToBase64, toBase64Url } from './helper/converters';
 export { MultiSigInterface, signTransactionHash, MultiSigInfo, SignatureInfo } from './helper/transaction-builder/multisignature';

@@ -21,7 +21,7 @@ const SignatureGenerator = ({ accountIndex, walletSignature, signature, buildTra
   // ======================================================================================================================================
   const signTransaction = async txBytes => {
     const accountIdxInt = parseInt(accountIndex);
-    if (!txBytes || txBytes.length === 0 || accountIdxInt == NaN) return;
+    if (!txBytes || txBytes.length === 0 || accountIdxInt === isNaN) return;
 
     // signing with keyring
     const txHash = Buffer.from(sha3_256(txBytes), 'hex');

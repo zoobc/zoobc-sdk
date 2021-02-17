@@ -16,7 +16,7 @@ const SignSendMoney = () => {
   const [fee, setFee] = useState('');
   const [signature, setSignature] = useState('');
   const [walletSignature, setWalletSignature] = useState('');
-  const [txBytes, setTxBytes] = useState('');
+  // const [txBytes, setTxBytes] = useState('');
 
   const resetDisplay = isKeepPublicKey => {
     if (!isKeepPublicKey) {
