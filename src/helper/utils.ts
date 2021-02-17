@@ -94,7 +94,7 @@ export function shortenHash(text = ''): string {
   return `${zoobcPrefix}_${truncateHead}...${truncateTail}`;
 }
 
-export function writeInt64(number: number | string, base?: number, endian?: any): Buffer {
+export function writeInt64(number: number | string): Buffer {
   number = number.toString();
   const buffer = new Int64LE(number);
   return buffer.toBuffer();
@@ -183,3 +183,31 @@ export function getTxTypeString(txType: number): string {
   }
   return '';
 }
+
+/**
+ * Used to generate unique number for string Nonce when generate multisig address
+ * @param addresses  array of participant address
+ * @param nonce  it is unique words
+ * @param minimumSigner minimum signer
+ */
+export function uniqueNonce(addresses: Address[], nonce: string, minimumSigner: number) {
+  const address = addresses.map((x: { value: string; }) => x.value);
+  const reducer = (sum: any, val: any) => sum + val;
+  const str = address.reduce(reducer, (nonce + minimumSigner));
+  const hash = sha3_256(str);
+  const arrayByte = Buffer.from(hash, 'base64');
+  const newArrays = arrayByte.slice(0, 4);
+  const uniqueID = newArrays.reduce(reducer, 0);
+  return uniqueID;
+}
+
+/**
+ * Calculate transaction fee based on message and timestamp
+ * @param strLength  total length of message
+ * @param hour24  rounding timestamp devided by 24 hour
+ */
+export function transactionFees(strLength: number, hour24: number) {
+  return (0.1 * (strLength + 1)) * hour24 * 0.01;
+}
+
+
