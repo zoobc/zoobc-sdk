@@ -1,7 +1,9 @@
-import { writeInt64, writeInt32, getZBCAddress, ZBCAddressToBytes, addressToBytes } from '../utils';
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
+import { writeInt64, writeInt32, getZBCAddress, ZBCAddressToBytes, addressToBytes, generateTransactionHash } from '../utils';
 import { ADDRESS_LENGTH, VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
-import { generateTransactionHash } from '../wallet/MultiSignature';
 import { EscrowTransactionInterface } from './send-money';
 import { Address } from '../interfaces';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
@@ -14,6 +16,7 @@ export interface RemoveNodeInterface extends EscrowTransactionInterface {
   accountAddress: Address;
   fee: number;
   nodePublicKey: Buffer;
+  message?: string;
 }
 
 export function removeNodeBuilder(data: RemoveNodeInterface, seed?: BIP32Interface): Buffer {
@@ -32,7 +35,13 @@ export function removeNodeBuilder(data: RemoveNodeInterface, seed?: BIP32Interfa
   // Add Escrow Bytes
   bytes = addEscrowBytes(bytes, data);
 
-  const message = writeInt32(0);
+  // Add message
+  let message = writeInt32(0);
+  if (data.message) {
+    message = writeInt32(data.message.length);
+    Buffer.concat([message, Buffer.from(data.message)]);
+  }
+
   bytes = Buffer.concat([bytes, message]);
 
   if (seed) {

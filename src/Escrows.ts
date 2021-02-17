@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import Network from './Network';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { BIP32Interface } from 'bip32';
@@ -6,9 +9,11 @@ import { GetEscrowTransactionsRequest, GetEscrowTransactionRequest } from '../gr
 import { EscrowTransactionServiceClient } from '../grpc/service/escrow_pb_service';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
-import { addressToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
+import { addressToBytes, errorDateMessage } from './helper/utils';
 import { Address } from './helper/interfaces';
 import { Escrows, toZBCEscrows, Escrow, toZBCEscrow } from './helper/wallet/Escrows';
+import { isTimestampValid } from './helper/timestamp-validation';
+import { grpc } from '@improbable-eng/grpc-web';
 
 export type ApprovalEscrowTransactionResponse = PostTransactionResponse.AsObject;
 
@@ -31,7 +36,7 @@ export interface EscrowListParams {
 
 function getList(params?: EscrowListParams): Promise<Escrows> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const request = new GetEscrowTransactionsRequest();
 
     if (params) {
@@ -54,52 +59,80 @@ function getList(params?: EscrowListParams): Promise<Escrows> {
       }
     }
 
-    const client = new EscrowTransactionServiceClient(networkIP.host);
+    Network.request(EscrowTransactionServiceClient, 'getEscrowTransactions', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toZBCEscrows(res.toObject()));
+      });
+
+    /*const client = new EscrowTransactionServiceClient(networkIP.host);
     client.getEscrowTransactions(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
       if (res) resolve(toZBCEscrows(res.toObject()));
-    });
+    });*/
   });
 }
 
 function get(id: string): Promise<Escrow> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const request = new GetEscrowTransactionRequest();
     request.setId(id);
 
-    const client = new EscrowTransactionServiceClient(networkIP.host);
+    Network.request(EscrowTransactionServiceClient, 'getEscrowTransaction', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toZBCEscrow(res.toObject()));
+      });
+
+    /*const client = new EscrowTransactionServiceClient(networkIP.host);
     client.getEscrowTransaction(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
       if (res) resolve(toZBCEscrow(res.toObject()));
-    });
+    });*/
   });
 }
 
 function approval(data: EscrowApprovalInterface, seed: BIP32Interface): Promise<ApprovalEscrowTransactionResponse> {
   const txBytes = escrowBuilder(data, seed);
   return new Promise(async (resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(txBytes);
 
-    const validTimestamp = await validationTimestamp(txBytes);
+    const validTimestamp = await isTimestampValid(txBytes);
     if (validTimestamp) {
-      const client = new TransactionServiceClient(networkIP.host);
+      Network.request(TransactionServiceClient, 'postTransaction', request)
+        .catch(err => {
+          const { code, message, metadata } = err;
+          if (code == grpc.Code.Internal) resolve({});
+          reject({ code, message, metadata });
+        })
+        .then(res => {
+          resolve(res ? res.toObject() : null);
+        });
+
+      /*const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
         if (err) {
           const { code, message, metadata } = err;
           reject({ code, message, metadata });
         }
-        resolve(res?.toObject());
-      });
+        resolve(res ?.toObject());
+      });*/
     } else {
       const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });

@@ -1,9 +1,11 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { BIP32Interface } from 'bip32';
 import { AccountType } from '../../../grpc/model/accountType_pb';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { Address } from '../interfaces';
-import { writeInt64, writeInt32, ZBCAddressToBytes, addressToBytes } from '../utils';
-import { generateTransactionHash } from '../wallet/MultiSignature';
+import { writeInt64, writeInt32, ZBCAddressToBytes, addressToBytes, generateTransactionHash } from '../utils';
 import { VERSION } from './constant';
 import { addEscrowBytes } from './escrow-transaction';
 import { EscrowTransactionInterface } from './send-money';
@@ -16,6 +18,7 @@ export interface MultiSigInterface extends EscrowTransactionInterface {
   multisigInfo?: MultiSigInfo;
   unisgnedTransactions?: Buffer;
   signaturesInfo?: SignatureInfo;
+  message?: string;
 }
 
 export interface MultiSigInfo {
@@ -101,7 +104,13 @@ export function multisignatureBuilder(data: MultiSigInterface, seed?: BIP32Inter
   // Add Escrow Bytes
   bytes = addEscrowBytes(bytes, data);
 
-  const message = writeInt32(0);
+  // Add message
+  let message = writeInt32(0);
+  if (data.message) {
+    message = writeInt32(data.message.length);
+    Buffer.concat([message, Buffer.from(data.message)]);
+  }
+
   bytes = Buffer.concat([bytes, message]);
 
   if (seed) {

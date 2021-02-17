@@ -1,19 +1,16 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import * as CryptoJS from 'crypto-js';
 import SHA3 from 'sha3';
 import B32Enc from 'base32-encode';
 import B32Dec from 'base32-decode';
 import { Int64LE } from 'int64-buffer';
-import zoobc from '..';
 import { Address } from './interfaces';
 import { AccountType } from '../../grpc/model/accountType_pb';
+import { sha3_256 } from 'js-sha3';
 import { TransactionType } from '../../grpc/model/transaction_pb';
-import { readClaimNodeBytes } from './transaction-builder/claim-node';
-import { readApprovalEscrowBytes } from './transaction-builder/escrow-transaction';
-import { readRegisterNodeBytes } from './transaction-builder/register-node';
-import { readRemoveNodeBytes } from './transaction-builder/remove-node';
-import { readSendMoneyBytes } from './transaction-builder/send-money';
-import { readSetupDatasetBytes } from './transaction-builder/setup-account-dataset';
-import { readUpdateNodeBytes } from './transaction-builder/update-node';
+
 export const errorDateMessage = {
   code: '',
   message: 'please fix your date and time',
@@ -97,7 +94,7 @@ export function shortenHash(text = ''): string {
   return `${zoobcPrefix}_${truncateHead}...${truncateTail}`;
 }
 
-export function writeInt64(number: number | string, base?: number, endian?: any): Buffer {
+export function writeInt64(number: number | string): Buffer {
   number = number.toString();
   const buffer = new Int64LE(number);
   return buffer.toBuffer();
@@ -112,17 +109,6 @@ export function writeInt32(number: number): Buffer {
   let byte = Buffer.alloc(4);
   byte.writeUInt32LE(number, 0);
   return byte;
-}
-
-export async function validationTimestamp(txBytes: Buffer) {
-  let timestampPostTransactionBytes = txBytes.slice(5, 13);
-  let timestampPostTransaction = readInt64(timestampPostTransactionBytes, 0);
-  let timestampServer = await zoobc.Node.getNodeTime().then(res => {
-    return res.nodetime;
-  });
-  const deviation = parseInt(timestampPostTransaction) - parseInt(timestampServer);
-  if (deviation < 30 && deviation > -30) return true;
-  else return false;
 }
 
 export function parseAddress(account: string | Uint8Array): Address {
@@ -157,7 +143,9 @@ export function addressToBytes(account: Address): Buffer {
     case AccountType.BTCACCOUNTTYPE:
       return Buffer.from([]);
     default:
-      return Buffer.from([...writeInt32(account.type), ...account.value]);
+      const bytesDefault = account.value;
+      const typeBytesDefault = writeInt32(account.type);
+      return Buffer.from([...typeBytesDefault, ...bytesDefault]);
   }
 }
 
@@ -167,23 +155,59 @@ export function readAddress(txBytes: Buffer, offset: number): Buffer {
   else return txBytes.slice(offset, offset + 36);
 }
 
-export function readBodyBytes(txBytes: Buffer, txType: number, offset: number): any {
-  switch (txType) {
-    case TransactionType.UPDATENODEREGISTRATIONTRANSACTION:
-      return readUpdateNodeBytes(txBytes, offset);
-    case TransactionType.SENDMONEYTRANSACTION:
-      return readSendMoneyBytes(txBytes, offset);
-    case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
-      return readRemoveNodeBytes(txBytes, offset);
-    case TransactionType.NODEREGISTRATIONTRANSACTION:
-      return readRegisterNodeBytes(txBytes, offset);
-    case TransactionType.CLAIMNODEREGISTRATIONTRANSACTION:
-      return readClaimNodeBytes(txBytes, offset);
-    case TransactionType.SETUPACCOUNTDATASETTRANSACTION:
-      return readSetupDatasetBytes(txBytes, offset);
-    case TransactionType.REMOVEACCOUNTDATASETTRANSACTION:
-      return readSetupDatasetBytes(txBytes, offset);
-    case TransactionType.APPROVALESCROWTRANSACTION:
-      return readApprovalEscrowBytes(txBytes, offset);
-  }
+export function generateTransactionHash(buffer: Buffer): string {
+  const hashed = Buffer.from(sha3_256(buffer), 'hex');
+  return getZBCAddress(hashed, 'ZTX');
 }
+
+export function getTxTypeString(txType: number): string {
+  switch (txType) {
+    case TransactionType.SENDMONEYTRANSACTION:
+      return 'transfer zoobc';
+    case TransactionType.NODEREGISTRATIONTRANSACTION:
+      return 'register node';
+    case TransactionType.UPDATENODEREGISTRATIONTRANSACTION:
+      return 'update node';
+    case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
+      return 'remove node';
+    case TransactionType.CLAIMNODEREGISTRATIONTRANSACTION:
+      return 'claim node';
+    case TransactionType.SETUPACCOUNTDATASETTRANSACTION:
+      return 'setup account dataset';
+    case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
+      return 'remove account dataset';
+    case TransactionType.APPROVALESCROWTRANSACTION:
+      return 'escrow approval';
+    case TransactionType.MULTISIGNATURETRANSACTION:
+      return 'multisignature';
+  }
+  return '';
+}
+
+/**
+ * Used to generate unique number for string Nonce when generate multisig address
+ * @param addresses  array of participant address
+ * @param nonce  it is unique words
+ * @param minimumSigner minimum signer
+ */
+export function uniqueNonce(addresses: Address[], nonce: string, minimumSigner: number) {
+  const address = addresses.map((x: { value: string; }) => x.value);
+  const reducer = (sum: any, val: any) => sum + val;
+  const str = address.reduce(reducer, (nonce + minimumSigner));
+  const hash = sha3_256(str);
+  const arrayByte = Buffer.from(hash, 'base64');
+  const newArrays = arrayByte.slice(0, 4);
+  const uniqueID = newArrays.reduce(reducer, 0);
+  return uniqueID;
+}
+
+/**
+ * Calculate transaction fee based on message and timestamp
+ * @param strLength  total length of message
+ * @param hour24  rounding timestamp devided by 24 hour
+ */
+export function transactionFees(strLength: number, hour24: number) {
+  return (0.1 * (strLength + 1)) * hour24 * 0.01;
+}
+
+

@@ -2,9 +2,9 @@
 // The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
 
 import React, { useState } from 'react';
-import { sha3_256 } from 'js-sha3';
-
-import { sendMoneyBuilder, EstoniaEid } from '../../../';
+import { sendMoneyBuilder } from '../../../';
+import Wallet, { hdkey } from 'ethereumjs-wallet';
+import { keccak256, ecsign, toRpcSig, toBuffer } from 'ethereumjs-util';
 
 const bytesToHexes = byteArr => {
   const a = [];
@@ -15,24 +15,20 @@ const bytesToHexes = byteArr => {
   return a.join('');
 };
 
-function hexToBytes(hex) {
-  for (var bytes = [], c = 0; c < hex.length; c += 2)
-  bytes.push(parseInt(hex.substr(c, 2), 16));
-  return bytes;
-}
-
-const SignSendMoneyWithEid = () => {
-  const estoniaEidObj= new EstoniaEid()
-  const [eidPublicKey, setEidPublicKey] = useState('');
+const SignSendMoneyWithEthereum = () => {
+  const [privateKey, setPrivateKey] = useState(null);
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
   const [fee, setFee] = useState('');
   const [signature, setSignature] = useState('');
   const [txBytesAndSignature, setTxBytesAndSignature] = useState('');
 
+  const publicKey = privateKey ? Wallet.fromPrivateKey(privateKey).getPublicKey() : null;
+  const address = publicKey ? Wallet.fromPublicKey(publicKey).getAddress(): null
+
   const resetDisplay = isKeepPublicKey => {
     if (!isKeepPublicKey) {
-      setEidPublicKey('');
+      setPrivateKey(null);
     }
     setSignature('');
   };
@@ -54,7 +50,7 @@ const SignSendMoneyWithEid = () => {
 
   const buildTransaction = () => {
     const txBytes = sendMoneyBuilder({
-      sender: { value: hexToBytes(eidPublicKey), type: 3 },
+      sender: { value: publicKey, type: 4 },
       recipient: { value: recipient, type: 0 },
       fee: parseInt(fee),
       amount: parseInt(amount),
@@ -62,29 +58,30 @@ const SignSendMoneyWithEid = () => {
     return txBytes;
   };
 
-  const getPublicKeyFromEid = async () => {
+  const generatePrivateKey = async () => {
     try {
-      const { publicKey } = await estoniaEidObj.getCardInfo();
-      setEidPublicKey(bytesToHexes(publicKey));
+      const privateKey = hdkey.fromMasterSeed('random')._hdkey._privateKey;
+      setPrivateKey(privateKey);
     } catch (e) {
-      console.error('getPublicKeyFromEid', e);
+      console.error('generatePrivateKey', e);
     }
   };
 
-  const signWithEid = async () => {
+  const signWithEthereum = async () => {
     try {
       const txBytes = buildTransaction();
       const txBytesString = bytesToHexes(txBytes);
+      const txHash = await keccak256(txBytes);
 
-      const txHash = await sha3_256(txBytes);
-
-      const { signature } = await estoniaEidObj.signData(txHash);
-      const signatureString = signature;
+      const signatureRaw = await ecsign(txHash, privateKey);
+      const signature = toBuffer(toRpcSig(signatureRaw.v, signatureRaw.r, signatureRaw.s));
+      console.log('signature', signature);
+      const signatureString = bytesToHexes(signature);
 
       setSignature(signatureString);
       setTxBytesAndSignature(txBytesString + signatureString);
     } catch (e) {
-      console.error('signWithEid', e);
+      console.error('signWithEthereum', e);
     }
   };
 
@@ -92,12 +89,26 @@ const SignSendMoneyWithEid = () => {
     <div>
       <div style={{ textAlign: 'center' }}>
         <div>
-          <button onClick={getPublicKeyFromEid}>Get Public Key from eID</button>
+          <button onClick={generatePrivateKey}>Generate private key</button>
         </div>
-        <div>
-          <h4>eID Public Key:</h4>
-          <textarea style={{ width: '800px', textAlign: 'center' }} value={eidPublicKey || '--'} />
-        </div>
+        {privateKey && (
+          <div>
+            <h4>Private Key:</h4>
+            <textarea style={{ width: '800px', textAlign: 'center' }} value={bytesToHexes(privateKey) || '--'} />
+          </div>
+        )}
+        {publicKey && (
+          <div>
+            <h4>Public Key:</h4>
+            <textarea style={{ width: '800px', textAlign: 'center' }} value={bytesToHexes(publicKey) || '--'} />
+          </div>
+        )}
+        {address && (
+          <div>
+            <h4>Ethereum Address:</h4>
+            <textarea style={{ width: '800px', textAlign: 'center' }} value={bytesToHexes(address) || '--'} />
+          </div>
+        )}
         <div>
           <h4>Recipient:</h4>
           <input name="recipient" onChange={handleChangeRecipient} value={recipient} />
@@ -111,7 +122,7 @@ const SignSendMoneyWithEid = () => {
           <input name="fee" onChange={handleChangeFee} value={fee} />
         </div>
         <div>
-          <button onClick={signWithEid}>Sign with eID</button>
+          <button onClick={signWithEthereum}>Sign with ethereum</button>
         </div>
         <div>
           <h4>Signature:</h4>
@@ -126,4 +137,4 @@ const SignSendMoneyWithEid = () => {
   );
 };
 
-export default SignSendMoneyWithEid;
+export default SignSendMoneyWithEthereum;

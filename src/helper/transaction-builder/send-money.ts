@@ -1,7 +1,9 @@
-import { addressToBytes, readInt64, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
+import { addressToBytes, generateTransactionHash, readInt64, writeInt32, writeInt64, ZBCAddressToBytes } from '../utils';
 import { VERSION } from './constant';
 import { BIP32Interface } from 'bip32';
-import { generateTransactionHash } from '../wallet/MultiSignature';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { Address } from '../interfaces';
 import { addEscrowBytes } from './escrow-transaction';
@@ -12,6 +14,7 @@ export interface SendMoneyInterface extends EscrowTransactionInterface {
   sender: Address;
   recipient: Address;
   fee: number;
+  message?: string;
   amount: number;
 }
 
@@ -37,7 +40,13 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface
   // Add Escrow Bytes
   bytes = addEscrowBytes(bytes, data);
 
-  const message = writeInt32(0);
+  // Add message
+  let message = writeInt32(0);
+  if (data.message) {
+    message = writeInt32(data.message.length);
+    Buffer.concat([message, Buffer.from(data.message)]);
+  }
+
   bytes = Buffer.concat([bytes, message]);
 
   if (seed) {

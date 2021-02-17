@@ -43,6 +43,7 @@ export interface AccountTypeMap {
   ZBCACCOUNTTYPE: 0;
   BTCACCOUNTTYPE: 1;
   EMPTYACCOUNTTYPE: 2;
+  ESTONIAEIDACCOUNTTYPE: 3;
 }
 
 export const AccountType: AccountTypeMap;

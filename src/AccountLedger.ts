@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { GetAccountLedgersRequest } from '../grpc/model/accountLedger_pb';
 import { AccountLedgerServiceClient } from '../grpc/service/accountLedger_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
@@ -22,7 +25,7 @@ export interface AccountLedgerListParams {
 
 export function getList(params?: AccountLedgerListParams): Promise<AccountLedgerList> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const request = new GetAccountLedgersRequest();
     if (params) {
       const { address, eventType, transactionId, timeStampStart, timeStampEnd, pagination } = params;
@@ -40,7 +43,17 @@ export function getList(params?: AccountLedgerListParams): Promise<AccountLedger
         request.setPagination(reqPagination);
       }
     }
-    const client = new AccountLedgerServiceClient(networkIP.host);
+
+    Network.request(AccountLedgerServiceClient, 'getAccountLedgers', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toZBCAccountLedger(res.toObject()));
+      });
+
+    /*const client = new AccountLedgerServiceClient(networkIP.host);
     client.getAccountLedgers(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
@@ -48,7 +61,7 @@ export function getList(params?: AccountLedgerListParams): Promise<AccountLedger
       }
 
       if (res) resolve(toZBCAccountLedger(res.toObject()));
-    });
+    });*/
   });
 }
 

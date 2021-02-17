@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { NodeHardwareServiceClient } from '../grpc/service/nodeHardware_pb_service';
 import { NodeAdminServiceClient } from '../grpc/service/nodeAdmin_pb_service';
 import { NodeRegistrationServiceClient } from '../grpc/service/nodeRegistration_pb_service';
@@ -24,9 +27,10 @@ import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/t
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { Empty } from '../grpc/model/empty_pb';
-import { addressToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
+import { addressToBytes, errorDateMessage, getZBCAddress } from './helper/utils';
 import { Address } from './helper/interfaces';
 import { NodeRegistration, NodeRegistrations, toZBCNodeRegistration, toZBCNodeRegistrations } from './helper/wallet/Node';
+import { isTimestampValid } from './helper/timestamp-validation';
 
 export type NodeHardwareResponse = GetNodeHardwareResponse.AsObject;
 export type GenerateNodeKeyResponses = GenerateNodeKeyResponse.AsObject;
@@ -88,7 +92,7 @@ function generateNodeKey(networkIP: string, childSeed: BIP32Interface): Promise<
 
 function getList(params?: NodeListParams): Promise<NodeRegistrations> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const request = new GetNodeRegistrationsRequest();
 
     if (params) {
@@ -107,20 +111,29 @@ function getList(params?: NodeListParams): Promise<NodeRegistrations> {
       if (status) request.setRegistrationstatusesList(status);
     }
 
-    const client = new NodeRegistrationServiceClient(networkIP.host);
+    Network.request(NodeRegistrationServiceClient, 'getNodeRegistrations', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toZBCNodeRegistrations(res.toObject()));
+      });
+
+    /*const client = new NodeRegistrationServiceClient(networkIP.host);
     client.getNodeRegistrations(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
       if (res) resolve(toZBCNodeRegistrations(res.toObject()));
-    });
+    });*/
   });
 }
 
-function get(params: NodeParams): Promise<NodeRegistration> {
+function get(params: NodeParams): Promise<NodeRegistration | undefined> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const request = new GetNodeRegistrationRequest();
     if (params) {
       const { height, owner, publicKey } = params;
@@ -130,7 +143,18 @@ function get(params: NodeParams): Promise<NodeRegistration> {
       if (height) request.setRegistrationheight(height);
     }
 
-    const client = new NodeRegistrationServiceClient(networkIP.host);
+    Network.request(NodeRegistrationServiceClient, 'getNodeRegistration', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        if (code == grpc.Code.NotFound) return resolve(undefined);
+        else if (code != grpc.Code.OK) return reject({ code, message, metadata });
+      })
+      .then(res => {
+        const node = res.toObject().noderegistration;
+        if (node !== undefined) resolve(toZBCNodeRegistration(node));
+      });
+
+    /*const client = new NodeRegistrationServiceClient(networkIP.host);
     client.getNodeRegistration(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
@@ -141,7 +165,7 @@ function get(params: NodeParams): Promise<NodeRegistration> {
         const node = res.toObject().noderegistration;
         if (node !== undefined) resolve(toZBCNodeRegistration(node));
       }
-    });
+    });*/
   });
 }
 
@@ -154,17 +178,27 @@ function register(data: RegisterNodeInterface, childSeed: BIP32Interface): Promi
       const request = new PostTransactionRequest();
       request.setTransactionbytes(bytes);
 
-      const networkIP = Network.selected();
-      const validTimestamp = await validationTimestamp(bytes);
+      // const networkIP = Network.selected();
+      const validTimestamp = await isTimestampValid(bytes);
       if (validTimestamp) {
-        const client = new TransactionServiceClient(networkIP.host);
+        Network.request(TransactionServiceClient, 'postTransaction', request)
+          .catch(err => {
+            const { code, message, metadata } = err;
+            if (code == grpc.Code.Internal) resolve({});
+            reject({ code, message, metadata });
+          })
+          .then(res => {
+            resolve(res.toObject());
+          });
+
+        /*const client = new TransactionServiceClient(networkIP.host);
         client.postTransaction(request, (err, res) => {
           if (err) {
             const { code, message, metadata } = err;
             reject({ code, message, metadata });
           }
           if (res) resolve(res.toObject());
-        });
+        });*/
       } else {
         const { code, message, metadata } = errorDateMessage;
         reject({ code, message, metadata });
@@ -183,17 +217,27 @@ function update(data: UpdateNodeInterface, childSeed: BIP32Interface): Promise<N
         const request = new PostTransactionRequest();
         request.setTransactionbytes(bytes);
 
-        const networkIP = Network.selected();
-        const validTimestamp = await validationTimestamp(bytes);
+        // const networkIP = Network.selected();
+        const validTimestamp = await isTimestampValid(bytes);
         if (validTimestamp) {
-          const client = new TransactionServiceClient(networkIP.host);
+          Network.request(TransactionServiceClient, 'postTransaction', request)
+            .catch(err => {
+              const { code, message, metadata } = err;
+              if (code == grpc.Code.Internal) resolve({});
+              reject({ code, message, metadata });
+            })
+            .then(res => {
+              resolve(res.toObject());
+            });
+
+          /*const client = new TransactionServiceClient(networkIP.host);
           client.postTransaction(request, (err, res) => {
             if (err) {
               const { code, message, metadata } = err;
               reject({ code, message, metadata });
             }
             if (res) resolve(res.toObject());
-          });
+          });*/
         } else {
           const { code, message, metadata } = errorDateMessage;
           reject({ code, message, metadata });
@@ -210,17 +254,27 @@ function remove(data: RemoveNodeInterface, childSeed: BIP32Interface): Promise<N
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
 
-    const networkIP = Network.selected();
-    const validTimestamp = await validationTimestamp(bytes);
+    // const networkIP = Network.selected();
+    const validTimestamp = await isTimestampValid(bytes);
     if (validTimestamp) {
-      const client = new TransactionServiceClient(networkIP.host);
+      Network.request(TransactionServiceClient, 'postTransaction', request)
+        .catch(err => {
+          const { code, message, metadata } = err;
+          if (code == grpc.Code.Internal) resolve({});
+          reject({ code, message, metadata });
+        })
+        .then(res => {
+          resolve(res.toObject());
+        });
+
+      /*const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
         if (err) {
           const { code, message, metadata } = err;
           reject({ code, message, metadata });
         }
         if (res) resolve(res.toObject());
-      });
+      });*/
     } else {
       const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });
@@ -238,17 +292,27 @@ function claim(data: ClaimNodeInterface, childSeed: BIP32Interface): Promise<Nod
         const request = new PostTransactionRequest();
         request.setTransactionbytes(bytes);
 
-        const networkIP = Network.selected();
-        const validTimestamp = await validationTimestamp(bytes);
+        // const networkIP = Network.selected();
+        const validTimestamp = await isTimestampValid(bytes);
         if (validTimestamp) {
-          const client = new TransactionServiceClient(networkIP.host);
+          Network.request(TransactionServiceClient, 'postTransaction', request)
+            .catch(err => {
+              const { code, message, metadata } = err;
+              if (code == grpc.Code.Internal) resolve({});
+              reject({ code, message, metadata });
+            })
+            .then(res => {
+              resolve(res.toObject());
+            });
+
+          /*const client = new TransactionServiceClient(networkIP.host);
           client.postTransaction(request, (err, res) => {
             if (err) {
               const { code, message, metadata } = err;
               reject({ code, message, metadata });
             }
             if (res) resolve(res.toObject());
-          });
+          });*/
         } else {
           const { code, message, metadata } = errorDateMessage;
           reject({ code, message, metadata });
@@ -263,8 +327,8 @@ function getPending(limit: number, childSeed: BIP32Interface): Observable<GetPen
     const auth = Poown.createAuth(RequestType.GETPENDINGNODEREGISTRATIONSSTREAM, childSeed);
     const request = new GetPendingNodeRegistrationsRequest();
     request.setLimit(limit);
-    const networkIP = Network.selected();
-    const client = new NodeRegistrationServiceClient(networkIP.host)
+    // const networkIP = Network.selected();
+    const client = new NodeRegistrationServiceClient(Network.getRandomAddress())
       .getPendingNodeRegistrations(new grpc.Metadata({ authorization: auth }))
       .write(request)
       .on('data', message => {
@@ -294,17 +358,26 @@ export function getMyNodePublicKey(networkIP: string): Promise<GetMyNodePublicKe
 
 export function getNodeTime(): Promise<GetNodeTimeResponses> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const request = new Empty();
 
-    const client = new NodeHardwareServiceClient(networkIP.host);
+    Network.request(NodeHardwareServiceClient, 'getNodeTime', request, true)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(res.toObject());
+      });
+
+    /*const client = new NodeHardwareServiceClient(networkIP.host);
     client.getNodeTime(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
       if (res) resolve(res.toObject());
-    });
+    });*/
   });
 }
 
@@ -319,5 +392,4 @@ export default {
   get,
   getPending,
   getMyNodePublicKey,
-  getNodeTime,
 };

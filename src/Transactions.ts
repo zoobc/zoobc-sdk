@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import Network from './Network';
 import {
   GetTransactionsRequest,
@@ -10,9 +13,11 @@ import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
 import { BIP32Interface } from 'bip32';
-import { addressToBytes, errorDateMessage, validationTimestamp } from './helper/utils';
+import { addressToBytes, errorDateMessage } from './helper/utils';
 import { Address } from './helper/interfaces';
 import { toZBCTransaction, toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
+import { isTimestampValid } from './helper/timestamp-validation';
+import { grpc } from '@improbable-eng/grpc-web';
 
 export type PostTransactionResponses = PostTransactionResponse.AsObject;
 export type TransactionMinimumFeeResponse = GetTransactionMinimumFeeResponse.AsObject;
@@ -33,7 +38,7 @@ export interface TransactionListParams {
 function getList(params?: TransactionListParams): Promise<ZBCTransactions> {
   return new Promise((resolve, reject) => {
     const request = new GetTransactionsRequest();
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
 
     if (params) {
       const { address, height, transactionType, timestampStart, timestampEnd, pagination } = params;
@@ -52,31 +57,49 @@ function getList(params?: TransactionListParams): Promise<ZBCTransactions> {
       }
     }
 
-    const client = new TransactionServiceClient(networkIP.host);
+    Network.request(TransactionServiceClient, 'getTransactions', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toZBCTransactions(res.toObject()));
+      });
+
+    /*const client = new TransactionServiceClient(networkIP.host);
     client.getTransactions(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
       if (res) resolve(toZBCTransactions(res.toObject()));
-    });
+    });*/
   });
 }
 
 function get(id: string): Promise<ZBCTransaction> {
   return new Promise((resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
     const request = new GetTransactionRequest();
     request.setId(id);
 
-    const client = new TransactionServiceClient(networkIP.host);
+    Network.request(TransactionServiceClient, 'getTransaction', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toZBCTransaction(res.toObject()));
+      });
+
+    /*const client = new TransactionServiceClient(networkIP.host);
     client.getTransaction(request, (err, res) => {
       if (err) {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       }
       if (res) resolve(toZBCTransaction(res.toObject()));
-    });
+    });*/
   });
 }
 
@@ -84,20 +107,30 @@ function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<Post
   const txBytes = sendMoneyBuilder(data, seed);
 
   return new Promise(async (resolve, reject) => {
-    const networkIP = Network.selected();
+    // const networkIP = Network.selected();
 
     const request = new PostTransactionRequest();
     request.setTransactionbytes(txBytes);
-    const validTimestamp = await validationTimestamp(txBytes);
+    const validTimestamp = await isTimestampValid(txBytes);
     if (validTimestamp) {
-      const client = new TransactionServiceClient(networkIP.host);
+      Network.request(TransactionServiceClient, 'postTransaction', request)
+        .catch(err => {
+          const { code, message, metadata } = err;
+          if (code == grpc.Code.Internal) resolve({});
+          reject({ code, message, metadata });
+        })
+        .then(res => {
+          resolve(res.toObject());
+        });
+
+      /*const client = new TransactionServiceClient(networkIP.host);
       client.postTransaction(request, (err, res) => {
         if (err) {
           const { code, message, metadata } = err;
           reject({ code, message, metadata });
         }
         if (res) resolve(res.toObject());
-      });
+      });*/
     } else {
       const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });
@@ -105,4 +138,37 @@ function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<Post
   });
 }
 
-export default { sendMoney, get, getList };
+function post(txBytes: Buffer): Promise<PostTransactionResponses> {
+  return new Promise(async (resolve, reject) => {
+    // const networkIP = Network.selected();
+
+    const request = new PostTransactionRequest();
+    request.setTransactionbytes(txBytes);
+    const validTimestamp = await isTimestampValid(txBytes);
+    if (validTimestamp) {
+      Network.request(TransactionServiceClient, 'postTransaction', request)
+        .catch(err => {
+          const { code, message, metadata } = err;
+          if (code == grpc.Code.Internal) resolve({});
+          reject({ code, message, metadata });
+        })
+        .then(res => {
+          resolve(res.toObject());
+        });
+
+      /*const client = new TransactionServiceClient(networkIP.host);
+      client.postTransaction(request, (err, res) => {
+        if (err) {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        }
+        if (res) resolve(res.toObject());
+      });*/
+    } else {
+      const { code, message, metadata } = errorDateMessage;
+      reject({ code, message, metadata });
+    }
+  });
+}
+
+export default { sendMoney, get, getList, post };

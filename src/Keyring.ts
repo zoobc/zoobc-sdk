@@ -1,3 +1,6 @@
+// Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
+// The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
+
 import { sign as ed25519 } from 'tweetnacl';
 import * as bip39 from 'bip39';
 import { BIP32Interface, fromSeed } from 'bip32';
@@ -98,8 +101,14 @@ export class ZooKeyring {
       // showValidationError(errorText);
       throw new Error(errorText);
     }
-    let bip32ExtendedKey = bip32RootKey.derivePath(derivationPath!, curveName);
+    const bip32ExtendedKey = bip32RootKey.derivePath(derivationPath!, curveName);
+    return this.generateBip32ExtendedKey(curveName, bip32ExtendedKey);
+  }
 
+  generateBip32ExtendedKey(
+    curveName: 'secp256k1' | 'P-256' | 'ed25519',
+    bip32ExtendedKey: BIP32Interface = this.bip32RootKey,
+  ): BIP32Interface {
     const privKey = bip32ExtendedKey.privateKey;
     let publicKey: Buffer;
     if (curveName === 'secp256k1') {
@@ -117,7 +126,7 @@ export class ZooKeyring {
         if (curveName === 'secp256k1') {
           return bip32ExtendedKey.sign(!Buffer.isBuffer(message) ? Buffer.from(message) : message, lowR);
         } else if (curveName === 'ed25519') {
-          const { secretKey } = ed25519.keyPair.fromSeed(new Uint8Array(privKey!.buffer.slice(0, 32)));
+          const { secretKey } = ed25519.keyPair.fromSeed(new Uint8Array(privKey || Buffer.from([])));
           return Buffer.from(ed25519.detached(message, secretKey));
         } else {
           throw new Error(NOT_IMPLEMENTED);
@@ -138,5 +147,11 @@ export class ZooKeyring {
     };
 
     return bip32ExtendedKey;
+  }
+
+  toWIF(path: number, changeValue: 0 | 1 = 0) {
+    const { curveName = 'secp256k1', derivationStandard = 'bip44', purposeValue = '44', coinValue } = findCoin(this.coinName);
+    var derivationPath = getDerivationPath(derivationStandard, String(purposeValue), String(coinValue), String(path), String(changeValue));
+    return this.bip32RootKey.derivePath(derivationPath!, curveName).toWIF();
   }
 }
