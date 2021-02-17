@@ -10,8 +10,8 @@ export function bufferToBase64(bytes: ArrayBuffer | ArrayBufferView | Array<numb
     bytes instanceof ArrayBuffer
       ? Buffer.from(bytes)
       : ArrayBuffer.isView(bytes)
-        ? Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength)
-        : Buffer.from(bytes);
+      ? Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength)
+      : Buffer.from(bytes);
   return buf.toString('base64');
 }
 
