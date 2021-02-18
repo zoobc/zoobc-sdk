@@ -11,7 +11,7 @@ const PublicKeyGenerator = ({ accountIndex, walletPublicKey, publicKey, setWalle
   // ======================================================================================================================================
   const getPublicKey = async () => {
     const accountIdxInt = parseInt(accountIndex);
-    if (accountIndex === '' || accountIdxInt == NaN) return;
+    if (accountIndex === '' || accountIdxInt === isNaN) return;
 
     // get public key with SDK
     const seed =

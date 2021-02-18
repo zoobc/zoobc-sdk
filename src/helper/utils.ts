@@ -191,9 +191,9 @@ export function getTxTypeString(txType: number): string {
  * @param minimumSigner minimum signer
  */
 export function uniqueNonce(addresses: Address[], nonce: string, minimumSigner: number) {
-  const address = addresses.map((x: { value: string; }) => x.value);
+  const address = addresses.map((x: { value: string }) => x.value);
   const reducer = (sum: any, val: any) => sum + val;
-  const str = address.reduce(reducer, (nonce + minimumSigner));
+  const str = address.reduce(reducer, nonce + minimumSigner);
   const hash = sha3_256(str);
   const arrayByte = Buffer.from(hash, 'base64');
   const newArrays = arrayByte.slice(0, 4);
@@ -207,7 +207,5 @@ export function uniqueNonce(addresses: Address[], nonce: string, minimumSigner: 
  * @param hour24  rounding timestamp devided by 24 hour
  */
 export function transactionFees(strLength: number, hour24: number) {
-  return (0.1 * (strLength + 1)) * hour24 * 0.01;
+  return 0.1 * (strLength + 1) * hour24 * 0.01;
 }
-
-

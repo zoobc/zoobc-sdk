@@ -1,15 +1,14 @@
 // Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
 // The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
 
+import './app.css';
 import React, { useState } from 'react';
-import zoobc from '../../../';
-
+import BlockList from './BlockList';
 import SignSendMoney from './SignSendMoney';
+import TransactionFees from './TransactionFees';
 import SignRegisterNode from './SignRegisterNode';
 import SignSendMoneyWithEid from './SignSendMoneyWithEid';
 import SignSendMoneyWithEthereum from './SignSendMoneyWithEthereum';
-import BlockList from './BlockList';
-import './app.css';
 
 const App = () => {
   const [appState, setAppState] = useState(0);
@@ -30,7 +29,10 @@ const App = () => {
       break;
     case 5:
       appContent = <SignSendMoneyWithEthereum />;
-      break
+      break;
+    case 6:
+      appContent = <TransactionFees />;
+      break;
     default:
       appContent = null;
   }
@@ -53,6 +55,9 @@ const App = () => {
         </li>
         <li onClick={() => setAppState(5)}>
           <a href="#SignSendMoneyWithEthereum">Sign SendMoney with ethereum</a>
+        </li>
+        <li onClick={() => setAppState(6)}>
+          <a href="#TransactionFees">Transaction Fees</a>
         </li>
       </ul>
       {appContent}
