@@ -202,10 +202,10 @@ export function uniqueNonce(addresses: Address[], nonce: string, minimumSigner: 
 }
 
 /**
- * Calculate transaction fee based on message and timestamp
+ * Calculate minimum fee based on message and timestamp
  * @param strLength  total length of message
- * @param hour24  rounding timestamp devided by 24 hour
+ * @param per24hour  rounding timestamp per 24 hour
  */
-export function transactionFees(strLength: number, hour24: number) {
-  return 0.1 * (strLength + 1) * hour24 * 0.01;
+export function calculateMinimumFee(strLength: number, per24hour: number) {
+  return (1 + (strLength * 0.1)) * per24hour * 0.01;
 }
