@@ -80,7 +80,7 @@ export {
   parseAddress,
   addressToBytes,
   generateTransactionHash,
-  transactionFees,
+  calculateMinimumFee,
   uniqueNonce,
 } from './helper/utils';
 export { bufferToBase64, toBase64Url } from './helper/converters';
