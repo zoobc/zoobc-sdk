@@ -207,5 +207,5 @@ export function uniqueNonce(addresses: Address[], nonce: string, minimumSigner: 
  * @param per24hour  rounding timestamp per 24 hour
  */
 export function calculateMinimumFee(strLength: number, per24hour: number) {
-  return (1 + (strLength * 0.1)) * per24hour * 0.01;
+  return (1 + strLength * 0.1) * per24hour * 0.01;
 }
