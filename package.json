@@ -1,6 +1,6 @@
 {
   "name": "zbc-sdk",
-  "version": "0.0.14-pre-release",
+  "version": "0.0.15-pre-release",
   "description": "A small set of libraries to implement applications connect with the P2P API of the nodes in the blockchain",
   "author": "ZooBC SDK Team",
   "license": "Apache-2.0",
@@ -97,7 +97,7 @@
     "rollup-plugin-size": "^0.2.2",
     "rollup-plugin-terser": "^5.3.0",
     "rollup-plugin-typescript2": "^0.27.0",
-    "semantic-release": "^15.13.18",
+    "semantic-release": "^17.2.3",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.6.2",
     "ts-protoc-gen": "^0.12.0",
