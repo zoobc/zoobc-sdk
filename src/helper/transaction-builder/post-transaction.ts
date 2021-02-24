@@ -14,7 +14,7 @@ export function readBodyBytes(txBytes: Buffer, txType: number, offset: number): 
   switch (txType) {
     case TransactionType.UPDATENODEREGISTRATIONTRANSACTION:
       return readUpdateNodeBytes(txBytes, offset);
-    case TransactionType.SENDMONEYTRANSACTION:
+    case TransactionType.SENDZBCTRANSACTION:
       return readSendMoneyBytes(txBytes, offset);
     case TransactionType.REMOVENODEREGISTRATIONTRANSACTION:
       return readRemoveNodeBytes(txBytes, offset);

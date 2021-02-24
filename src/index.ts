@@ -11,6 +11,7 @@ import Node from './Node';
 import Escrows from './Escrows';
 import Poown from './Poown';
 import Block from './Block';
+import Liquid from './LiquidTransaction';
 import MultiSignature from './MultiSignature';
 import AccountDataset from './AccountDataset';
 import AccountLedger from './AccountLedger';
@@ -114,6 +115,7 @@ const zoobc = {
   Account,
   Host,
   Node,
+  Liquid,
   Poown,
   Escrows,
   Mempool,

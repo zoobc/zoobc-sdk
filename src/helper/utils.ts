@@ -162,7 +162,7 @@ export function generateTransactionHash(buffer: Buffer): string {
 
 export function getTxTypeString(txType: number): string {
   switch (txType) {
-    case TransactionType.SENDMONEYTRANSACTION:
+    case TransactionType.SENDZBCTRANSACTION:
       return 'transfer zoobc';
     case TransactionType.NODEREGISTRATIONTRANSACTION:
       return 'register node';

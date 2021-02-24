@@ -66,10 +66,10 @@ export class Transaction extends jspb.Message {
   getEmptytransactionbody(): EmptyTransactionBody | undefined;
   setEmptytransactionbody(value?: EmptyTransactionBody): void;
 
-  hasSendmoneytransactionbody(): boolean;
-  clearSendmoneytransactionbody(): void;
-  getSendmoneytransactionbody(): SendMoneyTransactionBody | undefined;
-  setSendmoneytransactionbody(value?: SendMoneyTransactionBody): void;
+  hasSendzbctransactionbody(): boolean;
+  clearSendzbctransactionbody(): void;
+  getSendzbctransactionbody(): SendZBCTransactionBody | undefined;
+  setSendzbctransactionbody(value?: SendZBCTransactionBody): void;
 
   hasNoderegistrationtransactionbody(): boolean;
   clearNoderegistrationtransactionbody(): void;
@@ -174,7 +174,7 @@ export namespace Transaction {
     transactionindex: number,
     multisigchild: boolean,
     emptytransactionbody?: EmptyTransactionBody.AsObject,
-    sendmoneytransactionbody?: SendMoneyTransactionBody.AsObject,
+    sendzbctransactionbody?: SendZBCTransactionBody.AsObject,
     noderegistrationtransactionbody?: NodeRegistrationTransactionBody.AsObject,
     updatenoderegistrationtransactionbody?: UpdateNodeRegistrationTransactionBody.AsObject,
     removenoderegistrationtransactionbody?: RemoveNodeRegistrationTransactionBody.AsObject,
@@ -195,7 +195,7 @@ export namespace Transaction {
   export enum TransactionbodyCase {
     TRANSACTIONBODY_NOT_SET = 0,
     EMPTYTRANSACTIONBODY = 17,
-    SENDMONEYTRANSACTIONBODY = 18,
+    SENDZBCTRANSACTIONBODY = 18,
     NODEREGISTRATIONTRANSACTIONBODY = 19,
     UPDATENODEREGISTRATIONTRANSACTIONBODY = 20,
     REMOVENODEREGISTRATIONTRANSACTIONBODY = 21,
@@ -227,21 +227,21 @@ export namespace EmptyTransactionBody {
   }
 }
 
-export class SendMoneyTransactionBody extends jspb.Message {
+export class SendZBCTransactionBody extends jspb.Message {
   getAmount(): string;
   setAmount(value: string): void;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): SendMoneyTransactionBody.AsObject;
-  static toObject(includeInstance: boolean, msg: SendMoneyTransactionBody): SendMoneyTransactionBody.AsObject;
+  toObject(includeInstance?: boolean): SendZBCTransactionBody.AsObject;
+  static toObject(includeInstance: boolean, msg: SendZBCTransactionBody): SendZBCTransactionBody.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: SendMoneyTransactionBody, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): SendMoneyTransactionBody;
-  static deserializeBinaryFromReader(message: SendMoneyTransactionBody, reader: jspb.BinaryReader): SendMoneyTransactionBody;
+  static serializeBinaryToWriter(message: SendZBCTransactionBody, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): SendZBCTransactionBody;
+  static deserializeBinaryFromReader(message: SendZBCTransactionBody, reader: jspb.BinaryReader): SendZBCTransactionBody;
 }
 
-export namespace SendMoneyTransactionBody {
+export namespace SendZBCTransactionBody {
   export type AsObject = {
     amount: string,
   }
@@ -893,7 +893,7 @@ export namespace GetTransactionMinimumFeeResponse {
 
 export interface TransactionTypeMap {
   EMPTYTRANSACTION: 0;
-  SENDMONEYTRANSACTION: 1;
+  SENDZBCTRANSACTION: 1;
   NODEREGISTRATIONTRANSACTION: 2;
   UPDATENODEREGISTRATIONTRANSACTION: 258;
   REMOVENODEREGISTRATIONTRANSACTION: 514;

@@ -8,7 +8,7 @@ import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { Address } from '../interfaces';
 import { addEscrowBytes } from './escrow-transaction';
 
-const TRANSACTION_TYPE = writeInt32(TransactionType.SENDMONEYTRANSACTION);
+const TRANSACTION_TYPE = writeInt32(TransactionType.SENDZBCTRANSACTION);
 
 export interface SendMoneyInterface extends EscrowTransactionInterface {
   sender: Address;

@@ -9,6 +9,7 @@ import TransactionFees from './TransactionFees';
 import SignRegisterNode from './SignRegisterNode';
 import SignSendMoneyWithEid from './SignSendMoneyWithEid';
 import SignSendMoneyWithEthereum from './SignSendMoneyWithEthereum';
+import LiquidTx from './Liquid'
 
 const App = () => {
   const [appState, setAppState] = useState(0);
@@ -33,6 +34,9 @@ const App = () => {
     case 6:
       appContent = <TransactionFees />;
       break;
+    case 7:
+      appContent= <LiquidTx />
+      break
     default:
       appContent = null;
   }
@@ -58,6 +62,9 @@ const App = () => {
         </li>
         <li onClick={() => setAppState(6)}>
           <a href="#TransactionFees">Transaction Fees</a>
+        </li>
+        <li onClick={() => setAppState(7)}>
+          <a href="#LiquidTx">Liquid Transactions</a>
         </li>
       </ul>
       {appContent}
