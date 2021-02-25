@@ -11,6 +11,7 @@ import Node from './Node';
 import Escrows from './Escrows';
 import Poown from './Poown';
 import Block from './Block';
+import Liquid from './LiquidTransaction';
 import MultiSignature from './MultiSignature';
 import AccountDataset from './AccountDataset';
 import AccountLedger from './AccountLedger';
@@ -67,7 +68,7 @@ export {
   readApprovalEscrowBytes,
   addEscrowBytes,
 } from './helper/transaction-builder/escrow-transaction';
-export { SendMoneyInterface, sendMoneyBuilder, readSendMoneyBytes } from './helper/transaction-builder/send-money';
+export { SendZBCInterface, SendZBCBuilder, readSendZBCBytes } from './helper/transaction-builder/send-money';
 export { RemoveDatasetInterface, removeDatasetBuilder, readRemoveDatasetBytes } from './helper/transaction-builder/remove-account-dataset';
 export { SetupDatasetInterface, setupDatasetBuilder } from './helper/transaction-builder/setup-account-dataset';
 export { feeVoteInterface, feeVoteCommitBuilder, feeVoteRevealBuilder } from './helper/transaction-builder/fee-vote';
@@ -114,6 +115,7 @@ const zoobc = {
   Account,
   Host,
   Node,
+  Liquid,
   Poown,
   Escrows,
   Mempool,

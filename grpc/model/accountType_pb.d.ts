@@ -44,6 +44,7 @@ export interface AccountTypeMap {
   BTCACCOUNTTYPE: 1;
   EMPTYACCOUNTTYPE: 2;
   ESTONIAEIDACCOUNTTYPE: 3;
+  ETHACCOUNTTYPE: 4;
 }
 
 export const AccountType: AccountTypeMap;

@@ -2,7 +2,7 @@ import 'mocha';
 import { expect } from 'chai';
 import { grpc } from '@improbable-eng/grpc-web';
 import { FakeTransportBuilder } from '@improbable-eng/grpc-web-fake-transport';
-import { SendMoneyInterface, sendMoneyBuilder } from '../src/helper/transaction-builder/send-money';
+import { SendZBCInterface, SendZBCBuilder } from '../src/helper/transaction-builder/send-money';
 import {
   GetTransactionsRequest,
   Transaction,
@@ -32,8 +32,8 @@ function mockTransaction(id: string) {
   return new FakeTransportBuilder().withMessages([transaction]).build();
 }
 
-function mockSendMoney(data: SendMoneyInterface) {
-  const bytes = sendMoneyBuilder(data, childSeed);
+function mockSendZBC(data: SendZBCInterface) {
+  const bytes = SendZBCBuilder(data, childSeed);
 
   const response = new PostTransactionResponse();
   const transaction = new Transaction();
@@ -95,8 +95,8 @@ describe('Transactions Unit Testing :', () => {
     });
   });
 
-  describe('sendMoney', () => {
-    it('sendMoney should return new transaction object', async () => {
+  describe('SendZBC', () => {
+    it('SendZBC should return new transaction object', async () => {
       const data = {
         sender: 'BCZD_VxfO2S9aziIL3cn_cXW7uPDVPOrnXuP98GEAUC7',
         recipient: '5yOq6mtspHBApow2dPIoUdEliiNwwGsO_OoNXwAz5msy',
@@ -104,10 +104,10 @@ describe('Transactions Unit Testing :', () => {
         amount: 1,
       };
 
-      const transport = mockSendMoney({ ...data });
+      const transport = mockSendZBC({ ...data });
       grpc.setDefaultTransport(transport);
 
-      const result = await zoobc.Transactions.sendMoney(data, childSeed);
+      const result = await zoobc.Transactions.SendZBC(data, childSeed);
       expect(result).to.be.have.property('transaction');
     });
   });

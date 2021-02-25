@@ -11,7 +11,7 @@ import {
 } from '../grpc/model/transaction_pb';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
-import { SendMoneyInterface, sendMoneyBuilder } from './helper/transaction-builder/send-money';
+import { SendZBCInterface, SendZBCBuilder } from './helper/transaction-builder/send-money';
 import { BIP32Interface } from 'bip32';
 import { addressToBytes, errorDateMessage } from './helper/utils';
 import { Address } from './helper/interfaces';
@@ -103,8 +103,8 @@ function get(id: string): Promise<ZBCTransaction> {
   });
 }
 
-function sendMoney(data: SendMoneyInterface, seed: BIP32Interface): Promise<PostTransactionResponses> {
-  const txBytes = sendMoneyBuilder(data, seed);
+function SendZBC(data: SendZBCInterface, seed: BIP32Interface): Promise<PostTransactionResponses> {
+  const txBytes = SendZBCBuilder(data, seed);
 
   return new Promise(async (resolve, reject) => {
     // const networkIP = Network.selected();
@@ -171,4 +171,4 @@ function post(txBytes: Buffer): Promise<PostTransactionResponses> {
   });
 }
 
-export default { sendMoney, get, getList, post };
+export default { SendZBC, get, getList, post };
