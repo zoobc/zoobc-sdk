@@ -3,11 +3,11 @@
 
 import React, { useState } from 'react';
 
-import { sendMoneyBuilder } from '../../../';
+import { SendZBCBuilder } from '../../../';
 import PublicKeyGenerator from './common/PublicKeyGenerator';
 import SignatureGenerator from './common/SignatureGenerator';
 
-const SignSendMoney = () => {
+const SignSendZBC = () => {
   const [accountIndex, setAccountIndex] = useState('');
   const [walletPublicKey, setWalletPublicKey] = useState('');
   const [publicKey, setPublicKey] = useState('');
@@ -48,7 +48,7 @@ const SignSendMoney = () => {
   };
 
   const buildTransaction = () => {
-    const txBytes = sendMoneyBuilder({
+    const txBytes = SendZBCBuilder({
       sender: { value: publicKey, type: 0 },
       recipient:{ value: recipient, type: 0 },
       fee: parseInt(fee),
@@ -93,4 +93,4 @@ const SignSendMoney = () => {
   );
 };
 
-export default SignSendMoney;
+export default SignSendZBC;

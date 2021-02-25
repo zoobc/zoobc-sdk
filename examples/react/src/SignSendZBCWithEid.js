@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { sha3_256 } from 'js-sha3';
 
-import { sendMoneyBuilder, EstoniaEid } from '../../../';
+import { SendZBCBuilder, EstoniaEid } from '../../../';
 
 const bytesToHexes = byteArr => {
   const a = [];
@@ -21,7 +21,7 @@ function hexToBytes(hex) {
   return bytes;
 }
 
-const SignSendMoneyWithEid = () => {
+const SignSendZBCWithEid = () => {
   const estoniaEidObj= new EstoniaEid()
   const [eidPublicKey, setEidPublicKey] = useState('');
   const [recipient, setRecipient] = useState('');
@@ -53,7 +53,7 @@ const SignSendMoneyWithEid = () => {
   };
 
   const buildTransaction = () => {
-    const txBytes = sendMoneyBuilder({
+    const txBytes = SendZBCBuilder({
       sender: { value: hexToBytes(eidPublicKey), type: 3 },
       recipient: { value: recipient, type: 0 },
       fee: parseInt(fee),
@@ -126,4 +126,4 @@ const SignSendMoneyWithEid = () => {
   );
 };
 
-export default SignSendMoneyWithEid;
+export default SignSendZBCWithEid;

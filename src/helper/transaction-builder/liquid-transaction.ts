@@ -8,11 +8,11 @@ import { Address } from '../interfaces';
 import { writeInt64, writeInt32, ZBCAddressToBytes, addressToBytes, generateTransactionHash } from '../utils';
 import { VERSION } from './constant';
 import { addEscrowBytes } from './escrow-transaction';
-import { SendMoneyInterface } from './send-money';
+import { SendZBCInterface } from './send-money';
 
 const TRANSACTION_TYPE = writeInt32(TransactionType.LIQUIDPAYMENTTRANSACTION);
 
-export interface LiquidTransactionsInterface extends SendMoneyInterface {
+export interface LiquidTransactionsInterface extends SendZBCInterface {
   completeMinutes: number;
 }
 
