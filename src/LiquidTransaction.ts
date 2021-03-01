@@ -33,67 +33,66 @@ export interface LiquidTransactionParams {
 function getList(params?: LiquidTransactionParams): Promise<ZBCTransactions> {
   return new Promise((resolve, reject) => {
     const kevin = new GetLiquidTransactionsRequest();
-    console.log('kevin', kevin);
-    //   const request = new GetLiquidTransactionsRequest();
-    //   // const networkIP = Network.selected();
+    const request = new GetLiquidTransactionsRequest();
+    // const networkIP = Network.selected();
 
-    //   if (params) {
-    //     const { id, senderaddress, recipientaddress, status, pagination } = params;
+    if (params) {
+      const { id, senderaddress, recipientaddress, status, pagination } = params;
 
-    //     if (id) request.setId(id);
-    //     if (senderaddress) request.setSenderaddress(addressToBytes(senderaddress));
-    //     if (recipientaddress) request.setRecipientaddress(addressToBytes(recipientaddress));
-    //     if (status) request.setStatus(status);
-    //     if (pagination) {
-    //       const reqPagination = new Pagination();
-    //       reqPagination.setLimit(pagination.limit || 10);
-    //       reqPagination.setPage(pagination.page || 1);
-    //       reqPagination.setOrderby(pagination.orderBy || OrderBy.DESC);
-    //       request.setPagination(reqPagination);
-    //     }
-    //   }
+      if (id) request.setId(id);
+      if (senderaddress) request.setSenderaddress(addressToBytes(senderaddress));
+      if (recipientaddress) request.setRecipientaddress(addressToBytes(recipientaddress));
+      if (status) request.setStatus(status);
+      if (pagination) {
+        const reqPagination = new Pagination();
+        reqPagination.setLimit(pagination.limit || 10);
+        reqPagination.setPage(pagination.page || 1);
+        reqPagination.setOrderby(pagination.orderBy || OrderBy.DESC);
+        request.setPagination(reqPagination);
+      }
+    }
 
-    //   Network.request(LiquidPaymentServiceClient, 'getLiquidTransaction', request)
-    //     .catch(err => {
-    //       const { code, message, metadata } = err;
-    //       reject({ code, message, metadata });
-    //     })
-    //     .then(res => {
-    //       resolve(toZBCTransactions(res.toObject()));
-    //     });
+    Network.request(LiquidPaymentServiceClient, 'getLiquidTransaction', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toZBCTransactions(res.toObject()));
+      });
 
-    //   /*const client = new TransactionServiceClient(networkIP.host);
-    //   client.getTransactions(request, (err, res) => {
-    //     if (err) {
-    //       const { code, message, metadata } = err;
-    //       reject({ code, message, metadata });
-    //     }
-    //     if (res) resolve(toZBCTransactions(res.toObject()));
-    //   });*/
+    /*const client = new TransactionServiceClient(networkIP.host);
+      client.getTransactions(request, (err, res) => {
+        if (err) {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        }
+        if (res) resolve(toZBCTransactions(res.toObject()));
+      });*/
   });
 }
 
 function get(id: string): Promise<ZBCTransaction> {
   return new Promise((resolve, reject) => {
-    //   // const networkIP = Network.selected();
-    //   const request = new GetLiquidTransactionsRequest();
-    //   request.setId(id);
-    //   Network.request(LiquidPaymentServiceClient, 'getTransaction', request)
-    //     .catch(err => {
-    //       const { code, message, metadata } = err;
-    //       reject({ code, message, metadata });
-    //     })
-    //     .then(res => {
-    //       resolve(toZBCTransaction(res.toObject()));
-    //     });
-    //   /*const client = new TransactionServiceClient(networkIP.host);
-    //   client.getTransaction(request, (err, res) => {
-    //     if (err) {
-    //       const { code, message, metadata } = err;
-    //       reject({ code, message, metadata });
-    //     }
-    //     if (res) resolve(toZBCTransaction(res.toObject()));
-    //   });*/
+    // const networkIP = Network.selected();
+    const request = new GetLiquidTransactionsRequest();
+    request.setId(id);
+    Network.request(LiquidPaymentServiceClient, 'getTransaction', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(toZBCTransaction(res.toObject()));
+      });
+    /*const client = new TransactionServiceClient(networkIP.host);
+      client.getTransaction(request, (err, res) => {
+        if (err) {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        }
+        if (res) resolve(toZBCTransaction(res.toObject()));
+      });*/
   });
 }
 

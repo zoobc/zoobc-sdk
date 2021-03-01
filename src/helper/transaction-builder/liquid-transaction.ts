@@ -23,17 +23,11 @@ export function liquidTransactionBuilder(data: LiquidTransactionsInterface, seed
   const recipient = addressToBytes(data.recipient);
   const amount = writeInt64(data.amount * 1e8);
   const fee = writeInt64(data.fee * 1e8);
-  const completeMinutes = writeInt64(data.completeMinutes)
+  const completeMinutes = writeInt64(data.completeMinutes);
 
-  bytes = Buffer.concat([
-    TRANSACTION_TYPE,
-    VERSION,
-    sender,
-    recipient,
-    amount,
-    fee,
-    completeMinutes,
-  ]);
+  bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, sender, recipient, amount, fee, completeMinutes]);
+
+  bytes = addEscrowBytes(bytes, data);
 
   if (seed) {
     const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));

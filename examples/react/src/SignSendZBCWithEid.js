@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { sha3_256 } from 'js-sha3';
 
-import { SendZBCBuilder, EstoniaEid } from '../../../';
+import { SendZBCBuilder, EstoniaEid } from '../../../types';
 
 const bytesToHexes = byteArr => {
   const a = [];
