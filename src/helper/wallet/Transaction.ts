@@ -95,7 +95,7 @@ function getBodyBytes(tx: Transaction.AsObject): any {
     tx.feevotecommittransactionbody ||
     tx.feevoterevealtransactionbody ||
     tx.removenoderegistrationtransactionbody ||
-    tx.sendmoneytransactionbody ||
+    tx.sendzbctransactionbody ||
     tx.feevotecommittransactionbody ||
     tx.feevoterevealtransactionbody ||
     tx.liquidpaymentstoptransactionbody ||

@@ -119,7 +119,7 @@ describe('Escrow Unit Testing :', () => {
         approverAddress: approverAddress,
       });
       expect(escrow).to.be.an('object');
-      expect(escrow.escrowsList).to.be.an('array');
+      expect(escrow.escrowList).to.be.an('array');
     });
   });
 

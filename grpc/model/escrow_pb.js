@@ -208,7 +208,7 @@ proto.model.Escrow.deserializeBinaryFromReader = function(msg, reader) {
       msg.setCommission(value);
       break;
     case 7:
-      var value = /** @type {string} */ (reader.readUint64String());
+      var value = /** @type {string} */ (reader.readInt64String());
       msg.setTimeout(value);
       break;
     case 8:
@@ -300,7 +300,7 @@ proto.model.Escrow.serializeBinaryToWriter = function(message, writer) {
   }
   f = message.getTimeout();
   if (parseInt(f, 10) !== 0) {
-    writer.writeUint64String(
+    writer.writeInt64String(
       7,
       f
     );
@@ -499,7 +499,7 @@ proto.model.Escrow.prototype.setCommission = function(value) {
 
 
 /**
- * optional uint64 Timeout = 7;
+ * optional int64 Timeout = 7;
  * @return {string}
  */
 proto.model.Escrow.prototype.getTimeout = function() {

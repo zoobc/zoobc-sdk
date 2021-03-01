@@ -2,7 +2,7 @@
 // The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
 
 import React, { useState } from 'react';
-import { sendMoneyBuilder } from '../../../';
+import { SendZBCBuilder } from '../../../types';
 import Wallet, { hdkey } from 'ethereumjs-wallet';
 import { keccak256, ecsign, toRpcSig, toBuffer } from 'ethereumjs-util';
 
@@ -15,7 +15,7 @@ const bytesToHexes = byteArr => {
   return a.join('');
 };
 
-const SignSendMoneyWithEthereum = () => {
+const SignSendZBCWithEthereum = () => {
   const [privateKey, setPrivateKey] = useState(null);
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');
@@ -49,7 +49,7 @@ const SignSendMoneyWithEthereum = () => {
   };
 
   const buildTransaction = () => {
-    const txBytes = sendMoneyBuilder({
+    const txBytes = SendZBCBuilder({
       sender: { value: publicKey, type: 4 },
       recipient: { value: recipient, type: 0 },
       fee: parseInt(fee),
@@ -137,4 +137,4 @@ const SignSendMoneyWithEthereum = () => {
   );
 };
 
-export default SignSendMoneyWithEthereum;
+export default SignSendZBCWithEthereum;

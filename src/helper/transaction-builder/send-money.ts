@@ -8,9 +8,9 @@ import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { Address } from '../interfaces';
 import { addEscrowBytes } from './escrow-transaction';
 
-const TRANSACTION_TYPE = writeInt32(TransactionType.SENDMONEYTRANSACTION);
+const TRANSACTION_TYPE = writeInt32(TransactionType.SENDZBCTRANSACTION);
 
-export interface SendMoneyInterface extends EscrowTransactionInterface {
+export interface SendZBCInterface extends EscrowTransactionInterface {
   sender: Address;
   recipient: Address;
   fee: number;
@@ -25,7 +25,7 @@ export interface EscrowTransactionInterface {
   instruction?: string;
 }
 
-export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface): Buffer {
+export function SendZBCBuilder(data: SendZBCInterface, seed?: BIP32Interface): Buffer {
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
@@ -56,7 +56,7 @@ export function sendMoneyBuilder(data: SendMoneyInterface, seed?: BIP32Interface
   } else return bytes;
 }
 
-export function readSendMoneyBytes(txBytes: Buffer, offset: number): any {
+export function readSendZBCBytes(txBytes: Buffer, offset: number): any {
   const amount = parseInt(readInt64(txBytes, offset));
   return { amount };
 }

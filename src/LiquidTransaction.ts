@@ -2,32 +2,27 @@
 // The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
 
 import Network from './Network';
-import {
-  GetTransactionsRequest,
-  PostTransactionRequest,
-  PostTransactionResponse,
-  GetTransactionRequest,
-  GetTransactionMinimumFeeResponse,
-} from '../grpc/model/transaction_pb';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
+import { LiquidPaymentServiceClient } from '../grpc/service/liquidPayment_pb_service';
+import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
+import { GetLiquidTransactionsResponse, GetLiquidTransactionsRequest } from '../grpc/model/liquidPayment_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
-import { SendZBCInterface, SendZBCBuilder } from './helper/transaction-builder/send-money';
 import { BIP32Interface } from 'bip32';
 import { addressToBytes, errorDateMessage } from './helper/utils';
+import { LiquidTransactionsInterface, liquidTransactionBuilder } from './helper/transaction-builder/liquid-transaction';
 import { Address } from './helper/interfaces';
 import { toZBCTransaction, toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
 import { isTimestampValid } from './helper/timestamp-validation';
 import { grpc } from '@improbable-eng/grpc-web';
 
 export type PostTransactionResponses = PostTransactionResponse.AsObject;
-export type TransactionMinimumFeeResponse = GetTransactionMinimumFeeResponse.AsObject;
 
-export interface TransactionListParams {
-  address?: Address;
-  height?: number;
-  transactionType?: number;
-  timestampStart?: string;
-  timestampEnd?: string;
+export interface LiquidTransactionParams {
+  id?: string;
+  senderaddress?: Address;
+  recipientaddress?: Address;
+  status?: 0 | 1;
+  latest?: number;
   pagination?: {
     limit?: number;
     page?: number;
@@ -35,19 +30,19 @@ export interface TransactionListParams {
   };
 }
 
-function getList(params?: TransactionListParams): Promise<ZBCTransactions> {
+function getList(params?: LiquidTransactionParams): Promise<ZBCTransactions> {
   return new Promise((resolve, reject) => {
-    const request = new GetTransactionsRequest();
+    const kevin = new GetLiquidTransactionsRequest();
+    const request = new GetLiquidTransactionsRequest();
     // const networkIP = Network.selected();
 
     if (params) {
-      const { address, height, transactionType, timestampStart, timestampEnd, pagination } = params;
+      const { id, senderaddress, recipientaddress, status, pagination } = params;
 
-      if (address) request.setAccountaddress(addressToBytes(address));
-      if (height) request.setHeight(height);
-      if (transactionType) request.setTransactiontype(transactionType);
-      if (timestampStart) request.setTimestampstart(timestampStart);
-      if (timestampEnd) request.setTimestampend(timestampEnd);
+      if (id) request.setId(id);
+      if (senderaddress) request.setSenderaddress(addressToBytes(senderaddress));
+      if (recipientaddress) request.setRecipientaddress(addressToBytes(recipientaddress));
+      if (status) request.setStatus(status);
       if (pagination) {
         const reqPagination = new Pagination();
         reqPagination.setLimit(pagination.limit || 10);
@@ -57,7 +52,7 @@ function getList(params?: TransactionListParams): Promise<ZBCTransactions> {
       }
     }
 
-    Network.request(TransactionServiceClient, 'getTransactions', request)
+    Network.request(LiquidPaymentServiceClient, 'getLiquidTransaction', request)
       .catch(err => {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
@@ -67,23 +62,22 @@ function getList(params?: TransactionListParams): Promise<ZBCTransactions> {
       });
 
     /*const client = new TransactionServiceClient(networkIP.host);
-    client.getTransactions(request, (err, res) => {
-      if (err) {
-        const { code, message, metadata } = err;
-        reject({ code, message, metadata });
-      }
-      if (res) resolve(toZBCTransactions(res.toObject()));
-    });*/
+      client.getTransactions(request, (err, res) => {
+        if (err) {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        }
+        if (res) resolve(toZBCTransactions(res.toObject()));
+      });*/
   });
 }
 
 function get(id: string): Promise<ZBCTransaction> {
   return new Promise((resolve, reject) => {
     // const networkIP = Network.selected();
-    const request = new GetTransactionRequest();
+    const request = new GetLiquidTransactionsRequest();
     request.setId(id);
-
-    Network.request(TransactionServiceClient, 'getTransaction', request)
+    Network.request(LiquidPaymentServiceClient, 'getTransaction', request)
       .catch(err => {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
@@ -91,27 +85,24 @@ function get(id: string): Promise<ZBCTransaction> {
       .then(res => {
         resolve(toZBCTransaction(res.toObject()));
       });
-
     /*const client = new TransactionServiceClient(networkIP.host);
-    client.getTransaction(request, (err, res) => {
-      if (err) {
-        const { code, message, metadata } = err;
-        reject({ code, message, metadata });
-      }
-      if (res) resolve(toZBCTransaction(res.toObject()));
-    });*/
+      client.getTransaction(request, (err, res) => {
+        if (err) {
+          const { code, message, metadata } = err;
+          reject({ code, message, metadata });
+        }
+        if (res) resolve(toZBCTransaction(res.toObject()));
+      });*/
   });
 }
 
-function SendZBC(data: SendZBCInterface, seed: BIP32Interface): Promise<PostTransactionResponses> {
-  const txBytes = SendZBCBuilder(data, seed);
-
+function postTransaction(data: LiquidTransactionsInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   return new Promise(async (resolve, reject) => {
-    // const networkIP = Network.selected();
-
+    const bytes = liquidTransactionBuilder(data, childSeed);
     const request = new PostTransactionRequest();
-    request.setTransactionbytes(txBytes);
-    const validTimestamp = await isTimestampValid(txBytes);
+    request.setTransactionbytes(bytes);
+    // const networkIP = Network.selected();
+    const validTimestamp = await isTimestampValid(bytes);
     if (validTimestamp) {
       Network.request(TransactionServiceClient, 'postTransaction', request)
         .catch(err => {
@@ -138,37 +129,4 @@ function SendZBC(data: SendZBCInterface, seed: BIP32Interface): Promise<PostTran
   });
 }
 
-function post(txBytes: Buffer): Promise<PostTransactionResponses> {
-  return new Promise(async (resolve, reject) => {
-    // const networkIP = Network.selected();
-
-    const request = new PostTransactionRequest();
-    request.setTransactionbytes(txBytes);
-    const validTimestamp = await isTimestampValid(txBytes);
-    if (validTimestamp) {
-      Network.request(TransactionServiceClient, 'postTransaction', request)
-        .catch(err => {
-          const { code, message, metadata } = err;
-          if (code == grpc.Code.Internal) resolve({});
-          reject({ code, message, metadata });
-        })
-        .then(res => {
-          resolve(res.toObject());
-        });
-
-      /*const client = new TransactionServiceClient(networkIP.host);
-      client.postTransaction(request, (err, res) => {
-        if (err) {
-          const { code, message, metadata } = err;
-          reject({ code, message, metadata });
-        }
-        if (res) resolve(res.toObject());
-      });*/
-    } else {
-      const { code, message, metadata } = errorDateMessage;
-      reject({ code, message, metadata });
-    }
-  });
-}
-
-export default { SendZBC, get, getList, post };
+export default { get, getList, postTransaction };

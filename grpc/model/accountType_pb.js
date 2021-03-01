@@ -298,7 +298,8 @@ proto.model.AccountType = {
   ZBCACCOUNTTYPE: 0,
   BTCACCOUNTTYPE: 1,
   EMPTYACCOUNTTYPE: 2,
-  ESTONIAEIDACCOUNTTYPE: 3
+  ESTONIAEIDACCOUNTTYPE: 3,
+  ETHACCOUNTTYPE: 4
 };
 
 goog.object.extend(exports, proto.model);
