@@ -3,7 +3,7 @@ version: 2
 defaults: &defaults
   working_directory: ~/zoobc-sdk
   docker:
-    - image: circleci/node:10.14.2
+    - image: circleci/node:10.18
 
 jobs:
   test:
