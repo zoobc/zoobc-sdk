@@ -49,3 +49,11 @@ export function liquidTransactionBuilder(data: LiquidTransactionsInterface, seed
     return Buffer.concat([bytes, signature]);
   } else return bytes;
 }
+
+export function addLiquidBytes(bytes: Buffer, data: any): Buffer {
+  if (data.completeMinutes) {
+    const completeMinutes = writeInt64(data.completeMinutes);
+    bytes = Buffer.concat([bytes, completeMinutes]);
+  }
+  return bytes;
+}

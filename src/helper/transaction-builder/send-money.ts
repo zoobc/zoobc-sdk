@@ -7,6 +7,7 @@ import { BIP32Interface } from 'bip32';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { Address } from '../interfaces';
 import { addEscrowBytes } from './escrow-transaction';
+import { addLiquidBytes } from './liquid-transaction';
 
 const TRANSACTION_TYPE = writeInt32(TransactionType.SENDZBCTRANSACTION);
 
@@ -18,11 +19,15 @@ export interface SendZBCInterface extends EscrowTransactionInterface {
   amount: number;
 }
 
-export interface EscrowTransactionInterface {
+export interface EscrowTransactionInterface extends LiquidTransactionInterface {
   approverAddress?: Address;
   commission?: number;
   timeout?: number;
   instruction?: string;
+}
+
+export interface LiquidTransactionInterface {
+  completeMinutes?: number;
 }
 
 export function SendZBCBuilder(data: SendZBCInterface, seed?: BIP32Interface): Buffer {
@@ -39,6 +44,9 @@ export function SendZBCBuilder(data: SendZBCInterface, seed?: BIP32Interface): B
 
   // Add Escrow Bytes
   bytes = addEscrowBytes(bytes, data);
+
+  /** add liquid bytes */
+  bytes = addLiquidBytes(bytes, data);
 
   // Add message
   let message = writeInt32(0);
