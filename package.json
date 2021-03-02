@@ -1,6 +1,6 @@
 {
   "name": "zbc-sdk",
-  "version": "0.0.18-pre-release",
+  "version": "0.0.19-pre-release",
   "description": "A small set of libraries to implement applications connect with the P2P API of the nodes in the blockchain",
   "author": "ZooBC SDK Team",
   "license": "Apache-2.0",
