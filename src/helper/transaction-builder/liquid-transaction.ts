@@ -23,15 +23,25 @@ export interface LiquidTransactionsInterface extends EscrowTransactionInterface 
 export function liquidTransactionBuilder(data: LiquidTransactionsInterface, seed?: BIP32Interface): Buffer {
   let bytes: Buffer;
 
+  const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
   const sender = addressToBytes(data.sender);
   const recipient = addressToBytes(data.recipient);
   const amount = writeInt64(data.amount * 1e8);
   const fee = writeInt64(data.fee * 1e8);
   const completeMinutes = writeInt64(data.completeMinutes);
 
-  bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, sender, recipient, amount, fee, completeMinutes]);
+  bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, sender, recipient, amount, fee, completeMinutes]);
 
   bytes = addEscrowBytes(bytes, data);
+
+  // Add message
+  let message = writeInt32(0);
+  if (data.message) {
+    message = writeInt32(data.message.length);
+    Buffer.concat([message, Buffer.from(data.message)]);
+  }
+
+  bytes = Buffer.concat([bytes, message]);
 
   if (seed) {
     const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
