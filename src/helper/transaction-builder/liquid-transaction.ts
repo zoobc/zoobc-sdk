@@ -8,7 +8,7 @@ import { Address } from '../interfaces';
 import { writeInt64, writeInt32, ZBCAddressToBytes, addressToBytes, generateTransactionHash } from '../utils';
 import { VERSION } from './constant';
 import { addEscrowBytes } from './escrow-transaction';
-import { SendZBCInterface } from './send-money';
+import { EscrowTransactionInterface } from './send-money';
 
 const TRANSACTION_TYPE = writeInt32(TransactionType.LIQUIDPAYMENTTRANSACTION);
 

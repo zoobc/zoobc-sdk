@@ -15,7 +15,7 @@ import { toZBCTransaction, toZBCTransactions, ZBCTransaction, ZBCTransactions } 
 import { isTimestampValid } from './helper/timestamp-validation';
 import { grpc } from '@improbable-eng/grpc-web';
 
-export type PostTransactionResponses = PostTransactionResponse.AsObject;
+export type LiquidTransactionsResponse = GetLiquidTransactionsResponse.AsObject;
 
 export interface LiquidTransactionParams {
   id?: string;

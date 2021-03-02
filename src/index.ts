@@ -28,6 +28,7 @@ export { Subscription } from 'rxjs';
 
 // INTERFACE
 export { EscrowListParams, ApprovalEscrowTransactionResponse } from './Escrows';
+export { LiquidTransactionParams, LiquidTransactionsResponse } from './LiquidTransaction';
 export {
   NodeListParams,
   NodeParams,
@@ -86,6 +87,7 @@ export {
 } from './helper/utils';
 export { bufferToBase64, toBase64Url } from './helper/converters';
 export { MultiSigInterface, signTransactionHash, MultiSigInfo, SignatureInfo } from './helper/transaction-builder/multisignature';
+export { LiquidTransactionsInterface } from './helper/transaction-builder/liquid-transaction';
 
 // INTERFACE
 export { Address } from './helper/interfaces';
