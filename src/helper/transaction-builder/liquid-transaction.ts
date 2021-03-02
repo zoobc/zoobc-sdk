@@ -34,6 +34,15 @@ export function liquidTransactionBuilder(data: LiquidTransactionsInterface, seed
 
   bytes = addEscrowBytes(bytes, data);
 
+  // Add message
+  let message = writeInt32(0);
+  if (data.message) {
+    message = writeInt32(data.message.length);
+    Buffer.concat([message, Buffer.from(data.message)]);
+  }
+
+  bytes = Buffer.concat([bytes, message]);
+
   if (seed) {
     const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
     const signature = seed.sign(txHash);

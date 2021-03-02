@@ -42,7 +42,8 @@ export function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransact
     transaction.transactiontype == TransactionType.NODEREGISTRATIONTRANSACTION ||
     transaction.transactiontype == TransactionType.UPDATENODEREGISTRATIONTRANSACTION ||
     transaction.transactiontype == TransactionType.REMOVENODEREGISTRATIONTRANSACTION ||
-    transaction.transactiontype == TransactionType.CLAIMNODEREGISTRATIONTRANSACTION;
+    transaction.transactiontype == TransactionType.CLAIMNODEREGISTRATIONTRANSACTION ||
+    transaction.transactiontype == TransactionType.LIQUIDPAYMENTTRANSACTION
   if (nodeManagementTxType) {
     const hasNodePublicKey = txBody.nodepublickey;
     const hasAccountAddress = txBody.accountaddress;
