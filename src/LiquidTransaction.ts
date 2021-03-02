@@ -5,7 +5,7 @@ import Network from './Network';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { LiquidPaymentServiceClient } from '../grpc/service/liquidPayment_pb_service';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
-import { GetLiquidTransactionsResponse, GetLiquidTransactionsRequest } from '../grpc/model/liquidPayment_pb';
+import { GetLiquidTransactionsRequest } from '../grpc/model/liquidPayment_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { BIP32Interface } from 'bip32';
 import { addressToBytes, errorDateMessage } from './helper/utils';
@@ -32,9 +32,7 @@ export interface LiquidTransactionParams {
 
 function getList(params?: LiquidTransactionParams): Promise<ZBCTransactions> {
   return new Promise((resolve, reject) => {
-    const kevin = new GetLiquidTransactionsRequest();
     const request = new GetLiquidTransactionsRequest();
-    // const networkIP = Network.selected();
 
     if (params) {
       const { id, senderaddress, recipientaddress, status, pagination } = params;
@@ -60,21 +58,11 @@ function getList(params?: LiquidTransactionParams): Promise<ZBCTransactions> {
       .then(res => {
         resolve(toZBCTransactions(res.toObject()));
       });
-
-    /*const client = new TransactionServiceClient(networkIP.host);
-      client.getTransactions(request, (err, res) => {
-        if (err) {
-          const { code, message, metadata } = err;
-          reject({ code, message, metadata });
-        }
-        if (res) resolve(toZBCTransactions(res.toObject()));
-      });*/
   });
 }
 
 function get(id: string): Promise<ZBCTransaction> {
   return new Promise((resolve, reject) => {
-    // const networkIP = Network.selected();
     const request = new GetLiquidTransactionsRequest();
     request.setId(id);
     Network.request(LiquidPaymentServiceClient, 'getTransaction', request)
@@ -85,14 +73,6 @@ function get(id: string): Promise<ZBCTransaction> {
       .then(res => {
         resolve(toZBCTransaction(res.toObject()));
       });
-    /*const client = new TransactionServiceClient(networkIP.host);
-      client.getTransaction(request, (err, res) => {
-        if (err) {
-          const { code, message, metadata } = err;
-          reject({ code, message, metadata });
-        }
-        if (res) resolve(toZBCTransaction(res.toObject()));
-      });*/
   });
 }
 
