@@ -4,6 +4,7 @@
 /node_modules
 /examples/**/node_modules
 package-lock.json
+yarn-lock.json
 
 # test
 /coverage
