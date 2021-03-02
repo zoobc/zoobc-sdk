@@ -96,12 +96,11 @@ function get(id: string): Promise<ZBCTransaction> {
   });
 }
 
-function postTransaction(data: LiquidTransactionsInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
+function sendLiquid(data: LiquidTransactionsInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   return new Promise(async (resolve, reject) => {
     const bytes = liquidTransactionBuilder(data, childSeed);
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
-    // const networkIP = Network.selected();
     const validTimestamp = await isTimestampValid(bytes);
     if (validTimestamp) {
       Network.request(TransactionServiceClient, 'postTransaction', request)
@@ -113,15 +112,6 @@ function postTransaction(data: LiquidTransactionsInterface, childSeed: BIP32Inte
         .then(res => {
           resolve(res.toObject());
         });
-
-      /*const client = new TransactionServiceClient(networkIP.host);
-      client.postTransaction(request, (err, res) => {
-        if (err) {
-          const { code, message, metadata } = err;
-          reject({ code, message, metadata });
-        }
-        if (res) resolve(res.toObject());
-      });*/
     } else {
       const { code, message, metadata } = errorDateMessage;
       reject({ code, message, metadata });
@@ -129,4 +119,4 @@ function postTransaction(data: LiquidTransactionsInterface, childSeed: BIP32Inte
   });
 }
 
-export default { get, getList, postTransaction };
+export default { get, getList, sendLiquid };

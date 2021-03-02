@@ -12,7 +12,12 @@ import { SendZBCInterface } from './send-money';
 
 const TRANSACTION_TYPE = writeInt32(TransactionType.LIQUIDPAYMENTTRANSACTION);
 
-export interface LiquidTransactionsInterface extends SendZBCInterface {
+export interface LiquidTransactionsInterface extends EscrowTransactionInterface {
+  sender: Address;
+  recipient: Address;
+  fee: number;
+  message?: string;
+  amount: number;
   completeMinutes: number;
 }
 
