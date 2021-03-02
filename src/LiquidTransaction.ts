@@ -5,7 +5,7 @@ import Network from './Network';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
 import { LiquidPaymentServiceClient } from '../grpc/service/liquidPayment_pb_service';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
-import { GetLiquidTransactionsRequest } from '../grpc/model/liquidPayment_pb';
+import { GetLiquidTransactionsRequest, GetLiquidTransactionsResponse } from '../grpc/model/liquidPayment_pb';
 import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { BIP32Interface } from 'bip32';
 import { addressToBytes, errorDateMessage } from './helper/utils';
