@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { async } from 'rxjs/internal/scheduler/async';
 
 import zoobc, { ZooKeyring } from '../../../';
 
@@ -21,7 +20,6 @@ export default () => {
   };
 
   const getLiquid = async id => {
-    console.log('==id', id);
     const res = await zoobc.Liquid.get(id);
     console.log('==res', res);
   };
