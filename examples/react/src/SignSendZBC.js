@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 
-import { SendZBCBuilder } from '../../../types';
+import { SendZBCBuilder } from '../../../';
 import PublicKeyGenerator from './common/PublicKeyGenerator';
 import SignatureGenerator from './common/SignatureGenerator';
 

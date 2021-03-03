@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { sha3_256 } from 'js-sha3';
 
-import { SendZBCBuilder, EstoniaEid } from '../../../types';
+import { SendZBCBuilder, EstoniaEid } from '../../../';
 
 const bytesToHexes = byteArr => {
   const a = [];
@@ -16,13 +16,12 @@ const bytesToHexes = byteArr => {
 };
 
 function hexToBytes(hex) {
-  for (var bytes = [], c = 0; c < hex.length; c += 2)
-  bytes.push(parseInt(hex.substr(c, 2), 16));
+  for (var bytes = [], c = 0; c < hex.length; c += 2) bytes.push(parseInt(hex.substr(c, 2), 16));
   return bytes;
 }
 
 const SignSendZBCWithEid = () => {
-  const estoniaEidObj= new EstoniaEid()
+  const estoniaEidObj = new EstoniaEid();
   const [eidPublicKey, setEidPublicKey] = useState('');
   const [recipient, setRecipient] = useState('');
   const [amount, setAmount] = useState('');

@@ -1,13 +1,13 @@
 // Licensed to the Quasisoft Limited - Hong Kong under one or more agreements
 // The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
 
-import { BIP32Interface } from 'bip32';
-import { TransactionType } from '../../../grpc/model/transaction_pb';
-import { Address } from '../interfaces';
-import { writeInt64, writeInt32, ZBCAddressToBytes, addressToBytes, generateTransactionHash } from '../utils';
 import { VERSION } from './constant';
+import { BIP32Interface } from 'bip32';
+import { Address } from '../interfaces';
 import { addEscrowBytes } from './escrow-transaction';
 import { EscrowTransactionInterface } from './send-money';
+import { TransactionType } from '../../../grpc/model/transaction_pb';
+import { writeInt64, writeInt32, ZBCAddressToBytes, addressToBytes, generateTransactionHash } from '../utils';
 
 const TRANSACTION_TYPE = writeInt32(TransactionType.LIQUIDPAYMENTTRANSACTION);
 
@@ -26,11 +26,12 @@ export function liquidTransactionBuilder(data: LiquidTransactionsInterface, seed
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
   const sender = addressToBytes(data.sender);
   const recipient = addressToBytes(data.recipient);
-  const amount = writeInt64(data.amount * 1e8);
   const fee = writeInt64(data.fee * 1e8);
+  const amount = writeInt64(data.amount * 1e8);
   const completeMinutes = writeInt64(data.completeMinutes);
+  const bodyLength = writeInt32(amount.length + completeMinutes.length);
 
-  bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, sender, recipient, amount, fee, completeMinutes]);
+  bytes = Buffer.concat([TRANSACTION_TYPE, VERSION, timestamp, sender, recipient, fee, bodyLength, amount, completeMinutes]);
 
   bytes = addEscrowBytes(bytes, data);
 
@@ -48,4 +49,12 @@ export function liquidTransactionBuilder(data: LiquidTransactionsInterface, seed
     const signature = seed.sign(txHash);
     return Buffer.concat([bytes, signature]);
   } else return bytes;
+}
+
+export function addLiquidBytes(bytes: Buffer, data: any): Buffer {
+  if (data.completeMinutes) {
+    const completeMinutes = writeInt64(data.completeMinutes);
+    bytes = Buffer.concat([bytes, completeMinutes]);
+  }
+  return bytes;
 }

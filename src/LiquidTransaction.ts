@@ -2,18 +2,17 @@
 // The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
 
 import Network from './Network';
+import { BIP32Interface } from 'bip32';
+import { Address } from './helper/interfaces';
+import { grpc } from '@improbable-eng/grpc-web';
+import { addressToBytes } from './helper/utils';
 import { Pagination, OrderBy } from '../grpc/model/pagination_pb';
+import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
 import { LiquidPaymentServiceClient } from '../grpc/service/liquidPayment_pb_service';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { GetLiquidTransactionsRequest, GetLiquidTransactionsResponse } from '../grpc/model/liquidPayment_pb';
-import { TransactionServiceClient } from '../grpc/service/transaction_pb_service';
-import { BIP32Interface } from 'bip32';
-import { addressToBytes, errorDateMessage } from './helper/utils';
 import { LiquidTransactionsInterface, liquidTransactionBuilder } from './helper/transaction-builder/liquid-transaction';
-import { Address } from './helper/interfaces';
-import { toZBCTransaction, toZBCTransactions, ZBCTransaction, ZBCTransactions } from './helper/wallet/Transaction';
-import { isTimestampValid } from './helper/timestamp-validation';
-import { grpc } from '@improbable-eng/grpc-web';
+import { toLiquidTransactions, parseLiquidTransaction, ZBCLiquidTransactions, ZBCLiquidTransaction } from './helper/wallet/Liquid';
 
 export type LiquidTransactionsResponse = GetLiquidTransactionsResponse.AsObject;
 
@@ -30,7 +29,7 @@ export interface LiquidTransactionParams {
   };
 }
 
-function getList(params?: LiquidTransactionParams): Promise<ZBCTransactions> {
+function getList(params?: LiquidTransactionParams): Promise<ZBCLiquidTransactions> {
   return new Promise((resolve, reject) => {
     const request = new GetLiquidTransactionsRequest();
 
@@ -50,28 +49,28 @@ function getList(params?: LiquidTransactionParams): Promise<ZBCTransactions> {
       }
     }
 
-    Network.request(LiquidPaymentServiceClient, 'getLiquidTransaction', request)
+    Network.request(LiquidPaymentServiceClient, 'getLiquidTransactions', request)
       .catch(err => {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       })
       .then(res => {
-        resolve(toZBCTransactions(res.toObject()));
+        resolve(toLiquidTransactions(res.toObject()));
       });
   });
 }
 
-function get(id: string): Promise<ZBCTransaction> {
+function get(id: string): Promise<ZBCLiquidTransaction> {
   return new Promise((resolve, reject) => {
     const request = new GetLiquidTransactionsRequest();
     request.setId(id);
-    Network.request(LiquidPaymentServiceClient, 'getTransaction', request)
+    Network.request(LiquidPaymentServiceClient, 'getLiquidTransactions', request)
       .catch(err => {
         const { code, message, metadata } = err;
         reject({ code, message, metadata });
       })
       .then(res => {
-        resolve(toZBCTransaction(res.toObject()));
+        resolve(parseLiquidTransaction(res.toObject()));
       });
   });
 }
@@ -79,23 +78,19 @@ function get(id: string): Promise<ZBCTransaction> {
 function sendLiquid(data: LiquidTransactionsInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   return new Promise(async (resolve, reject) => {
     const bytes = liquidTransactionBuilder(data, childSeed);
+
     const request = new PostTransactionRequest();
     request.setTransactionbytes(bytes);
-    const validTimestamp = await isTimestampValid(bytes);
-    if (validTimestamp) {
-      Network.request(TransactionServiceClient, 'postTransaction', request)
-        .catch(err => {
-          const { code, message, metadata } = err;
-          if (code == grpc.Code.Internal) resolve({});
-          reject({ code, message, metadata });
-        })
-        .then(res => {
-          resolve(res.toObject());
-        });
-    } else {
-      const { code, message, metadata } = errorDateMessage;
-      reject({ code, message, metadata });
-    }
+
+    Network.request(TransactionServiceClient, 'postTransaction', request)
+      .catch(err => {
+        const { code, message, metadata } = err;
+        if (code == grpc.Code.Internal) resolve({});
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        resolve(res ? res.toObject() : null);
+      });
   });
 }
 
