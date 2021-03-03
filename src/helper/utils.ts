@@ -180,6 +180,8 @@ export function getTxTypeString(txType: number): string {
       return 'escrow approval';
     case TransactionType.MULTISIGNATURETRANSACTION:
       return 'multisignature';
+    case TransactionType.LIQUIDPAYMENTTRANSACTION:
+      return 'liquid transaction';
   }
   return '';
 }
