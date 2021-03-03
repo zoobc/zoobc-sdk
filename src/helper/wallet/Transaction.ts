@@ -78,8 +78,6 @@ export function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransact
 }
 
 export function toZBCTransactions(transactions: GetTransactionsResponse.AsObject): ZBCTransactions {
-  console.log('==transactions', transactions);
-
   const list = transactions && transactions.transactionsList ? transactions.transactionsList.map(tx => toZBCTransaction(tx)) : [];
   return {
     total: parseInt(transactions.total),
