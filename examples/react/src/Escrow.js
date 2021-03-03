@@ -1,26 +1,36 @@
 import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 import zoobc, { ZooKeyring } from '../../../';
 
 export default () => {
-  const [datas, setDatas] = useState({ total: 0, liquidtransactionsList: [] });
+  const [datas, setDatas] = useState({ total: 0, escrowList: [] });
 
   const data = {
     amount: 2,
-    completeMinutes: 2,
-    fee: 0.01,
+    fee: 0.017,
     sender: { value: 'ZBC_F5YUYDXD_WFDJSAV5_K3Y72RCM_GLQP32XI_QDVXOGGD_J7CGSSSK_5VKR7YML', type: 0 },
     recipient: { value: 'ZBC_QWREWSUY_FHG66UD3_SAHOMJLW_5KTDEWZ3_FD3YP3YK_JYGTVD4B_FT7RTWUR', type: 0 },
+    approverAddress: { value: 'ZBC_F6CRZPOG_C42A7M37_WRL2EVBV_KA5PKBGI_SBGVZHMH_VIFZ7CMQ_VMOFWD3P', type: 0 },
+    commission: 0.1,
+    instruction: 'Testing',
+    message: '',
+    timeout: moment()
+      .add(2, 'hours')
+      .utc()
+      .unix(),
   };
 
-  const getLiquids = async () => {
-    const params = { senderaddress: data.sender };
-    const res = await zoobc.Liquid.getList(params);
+  const getEscrows = async () => {
+    const params = { sender: data.sender };
+    const res = await zoobc.Escrows.getList(params);
+    // const params = { address: data.sender };
+    // const res = await zoobc.Transactions.getList(params);
+    console.log('==res', res);
+    // if (res && res.transactions) {
+    //   const escrows = res.transactions.filter(f => f.escrow !== undefined);
+    //   console.log('==escrows', escrows);
+    // }
     setDatas(res);
-  };
-
-  const getLiquid = async id => {
-    const res = await zoobc.Liquid.get(id);
-    console.log('==Detail Liquid', res);
   };
 
   const onSubmit = async () => {
@@ -29,16 +39,8 @@ export default () => {
     const zooKeyring = new ZooKeyring(seed, '');
     const childSeed = zooKeyring.calcDerivationPath(0);
 
-    const res = await zoobc.Liquid.sendLiquid(data, childSeed);
-    console.log('==Send Liquid', res);
-    getLiquids();
-  };
-
-  const getTrx = async () => {
-    const res = await zoobc.Transactions.getList();
-
-    const liquid = res.transactions.filter(x => x.transactionType === 6);
-    console.log('liquid = ', liquid);
+    const res = await zoobc.Transactions.SendZBC(data, childSeed);
+    console.log('==Send Escrow', res);
   };
 
   useEffect(() => {
@@ -72,41 +74,22 @@ export default () => {
 
   return (
     <>
-      <h2>liquid transaction</h2>
-      <button onClick={onSubmit}>Create Liquid</button>
-      <button onClick={getLiquids}>Refresh Liquid</button>
-      <button onClick={getTrx}>Get Trx</button>
+      <h2>Escrow Transaction</h2>
+      <button onClick={onSubmit}>Create Escrow</button>
+      <button onClick={getEscrows}>Get Escrows</button>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Sender</th>
-            <th>Recipient</th>
-            <th>Fee</th>
-            <th>Message</th>
-            <th>Amout</th>
-            <th>Complete Minutes</th>
-          </tr>
-        </thead>
-        <tbody>
-          {datas &&
-            datas.liquidtransactionsList &&
-            datas.liquidtransactionsList.map((item, idx) => {
-              return (
-                <tr key={idx}>
-                  <td onClick={() => getLiquid(item.id)}>{item.id}</td>
-                  <td>{item.sender.value}</td>
-                  <td>{item.recipient.value}</td>
-                  <td>{item.fee}</td>
-                  <td>{item.message}</td>
-                  <td>{item.amount}</td>
-                  <td>{item.completeMinutes}</td>
-                </tr>
-              );
-            })}
-        </tbody>
-      </table>
+      <h4>Escrow List ({datas && datas.total})</h4>
+      <ul>
+        {datas &&
+          datas.escrowList &&
+          datas.escrowList.map(i => {
+            return (
+              <li key={i.id}>
+                ID: {i.id} - Block: {i.blockHeight} - Instruction: {i.instruction}
+              </li>
+            );
+          })}
+      </ul>
     </>
   );
 };

@@ -3,13 +3,14 @@
 
 import './app.css';
 import React, { useState } from 'react';
+import Escrow from './Escrow';
+import Liquid from './Liquid';
 import BlockList from './BlockList';
 import SignSendZBC from './SignSendZBC';
 import TransactionFees from './TransactionFees';
 import SignRegisterNode from './SignRegisterNode';
 import SignSendZBCWithEid from './SignSendZBCWithEid';
 import SignSendZBCWithEthereum from './SignSendZBCWithEthereum';
-import LiquidTx from './Liquid';
 
 const App = () => {
   const [appState, setAppState] = useState(0);
@@ -35,7 +36,10 @@ const App = () => {
       appContent = <TransactionFees />;
       break;
     case 7:
-      appContent = <LiquidTx />;
+      appContent = <Liquid />;
+      break;
+    case 8:
+      appContent = <Escrow />;
       break;
     default:
       appContent = null;
@@ -64,7 +68,10 @@ const App = () => {
           <a href="#TransactionFees">Transaction Fees</a>
         </li>
         <li onClick={() => setAppState(7)}>
-          <a href="#LiquidTx">Liquid Transactions</a>
+          <a href="#Liquid">Liquid Transactions</a>
+        </li>
+        <li onClick={() => setAppState(8)}>
+          <a href="#Escrow">Escrow Transactions</a>
         </li>
       </ul>
       {appContent}
