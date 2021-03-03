@@ -87,7 +87,7 @@ export {
 } from './helper/utils';
 export { bufferToBase64, toBase64Url } from './helper/converters';
 export { MultiSigInterface, signTransactionHash, MultiSigInfo, SignatureInfo } from './helper/transaction-builder/multisignature';
-export { LiquidTransactionsInterface, liquidTransactionBuilder } from './helper/transaction-builder/liquid-transaction';
+export { LiquidTransactionsInterface } from './helper/transaction-builder/liquid-transaction';
 
 // INTERFACE
 export { Address } from './helper/interfaces';

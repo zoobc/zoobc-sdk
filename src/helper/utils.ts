@@ -181,7 +181,7 @@ export function getTxTypeString(txType: number): string {
     case TransactionType.MULTISIGNATURETRANSACTION:
       return 'multisignature';
     case TransactionType.LIQUIDPAYMENTTRANSACTION:
-      return 'liquid transaction'
+      return 'liquid transaction';
   }
   return '';
 }
