@@ -43,7 +43,7 @@ export function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransact
     transaction.transactiontype == TransactionType.UPDATENODEREGISTRATIONTRANSACTION ||
     transaction.transactiontype == TransactionType.REMOVENODEREGISTRATIONTRANSACTION ||
     transaction.transactiontype == TransactionType.CLAIMNODEREGISTRATIONTRANSACTION ||
-    transaction.transactiontype == TransactionType.LIQUIDPAYMENTTRANSACTION
+    transaction.transactiontype == TransactionType.LIQUIDPAYMENTTRANSACTION;
   if (nodeManagementTxType) {
     const hasNodePublicKey = txBody.nodepublickey;
     const hasAccountAddress = txBody.accountaddress;
@@ -78,7 +78,9 @@ export function toZBCTransaction(transaction: Transaction.AsObject): ZBCTransact
 }
 
 export function toZBCTransactions(transactions: GetTransactionsResponse.AsObject): ZBCTransactions {
-  const list = transactions.transactionsList.map(tx => toZBCTransaction(tx));
+  console.log('==transactions', transactions);
+
+  const list = transactions && transactions.transactionsList ? transactions.transactionsList.map(tx => toZBCTransaction(tx)) : [];
   return {
     total: parseInt(transactions.total),
     transactions: list,

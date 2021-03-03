@@ -9,7 +9,7 @@ import TransactionFees from './TransactionFees';
 import SignRegisterNode from './SignRegisterNode';
 import SignSendZBCWithEid from './SignSendZBCWithEid';
 import SignSendZBCWithEthereum from './SignSendZBCWithEthereum';
-import LiquidTx from './Liquid'
+import LiquidTx from './Liquid';
 
 const App = () => {
   const [appState, setAppState] = useState(0);
@@ -35,8 +35,8 @@ const App = () => {
       appContent = <TransactionFees />;
       break;
     case 7:
-      appContent= <LiquidTx />
-      break
+      appContent = <LiquidTx />;
+      break;
     default:
       appContent = null;
   }

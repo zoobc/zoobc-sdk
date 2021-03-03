@@ -19,15 +19,11 @@ export interface SendZBCInterface extends EscrowTransactionInterface {
   amount: number;
 }
 
-export interface EscrowTransactionInterface extends LiquidTransactionInterface {
+export interface EscrowTransactionInterface {
   approverAddress?: Address;
   commission?: number;
   timeout?: number;
   instruction?: string;
-}
-
-export interface LiquidTransactionInterface {
-  completeMinutes?: number;
 }
 
 export function SendZBCBuilder(data: SendZBCInterface, seed?: BIP32Interface): Buffer {
@@ -44,9 +40,6 @@ export function SendZBCBuilder(data: SendZBCInterface, seed?: BIP32Interface): B
 
   // Add Escrow Bytes
   bytes = addEscrowBytes(bytes, data);
-
-  /** add liquid bytes */
-  bytes = addLiquidBytes(bytes, data);
 
   // Add message
   let message = writeInt32(0);
