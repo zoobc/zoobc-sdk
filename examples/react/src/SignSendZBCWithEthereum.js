@@ -2,7 +2,7 @@
 // The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
 
 import React, { useState } from 'react';
-import { SendZBCBuilder } from '../../../types';
+import { SendZBCBuilder } from '../../../';
 import Wallet, { hdkey } from 'ethereumjs-wallet';
 import { keccak256, ecsign, toRpcSig, toBuffer } from 'ethereumjs-util';
 

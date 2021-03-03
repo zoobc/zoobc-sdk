@@ -63,6 +63,8 @@ function getList(params?: TransactionListParams): Promise<ZBCTransactions> {
         reject({ code, message, metadata });
       })
       .then(res => {
+        console.log('==res', res);
+
         resolve(toZBCTransactions(res.toObject()));
       });
 
