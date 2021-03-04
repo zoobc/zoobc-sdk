@@ -9,6 +9,7 @@ import { readRemoveNodeBytes } from './remove-node';
 import { readSendZBCBytes } from './send-money';
 import { readSetupDatasetBytes } from './setup-account-dataset';
 import { readUpdateNodeBytes } from './update-node';
+import { readLiquidBytes } from './liquid-transaction';
 
 export function readBodyBytes(txBytes: Buffer, txType: number, offset: number): any {
   switch (txType) {
@@ -28,5 +29,7 @@ export function readBodyBytes(txBytes: Buffer, txType: number, offset: number): 
       return readSetupDatasetBytes(txBytes, offset);
     case TransactionType.APPROVALESCROWTRANSACTION:
       return readApprovalEscrowBytes(txBytes, offset);
+    case TransactionType.LIQUIDPAYMENTTRANSACTION:
+      return readLiquidBytes(txBytes, offset);
   }
 }
