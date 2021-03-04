@@ -42,7 +42,7 @@ export function updateNodeBuilder(data: UpdateNodeInterface, poown: Buffer, seed
   let message = writeInt32(0);
   if (data.message) {
     message = writeInt32(data.message.length);
-    Buffer.concat([message, Buffer.from(data.message)]);
+    message = Buffer.concat([message, Buffer.from(data.message)]);
   }
 
   bytes = Buffer.concat([bytes, message]);

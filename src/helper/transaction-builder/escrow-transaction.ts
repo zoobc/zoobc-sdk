@@ -38,7 +38,7 @@ export function escrowBuilder(data: EscrowApprovalInterface, seed?: BIP32Interfa
   let message = writeInt32(0);
   if (data.message) {
     message = writeInt32(data.message.length);
-    Buffer.concat([message, Buffer.from(data.message)]);
+    message = Buffer.concat([message, Buffer.from(data.message)]);
   }
 
   bytes = Buffer.concat([bytes, message]);
