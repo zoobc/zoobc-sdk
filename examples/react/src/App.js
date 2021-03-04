@@ -3,6 +3,7 @@
 
 import './app.css';
 import React, { useState } from 'react';
+import Mempol from './Mempol';
 import Escrow from './Escrow';
 import Liquid from './Liquid';
 import BlockList from './BlockList';
@@ -41,6 +42,9 @@ const App = () => {
     case 8:
       appContent = <Escrow />;
       break;
+    case 9:
+      appContent = <Mempol />;
+      break;
     default:
       appContent = null;
   }
@@ -72,6 +76,9 @@ const App = () => {
         </li>
         <li onClick={() => setAppState(8)}>
           <a href="#Escrow">Escrow Transactions</a>
+        </li>
+        <li onClick={() => setAppState(9)}>
+          <a href="#Mempol">Mempol Transactions</a>
         </li>
       </ul>
       {appContent}
