@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import zoobc from '../../../';
 
 export default () => {
+  const [datas, setDatas] = useState({ total: 0, transactions: [] });
+
   const getMempol = async () => {
     const params = { address: { value: 'ZBC_F5YUYDXD_WFDJSAV5_K3Y72RCM_GLQP32XI_QDVXOGGD_J7CGSSSK_5VKR7YML', type: 0 } };
     const res = await zoobc.Mempool.getList(params);
     console.log('==List Mempol', res);
+    setDatas(res);
   };
 
   useEffect(() => {
@@ -41,6 +44,19 @@ export default () => {
     <>
       <h2>mempol transaction</h2>
       <button onClick={getMempol}>Get Mmepol</button>
+
+      <h4>Escrow List ({datas && datas.total})</h4>
+      <ul>
+        {datas &&
+          datas.transactions &&
+          datas.transactions.map(i => {
+            return (
+              <li key={i.transactionHash}>
+                ID: <small>{i.transactionHash}</small> - Type: {i.transactionTypeString} - Body: {JSON.stringify(i.txBody)}
+              </li>
+            );
+          })}
+      </ul>
     </>
   );
 };
