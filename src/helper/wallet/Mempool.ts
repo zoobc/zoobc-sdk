@@ -2,11 +2,11 @@
 // The Quasisoft Limited - Hong Kong licenses this file to you under MIT license.
 
 import { sha3_256 } from 'js-sha3';
-import { GetMempoolTransactionsResponse, MempoolTransaction } from '../../../grpc/model/mempool_pb';
+import { ZBCTransaction, ZBCTransactions } from './Transaction';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { readBodyBytes } from '../transaction-builder/post-transaction';
-import { getZBCAddress, parseAddress, readAddress, readInt64 } from '../utils';
-import { ZBCTransaction, ZBCTransactions } from './Transaction';
+import { getZBCAddress, parseAddress, readAddress, readInt64, getTxTypeString } from '../utils';
+import { GetMempoolTransactionsResponse, MempoolTransaction } from '../../../grpc/model/mempool_pb';
 
 export function toUnconfirmTransactionNodeWallet(res: GetMempoolTransactionsResponse.AsObject) {
   let mempoolTx = res.mempooltransactionsList;
@@ -53,6 +53,8 @@ export function toZBCPendingTransaction(mempool: MempoolTransaction.AsObject): Z
   const transactionType = txBytes.readUInt32LE(offset);
   offset += 4;
 
+  const transactionTypeString = getTxTypeString(transactionType);
+
   const version = txBytes.readUInt8(offset);
   offset += 1;
 
@@ -85,6 +87,7 @@ export function toZBCPendingTransaction(mempool: MempoolTransaction.AsObject): Z
     fee: parseInt(txFee),
     escrow: false,
     transactionType,
+    transactionTypeString,
     transactionHash: getZBCAddress(transactionHash, 'ZTX'),
     txBody,
   };
