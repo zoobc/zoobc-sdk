@@ -97,6 +97,7 @@ export default () => {
 						<th>Message</th>
 						<th>Amout</th>
 						<th>Complete Minutes</th>
+            <th>Status</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -113,6 +114,7 @@ export default () => {
 									<td>{item.message}</td>
 									<td>{item.amount}</td>
 									<td>{item.completeMinutes}</td>
+                  <td>{item.status}</td>
 								</tr>
 							);
 						})}
