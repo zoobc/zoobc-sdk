@@ -11,7 +11,7 @@ import { AccountType } from '../../../grpc/model/accountType_pb';
 import { writeInt64, writeInt32, ZBCAddressToBytes, addressToBytes, generateTransactionHash } from '../utils';
 
 const TRANSACTION_TYPE = writeInt32(TransactionType.LIQUIDPAYMENTTRANSACTION);
-const TRANSACTION_TYPE_2 = writeInt32(TransactionType.LIQUIDPAYMENTSTOPTRANSACTION);
+const TRANSACTION_TYPE_STOP = writeInt32(TransactionType.LIQUIDPAYMENTSTOPTRANSACTION);
 
 export interface LiquidTransactionsInterface extends EscrowTransactionInterface {
   sender: Address;
@@ -64,12 +64,14 @@ export function liquidStopTransactionBuilder(data: LiquidStopTransactionInterfac
   let bytes: Buffer;
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
-  const sender = addressToBytes(data.sender);
+  const sender = addressToBytes(data.accountAddress);
+  console.log("sender = ", data.accountAddress)
   const recipient = writeInt32(AccountType.EMPTYACCOUNTTYPE);
   const fee = writeInt64(data.fee * 1e8);
-  const txId = writeInt64(data.transactionId)
+  const TransactionId = writeInt64(data.transactionId);
+  const bodyLength = writeInt32(TransactionId.length);
 
-  bytes = Buffer.concat([TRANSACTION_TYPE_2, VERSION, timestamp, sender, recipient, fee, txId ]);
+  bytes = Buffer.concat([TRANSACTION_TYPE_STOP, VERSION, timestamp, sender, recipient, fee, bodyLength, TransactionId]);
 
   // Add message
   let message = writeInt32(0);

@@ -21,6 +21,15 @@ export default () => {
 		},
 	};
 
+  const dataStop = {
+    accountAddress: {
+			value:
+				"ZBC_F5YUYDXD_WFDJSAV5_K3Y72RCM_GLQP32XI_QDVXOGGD_J7CGSSSK_5VKR7YML",
+			type: 0,
+		},
+    fee: 0.5,
+  }
+
 	const getLiquids = async () => {
 		const params = { senderaddress: data.sender };
 		const res = await zoobc.Liquid.getList(params);
@@ -40,6 +49,19 @@ export default () => {
 		const childSeed = zooKeyring.calcDerivationPath(0);
 
 		const res = await zoobc.Liquid.sendLiquid(data, childSeed);
+    console.log(res)
+		getLiquids();
+	};
+
+  const onStop = async (id) => {
+		const seed =
+			"stand cheap entire summer claw subject victory supreme top divide tooth park change excite legend category motor text zebra bottom mystery off garage energy";
+		const zooKeyring = new ZooKeyring(seed, "");
+		const childSeed = zooKeyring.calcDerivationPath(0);
+    dataStop.transactionId = id
+    // console.log(dataStop)
+		const res = await zoobc.Liquid.sendLiquidStop(dataStop, childSeed);
+    console.log('==res', res)
 		getLiquids();
 	};
 
@@ -115,6 +137,7 @@ export default () => {
 									<td>{item.amount}</td>
 									<td>{item.completeMinutes}</td>
                   <td>{item.status}</td>
+                  <td><button onClick={() => onStop(item.id)}>stop liquid tx</button></td>
 								</tr>
 							);
 						})}
