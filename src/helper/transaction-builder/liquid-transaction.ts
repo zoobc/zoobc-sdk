@@ -10,6 +10,7 @@ import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { writeInt64, writeInt32, ZBCAddressToBytes, addressToBytes, readInt64, generateTransactionHash } from '../utils';
 
 const TRANSACTION_TYPE = writeInt32(TransactionType.LIQUIDPAYMENTTRANSACTION);
+const TRANSACTION_TYPE_STOP = writeInt32(TransactionType.LIQUIDPAYMENTSTOPTRANSACTION);
 
 export interface LiquidTransactionsInterface extends EscrowTransactionInterface {
   sender: Address;
@@ -18,6 +19,13 @@ export interface LiquidTransactionsInterface extends EscrowTransactionInterface 
   message?: string;
   amount: number;
   completeMinutes: number;
+}
+
+export interface LiquidStopTransactionInterface extends LiquidTransactionsInterface {
+  accountAddress: Address;
+  fee: number;
+  transactionId: number;
+  message?: string;
 }
 
 export function liquidTransactionBuilder(data: LiquidTransactionsInterface, seed?: BIP32Interface): Buffer {
@@ -40,6 +48,35 @@ export function liquidTransactionBuilder(data: LiquidTransactionsInterface, seed
   if (data.message) {
     message = writeInt32(data.message.length);
     message = Buffer.concat([message, Buffer.from(data.message)]);
+  }
+
+  bytes = Buffer.concat([bytes, message]);
+
+  if (seed) {
+    const txHash = ZBCAddressToBytes(generateTransactionHash(bytes));
+    const signature = seed.sign(txHash);
+    return Buffer.concat([bytes, signature]);
+  } else return bytes;
+}
+
+export function liquidStopTransactionBuilder(data: LiquidStopTransactionInterface, seed?: BIP32Interface): Buffer {
+  let bytes: Buffer;
+
+  const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
+  const sender = addressToBytes(data.accountAddress);
+  console.log("sender = ", data.accountAddress)
+  const recipient = writeInt32(AccountType.EMPTYACCOUNTTYPE);
+  const fee = writeInt64(data.fee * 1e8);
+  const TransactionId = writeInt64(data.transactionId);
+  const bodyLength = writeInt32(TransactionId.length);
+
+  bytes = Buffer.concat([TRANSACTION_TYPE_STOP, VERSION, timestamp, sender, recipient, fee, bodyLength, TransactionId]);
+
+  // Add message
+  let message = writeInt32(0);
+  if (data.message) {
+    message = writeInt32(data.message.length);
+    Buffer.concat([message, Buffer.from(data.message)]);
   }
 
   bytes = Buffer.concat([bytes, message]);

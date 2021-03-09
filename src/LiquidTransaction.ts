@@ -11,7 +11,12 @@ import { TransactionServiceClient } from '../grpc/service/transaction_pb_service
 import { LiquidPaymentServiceClient } from '../grpc/service/liquidPayment_pb_service';
 import { PostTransactionRequest, PostTransactionResponse } from '../grpc/model/transaction_pb';
 import { GetLiquidTransactionsRequest, GetLiquidTransactionsResponse } from '../grpc/model/liquidPayment_pb';
-import { LiquidTransactionsInterface, liquidTransactionBuilder } from './helper/transaction-builder/liquid-transaction';
+import {
+  LiquidTransactionsInterface,
+  LiquidStopTransactionInterface,
+  liquidTransactionBuilder,
+  liquidStopTransactionBuilder,
+} from './helper/transaction-builder/liquid-transaction';
 import { toLiquidTransactions, parseLiquidTransaction, ZBCLiquidTransactions, ZBCLiquidTransaction } from './helper/wallet/Liquid';
 
 export type LiquidTransactionsResponse = GetLiquidTransactionsResponse.AsObject;
@@ -94,4 +99,26 @@ function sendLiquid(data: LiquidTransactionsInterface, childSeed: BIP32Interface
   });
 }
 
-export default { get, getList, sendLiquid };
+function sendLiquidStop(data: LiquidStopTransactionInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
+  return new Promise(async (resolve, reject) => {
+    //build the tx into bytes
+    const bytes = liquidStopTransactionBuilder(data, childSeed);
+
+    const request = new PostTransactionRequest();
+    request.setTransactionbytes(bytes);
+
+    Network.request(TransactionServiceClient, 'postTransaction', request)
+      .catch(err => {
+        console.log('error', err);
+        const { code, message, metadata } = err;
+        if (code == grpc.Code.Internal) resolve({});
+        reject({ code, message, metadata });
+      })
+      .then(res => {
+        console.log('resolved', res);
+        resolve(res ? res.toObject() : null);
+      });
+  });
+}
+
+export default { get, getList, sendLiquid, sendLiquidStop };
