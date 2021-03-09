@@ -99,9 +99,8 @@ function sendLiquid(data: LiquidTransactionsInterface, childSeed: BIP32Interface
   });
 }
 
-function sendLiquidStop(data: LiquidStopTransactionInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
+function stopLiquid(data: LiquidStopTransactionInterface, childSeed: BIP32Interface): Promise<PostTransactionResponse.AsObject> {
   return new Promise(async (resolve, reject) => {
-    //build the tx into bytes
     const bytes = liquidStopTransactionBuilder(data, childSeed);
 
     const request = new PostTransactionRequest();
@@ -109,16 +108,14 @@ function sendLiquidStop(data: LiquidStopTransactionInterface, childSeed: BIP32In
 
     Network.request(TransactionServiceClient, 'postTransaction', request)
       .catch(err => {
-        console.log('error', err);
         const { code, message, metadata } = err;
         if (code == grpc.Code.Internal) resolve({});
         reject({ code, message, metadata });
       })
       .then(res => {
-        console.log('resolved', res);
         resolve(res ? res.toObject() : null);
       });
   });
 }
 
-export default { get, getList, sendLiquid, sendLiquidStop };
+export default { get, getList, sendLiquid, stopLiquid };

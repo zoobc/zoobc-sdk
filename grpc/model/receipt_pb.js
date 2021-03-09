@@ -72,7 +72,7 @@ proto.model.Receipt.toObject = function(includeInstance, msg) {
     datumhash: msg.getDatumhash_asB64(),
     referenceblockheight: jspb.Message.getFieldWithDefault(msg, 5, 0),
     referenceblockhash: msg.getReferenceblockhash_asB64(),
-    rmrlinked: msg.getRmrlinked_asB64(),
+    rmr: msg.getRmr_asB64(),
     recipientsignature: msg.getRecipientsignature_asB64()
   };
 
@@ -136,7 +136,7 @@ proto.model.Receipt.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 7:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setRmrlinked(value);
+      msg.setRmr(value);
       break;
     case 8:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
@@ -213,7 +213,7 @@ proto.model.Receipt.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getRmrlinked_asU8();
+  f = message.getRmr_asU8();
   if (f.length > 0) {
     writer.writeBytes(
       7,
@@ -417,40 +417,40 @@ proto.model.Receipt.prototype.setReferenceblockhash = function(value) {
 
 
 /**
- * optional bytes RMRLinked = 7;
+ * optional bytes RMR = 7;
  * @return {!(string|Uint8Array)}
  */
-proto.model.Receipt.prototype.getRmrlinked = function() {
+proto.model.Receipt.prototype.getRmr = function() {
   return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 7, ""));
 };
 
 
 /**
- * optional bytes RMRLinked = 7;
- * This is a type-conversion wrapper around `getRmrlinked()`
+ * optional bytes RMR = 7;
+ * This is a type-conversion wrapper around `getRmr()`
  * @return {string}
  */
-proto.model.Receipt.prototype.getRmrlinked_asB64 = function() {
+proto.model.Receipt.prototype.getRmr_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
-      this.getRmrlinked()));
+      this.getRmr()));
 };
 
 
 /**
- * optional bytes RMRLinked = 7;
+ * optional bytes RMR = 7;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
- * This is a type-conversion wrapper around `getRmrlinked()`
+ * This is a type-conversion wrapper around `getRmr()`
  * @return {!Uint8Array}
  */
-proto.model.Receipt.prototype.getRmrlinked_asU8 = function() {
+proto.model.Receipt.prototype.getRmr_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-      this.getRmrlinked()));
+      this.getRmr()));
 };
 
 
 /** @param {!(string|Uint8Array)} value */
-proto.model.Receipt.prototype.setRmrlinked = function(value) {
+proto.model.Receipt.prototype.setRmr = function(value) {
   jspb.Message.setProto3BytesField(this, 7, value);
 };
 

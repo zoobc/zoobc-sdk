@@ -10,13 +10,13 @@ export class BatchReceipt extends jspb.Message {
   getReceipt(): model_receipt_pb.Receipt | undefined;
   setReceipt(value?: model_receipt_pb.Receipt): void;
 
-  getRmr(): Uint8Array | string;
-  getRmr_asU8(): Uint8Array;
-  getRmr_asB64(): string;
-  setRmr(value: Uint8Array | string): void;
+  getRmrbatch(): Uint8Array | string;
+  getRmrbatch_asU8(): Uint8Array;
+  getRmrbatch_asB64(): string;
+  setRmrbatch(value: Uint8Array | string): void;
 
-  getRmrindex(): number;
-  setRmrindex(value: number): void;
+  getRmrbatchindex(): number;
+  setRmrbatchindex(value: number): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): BatchReceipt.AsObject;
@@ -31,8 +31,8 @@ export class BatchReceipt extends jspb.Message {
 export namespace BatchReceipt {
   export type AsObject = {
     receipt?: model_receipt_pb.Receipt.AsObject,
-    rmr: Uint8Array | string,
-    rmrindex: number,
+    rmrbatch: Uint8Array | string,
+    rmrbatchindex: number,
   }
 }
 

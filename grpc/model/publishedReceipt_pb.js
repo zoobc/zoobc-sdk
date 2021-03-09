@@ -115,8 +115,9 @@ proto.model.PublishedReceipt.toObject = function(includeInstance, msg) {
     receipt: (f = msg.getReceipt()) && model_receipt_pb.Receipt.toObject(includeInstance, f),
     intermediatehashes: msg.getIntermediatehashes_asB64(),
     blockheight: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    receiptindex: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    publishedindex: jspb.Message.getFieldWithDefault(msg, 5, 0)
+    publishedindex: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    rmrlinked: msg.getRmrlinked_asB64(),
+    rmrlinkedindex: jspb.Message.getFieldWithDefault(msg, 6, 0)
   };
 
   if (includeInstance) {
@@ -168,11 +169,15 @@ proto.model.PublishedReceipt.deserializeBinaryFromReader = function(msg, reader)
       break;
     case 4:
       var value = /** @type {number} */ (reader.readUint32());
-      msg.setReceiptindex(value);
+      msg.setPublishedindex(value);
       break;
     case 5:
+      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      msg.setRmrlinked(value);
+      break;
+    case 6:
       var value = /** @type {number} */ (reader.readUint32());
-      msg.setPublishedindex(value);
+      msg.setRmrlinkedindex(value);
       break;
     default:
       reader.skipField();
@@ -225,17 +230,24 @@ proto.model.PublishedReceipt.serializeBinaryToWriter = function(message, writer)
       f
     );
   }
-  f = message.getReceiptindex();
+  f = message.getPublishedindex();
   if (f !== 0) {
     writer.writeUint32(
       4,
       f
     );
   }
-  f = message.getPublishedindex();
+  f = message.getRmrlinked_asU8();
+  if (f.length > 0) {
+    writer.writeBytes(
+      5,
+      f
+    );
+  }
+  f = message.getRmrlinkedindex();
   if (f !== 0) {
     writer.writeUint32(
-      5,
+      6,
       f
     );
   }
@@ -330,32 +342,71 @@ proto.model.PublishedReceipt.prototype.setBlockheight = function(value) {
 
 
 /**
- * optional uint32 ReceiptIndex = 4;
+ * optional uint32 PublishedIndex = 4;
  * @return {number}
  */
-proto.model.PublishedReceipt.prototype.getReceiptindex = function() {
+proto.model.PublishedReceipt.prototype.getPublishedindex = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
 
 /** @param {number} value */
-proto.model.PublishedReceipt.prototype.setReceiptindex = function(value) {
+proto.model.PublishedReceipt.prototype.setPublishedindex = function(value) {
   jspb.Message.setProto3IntField(this, 4, value);
 };
 
 
 /**
- * optional uint32 PublishedIndex = 5;
+ * optional bytes RMRLinked = 5;
+ * @return {!(string|Uint8Array)}
+ */
+proto.model.PublishedReceipt.prototype.getRmrlinked = function() {
+  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * optional bytes RMRLinked = 5;
+ * This is a type-conversion wrapper around `getRmrlinked()`
+ * @return {string}
+ */
+proto.model.PublishedReceipt.prototype.getRmrlinked_asB64 = function() {
+  return /** @type {string} */ (jspb.Message.bytesAsB64(
+      this.getRmrlinked()));
+};
+
+
+/**
+ * optional bytes RMRLinked = 5;
+ * Note that Uint8Array is not supported on all browsers.
+ * @see http://caniuse.com/Uint8Array
+ * This is a type-conversion wrapper around `getRmrlinked()`
+ * @return {!Uint8Array}
+ */
+proto.model.PublishedReceipt.prototype.getRmrlinked_asU8 = function() {
+  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
+      this.getRmrlinked()));
+};
+
+
+/** @param {!(string|Uint8Array)} value */
+proto.model.PublishedReceipt.prototype.setRmrlinked = function(value) {
+  jspb.Message.setProto3BytesField(this, 5, value);
+};
+
+
+/**
+ * optional uint32 RMRLinkedIndex = 6;
  * @return {number}
  */
-proto.model.PublishedReceipt.prototype.getPublishedindex = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+proto.model.PublishedReceipt.prototype.getRmrlinkedindex = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
 };
 
 
 /** @param {number} value */
-proto.model.PublishedReceipt.prototype.setPublishedindex = function(value) {
-  jspb.Message.setProto3IntField(this, 5, value);
+proto.model.PublishedReceipt.prototype.setRmrlinkedindex = function(value) {
+  jspb.Message.setProto3IntField(this, 6, value);
 };
 
 

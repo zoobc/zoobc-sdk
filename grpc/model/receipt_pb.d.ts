@@ -30,10 +30,10 @@ export class Receipt extends jspb.Message {
   getReferenceblockhash_asB64(): string;
   setReferenceblockhash(value: Uint8Array | string): void;
 
-  getRmrlinked(): Uint8Array | string;
-  getRmrlinked_asU8(): Uint8Array;
-  getRmrlinked_asB64(): string;
-  setRmrlinked(value: Uint8Array | string): void;
+  getRmr(): Uint8Array | string;
+  getRmr_asU8(): Uint8Array;
+  getRmr_asB64(): string;
+  setRmr(value: Uint8Array | string): void;
 
   getRecipientsignature(): Uint8Array | string;
   getRecipientsignature_asU8(): Uint8Array;
@@ -58,7 +58,7 @@ export namespace Receipt {
     datumhash: Uint8Array | string,
     referenceblockheight: number,
     referenceblockhash: Uint8Array | string,
-    rmrlinked: Uint8Array | string,
+    rmr: Uint8Array | string,
     recipientsignature: Uint8Array | string,
   }
 }

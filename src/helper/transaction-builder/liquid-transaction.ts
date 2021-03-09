@@ -6,6 +6,7 @@ import { BIP32Interface } from 'bip32';
 import { Address } from '../interfaces';
 import { addEscrowBytes } from './escrow-transaction';
 import { EscrowTransactionInterface } from './send-money';
+import { AccountType } from '../../../grpc/model/accountType_pb';
 import { TransactionType } from '../../../grpc/model/transaction_pb';
 import { writeInt64, writeInt32, ZBCAddressToBytes, addressToBytes, readInt64, generateTransactionHash } from '../utils';
 
@@ -64,13 +65,12 @@ export function liquidStopTransactionBuilder(data: LiquidStopTransactionInterfac
 
   const timestamp = writeInt64(Math.trunc(Date.now() / 1000));
   const sender = addressToBytes(data.accountAddress);
-  console.log("sender = ", data.accountAddress)
   const recipient = writeInt32(AccountType.EMPTYACCOUNTTYPE);
   const fee = writeInt64(data.fee * 1e8);
-  const TransactionId = writeInt64(data.transactionId);
-  const bodyLength = writeInt32(TransactionId.length);
+  const transactionId = writeInt64(data.transactionId);
+  const bodyLength = writeInt32(transactionId.length);
 
-  bytes = Buffer.concat([TRANSACTION_TYPE_STOP, VERSION, timestamp, sender, recipient, fee, bodyLength, TransactionId]);
+  bytes = Buffer.concat([TRANSACTION_TYPE_STOP, VERSION, timestamp, sender, recipient, fee, bodyLength, transactionId]);
 
   // Add message
   let message = writeInt32(0);
@@ -98,7 +98,7 @@ export function addLiquidBytes(bytes: Buffer, data: any): Buffer {
 
 export function readLiquidBytes(txBytes: Buffer, offset: number): any {
   const amount = parseInt(readInt64(txBytes, offset));
-  offset+=8
+  offset += 8;
   const completeminutes = parseInt(readInt64(txBytes, offset));
   return { amount, completeminutes };
 }
