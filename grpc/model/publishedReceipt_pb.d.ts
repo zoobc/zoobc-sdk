@@ -18,11 +18,16 @@ export class PublishedReceipt extends jspb.Message {
   getBlockheight(): number;
   setBlockheight(value: number): void;
 
-  getReceiptindex(): number;
-  setReceiptindex(value: number): void;
-
   getPublishedindex(): number;
   setPublishedindex(value: number): void;
+
+  getRmrlinked(): Uint8Array | string;
+  getRmrlinked_asU8(): Uint8Array;
+  getRmrlinked_asB64(): string;
+  setRmrlinked(value: Uint8Array | string): void;
+
+  getRmrlinkedindex(): number;
+  setRmrlinkedindex(value: number): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): PublishedReceipt.AsObject;
@@ -39,8 +44,9 @@ export namespace PublishedReceipt {
     receipt?: model_receipt_pb.Receipt.AsObject,
     intermediatehashes: Uint8Array | string,
     blockheight: number,
-    receiptindex: number,
     publishedindex: number,
+    rmrlinked: Uint8Array | string,
+    rmrlinkedindex: number,
   }
 }
 

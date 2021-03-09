@@ -69,8 +69,8 @@ proto.model.BatchReceipt.prototype.toObject = function(opt_includeInstance) {
 proto.model.BatchReceipt.toObject = function(includeInstance, msg) {
   var f, obj = {
     receipt: (f = msg.getReceipt()) && model_receipt_pb.Receipt.toObject(includeInstance, f),
-    rmr: msg.getRmr_asB64(),
-    rmrindex: jspb.Message.getFieldWithDefault(msg, 3, 0)
+    rmrbatch: msg.getRmrbatch_asB64(),
+    rmrbatchindex: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
   if (includeInstance) {
@@ -114,11 +114,11 @@ proto.model.BatchReceipt.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 2:
       var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setRmr(value);
+      msg.setRmrbatch(value);
       break;
     case 3:
       var value = /** @type {number} */ (reader.readUint32());
-      msg.setRmrindex(value);
+      msg.setRmrbatchindex(value);
       break;
     default:
       reader.skipField();
@@ -157,14 +157,14 @@ proto.model.BatchReceipt.serializeBinaryToWriter = function(message, writer) {
       model_receipt_pb.Receipt.serializeBinaryToWriter
     );
   }
-  f = message.getRmr_asU8();
+  f = message.getRmrbatch_asU8();
   if (f.length > 0) {
     writer.writeBytes(
       2,
       f
     );
   }
-  f = message.getRmrindex();
+  f = message.getRmrbatchindex();
   if (f !== 0) {
     writer.writeUint32(
       3,
@@ -208,55 +208,55 @@ proto.model.BatchReceipt.prototype.hasReceipt = function() {
 
 
 /**
- * optional bytes RMR = 2;
+ * optional bytes RMRBatch = 2;
  * @return {!(string|Uint8Array)}
  */
-proto.model.BatchReceipt.prototype.getRmr = function() {
+proto.model.BatchReceipt.prototype.getRmrbatch = function() {
   return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
 };
 
 
 /**
- * optional bytes RMR = 2;
- * This is a type-conversion wrapper around `getRmr()`
+ * optional bytes RMRBatch = 2;
+ * This is a type-conversion wrapper around `getRmrbatch()`
  * @return {string}
  */
-proto.model.BatchReceipt.prototype.getRmr_asB64 = function() {
+proto.model.BatchReceipt.prototype.getRmrbatch_asB64 = function() {
   return /** @type {string} */ (jspb.Message.bytesAsB64(
-      this.getRmr()));
+      this.getRmrbatch()));
 };
 
 
 /**
- * optional bytes RMR = 2;
+ * optional bytes RMRBatch = 2;
  * Note that Uint8Array is not supported on all browsers.
  * @see http://caniuse.com/Uint8Array
- * This is a type-conversion wrapper around `getRmr()`
+ * This is a type-conversion wrapper around `getRmrbatch()`
  * @return {!Uint8Array}
  */
-proto.model.BatchReceipt.prototype.getRmr_asU8 = function() {
+proto.model.BatchReceipt.prototype.getRmrbatch_asU8 = function() {
   return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-      this.getRmr()));
+      this.getRmrbatch()));
 };
 
 
 /** @param {!(string|Uint8Array)} value */
-proto.model.BatchReceipt.prototype.setRmr = function(value) {
+proto.model.BatchReceipt.prototype.setRmrbatch = function(value) {
   jspb.Message.setProto3BytesField(this, 2, value);
 };
 
 
 /**
- * optional uint32 RMRIndex = 3;
+ * optional uint32 RMRBatchIndex = 3;
  * @return {number}
  */
-proto.model.BatchReceipt.prototype.getRmrindex = function() {
+proto.model.BatchReceipt.prototype.getRmrbatchindex = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
 
 /** @param {number} value */
-proto.model.BatchReceipt.prototype.setRmrindex = function(value) {
+proto.model.BatchReceipt.prototype.setRmrbatchindex = function(value) {
   jspb.Message.setProto3IntField(this, 3, value);
 };
 
