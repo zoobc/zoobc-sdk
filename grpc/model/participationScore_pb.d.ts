@@ -85,6 +85,9 @@ export class GetLatestParticipationScoreByNodeIDRequest extends jspb.Message {
   getNodeid(): string;
   setNodeid(value: string): void;
 
+  getNodeaddress(): string;
+  setNodeaddress(value: string): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): GetLatestParticipationScoreByNodeIDRequest.AsObject;
   static toObject(includeInstance: boolean, msg: GetLatestParticipationScoreByNodeIDRequest): GetLatestParticipationScoreByNodeIDRequest.AsObject;
@@ -98,6 +101,7 @@ export class GetLatestParticipationScoreByNodeIDRequest extends jspb.Message {
 export namespace GetLatestParticipationScoreByNodeIDRequest {
   export type AsObject = {
     nodeid: string,
+    nodeaddress: string,
   }
 }
 
