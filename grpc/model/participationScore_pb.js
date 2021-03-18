@@ -650,7 +650,8 @@ proto.model.GetLatestParticipationScoreByNodeIDRequest.prototype.toObject = func
  */
 proto.model.GetLatestParticipationScoreByNodeIDRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    nodeid: jspb.Message.getFieldWithDefault(msg, 1, "0")
+    nodeid: jspb.Message.getFieldWithDefault(msg, 1, "0"),
+    nodeaddress: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -691,6 +692,10 @@ proto.model.GetLatestParticipationScoreByNodeIDRequest.deserializeBinaryFromRead
       var value = /** @type {string} */ (reader.readInt64String());
       msg.setNodeid(value);
       break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setNodeaddress(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -727,6 +732,13 @@ proto.model.GetLatestParticipationScoreByNodeIDRequest.serializeBinaryToWriter =
       f
     );
   }
+  f = message.getNodeaddress();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
 };
 
 
@@ -742,6 +754,21 @@ proto.model.GetLatestParticipationScoreByNodeIDRequest.prototype.getNodeid = fun
 /** @param {string} value */
 proto.model.GetLatestParticipationScoreByNodeIDRequest.prototype.setNodeid = function(value) {
   jspb.Message.setProto3StringIntField(this, 1, value);
+};
+
+
+/**
+ * optional string NodeAddress = 2;
+ * @return {string}
+ */
+proto.model.GetLatestParticipationScoreByNodeIDRequest.prototype.getNodeaddress = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/** @param {string} value */
+proto.model.GetLatestParticipationScoreByNodeIDRequest.prototype.setNodeaddress = function(value) {
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 
