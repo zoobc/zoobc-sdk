@@ -64,7 +64,7 @@ export function addEscrowBytes(bytes: Buffer, data: any): Buffer {
     const approverAddress = addressToBytes(data.approverAddress);
     const commission = writeInt64(data.commission * 1e8);
     const timeout = writeInt64(data.timeout);
-    const instruction = Buffer.from(data.instruction, 'utf-8');
+    const instruction = Buffer.from(data.instruction || '', 'utf-8');
     const instructionLength = writeInt32(instruction.length);
     bytes = Buffer.concat([bytes, approverAddress, commission, timeout, instructionLength, instruction]);
   } else {
