@@ -59,7 +59,7 @@ export function readApprovalEscrowBytes(txBytes: Buffer, offset: number) {
 }
 
 export function addEscrowBytes(bytes: Buffer, data: any): Buffer {
-  if (data.approverAddress && data.commission && data.timeout && data.instruction) {
+  if (data.approverAddress && data.commission && data.timeout) {
     // escrow bytes
     const approverAddress = addressToBytes(data.approverAddress);
     const commission = writeInt64(data.commission * 1e8);
